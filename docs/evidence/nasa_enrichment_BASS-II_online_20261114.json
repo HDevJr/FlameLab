@@ -1,0 +1,601 @@
+{
+ "data": {
+  "document_id": "NASA-TM-20210011385",
+  "generated_at": "2026-11-14T23:42:36Z",
+  "mode": "ONLINE",
+  "document": {
+   "document_id": "NASA-TM-20210011385",
+   "title": "Burning and Suppression of Solids—II (BASS—II) Summary Report",
+   "authors": [],
+   "ntrs_id": "20210011385",
+   "report_numbers": [],
+   "doi": null,
+   "year": null
+  },
+  "matches": [
+   {
+    "source": "NTRS",
+    "state": "MATCH_CONFIRMED",
+    "match_type": "IDENTIFIER",
+    "source_record_id": "20210011385",
+    "source_url": "https://ntrs.nasa.gov/citations/20210011385",
+    "title": "Burning and Suppression of Solids–II  (BASS-II) Summary Report",
+    "score": 1.0,
+    "reasons_pt": [
+     "O ID NTRS 20210011385 consta do artigo e existe no NTRS.",
+     "O título do registro é coerente com o do artigo (semelhança 1.0)."
+    ],
+    "rejected_candidates": [],
+    "metadata": {
+     "sti_type": "TECHNICAL_MEMORANDUM",
+     "authors": [
+      "Sandra L. Olson",
+      "Paul V. Ferkul",
+      "Subrata Bhattacharjee",
+      "Fletcher J. Miller",
+      "Carlos Fernandez-Pello",
+      "Shmuel Link",
+      "James S. T'ien",
+      "Indrek Wichman"
+     ],
+     "center": "Glenn Research Center",
+     "publication_date": "2021-10-01",
+     "report_numbers": [
+      "E-19939"
+     ],
+     "keywords": [
+      "Microgravity",
+      "Flammability",
+      "Flame Spread",
+      "ISS",
+      "Glovebox"
+     ],
+     "distribution": "PUBLIC",
+     "downloads": [
+      {
+       "name": "TM-20210011385.pdf",
+       "pdf": "/api/citations/20210011385/downloads/TM-20210011385.pdf",
+       "fulltext": "/api/citations/20210011385/downloads/TM-20210011385.pdf.txt"
+      }
+     ],
+     "related": []
+    },
+    "curation_decision": "PENDENTE",
+    "note_pt": "Confirma a identidade do registro, não o conteúdo do arquivo nem medições."
+   },
+   {
+    "source": "PSI",
+    "state": "MATCH_CANDIDATE",
+    "match_type": "TITLE_AUTHORS",
+    "source_record_id": "PSI-25",
+    "source_url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-25",
+    "title": "Burning and Suppression of Solids - II",
+    "score": 1.0,
+    "reasons_pt": [
+     "DataCite: dataset do publicador \"NASA PSI\" com título semelhante ao do artigo (semelhança 1.0).",
+     "Pessoas em comum entre autores e criadores: ferkul, fernandezpello, miller, tien.",
+     "Os dois registros não citam um ao outro por identificador: é candidato até revisão humana."
+    ],
+    "rejected_candidates": [
+     {
+      "id": "PSI-26",
+      "title": "Burning and Suppression of Solids",
+      "score": 0.8
+     }
+    ],
+    "metadata": {
+     "doi": "10.60555/4qc4-de67",
+     "publisher": "NASA PSI",
+     "subtitles": [
+      "BASS-II"
+     ],
+     "creators": [
+      "Ferkul, Paul",
+      "Fernandez-Pello, Carlos",
+      "Miller, Fletcher J.",
+      "T'ien, James",
+      "Bhattachjee, Subrata"
+     ],
+     "publication_year": 2022,
+     "resource_type": "Dataset",
+     "rights": [
+      "Creative Commons Zero v1.0 Universal"
+     ],
+     "related_identifiers": [],
+     "version": "4"
+    },
+    "curation_decision": "PENDENTE",
+    "note_pt": "O NASA PSI não publica API documentada. A descoberta usa o registro de DOI no DataCite; os arquivos de dados da investigação exigem consulta manual ao portal."
+   },
+   {
+    "source": "TECHPORT",
+    "state": "NOT_FOUND",
+    "match_type": "NONE",
+    "source_record_id": null,
+    "source_url": null,
+    "title": null,
+    "score": null,
+    "reasons_pt": [
+     "Nenhum projeto do TechPort tem título correspondente ao do artigo. Projetos de tema parecido não são tratados como equivalentes."
+    ],
+    "rejected_candidates": [
+     {
+      "id": 4313,
+      "title": "Burning Rate Emulator Experiments for Spacecraft Fire Safety",
+      "score": 0.091
+     },
+     {
+      "id": 106742,
+      "title": "Material Flammability in Lunar Gravity",
+      "score": 0.0
+     },
+     {
+      "id": 158080,
+      "title": "GAS on Fire (Guided, Accurate Slurry drops on Fire)",
+      "score": 0.0
+     }
+    ],
+    "metadata": {},
+    "curation_decision": "PENDENTE",
+    "note_pt": null
+   }
+  ],
+  "records": [
+   {
+    "field": "title",
+    "label_pt": "Título",
+    "scope": "DOCUMENT_METADATA",
+    "experiment_id": null,
+    "original_value": "Burning and Suppression of Solids—II (BASS—II) Summary Report",
+    "original_source": "artigo",
+    "complementary_value": "Burning and Suppression of Solids–II  (BASS-II) Summary Report",
+    "complementary_source": "NTRS",
+    "complementary_source_id": "20210011385",
+    "match_type": "IDENTIFIER",
+    "state": "MATCH_CONFIRMED",
+    "review_status": "NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "keywords",
+    "label_pt": "Palavras-chave",
+    "scope": "DOCUMENT_METADATA",
+    "experiment_id": null,
+    "original_value": null,
+    "original_source": null,
+    "complementary_value": [
+     "Microgravity",
+     "Flammability",
+     "Flame Spread",
+     "ISS",
+     "Glovebox"
+    ],
+    "complementary_source": "NTRS",
+    "complementary_source_id": "20210011385",
+    "match_type": "NONE",
+    "state": "ADDITIONAL_DATA_FOUND",
+    "review_status": "NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "report_numbers",
+    "label_pt": "Números de relatório",
+    "scope": "DOCUMENT_METADATA",
+    "experiment_id": null,
+    "original_value": null,
+    "original_source": null,
+    "complementary_value": [
+     "E-19939"
+    ],
+    "complementary_source": "NTRS",
+    "complementary_source_id": "20210011385",
+    "match_type": "NONE",
+    "state": "ADDITIONAL_DATA_FOUND",
+    "review_status": "NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "publication_date",
+    "label_pt": "Data de publicação",
+    "scope": "DOCUMENT_METADATA",
+    "experiment_id": null,
+    "original_value": null,
+    "original_source": null,
+    "complementary_value": "2021-10-01",
+    "complementary_source": "NTRS",
+    "complementary_source_id": "20210011385",
+    "match_type": "NONE",
+    "state": "ADDITIONAL_DATA_FOUND",
+    "review_status": "NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "subject_categories",
+    "label_pt": "Categorias de assunto",
+    "scope": "DOCUMENT_METADATA",
+    "experiment_id": null,
+    "original_value": null,
+    "original_source": null,
+    "complementary_value": [
+     "Fluid Mechanics And Thermodynamics"
+    ],
+    "complementary_source": "NTRS",
+    "complementary_source_id": "20210011385",
+    "match_type": "NONE",
+    "state": "ADDITIONAL_DATA_FOUND",
+    "review_status": "NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "fulltext",
+    "label_pt": "Texto completo no NTRS",
+    "scope": "DOCUMENT_METADATA",
+    "experiment_id": null,
+    "original_value": null,
+    "original_source": null,
+    "complementary_value": [
+     "/api/citations/20210011385/downloads/TM-20210011385.pdf"
+    ],
+    "complementary_source": "NTRS",
+    "complementary_source_id": "20210011385",
+    "match_type": "NONE",
+    "state": "ADDITIONAL_DATA_FOUND",
+    "review_status": "NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "people",
+    "label_pt": "Autores × criadores do dataset",
+    "scope": "DOCUMENT_METADATA",
+    "experiment_id": null,
+    "original_value": [
+     "Sandra L. Olson",
+     "Paul V. Ferkul",
+     "Subrata Bhattacharjee",
+     "Fletcher J. Miller",
+     "Carlos Fernandez-Pello",
+     "Shmuel Link",
+     "James S. T'ien",
+     "Indrek Wichman"
+    ],
+    "original_source": "NTRS",
+    "complementary_value": [
+     "Ferkul, Paul",
+     "Fernandez-Pello, Carlos",
+     "Miller, Fletcher J.",
+     "T'ien, James",
+     "Bhattachjee, Subrata"
+    ],
+    "complementary_source": "PSI (DataCite)",
+    "complementary_source_id": "PSI-25",
+    "match_type": "TITLE_AUTHORS",
+    "state": "CONFLICT",
+    "review_status": "NAO_REVISADO",
+    "divergence_pt": "grafias diferentes: bhattacharjee × bhattachjee; as listas de pessoas não coincidem",
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "investigation_url",
+    "label_pt": "Página da investigação",
+    "scope": "DOCUMENT_METADATA",
+    "experiment_id": null,
+    "original_value": null,
+    "original_source": null,
+    "complementary_value": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-25",
+    "complementary_source": "PSI (DataCite)",
+    "complementary_source_id": "PSI-25",
+    "match_type": "NONE",
+    "state": "ADDITIONAL_DATA_FOUND",
+    "review_status": "NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "investigation_doi",
+    "label_pt": "DOI da investigação",
+    "scope": "DOCUMENT_METADATA",
+    "experiment_id": null,
+    "original_value": null,
+    "original_source": null,
+    "complementary_value": "10.60555/4qc4-de67",
+    "complementary_source": "PSI (DataCite)",
+    "complementary_source_id": "PSI-25",
+    "match_type": "NONE",
+    "state": "ADDITIONAL_DATA_FOUND",
+    "review_status": "NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "data_license",
+    "label_pt": "Licença dos dados",
+    "scope": "DOCUMENT_METADATA",
+    "experiment_id": null,
+    "original_value": null,
+    "original_source": null,
+    "complementary_value": [
+     "Creative Commons Zero v1.0 Universal"
+    ],
+    "complementary_source": "PSI (DataCite)",
+    "complementary_source_id": "PSI-25",
+    "match_type": "NONE",
+    "state": "ADDITIONAL_DATA_FOUND",
+    "review_status": "NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "investigation_description",
+    "label_pt": "Descrição da investigação (objetivos e variáveis)",
+    "scope": "DOCUMENT_METADATA",
+    "experiment_id": null,
+    "original_value": null,
+    "original_source": null,
+    "complementary_value": "BASS-II results contribute to the combustion computational models used in the design of fire detection and suppression systems in microgravity and on Earth.\nObjectives Include:\n  1) Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity.\n  2) Begin to bridge the gap between the normal gravity NASA-STD-6001 Test #1 method, ground-based microgravity tests, and actual material flammability in microgravity.\n  3) Provide SoFIE PIs with preliminary data to refine Science Requirements.\n  4)  Practical, realistic (thicker) fuels in typical geometries will be examined, including slabs, cylinders, and spherical sections.\n\nThe primary variables include:\n     • Forced flow velocity (speed and direction)\n     • Ambient oxygen concentration (via working volume nitrogen vitiation)\n     • Sample geometry (rods, spherical section, slabs, films, and fabric sheets",
+    "complementary_source": "PSI (DataCite)",
+    "complementary_source_id": "PSI-25",
+    "match_type": "NONE",
+    "state": "ADDITIONAL_DATA_FOUND",
+    "review_status": "NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "material",
+    "label_pt": "Material",
+    "scope": "EXPERIMENT_PARAMETER",
+    "experiment_id": "BASS2-M1",
+    "original_value": "PMMA (polimetilmetacrilato; \"clear cast\")",
+    "original_source": "artigo",
+    "complementary_value": null,
+    "complementary_source": null,
+    "complementary_source_id": null,
+    "match_type": "NONE",
+    "state": "NOT_FOUND",
+    "review_status": "EXTRAIDO_NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "thickness",
+    "label_pt": "Espessura da amostra",
+    "scope": "EXPERIMENT_PARAMETER",
+    "experiment_id": "BASS2-M1",
+    "original_value": "1.0 mm",
+    "original_source": "artigo",
+    "complementary_value": null,
+    "complementary_source": null,
+    "complementary_source_id": null,
+    "match_type": "NONE",
+    "state": "NOT_FOUND",
+    "review_status": "EXTRAIDO_NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "width",
+    "label_pt": "Largura da amostra",
+    "scope": "EXPERIMENT_PARAMETER",
+    "experiment_id": "BASS2-M1",
+    "original_value": "2.2 cm",
+    "original_source": "artigo",
+    "complementary_value": null,
+    "complementary_source": null,
+    "complementary_source_id": null,
+    "match_type": "NONE",
+    "state": "NOT_FOUND",
+    "review_status": "EXTRAIDO_NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "burning_faces",
+    "label_pt": "Faces em combustão",
+    "scope": "EXPERIMENT_PARAMETER",
+    "experiment_id": "BASS2-M1",
+    "original_value": 1.0,
+    "original_source": "artigo",
+    "complementary_value": null,
+    "complementary_source": null,
+    "complementary_source_id": null,
+    "match_type": "NONE",
+    "state": "NOT_FOUND",
+    "review_status": "EXTRAIDO_NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "airflow_velocity",
+    "label_pt": "Velocidade do ar (escoamento oposto)",
+    "scope": "EXPERIMENT_PARAMETER",
+    "experiment_id": "BASS2-M1",
+    "original_value": "9.0 cm/s",
+    "original_source": "artigo",
+    "complementary_value": null,
+    "complementary_source": null,
+    "complementary_source_id": null,
+    "match_type": "NONE",
+    "state": "NOT_FOUND",
+    "review_status": "EXTRAIDO_NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "flame_spread_rate",
+    "label_pt": "Velocidade de propagação da chama",
+    "scope": "EXPERIMENT_PARAMETER",
+    "experiment_id": "BASS2-M1",
+    "original_value": "0.071 mm/s",
+    "original_source": "artigo",
+    "complementary_value": null,
+    "complementary_source": null,
+    "complementary_source_id": null,
+    "match_type": "NONE",
+    "state": "NOT_FOUND",
+    "review_status": "EXTRAIDO_NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "burn_duration",
+    "label_pt": "Tempo de queima",
+    "scope": "EXPERIMENT_PARAMETER",
+    "experiment_id": "BASS2-M1",
+    "original_value": "6.4 min",
+    "original_source": "artigo",
+    "complementary_value": null,
+    "complementary_source": null,
+    "complementary_source_id": null,
+    "match_type": "NONE",
+    "state": "NOT_FOUND",
+    "review_status": "EXTRAIDO_NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "o2_initial",
+    "label_pt": "Concentração inicial de O₂",
+    "scope": "EXPERIMENT_PARAMETER",
+    "experiment_id": "BASS2-M1",
+    "original_value": "22.2 vol%",
+    "original_source": "artigo",
+    "complementary_value": null,
+    "complementary_source": null,
+    "complementary_source_id": null,
+    "match_type": "NONE",
+    "state": "NOT_FOUND",
+    "review_status": "EXTRAIDO_NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   },
+   {
+    "field": "o2_final",
+    "label_pt": "Concentração final de O₂",
+    "scope": "EXPERIMENT_PARAMETER",
+    "experiment_id": "BASS2-M1",
+    "original_value": "21.9 vol%",
+    "original_source": "artigo",
+    "complementary_value": null,
+    "complementary_source": null,
+    "complementary_source_id": null,
+    "match_type": "NONE",
+    "state": "NOT_FOUND",
+    "review_status": "EXTRAIDO_NAO_REVISADO",
+    "divergence_pt": null,
+    "curation_decision": "PENDENTE"
+   }
+  ],
+  "related_documents": [
+   {
+    "source": "NTRS",
+    "ntrs_id": "20160000593",
+    "title": "Combustion of Solids in Microgravity: Results from the BASS-II Experiment",
+    "sti_type": "PRESENTATION",
+    "url": "https://ntrs.nasa.gov/citations/20160000593",
+    "state": "ADDITIONAL_DATA_FOUND",
+    "note_pt": "Resultado de busca textual; relação com o artigo não verificada."
+   },
+   {
+    "source": "NTRS",
+    "ntrs_id": "20150019858",
+    "title": "Results from On-Board CSA-CP and CDM Sensor Readings During the Burning and Suppression of Solids II (BASS-II) Experiment in the Microgravity Science Glovebox (MSG)",
+    "sti_type": "CONFERENCE_PAPER",
+    "url": "https://ntrs.nasa.gov/citations/20150019858",
+    "state": "ADDITIONAL_DATA_FOUND",
+    "note_pt": "Resultado de busca textual; relação com o artigo não verificada."
+   },
+   {
+    "source": "NTRS",
+    "ntrs_id": "20170006615",
+    "title": "Mixed Convection Blowoff Limits as a Function of Oxygen Concentration and Upward Forced Stretch Rate for Burning Pmma Rods of Various Sizes",
+    "sti_type": "CONFERENCE_PAPER",
+    "url": "https://ntrs.nasa.gov/citations/20170006615",
+    "state": "ADDITIONAL_DATA_FOUND",
+    "note_pt": "Resultado de busca textual; relação com o artigo não verificada."
+   },
+   {
+    "source": "NTRS",
+    "ntrs_id": "20140011099",
+    "title": "Thickness and Fuel Preheating Effects on Material Flammability in Microgravity from the BASS Experiment",
+    "sti_type": "PRESENTATION",
+    "url": "https://ntrs.nasa.gov/citations/20140011099",
+    "state": "ADDITIONAL_DATA_FOUND",
+    "note_pt": "Resultado de busca textual; relação com o artigo não verificada."
+   },
+   {
+    "source": "NTRS",
+    "ntrs_id": "20160012691",
+    "title": "Correlation of Normal Gravity Mixed Convection Blowoff Limits with Microgravity Forced Flow Blowoff Limits",
+    "sti_type": "CONFERENCE_PAPER",
+    "url": "https://ntrs.nasa.gov/citations/20160012691",
+    "state": "ADDITIONAL_DATA_FOUND",
+    "note_pt": "Resultado de busca textual; relação com o artigo não verificada."
+   }
+  ],
+  "operations": [
+   {
+    "source": "NTRS",
+    "method": "GET",
+    "url": "https://ntrs.nasa.gov/api/citations/20210011385",
+    "mode": "ONLINE",
+    "http_status": 200,
+    "ok": true,
+    "error": null,
+    "response_sha256": "3fcf1e93014a6c0e210bc77714c5a7f95b0ccbedb7e28390184e051d517ab9e9",
+    "response_bytes": 7042,
+    "at": "2026-11-14T23:42:29Z",
+    "elapsed_ms": 921
+   },
+   {
+    "source": "NTRS",
+    "method": "GET",
+    "url": "https://ntrs.nasa.gov/api/citations/search?page.size=6&q=burning+suppression+solids+bass",
+    "mode": "ONLINE",
+    "http_status": 200,
+    "ok": true,
+    "error": null,
+    "response_sha256": "2d90daf6e46ca3f0738875f947de9fad99c26dc8e73108e81c4bd63cb69aa0a5",
+    "response_bytes": 42373,
+    "at": "2026-11-14T23:42:31Z",
+    "elapsed_ms": 1422
+   },
+   {
+    "source": "DATACITE",
+    "method": "GET",
+    "url": "https://api.datacite.org/dois?query=publisher%3A%22NASA+PSI%22+AND+titles.title%3A%28burning+AND+suppression+AND+solids%29&page%5Bsize%5D=10",
+    "mode": "ONLINE",
+    "http_status": 200,
+    "ok": true,
+    "error": null,
+    "response_sha256": "bba0459fa9c3e827adf5189d60382489930f6b500367b4bc474c1574a1d7f7af",
+    "response_bytes": 6430,
+    "at": "2026-11-14T23:42:35Z",
+    "elapsed_ms": 3858
+   },
+   {
+    "source": "TECHPORT",
+    "method": "GET",
+    "url": "https://techport.nasa.gov/api/projects/search?query=burning+suppression+solids",
+    "mode": "ONLINE",
+    "http_status": 200,
+    "ok": true,
+    "error": null,
+    "response_sha256": "2369796a8e5ab39229abe4f8934d025db76165f3f8869cbab41cd2e10d4915d2",
+    "response_bytes": 20746,
+    "at": "2026-11-14T23:42:36Z",
+    "elapsed_ms": 1671
+   }
+  ],
+  "warnings_pt": [
+   "Nenhuma fonte consultada expõe valores por ensaio em API documentada; os parâmetros do artigo não puderam ser confrontados com medições de outra fonte."
+  ],
+  "promoted_records": 0
+ },
+ "dataset_version": "sha256:29674b79fa2080f91d26684af9532610263e7a57c60358d866ada9907610df75"
+}

@@ -86,5 +86,18 @@ Legenda de tipo: **A** automatizado (pytest), **M** manual, ⓘ integração rea
 | FDS-G5 alteração | uma variável alterada com rastreabilidade | CIÊNCIA | **FUTURO** |
 Proibição: usar `flame_spread_rate` (observável) como entrada ou alvo de calibração apresentado como reprodução.
 
+### 6.1 Atualização (14/11/2026, ADR-09): testes da plataforma
+| Área | Testes | Natureza | Resultado |
+|---|---|---|---|
+| Enriquecimento NASA | `test_nasa_enrichment.py` (10) | fixtures de respostas reais gravadas | PASS |
+| Genericidade | `test_generic_architecture.py` — nenhum identificador de referência em módulos genéricos | estático | PASS |
+| Importação/procedência/extração | `test_ingest.py` (17) — hash, VERIFIED/MISMATCH/PENDING, fontes fora do ar, PDF inválido, caminho, citação literal, hifenização | provedor e transporte simulados | PASS |
+| Simulação | `test_simulation.py` (25) — gerador, faixas, compatibilidade, estados, falhas, executor indisponível, reinício, segurança de API e artefatos | **executor simulado** (`FakeExecutor`, `demo=true`) | PASS |
+| Frontend | `lib.test.ts` (5) + `tsc` + `vite build` | unitário/estático | PASS |
+| Execução FDS/Smokeview/FFmpeg **real** | evidências em `docs/evidence/` (2 execuções, 1 spike manual) | **real, fora da suíte automática** | registrado |
+| Gemini real (extração) | 1 importação real (DYLCO) | **real, fora da suíte** | registrado |
+| Navegador (renderização das telas) | — | **NOT_RUN** (sem ferramenta de navegador na sessão) | NOT_RUN |
+Gates G0-env e G3 (execução) passam a **possível/verificado para o caso de integração**; G1, G2 e G4 seguem bloqueados para o BASS-II.
+
 ## 7. Revisão de interface
 Checklist (M): toda tela tem rodapé com `dataset_version` e aviso de independência; todo número tem unidade; o estado não é comunicado só por cor (chip com texto); contraste mínimo AA nos chips e badges; termos em PT com o original em EN na primeira menção; largura mínima de 1280 px na máquina de demo e sem quebra em 1024 px.

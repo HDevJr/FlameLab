@@ -117,6 +117,24 @@ Equipes pequenas combinam papéis. Uma combinação que funciona: {DADOS+CIÊNCI
 | BL-09.03 | S06 "Prontidão para simulação" (somente leitura) | FRONT | 09.02 | 1 | T-11 |
 | BL-09.04 | (só com dimensões com fonte) caso de escoamento frio revisado, executado manualmente, log guardado | SIM | 09.00, 09.01 | 2–3 | T-28, G3 |
 
+> **Atualização 14/11/2026 (ADR-09):** BL-09.00 e a regra “execução manual” foram **superadas**: o FDS/Smokeview/FFmpeg foram verificados nesta máquina e o worker isolado foi implementado e provado com um caso de integração. BL-09.01/.02 (leitura da §5.5 e gates do M1) **continuam abertos** e bloqueiam qualquer reprodução do BASS-II.
+
+### BL-12 · Plataforma v2 — importação, enriquecimento NASA, simulação e protótipo web (ADR-09)
+| ID | Tarefa | Estado |
+|---|---|---|
+| BL-12.01 | Clientes NTRS/DataCite(PSI)/TechPort + registro de operações | IMPLEMENTADO_E_TESTADO |
+| BL-12.02 | Comparador de fontes e relatório de enriquecimento (`SourceMatch`, `EnrichmentRecord`) | IMPLEMENTADO_E_TESTADO |
+| BL-12.03 | Importação de PDF (hash, identificação, procedência por hash NTRS) | IMPLEMENTADO_E_TESTADO |
+| BL-12.04 | Extração assistida por Gemini com citação literal verificada | IMPLEMENTADO_E_TESTADO (IA simulada) · 1 execução real |
+| BL-12.05 | Catálogo genérico (documentos/experimentos, curados e importados) | IMPLEMENTADO_E_TESTADO |
+| BL-12.06 | Compatibilidade de simulação (`COMPATIBLE/MISSING_PARAMETERS/UNSUPPORTED_PHYSICS/REQUIRES_REVIEW`) | IMPLEMENTADO_E_TESTADO |
+| BL-12.07 | FDS Case Builder + cenários derivados | IMPLEMENTADO_E_TESTADO (modelo de integração) |
+| BL-12.08 | Worker, fila e executor local FDS→Smokeview→FFmpeg | IMPLEMENTADO_E_TESTADO (simulado) · execução real registrada |
+| BL-12.09 | Telas S01–S07 | PROTOTIPO |
+| BL-12.10 | Modelo de **reprodução** de propagação de chama (gerador) | BLOQUEADO (G1/G2, revisão humana de M1, DIV-22) |
+| BL-12.11 | Contêiner/limite de memória, Linux/Xvfb, autenticação, fila durável | NAO_INICIADO |
+| BL-12.12 | Revisão de parâmetros importados na UI (promoção a `CONFERIDO_FONTE`) | NAO_INICIADO (hoje só por `scripts/review_record.py` no dataset curado) |
+
 ### BL-10 · Stretch · Visualizar resultado FDS e comparar
 | ID | Tarefa | Papel | Dep. | h | Aceite / teste |
 |---|---|---|---|---|---|

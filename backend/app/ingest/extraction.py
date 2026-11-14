@@ -97,7 +97,11 @@ Responda somente JSON."""
 
 
 def _norm(text: str) -> str:
-    return re.sub(r"\s+", " ", text.replace("­", "")).strip().lower()
+    """Normalização simétrica (página e citação): espaços, hífen suave e hifenização de fim de
+    linha ("in- creased" → "increased"). Não aceita paráfrase nem troca de números."""
+    text = text.replace("­", "")
+    text = re.sub(r"(?<=[A-Za-z])-\s+(?=[a-z])", "", text)
+    return re.sub(r"\s+", " ", text).strip().lower()
 
 
 def _slug(name: str) -> str:

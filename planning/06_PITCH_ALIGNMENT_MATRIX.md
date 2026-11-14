@@ -34,7 +34,7 @@
 | P-13 | S-5 Verificador do PDF | relatório MATCH da Tabela 5.1 | **IMPLEMENTADO_E_TESTADO só para M1** (camada de texto, 10/10 MATCH) | T-04, T-08 | G3 | trecho do relatório | **Não mencionar extração automática.** "Transcrição curada e conferida por duas pessoas." | 06 (opcional) |
 | P-14 | Extrator do PDF completo | — | **EVOLUCAO_FUTURA** (protótipo anterior NOT_VERIFIED, ausente do repositório) | — | — | — | "A extração automática de documentos completos faz parte da evolução." | 09 |
 | P-15 | FDS no outro computador | caso básico rodou, temperatura no Smokeview | IMPLEMENTADO_E_TESTADO **em outro ambiente** (relato da equipe; precisa de captura/log) | print/log do outro computador | já, **se houver captura** | print Smokeview **rotulado "caso genérico de teste, não BASS-II"** | "Confirmamos que conseguimos operar o FDS num caso básico." | 07 |
-| P-16 | FDS no ambiente do projeto | — | **NOT_VERIFIED** → BLOQUEADO até a auditoria | T-00f, auditoria | após F00.A VERIFIED | — | Não mencionar como integrado. | 07 |
+| P-16 | FDS no ambiente do projeto | — | ~~NOT_VERIFIED~~ → **IMPLEMENTADO_E_TESTADO (14/11, caso de integração)**: FDS 6.11.1 concluiu um caso real nesta máquina e o pipeline gerou vídeo; ver §7 | T-00f, auditoria | após F00.A VERIFIED | — | Não mencionar como integrado. | 07 |
 | P-17 | X-1 Prontidão FDS (G1) | checklist de gates e lacunas de M1 | PLANEJADO (STRETCH) | gates G1 documentados | G1 científico PASS | S06 | "Mapeamos o que falta para tentar reproduzir M1 em FDS." | 07 |
 | P-18 | X-2 Escoamento frio | campo de velocidade em geometria aproximada | PLANEJADO (STRETCH) | T-28, G1+G3 | PASS + revisão CIÊNCIA | gráfico com badge "Simulação exploratória" | Omitir. | 07 |
 | P-19 | X-3 Reprodução de M1 | — | **BLOQUEADO** (G2 sem propriedades de PMMA; G4 sem comparação) | G2+G4 | não esperado no hackathon | — | "Ainda não reproduzimos M1. A seção 5.5 do relatório mostra que até a modelagem original teve discrepâncias; tratamos isso como pesquisa." | 07, 09 |
@@ -92,3 +92,22 @@
 
 > **Frase permitida (BL-02):** "Carregamos o relatório BASS-II original, verificamos sua integridade e estruturamos o ensaio M1 com página, tabela e coluna de cada valor. Antes de qualquer número ser usado, ele passa por revisão humana; enquanto isso não acontece, o assistente diz que o dado existe e está em revisão, sem citá-lo."
 > **Proibido até a revisão:** "dados conferidos", "valores validados", ou mostrar 0,071 mm/s como resposta da IA.
+
+## 7. Plataforma v2 (14/11, ADR-09): o que pode e o que não pode ser dito
+| Capacidade | Estado | Evidência | Pode ser dito? |
+|---|---|---|---|
+| Importar um artigo NASA em PDF e registrar hash/procedência | IMPLEMENTADO_E_TESTADO; 2 PDFs reais importados online | `docs/evidence/BL-12_plataforma_v2.md` | Sim: "importamos o relatório, calculamos o hash e o comparamos com o arquivo publicado no NTRS" |
+| Funciona para outro artigo NASA (não só BASS-II) | IMPLEMENTADO_E_TESTADO: um relatório de 1998 sobre líquidos capilares percorreu o fluxo; classificado `UNSUPPORTED_PHYSICS` para FDS | idem | Sim, **sem** dizer que qualquer artigo pode ser reproduzido |
+| IA extrai parâmetros | IMPLEMENTADO_NAO_VALIDADO: Gemini propõe, o código só aceita citação literal; **tudo fica “não revisado”** | idem | Sim: "a IA propõe, o código confere a citação, uma pessoa aprova". **Não**: “a IA extrai os parâmetros corretamente” |
+| Enriquecimento NTRS/PSI/TechPort | IMPLEMENTADO_E_TESTADO; BASS-II: NTRS confirmado, **PSI-25 candidato** (revisão humana), TechPort sem correspondência | idem | Sim, com “candidato”. **Não**: “o PSI-25 é confirmado”. **Não** citar TechPort 13543 como BASS-II |
+| Cenário derivado (alterar parâmetros) | PROTOTIPO, sobre o **caso de integração** | idem | Sim, rotulado “hipótese computacional” |
+| FDS → Smokeview → MP4 no navegador | IMPLEMENTADO_E_TESTADO (2 execuções reais, caso genérico) | `docs/evidence/` (vídeo, logs, hashes) | Sim: “renderizamos no servidor e exibimos o vídeo”. **Sempre** com o rótulo “teste de integração — não é o BASS-II” |
+| Reprodução numérica do BASS-II M1 | **BLOQUEADO** | `07` (G1/G2/G4, D-11, DIV-22) | **Não.** Dizer “ainda não reproduzimos M1; mapeamos o que falta” |
+| Telas S01–S07 | PROTOTIPO; compiladas e testadas, **não inspecionadas em navegador nesta sessão** | `frontend/` | “protótipo navegável”, não “interface final” |
+> **Proibido:** mostrar o vídeo do caso de integração como simulação do BASS-II; apresentar curva de HRR como resultado experimental; dizer que valores importados por IA são “conferidos”.
+
+### Registro de mudanças de status (plataforma v2)
+| Data | Item | De → Para | Evidência | Quem |
+|---|---|---|---|---|
+| 14/11 | P-16 | NOT_VERIFIED → IMPLEMENTADO_E_TESTADO (caso de integração) | FDS 6.11.1/Smokeview 6.11.2/FFmpeg 9.0.2 executados; runs reais | plataforma v2 |
+| 14/11 | P-17, P-18 | PLANEJADO → parcial: o worker existe; o caso científico (G1/G2) segue bloqueado | `planning/09` | plataforma v2 |

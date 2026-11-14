@@ -199,7 +199,9 @@ class LocalFdsExecutor:
         if [f.name for f in frames] != expected:
             raise ExecutionError(RunState.FAILED, "A sequência de quadros está incompleta ou fora de ordem.")
         result.results["frame_count"] = len(frames)
-        result.artifacts.append(_artifact("FRAME_PNG", frames[len(frames) // 2], index=len(frames) // 2,
+        poster = run_dir / "poster.png"  # na raiz da execução: é o que a API entrega como artefato
+        shutil.copy2(frames[len(frames) // 2], poster)
+        result.artifacts.append(_artifact("FRAME_PNG", poster, source_frame=frames[len(frames) // 2].name,
                                           note="quadro representativo"))
 
         # 4) FFmpeg → MP4

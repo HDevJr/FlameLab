@@ -26,8 +26,10 @@ Desafio: [Flame in Freefall — NASA Space Apps 2026](https://www.spaceappschall
 - F00: **esqueleto** com endpoint de saúde (`/api/health`) e teste básico.
 - BL-05 (assistente de IA, só backend): `POST /api/ask` com adaptador Gemini, verificador determinístico V1–V8, abstenção e modos `live`/`cache`/`off`. **Testado com evidência sintética** (66 testes com provedor simulado + smoke test real do Gemini). Detalhes em [docs/evidence/BL-05_assistente_ia.md](docs/evidence/BL-05_assistente_ia.md).
 - BL-02 (dataset científico): `data/` contém o ensaio **BASS-II M1** (9 registros, 11 evidências, 12 lacunas), validado pelo `DatasetStore` (invariantes I-1–I-10). O hash do PDF-fonte confere. **Os 9 registros estão `EXTRAIDO_NAO_REVISADO`: aguardam revisão humana.** Até lá, o assistente informa que o dado "consta na fonte e aguarda revisão" (`PENDING_REVIEW`) e não cita o valor. Detalhes em [docs/evidence/BL-02_dataset_cientifico.md](docs/evidence/BL-02_dataset_cientifico.md) e [docs/curation/BASS2-M1_curation_report.md](docs/curation/BASS2-M1_curation_report.md).
-- Não há busca, frontend nem integração com FDS.
-- Teste simples do FDS/Smokeview aconteceu em **outro computador**; a máquina atual ainda precisa de auditoria.
+- **Plataforma v2 (ADR-09, protótipo):** importação de artigos NASA em PDF (hash e procedência por comparação com o NTRS), extração assistida por IA com citação literal, enriquecimento NASA (NTRS, PSI via DataCite, TechPort), catálogo genérico, compatibilidade com o FDS, cenários derivados e worker FDS → Smokeview → MP4. Evidências em [docs/evidence/BL-12_plataforma_v2.md](docs/evidence/BL-12_plataforma_v2.md); decisões em [planning/09](planning/09_ADR_NASA_ENRICHMENT_FDS_SMOKEVIEW.md).
+- **FDS/Smokeview/FFmpeg: verificados nesta máquina** (FDS 6.11.1, Smokeview 6.11.2, FFmpeg 9.0.2), com um **caso de integração** genérico. **Não há reprodução do BASS-II M1**: depende de revisão humana, lacunas científicas e modelo aprovado.
+- Frontend: protótipo navegável S01–S07 (React + TypeScript + Vite) em `frontend/`. Não foi inspecionado em navegador nesta sessão (NOT_RUN); compila, tipa e passa nos testes unitários.
+- Busca textual/ranking e comparação lado a lado continuam não implementados.
 - Valores BASS-II/M1 citados no planejamento **não são apresentados como conferidos na fonte primária** até dupla revisão do PDF original.
 
 ## Executar localmente (Windows / PowerShell)
@@ -50,6 +52,15 @@ Em outro terminal, dentro da raiz:
 ```
 
 Verificação: abrir <http://127.0.0.1:8000/api/health>; resposta esperada `{"status":"ok","stage":"F00"}`. Isso atesta apenas a API mínima, não as integrações científicas.
+
+### Frontend (protótipo v2)
+```powershell
+cd frontend
+npm install
+npm run dev          # http://localhost:5173 (proxy de /api para 127.0.0.1:8000)
+npm run typecheck; npm test; npm run build
+```
+Variáveis úteis do backend: `FLAMELAB_NASA_MODE=online|fixture` (padrão `online`; `fixture` usa respostas gravadas, sem rede) e `FLAMELAB_VAR_DIR` (área de trabalho local; padrão `var/`, não versionada). O executor FDS usa `C:/Program Files/firemodels`; se ausente, simulações ficam `BLOCKED` com o motivo. Importações usam o Gemini quando `FLAMELAB_LLM_MODE=live` (um PDF = uma chamada real).
 
 ## Assistente científico (IA)
 

@@ -19,6 +19,13 @@
 | R-12 | "Dashboard genérico" (DM §17) | Média | Médio | revisão de G2 | jornada guiada por pergunta e ficha M1 no centro | — |
 | R-13 | PDF > limite de repositório/licença de redistribuição incerta | Baixa | Baixo | BL-01.04 | guardar só o hash e a URL no git | — |
 | R-14 | Prompt injection via trecho | Baixa (corpus curado) | Alto | T-16 | dados delimitados, sem ferramentas, verificador | — |
+| R-15 | **Isolamento do worker sem contêiner nem limite de memória** (Windows; só diretório, lista de executáveis, tempo e threads) | Média | Alto | execução que consome memória | Casos só do Case Builder; limites de tempo/quadros; uso local | Contêiner/Job Object, ou worker em VM antes de expor a terceiros |
+| R-16 | Smokeview exige contexto OpenGL (funcionou com sessão de usuário no Windows 11; sem teste em servidor sem tela, Linux/Xvfb) | Média | Médio | falha de renderização → `FAILED` explícito | Worker Windows com sessão; registrar | Xvfb/Mesa em Linux, testado antes de depender |
+| R-17 | TechPort pode passar a exigir token (spec declara `bearerAuth`, mas as leituras funcionaram sem) | Média | Baixo | 401/403 | Tratado como `SOURCE_UNAVAILABLE`; nenhum token guardado | Consulta manual |
+| R-18 | PSI sem API documentada | Alta | Médio | — | Descoberta pelo DataCite; arquivos do PSI por consulta manual | Adaptador de metadados conhecidos |
+| R-19 | Vídeo/curva do caso de integração confundido com resultado BASS-II | Média | **Muito alto** | revisão do pitch | Rótulo obrigatório no JSON (`label_pt`), na UI (badge “Teste de integração”) e em `06 §7` | Remover a tela do roteiro |
+| R-20 | A extração por IA lê só as 14 primeiras páginas / 48 mil caracteres de cada PDF | Alta | Médio | aviso na importação | Aviso no registro; revisão humana | Extração por seções (fase de produção) |
+| R-21 | Texto de PDF com hifenização/colunas misturadas gera descarte de citações válidas ou, raramente, trecho espúrio | Média | Baixo | `extraction.rejected` | Normalização simétrica; descarte é o lado seguro | OCR/layout em produção |
 
 ## 2. Divergências documento × prompt × realidade
 | ID | Divergência | Consequência | Recomendação |
@@ -44,6 +51,12 @@
 | DIV-20 | Registros não conferidos eram simplesmente omitidos do assistente | o Gemini real disse que a propagação de M1 "está ausente no relatório" (falso: está pendente de revisão) e o verificador aprovou (`docs/evidence/smoke_real_dataset_20261114T191536Z.json`) | **Implementado:** registro não conferido entra como VALOR RETIDO (sem número); regras V5b (citação de lacuna precisa tratar da lacuna) e V5c (pendente ≠ ausente); motivo `PENDING_REVIEW`; prompt v2 |
 | DIV-21 | Divergência interna na fonte: texto das §5.1/§5.3 diz larguras "1 or 2 cm"; a Tabela 5.1 e a p. 58 dizem 1,2/2,2 cm | escolher um sem registrar esconderia a inconsistência | Registrado o valor da tabela (2,2 cm), com ressalva no registro `width`; decisão final na revisão humana |
 | DIV-22 | M2–M20 têm várias velocidades e propagações por ensaio ("20 and 15"; "0.052 and 0.033") | o contrato v1 tem um valor por registro; T-04 se confirma | Antes de BL-02.08, decidir o modelo de **segmentos de escoamento** por ensaio (alteração de contrato → aprovação) |
+| DIV-23 | Política “FDS fora do servidor” (02 §1.5/§11; `POST /api/simulations` = 423) × novo requisito de executar FDS na infraestrutura | A API antiga contradiz o produto | **Substituída por ADR-09** (`09`); 02 e 05 anotados sem apagar o texto original |
+| DIV-24 | Prompt pede “consultar o PSI” × ausência de API documentada do PSI | Inventar endpoints seria falso | Descoberta pelo DataCite (publicador “NASA PSI”); o serviço interno do portal **não foi sondado**; dados de arquivo = consulta manual |
+| DIV-25 | Prompt: “PSI-25 ↔ BASS-II” como vínculo conhecido × ausência de citação cruzada entre NTRS e PSI | Chamar de confirmado esconde que a ligação é por título/pessoas | Estado **`MATCH_CANDIDATE`** até revisão humana; razões gravadas |
+| DIV-26 | Registro TechPort 13543 citado no prompt | É “Spacecraft Fire Safety Demonstration” (Saffire), não BASS-II | Consultado, **não equivalente**, nenhuma relação criada |
+| DIV-27 | Nomes do prompt (`Experiment`, `Parameter`) × contrato v1 (`Test`, `ParameterRecord`) | Duplicar entidades criaria dois modelos | Mesmas entidades; apenas nomes de API. Novos: `SourceMatch`, `EnrichmentRecord`, `SimulationModel`, `Scenario`, `SimulationRun`, `RenderedArtifact` (camada de plataforma, sem alterar o contrato v1) |
+| DIV-28 | “Verificar associação com a NASA” sem definição | Texto/aparência de PDF é forjável | Procedência `VERIFIED` só com hash idêntico ao arquivo do NTRS |
 | DIV-18 | Schema JSON gerado pelo Pydantic | rejeitado com HTTP 400 por `gemini-3.5-flash-lite` (evidência: `docs/evidence/smoke_gemini_20261114T184138Z.json`) | **Implementado:** schema do provedor declarado à mão (`LLM_OUTPUT_PROVIDER_SCHEMA`); validação estrita mantida no Pydantic |
 
 ## 3. Decisões pendentes
@@ -60,6 +73,10 @@
 | D-09 | O PDF entra no git? | sim / só hash | *14/11: **só hash** (49 MB; `sources/*.pdf` ignorado; termos NTRS a confirmar). Hash conferido em `docs/evidence/source_hash_check_*`* | BL-01.04 | — |
 | D-11 | **Quem faz a revisão humana de M1** (BL-02.07) | pessoa da equipe ≠ extrator | Escolher 1 revisor agora; ~15 min com `scripts/review_record.py`. Bloqueia P-02 e o teste de resposta real | **imediato** | P-02, P-05 |
 | D-10 | Idioma das respostas da IA | PT / PT+citação EN | PT com o trecho citado em EN | BL-05.05 | — |
+| D-12 | Aprovar ADR-09 (execução de FDS em worker isolado) | aprovar / manter execução manual | **Aprovar**, com a limitação R-15 explícita | antes de expor a terceiros | uso fora da máquina local |
+| D-13 | Quando `PSI-25` deixa de ser “candidato” | revisão humana do vínculo; ou citação cruzada | Revisor humano registra a decisão; nunca automático | com D-11 | rótulo “confirmado” |
+| D-14 | Onde fica a revisão humana de parâmetros importados | `scripts/review_record.py` só no dataset curado / tela na UI | Tela de revisão (BL-12.12), mantendo as recusas do script | produção | promoção de itens importados |
+| D-15 | Segundo executor (Linux/Xvfb) e contêiner | adiar / já | Adiar; registrar R-15/R-16 | produção | hospedagem |
 
 ## 4. Hipóteses assumidas neste plano
 - H-1: a Tabela 5.1 do NASA/TM-20210011385 é texto selecionável (não imagem). Verificar no BL-02.04.

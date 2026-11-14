@@ -210,3 +210,15 @@ def test_enrichment_endpoint_on_reference_document_and_404_for_unknown(client):
     assert client.post("/api/documents/DOC-nao-existe/enrichment").status_code == 404
     assert all(p["status"] == "EXTRAIDO_NAO_REVISADO"
                for p in client.get("/api/experiments/BASS2-M1").json()["data"]["parameters"])
+
+
+def test_literal_check_tolerates_line_end_hyphenation_but_not_paraphrase():
+    pages = {1: "the system temperature was further in- creased to 95 °C. Cooling followed."}
+    ok = {"name": "peak_temperature", "role": "CONDICAO", "value": "95", "unit": "°C", "page": 1,
+          "quote": "temperature was further increased to 95 °C"}
+    para = {"name": "peak2", "role": "CONDICAO", "value": "95", "unit": "°C", "page": 1,
+            "quote": "temperature rose to 95 °C"}
+    out = extraction.ExtractionOutput.model_validate(_out([ok, para]))
+    exps, rejected = extraction.validate(out, pages, "DOC-X", "m", "2026-11-14T00:00:00Z")
+    assert [p["parameter"] for p in exps[0]["parameters"]] == ["peak_temperature"]
+    assert [r["reason"] for r in rejected] == ["QUOTE_NOT_LITERAL"]

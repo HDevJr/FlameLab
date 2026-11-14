@@ -1,5 +1,17 @@
-# Frontend — reservado para fase de interface
+# Frontend — protótipo navegável (v2)
 
-A estrutura e os contratos da UI constam de `planning/02_TECHNICAL_ARCHITECTURE.md` e do alinhamento de pitch (`planning/06_PITCH_ALIGNMENT_MATRIX.md`).
+React 18 + TypeScript + Vite. **Protótipo para validar a jornada**, não o design final.
 
-Nenhuma página, gráfico ou simulação está implementada no pacote F00. A equipe de frontend pode criar o projeto Vite nesta pasta depois de alinhar o contrato com a equipe de backend. Não alterar `planning/` unilateralmente.
+| Tela | Rota | Função |
+|---|---|---|
+| S01 Biblioteca | `/` | documentos e experimentos do catálogo (curados e importados) |
+| S02 Importação | `/importar` | upload de PDF; estados reais de cada etapa |
+| S03 Enriquecimento | `/documentos/:id/enriquecimento` | NTRS / PSI / TechPort, razões, divergências, operações de API |
+| S04 Revisão | `/experimentos/:id` | condições × resultados observados, estado de revisão, lacunas, prontidão FDS |
+| S05 Alteração | `/experimentos/:id/alterar` | formulário gerado do modelo; original × novo; cenário derivado |
+| S06 Execução | `/simulacao/:scenarioId` | estado real da tarefa (fila → FDS → renderização) |
+| S07 Resultado | `/execucoes/:runId` | vídeo MP4, HRR, parâmetros alterados, proveniência |
+
+Regras de interface: dado real, em revisão, de teste e demonstrativo têm selos distintos; todo resultado de simulação traz o rótulo “teste de integração / hipótese computacional”; nada é animado sem corresponder a um estado do backend. Não há modo demonstrativo no frontend (testes usam executor simulado no backend).
+
+`npm install` · `npm run dev` (backend em `127.0.0.1:8000`) · `npm run typecheck` · `npm test` · `npm run build`.
