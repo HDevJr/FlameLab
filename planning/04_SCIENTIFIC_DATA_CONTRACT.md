@@ -240,3 +240,35 @@ Unidades fora da tabela → o registro é rejeitado no carregamento (não há co
 - `contract_version: "1.0"` em cada arquivo JSON.
 - `dataset_version` = sha256 do JSON canônico (chaves ordenadas) de todos os arquivos em `data/`, exceto `ai_cache/`.
 - Mudar o contrato depois da F02a exige atualizar este documento, os fixtures e um teste de regressão.
+
+
+# Curadoria científica — BASS-II
+
+## Fonte
+- Documento: NASA/TM-20210011385
+- Investigação: BASS-II
+- SHA-256: consultar data/source_manifest.json
+
+## Experimento M1
+- Seção: 5.3
+- Tabela: 5.1
+- Página impressa: 57
+- Página do PDF: PENDENTE
+- Revisor 1: PENDENTE
+- Revisor 2: PENDENTE
+- Estado: EXTRAIDO_NAO_REVISADO
+
+## Conferência
+- [ ] Identificação M1 correta
+- [ ] Espessura e largura verificadas
+- [ ] Número de faces verificado
+- [ ] Velocidade do ar verificada
+- [ ] Propagação observada verificada
+- [ ] Duração verificada
+- [ ] Oxigênio inicial e final verificados
+- [ ] Unidades originais preservadas
+- [ ] Conversões para SI verificadas
+- [ ] Segunda revisão concluída
+
+## Resultado
+PENDENTE DE VALIDAÇÃO
