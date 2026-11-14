@@ -25,7 +25,8 @@ Desafio: [Flame in Freefall — NASA Space Apps 2026](https://www.spaceappschall
 
 - F00: **esqueleto** com endpoint de saúde (`/api/health`) e teste básico.
 - BL-05 (assistente de IA, só backend): `POST /api/ask` com adaptador Gemini, verificador determinístico V1–V8, abstenção e modos `live`/`cache`/`off`. **Testado com evidência sintética** (66 testes com provedor simulado + smoke test real do Gemini). Detalhes em [docs/evidence/BL-05_assistente_ia.md](docs/evidence/BL-05_assistente_ia.md).
-- **Ainda não há dataset BASS-II curado.** Por isso, em execução normal, `/api/ask` se abstém (`NO_ELIGIBLE_EVIDENCE`) e nunca responde com valores experimentais não conferidos. Não há busca, frontend nem integração com FDS.
+- BL-02 (dataset científico): `data/` contém o ensaio **BASS-II M1** (9 registros, 11 evidências, 12 lacunas), validado pelo `DatasetStore` (invariantes I-1–I-10). O hash do PDF-fonte confere. **Os 9 registros estão `EXTRAIDO_NAO_REVISADO`: aguardam revisão humana.** Até lá, o assistente informa que o dado "consta na fonte e aguarda revisão" (`PENDING_REVIEW`) e não cita o valor. Detalhes em [docs/evidence/BL-02_dataset_cientifico.md](docs/evidence/BL-02_dataset_cientifico.md) e [docs/curation/BASS2-M1_curation_report.md](docs/curation/BASS2-M1_curation_report.md).
+- Não há busca, frontend nem integração com FDS.
 - Teste simples do FDS/Smokeview aconteceu em **outro computador**; a máquina atual ainda precisa de auditoria.
 - Valores BASS-II/M1 citados no planejamento **não são apresentados como conferidos na fonte primária** até dupla revisão do PDF original.
 
@@ -87,10 +88,22 @@ Responde `{"data": AIAnswer, "dataset_version": ..., "warnings": [...]}` (contra
 O smoke test grava o relatório em `docs/evidence/smoke_gemini_<UTC>.json`, sem credenciais. Sem chave, o resultado é `NOT_RUN`. Ele **não valida** conteúdo BASS-II.
 
 ### Limitações atuais
-- Não existe dataset curado (BL-02): o assistente não responde sobre experimentos NASA.
+- O dataset tem só o ensaio M1, ainda sem revisão humana: o assistente não afirma valores experimentais da NASA (ver "Dataset científico" abaixo).
 - Números só são aceitos quando vêm de fichas de registros `CONFERIDO_FONTE`. Trechos de documento sustentam apenas afirmações qualitativas.
 - O verificador não detecta números por extenso. Paráfrases causais e extrapolações fora da lista (Marte, Lua, gravidade parcial e outros corpos celestes) podem escapar das regras V6/V8.
 - O prompt v1 ainda não teve revisão científica. O golden set real depende da curadoria.
+
+## Dataset científico (BL-02)
+
+- Layout: `data/documents.json`, `data/investigations.json`, `data/tests/`, `data/parameters/`, `data/evidence/`, `data/gaps/`, cada um no envelope `{"contract_version": "1.0", "items": [...]}` (contrato em `planning/04`). Na inicialização, o servidor valida tudo e **não sobe** se o dataset for inválido.
+- O PDF-fonte fica em `sources/NASA-TM-20210011385.pdf` e **não é versionado**. Baixe-o em <https://ntrs.nasa.gov/citations/20210011385> e confira:
+  ```powershell
+  .\.venv\Scripts\python.exe scripts\verify_sources.py        # SHA-256 → MATCH esperado
+  .\.venv\Scripts\python.exe scripts\crosscheck_table51.py    # curadoria × texto do PDF (automático)
+  ```
+- **Revisão humana** (somente pessoa da equipe, diferente de quem extraiu): `scripts\review_record.py`. Ela exige o valor, a unidade e a página lidos no PDF e recusa qualquer divergência. Passo a passo em [docs/curation/BASS2-M1_curation_report.md](docs/curation/BASS2-M1_curation_report.md).
+- Registros não conferidos chegam ao assistente como **valor retido**: o modelo sabe que o dado existe e onde está, mas não recebe o número.
+- Smoke real sobre o dataset real (explícito): `.\.venv\Scripts\python.exe scripts\smoke_gemini_real_dataset.py`.
 
 ## Organização e colaboração
 

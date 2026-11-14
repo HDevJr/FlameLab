@@ -32,20 +32,20 @@ Equipes pequenas combinam papéis. Uma combinação que funciona: {DADOS+CIÊNCI
 | BL-01.08 | Se o protótipo de extração for encontrado: copiar para `scripts/legacy_extractor/` + nota de origem, **sem integrar** | DADOS | 01.07 | 0,25 | arquivo + nota, ou registro "ABSENT" |
 
 ### BL-02 · P0 · Importar e conferir BASS-II Tabela 5.1 (F01 + F02a)
-| ID | Tarefa | Papel | Dep. | h | Aceite / teste |
+| ID | Tarefa | Papel | Dep. | h | Aceite / teste · status (14/11) |
 |---|---|---|---|---|---|
-| BL-02.01 | Modelos Pydantic + enums + invariantes ([04](04_SCIENTIFIC_DATA_CONTRACT.md)) | BACK | 01.02 | 1,5 | T-20 |
-| BL-02.02 | `units.py` (mm, cm, m, mm/s, cm/s, m/s, s, min, %, fração) | BACK | 02.01 | 0,5 | T-07 |
-| BL-02.03 | `DatasetStore` (carregar, validar, indexar, `dataset_version`) | BACK | 02.01 | 1 | T-20, servidor recusa dataset inválido |
-| BL-02.04 | `page_map.py` (página impressa ↔ índice PDF) | DADOS | 01.04 | 0,75 | página de "Table 5.1" identificada nos dois sistemas |
-| BL-02.05 | Ler a Tabela 5.1 e escolher os ensaios do MVP (D-01; recomendado M1 + ≥4 contrastantes, registrar o motivo de cada escolha) | DADOS+CIÊNCIA | 01.04 | 0,5 | lista justificada em `curation_log.md` |
-| BL-02.06 | Transcrever M1 (9 registros) + evidências literais + localização | DADOS | 02.01, 02.04 | 0,75 | registros `EXTRAIDO_NAO_REVISADO` carregam sem erro |
-| BL-02.07 | Conferência independente de M1 → `CONFERIDO_FONTE` | CIÊNCIA | 02.06 | 0,5 | T-01, T-03, T-19 |
-| BL-02.08 | Transcrever + conferir os demais ensaios | DADOS → CIÊNCIA | 02.05, 02.07 | 2 | T-21 (M1/M2 não se misturam), T-04 se M2 tiver duas velocidades |
-| BL-02.09 | Registrar a fonte de "Material = PMMA" e de "microgravidade/ISS" (metadado da investigação) | DADOS | 02.06 | 0,25 | evidência com seção/página |
-| BL-02.10 | `gaps.json` a partir do DM §08.2 + campos esperados não encontrados | CIÊNCIA | 02.06 | 0,5 | T-02 |
-| BL-02.11 | Metadados PSI-25 (`investigations.json`: DOI 10.60555/4qc4-de67, URL) | DADOS | 01.01 | 0,25 | carregado |
-| BL-02.12 | (SHOULD) `crosscheck_table51.py` com PyMuPDF; reaproveitar o protótipo se ele existir | BACK/DADOS | 02.04, 02.08 | 2 | T-04, T-08, relatório MATCH/MISMATCH |
+| BL-02.01 | Modelos Pydantic + enums + invariantes ([04](04_SCIENTIFIC_DATA_CONTRACT.md)) | BACK | 01.02 | 1,5 | T-20 | **IMPLEMENTADO_E_TESTADO**: `backend/app/dataset/models.py` (I-1–I-4, I-6, I-8–I-10 por registro) |
+| BL-02.02 | `units.py` (mm, cm, m, mm/s, cm/s, m/s, s, min, %, fração) | BACK | 02.01 | 0,5 | T-07 | **IMPLEMENTADO_E_TESTADO**: `backend/app/units.py` (+ alias `vol%` da Tabela 5.1) |
+| BL-02.03 | `DatasetStore` (carregar, validar, indexar, `dataset_version`) | BACK | 02.01 | 1 | T-20, servidor recusa dataset inválido | **IMPLEMENTADO_E_TESTADO**: `store.py` (I-5, I-7, referências, versões do documento); servidor não sobe com dataset inválido |
+| BL-02.04 | `page_map.py` (página impressa ↔ índice PDF) | DADOS | 01.04 | 0,75 | página de "Table 5.1" identificada nos dois sistemas | **PARCIAL**: capítulo 5 mapeado à mão (Tab. 5.1 = impressa 57 / PDF 65); `page_map.py` genérico não feito |
+| BL-02.05 | Ler a Tabela 5.1 e escolher os ensaios do MVP (D-01; recomendado M1 + ≥4 contrastantes, registrar o motivo de cada escolha) | DADOS+CIÊNCIA | 01.04 | 0,5 | lista justificada em `curation_log.md` | PLANEJADO (só M1 nesta etapa) |
+| BL-02.06 | Transcrever M1 (9 registros) + evidências literais + localização | DADOS | 02.01, 02.04 | 0,75 | registros `EXTRAIDO_NAO_REVISADO` carregam sem erro | **IMPLEMENTADO_E_TESTADO**: 9 registros + 11 evidências; extração preliminar assistida (não manual) |
+| BL-02.07 | Conferência independente de M1 → `CONFERIDO_FONTE` | CIÊNCIA | 02.06 | 0,5 | T-01, T-03, T-19 | **BLOQUEADO — aguarda pessoa da equipe**: 0/9 conferidos. Ferramenta pronta: `scripts/review_record.py` |
+| BL-02.08 | Transcrever + conferir os demais ensaios | DADOS → CIÊNCIA | 02.05, 02.07 | 2 | T-21 (M1/M2 não se misturam), T-04 se M2 tiver duas velocidades | PLANEJADO. Atenção: M2–M20 têm várias velocidades por ensaio ("20 and 15"), o que exige um modelo de segmentos (DIV-22) |
+| BL-02.09 | Registrar a fonte de "Material = PMMA" e de "microgravidade/ISS" (metadado da investigação) | DADOS | 02.06 | 0,25 | evidência com seção/página | **IMPLEMENTADO** (EXTRAIDO_NAO_REVISADO): material §5.3/§5.1; plataforma ISS/MSG §5.1 |
+| BL-02.10 | `gaps.json` a partir do DM §08.2 + campos esperados não encontrados | CIÊNCIA | 02.06 | 0,5 | T-02 | **IMPLEMENTADO_E_TESTADO**: 12 lacunas em `data/gaps/BASS2-M1.json` |
+| BL-02.11 | Metadados PSI-25 (`investigations.json`: DOI 10.60555/4qc4-de67, URL) | DADOS | 01.01 | 0,25 | carregado | **IMPLEMENTADO** (DOI/URL copiados do DM, não reconferidos no PSI) |
+| BL-02.12 | (SHOULD) `crosscheck_table51.py` com PyMuPDF; reaproveitar o protótipo se ele existir | BACK/DADOS | 02.04, 02.08 | 2 | T-04, T-08, relatório MATCH/MISMATCH | **IMPLEMENTADO_E_TESTADO para M1**: 10/10 MATCH; não generalizado para M2+ |
 
 ### BL-03 · P0 · Ficha M1 (F03 + F04)
 | ID | Tarefa | Papel | Dep. | h | Aceite / teste |

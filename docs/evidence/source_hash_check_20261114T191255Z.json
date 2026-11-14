@@ -1,0 +1,16 @@
+{
+  "executed_at_utc": "2026-11-14T19:12:55.230560+00:00",
+  "results": [
+    {
+      "document_id": "NASA-TM-20210011385",
+      "path": "sources/NASA-TM-20210011385.pdf",
+      "status": "MATCH",
+      "expected_sha256_documents_json": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+      "expected_sha256_source_manifest": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+      "manifest_agrees_with_documents_json": true,
+      "actual_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+      "size_bytes": 48972416,
+      "expected_size_bytes": 48972416
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "contract_version": "1.0",
+  "items": [
+    {
+      "test_uid": "BASS2-M1",
+      "investigation_id": "PSI-25",
+      "label": "M1",
+      "source_table": { "document_id": "NASA-TM-20210011385", "table": "5.1" },
+      "phenomena": ["flame_spread", "opposed_flow"],
+      "material_family": "PMMA",
+      "tags": ["flat_sample", "one_sided"],
+      "selection_reason": "Ensaio inicial definido pela equipe no documento mestre (§08.1)."
+    }
+  ]
+}

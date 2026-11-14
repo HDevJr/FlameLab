@@ -1,0 +1,74 @@
+{
+  "executed_at_utc": "2026-11-14T19:12:55.729816+00:00",
+  "kind": "AUTOMATIC_TEXT_LAYER_CROSSCHECK",
+  "warning": "Verificação automática; não equivale a CONFERIDO_FONTE.",
+  "dataset_version": "sha256:8c1249ba3ff68c258d07a66fb469e3f1893ec7832dfc66a28dd47da9b72b9c56",
+  "rows": [
+    {
+      "record_id": "BASS2-M1.airflow_velocity",
+      "evidence_id": "EV-TM20210011385-T51-M1-flow",
+      "pdf_cell": "9",
+      "curated_raw_text": "9",
+      "result": "MATCH"
+    },
+    {
+      "record_id": "BASS2-M1.burn_duration",
+      "evidence_id": "EV-TM20210011385-T51-M1-burntime",
+      "pdf_cell": "6.4",
+      "curated_raw_text": "6.4",
+      "result": "MATCH"
+    },
+    {
+      "record_id": "BASS2-M1.burning_faces",
+      "evidence_id": "EV-TM20210011385-T51-M1-faces",
+      "pdf_cell": "1",
+      "curated_raw_text": "1",
+      "result": "MATCH"
+    },
+    {
+      "record_id": "BASS2-M1.flame_spread_rate",
+      "evidence_id": "EV-TM20210011385-T51-M1-spread",
+      "pdf_cell": "0.071",
+      "curated_raw_text": "0.071",
+      "result": "MATCH"
+    },
+    {
+      "record_id": "BASS2-M1.material",
+      "evidence_id": "EV-TM20210011385-S53-p56-M1-material",
+      "result": "MATCH"
+    },
+    {
+      "record_id": "BASS2-M1.material",
+      "evidence_id": "EV-TM20210011385-S51-p55-M1-material",
+      "result": "MATCH"
+    },
+    {
+      "record_id": "BASS2-M1.o2_final",
+      "evidence_id": "EV-TM20210011385-T51-M1-o2f",
+      "pdf_cell": "21.9",
+      "curated_raw_text": "21.9",
+      "result": "MATCH"
+    },
+    {
+      "record_id": "BASS2-M1.o2_initial",
+      "evidence_id": "EV-TM20210011385-T51-M1-o2i",
+      "pdf_cell": "22.2",
+      "curated_raw_text": "22.2",
+      "result": "MATCH"
+    },
+    {
+      "record_id": "BASS2-M1.thickness",
+      "evidence_id": "EV-TM20210011385-T51-M1-thickness",
+      "pdf_cell": "1",
+      "curated_raw_text": "1",
+      "result": "MATCH"
+    },
+    {
+      "record_id": "BASS2-M1.width",
+      "evidence_id": "EV-TM20210011385-T51-M1-width",
+      "pdf_cell": "2.2",
+      "curated_raw_text": "2.2",
+      "result": "MATCH"
+    }
+  ]
+}

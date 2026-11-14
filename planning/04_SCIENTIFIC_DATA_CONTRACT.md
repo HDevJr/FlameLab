@@ -150,6 +150,8 @@ O DM lista seis estados, e dois deles (`INFERIDO`, `CALCULADO`) descrevem **de o
   "possible_sources_pt": "<referências a investigar; não preencher com valores>"
 }
 ```
+> **Extensão aditiva (BL-02, DIV-19, pendente de aprovação):** `label_pt` (obrigatório) e `keywords` (lista), usados pela regra V5 do verificador.
+
 Lista inicial (DM §08.2): comprimento da amostra; posição/apoio metálico; dimensões efetivas do duto; pressão; temperatura; perfil espacial e temporal do fluxo; ponto do anemômetro; procedimento/duração/fonte de ignição; propriedades termoquímicas/pirólise do PMMA; incertezas de medição; método de cálculo do avanço da frente. **Na F01, cada item é verificado no PDF.** Se algum for encontrado, sai de Gap e vira ParameterRecord.
 
 ### 3.7 Passage (para recuperação)
@@ -203,6 +205,7 @@ Total: **9 registros = os "8 campos" do DM** (O₂ inicial e final contam como u
 > - `blocked_claims[]` ganha `type` e `reasons[]` (todas as violações); `retrieved[]` ganha `kind`, `test_uid`, `status`, `nature`, `text`, `locator`, `document_id`, `synthetic`.
 > - `abstain_reason`: NO_ELIGIBLE_EVIDENCE, INSUFFICIENT_EVIDENCE, MISSING_DATA, EXTRAPOLATION, MODEL_ABSTAINED, VERIFICATION_FAILED.
 > - IDs de evidência no assistente: fichas `REC-<record_id>`, lacunas `GAP-…`, trechos `PS-…`.
+> - **BL-02 (DIV-20):** `abstain_reason` ganha `PENDING_REVIEW`; `retrieved[]` ganha `value_withheld` (registro não conferido: existe na fonte, valor não liberado).
 
 ### 3.10 Comparison (saída)
 ```json
@@ -260,10 +263,13 @@ Unidades fora da tabela → o registro é rejeitado no carregamento (não há co
 - Seção: 5.3
 - Tabela: 5.1
 - Página impressa: 57
-- Página do PDF: PENDENTE
-- Revisor 1: PENDENTE
+- Página do PDF: 65 (impressa 57) — identificada na extração preliminar (BL-02, 14/11)
+- Material: texto da §5.3 (p. 56 / PDF 64) e §5.1 (p. 55 / PDF 63), não coluna da tabela
+- Extração preliminar: claude-code (camada de texto PyMuPDF), verificação cruzada 10/10 MATCH
+- Revisor 1: PENDENTE (pessoa da equipe; `scripts/review_record.py`)
 - Revisor 2: PENDENTE
-- Estado: EXTRAIDO_NAO_REVISADO
+- Estado: EXTRAIDO_NAO_REVISADO (9/9)
+- Relatório: `docs/curation/BASS2-M1_curation_report.md`
 
 ## Conferência
 - [ ] Identificação M1 correta

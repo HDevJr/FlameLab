@@ -1,0 +1,21 @@
+{
+  "contract_version": "1.0",
+  "items": [
+    {
+      "investigation_id": "PSI-25",
+      "aliases": ["BASS-II", "Burning and Suppression of Solids II"],
+      "doi": "10.60555/4qc4-de67",
+      "url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-25",
+      "platform": {
+        "value": "ISS — Microgravity Science Glovebox (MSG)",
+        "evidence_ids": ["EV-TM20210011385-S51-p55-platform"]
+      },
+      "gravity_environment": {
+        "value": "microgravity",
+        "evidence_ids": ["EV-TM20210011385-S51-p55-platform"]
+      },
+      "documents": ["NASA-TM-20210011385"],
+      "description_pt": "Resumo editorial (equipe, não citação): investigação de queima e supressão de sólidos em microgravidade na ISS. DOI e URL do PSI copiados do documento mestre; não reconferidos no portal PSI nesta etapa."
+    }
+  ]
+}

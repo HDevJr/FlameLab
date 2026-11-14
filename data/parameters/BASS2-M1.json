@@ -1,0 +1,376 @@
+{
+  "contract_version": "1.0",
+  "items": [
+    {
+      "record_id": "BASS2-M1.material",
+      "test_uid": "BASS2-M1",
+      "investigation_id": "PSI-25",
+      "parameter": "material",
+      "label_pt": "Material",
+      "label_source": null,
+      "role": "METADADO",
+      "nature": "OBSERVADO",
+      "status": "EXTRAIDO_NAO_REVISADO",
+      "original": {
+        "value": "PMMA (polimetilmetacrilato; \"clear cast\")",
+        "unit": null,
+        "raw_text": "20 PMMA flat samples ... (Table 5.1)"
+      },
+      "normalized": null,
+      "qualifiers": {},
+      "evidence_ids": [
+        "EV-TM20210011385-S53-p56-M1-material",
+        "EV-TM20210011385-S51-p55-M1-material"
+      ],
+      "extraction": {
+        "method": "ASSISTED_TEXT_LAYER",
+        "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)",
+        "at": "2026-11-14T19:10:00Z"
+      },
+      "review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": null,
+        "checked_document_sha256": null
+      },
+      "model_review": null,
+      "rationale": null,
+      "sim_run_id": null,
+      "caveats_pt": [
+        "A Tabela 5.1 não tem coluna de material; a identificação vem do texto da §5.3 (as 20 amostras planas da Tabela 5.1 são de PMMA) e da §5.1 (\"clear cast PMMA\")."
+      ]
+    },
+    {
+      "record_id": "BASS2-M1.thickness",
+      "test_uid": "BASS2-M1",
+      "investigation_id": "PSI-25",
+      "parameter": "thickness",
+      "label_pt": "Espessura da amostra",
+      "label_source": "Thickness, mm",
+      "role": "CONDICAO",
+      "nature": "OBSERVADO",
+      "status": "EXTRAIDO_NAO_REVISADO",
+      "original": {
+        "value": 1,
+        "unit": "mm",
+        "raw_text": "1"
+      },
+      "normalized": {
+        "value": 0.001,
+        "unit": "m"
+      },
+      "qualifiers": {},
+      "evidence_ids": [
+        "EV-TM20210011385-T51-M1-thickness"
+      ],
+      "extraction": {
+        "method": "ASSISTED_TEXT_LAYER",
+        "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)",
+        "at": "2026-11-14T19:10:00Z"
+      },
+      "review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": null,
+        "checked_document_sha256": null
+      },
+      "model_review": null,
+      "rationale": null,
+      "sim_run_id": null,
+      "caveats_pt": []
+    },
+    {
+      "record_id": "BASS2-M1.width",
+      "test_uid": "BASS2-M1",
+      "investigation_id": "PSI-25",
+      "parameter": "width",
+      "label_pt": "Largura da amostra",
+      "label_source": "Width, cm",
+      "role": "CONDICAO",
+      "nature": "OBSERVADO",
+      "status": "EXTRAIDO_NAO_REVISADO",
+      "original": {
+        "value": 2.2,
+        "unit": "cm",
+        "raw_text": "2.2"
+      },
+      "normalized": {
+        "value": 0.022000000000000002,
+        "unit": "m"
+      },
+      "qualifiers": {},
+      "evidence_ids": [
+        "EV-TM20210011385-T51-M1-width"
+      ],
+      "extraction": {
+        "method": "ASSISTED_TEXT_LAYER",
+        "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)",
+        "at": "2026-11-14T19:10:00Z"
+      },
+      "review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": null,
+        "checked_document_sha256": null
+      },
+      "model_review": null,
+      "rationale": null,
+      "sim_run_id": null,
+      "caveats_pt": [
+        "Divergência interna da fonte: o texto das §5.1 (p. 55) e §5.3 (p. 56) menciona larguras de \"1 or 2 cm\", enquanto a Tabela 5.1 e o texto da p. 58 listam 1,2 e 2,2 cm. Valor da tabela registrado; divergência a avaliar na revisão."
+      ]
+    },
+    {
+      "record_id": "BASS2-M1.burning_faces",
+      "test_uid": "BASS2-M1",
+      "investigation_id": "PSI-25",
+      "parameter": "burning_faces",
+      "label_pt": "Faces em combustão",
+      "label_source": "One or two sides burning",
+      "role": "CONDICAO",
+      "nature": "OBSERVADO",
+      "status": "EXTRAIDO_NAO_REVISADO",
+      "original": {
+        "value": 1,
+        "unit": null,
+        "raw_text": "1"
+      },
+      "normalized": {
+        "value": 1.0,
+        "unit": "adimensional"
+      },
+      "qualifiers": {},
+      "evidence_ids": [
+        "EV-TM20210011385-T51-M1-faces"
+      ],
+      "extraction": {
+        "method": "ASSISTED_TEXT_LAYER",
+        "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)",
+        "at": "2026-11-14T19:10:00Z"
+      },
+      "review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": null,
+        "checked_document_sha256": null
+      },
+      "model_review": null,
+      "rationale": null,
+      "sim_run_id": null,
+      "caveats_pt": [
+        "Coluna \"One or two sides burning\" = 1 (queima em uma face)."
+      ]
+    },
+    {
+      "record_id": "BASS2-M1.airflow_velocity",
+      "test_uid": "BASS2-M1",
+      "investigation_id": "PSI-25",
+      "parameter": "airflow_velocity",
+      "label_pt": "Velocidade do ar (escoamento oposto)",
+      "label_source": "Velocity, cm/s",
+      "role": "CONDICAO",
+      "nature": "OBSERVADO",
+      "status": "EXTRAIDO_NAO_REVISADO",
+      "original": {
+        "value": 9,
+        "unit": "cm/s",
+        "raw_text": "9"
+      },
+      "normalized": {
+        "value": 0.09,
+        "unit": "m/s"
+      },
+      "qualifiers": {
+        "flow_direction": "oposto (§5.3, p. 56: \"The airflow was always opposed.\") — EXTRAIDO_NAO_REVISADO",
+        "spatial_profile": "AUSENTE (§5.5 informa perfil medido irregular; valores não tabulados)",
+        "measurement_point": "parcial: anemômetro mede o ar que entra no duto (§5.3); posição exata AUSENTE"
+      },
+      "evidence_ids": [
+        "EV-TM20210011385-T51-M1-flow"
+      ],
+      "extraction": {
+        "method": "ASSISTED_TEXT_LAYER",
+        "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)",
+        "at": "2026-11-14T19:10:00Z"
+      },
+      "review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": null,
+        "checked_document_sha256": null
+      },
+      "model_review": null,
+      "rationale": null,
+      "sim_run_id": null,
+      "caveats_pt": [
+        "Valor tabulado único para M1; não descreve o perfil espacial nem a variação temporal."
+      ]
+    },
+    {
+      "record_id": "BASS2-M1.flame_spread_rate",
+      "test_uid": "BASS2-M1",
+      "investigation_id": "PSI-25",
+      "parameter": "flame_spread_rate",
+      "label_pt": "Velocidade de propagação da chama",
+      "label_source": "Spread rate, mm/s",
+      "role": "OBSERVAVEL",
+      "nature": "OBSERVADO",
+      "status": "EXTRAIDO_NAO_REVISADO",
+      "original": {
+        "value": 0.071,
+        "unit": "mm/s",
+        "raw_text": "0.071"
+      },
+      "normalized": {
+        "value": 7.099999999999999e-05,
+        "unit": "m/s"
+      },
+      "qualifiers": {},
+      "evidence_ids": [
+        "EV-TM20210011385-T51-M1-spread"
+      ],
+      "extraction": {
+        "method": "ASSISTED_TEXT_LAYER",
+        "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)",
+        "at": "2026-11-14T19:10:00Z"
+      },
+      "review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": null,
+        "checked_document_sha256": null
+      },
+      "model_review": null,
+      "rationale": null,
+      "sim_run_id": null,
+      "caveats_pt": [
+        "RESULTADO OBSERVADO: nunca usar como entrada ou alvo de calibração de modelo.",
+        "Obtida por rastreamento de imagens/vídeo (§5.1, §5.3); incerteza não informada."
+      ]
+    },
+    {
+      "record_id": "BASS2-M1.burn_duration",
+      "test_uid": "BASS2-M1",
+      "investigation_id": "PSI-25",
+      "parameter": "burn_duration",
+      "label_pt": "Tempo de queima",
+      "label_source": "Burn time, min",
+      "role": "OBSERVAVEL",
+      "nature": "OBSERVADO",
+      "status": "EXTRAIDO_NAO_REVISADO",
+      "original": {
+        "value": 6.4,
+        "unit": "min",
+        "raw_text": "6.4"
+      },
+      "normalized": {
+        "value": 384.0,
+        "unit": "s"
+      },
+      "qualifiers": {},
+      "evidence_ids": [
+        "EV-TM20210011385-T51-M1-burntime"
+      ],
+      "extraction": {
+        "method": "ASSISTED_TEXT_LAYER",
+        "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)",
+        "at": "2026-11-14T19:10:00Z"
+      },
+      "review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": null,
+        "checked_document_sha256": null
+      },
+      "model_review": null,
+      "rationale": null,
+      "sim_run_id": null,
+      "caveats_pt": [
+        "Duração reportada; não implica regime estacionário."
+      ]
+    },
+    {
+      "record_id": "BASS2-M1.o2_initial",
+      "test_uid": "BASS2-M1",
+      "investigation_id": "PSI-25",
+      "parameter": "o2_initial",
+      "label_pt": "Concentração inicial de O₂",
+      "label_source": "Initial O2, vol%",
+      "role": "CONDICAO",
+      "nature": "OBSERVADO",
+      "status": "EXTRAIDO_NAO_REVISADO",
+      "original": {
+        "value": 22.2,
+        "unit": "vol%",
+        "raw_text": "22.2"
+      },
+      "normalized": {
+        "value": 0.222,
+        "unit": "fraction"
+      },
+      "qualifiers": {},
+      "evidence_ids": [
+        "EV-TM20210011385-T51-M1-o2i"
+      ],
+      "extraction": {
+        "method": "ASSISTED_TEXT_LAYER",
+        "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)",
+        "at": "2026-11-14T19:10:00Z"
+      },
+      "review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": null,
+        "checked_document_sha256": null
+      },
+      "model_review": null,
+      "rationale": null,
+      "sim_run_id": null,
+      "caveats_pt": [
+        "Base volumétrica (vol%) declarada no cabeçalho da Tabela 5.1.",
+        "O₂ medido apenas no início e no fim do ensaio; os autores assumem perfil linear entre os dois pontos (§5.4, p. 60)."
+      ]
+    },
+    {
+      "record_id": "BASS2-M1.o2_final",
+      "test_uid": "BASS2-M1",
+      "investigation_id": "PSI-25",
+      "parameter": "o2_final",
+      "label_pt": "Concentração final de O₂",
+      "label_source": "Final O2, vol%",
+      "role": "OBSERVAVEL",
+      "nature": "OBSERVADO",
+      "status": "EXTRAIDO_NAO_REVISADO",
+      "original": {
+        "value": 21.9,
+        "unit": "vol%",
+        "raw_text": "21.9"
+      },
+      "normalized": {
+        "value": 0.219,
+        "unit": "fraction"
+      },
+      "qualifiers": {},
+      "evidence_ids": [
+        "EV-TM20210011385-T51-M1-o2f"
+      ],
+      "extraction": {
+        "method": "ASSISTED_TEXT_LAYER",
+        "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)",
+        "at": "2026-11-14T19:10:00Z"
+      },
+      "review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": null,
+        "checked_document_sha256": null
+      },
+      "model_review": null,
+      "rationale": null,
+      "sim_run_id": null,
+      "caveats_pt": [
+        "O₂ medido apenas no início e no fim; não é concentração constante durante o ensaio (§5.4, p. 60)."
+      ]
+    }
+  ]
+}

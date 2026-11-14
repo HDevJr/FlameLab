@@ -1,0 +1,69 @@
+{
+  "kind": "SMOKE_REAL_GEMINI_REAL_DATASET",
+  "executed_at_utc": "2026-11-14T19:18:30.210810+00:00",
+  "model": "gemini-3.5-flash-lite",
+  "dataset_version": "sha256:29674b79fa2080f91d26684af9532610263e7a57c60358d866ada9907610df75",
+  "record_statuses": [
+    "EXTRAIDO_NAO_REVISADO"
+  ],
+  "cases": [
+    {
+      "question": "Qual era a pressão no ensaio M1?",
+      "mode": "LIVE",
+      "abstained": true,
+      "abstain_reason": "MISSING_DATA",
+      "provider_error": null,
+      "latency_ms": 1312,
+      "retrieved_kinds": [
+        "GAP",
+        "RECORD_CARD"
+      ],
+      "approved_claims": [
+        {
+          "type": "LIMITACAO",
+          "text_pt": "A pressao no ensaio M1 esta ausente nas evidencias fornecidas para o ensaio BASS2-M1.",
+          "evidence_ids": [
+            "GAP-BASS2-M1-ambient_pressure"
+          ],
+          "numbers": [],
+          "verification": "PASS"
+        }
+      ],
+      "blocked_claims": [],
+      "numbers_published": [],
+      "warnings": [
+        "9 registro(s) com valor retido: extraído(s) da fonte, aguardando revisão humana."
+      ]
+    },
+    {
+      "question": "Qual foi a velocidade de propagação da chama no ensaio M1?",
+      "mode": "LIVE",
+      "abstained": true,
+      "abstain_reason": "MODEL_ABSTAINED",
+      "provider_error": null,
+      "latency_ms": 1187,
+      "retrieved_kinds": [
+        "GAP",
+        "RECORD_CARD"
+      ],
+      "approved_claims": [
+        {
+          "type": "LIMITACAO",
+          "text_pt": "O dado sobre a velocidade de propagação da chama no ensaio M1 consta na fonte, mas possui status de VALOR RETIDO e aguarda revisão humana, não podendo ser citado como valor.",
+          "evidence_ids": [
+            "REC-BASS2-M1.flame_spread_rate"
+          ],
+          "numbers": [],
+          "verification": "PASS"
+        }
+      ],
+      "blocked_claims": [],
+      "numbers_published": [],
+      "warnings": [
+        "9 registro(s) com valor retido: extraído(s) da fonte, aguardando revisão humana."
+      ]
+    }
+  ],
+  "overall": "PASS",
+  "pass_criterion": "Antes da revisão humana: LIVE, abstenção e nenhum número publicado."
+}

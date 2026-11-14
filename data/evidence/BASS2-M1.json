@@ -1,0 +1,205 @@
+{
+  "contract_version": "1.0",
+  "items": [
+    {
+      "evidence_id": "EV-TM20210011385-S53-p56-M1-material",
+      "document_id": "NASA-TM-20210011385",
+      "test_uid": "BASS2-M1",
+      "locator": {
+        "section": "5.3",
+        "table": null,
+        "figure": null,
+        "row_label": null,
+        "column_label": null,
+        "page_printed": 56,
+        "page_pdf_index": 64,
+        "bbox": null,
+        "precision": "PAGE"
+      },
+      "quote": "A total of 20 PMMA flat samples were burnt during the BASS-II experimentation (Table 5.1).",
+      "quote_lang": "en",
+      "method": "ASSISTED_TEXT_LAYER",
+      "document_sha256_at_extraction": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+    },
+    {
+      "evidence_id": "EV-TM20210011385-S51-p55-M1-material",
+      "document_id": "NASA-TM-20210011385",
+      "test_uid": "BASS2-M1",
+      "locator": {
+        "section": "5.1",
+        "table": null,
+        "figure": null,
+        "row_label": null,
+        "column_label": null,
+        "page_printed": 55,
+        "page_pdf_index": 63,
+        "bbox": null,
+        "precision": "PAGE"
+      },
+      "quote": "Combustion of clear cast polymethylmethacrylate (PMMA) samples ...",
+      "quote_lang": "en",
+      "method": "ASSISTED_TEXT_LAYER",
+      "document_sha256_at_extraction": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+    },
+    {
+      "evidence_id": "EV-TM20210011385-T51-M1-thickness",
+      "document_id": "NASA-TM-20210011385",
+      "test_uid": "BASS2-M1",
+      "locator": {
+        "section": "5.3",
+        "table": "5.1",
+        "figure": null,
+        "row_label": "M1",
+        "column_label": "Thickness, mm",
+        "page_printed": 57,
+        "page_pdf_index": 65,
+        "bbox": null,
+        "precision": "TABLE_CELL"
+      },
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Thickness, mm: 1",
+      "quote_lang": "en",
+      "method": "ASSISTED_TEXT_LAYER",
+      "document_sha256_at_extraction": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+    },
+    {
+      "evidence_id": "EV-TM20210011385-T51-M1-width",
+      "document_id": "NASA-TM-20210011385",
+      "test_uid": "BASS2-M1",
+      "locator": {
+        "section": "5.3",
+        "table": "5.1",
+        "figure": null,
+        "row_label": "M1",
+        "column_label": "Width, cm",
+        "page_printed": 57,
+        "page_pdf_index": 65,
+        "bbox": null,
+        "precision": "TABLE_CELL"
+      },
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Width, cm: 2.2",
+      "quote_lang": "en",
+      "method": "ASSISTED_TEXT_LAYER",
+      "document_sha256_at_extraction": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+    },
+    {
+      "evidence_id": "EV-TM20210011385-T51-M1-faces",
+      "document_id": "NASA-TM-20210011385",
+      "test_uid": "BASS2-M1",
+      "locator": {
+        "section": "5.3",
+        "table": "5.1",
+        "figure": null,
+        "row_label": "M1",
+        "column_label": "One or two sides burning",
+        "page_printed": 57,
+        "page_pdf_index": 65,
+        "bbox": null,
+        "precision": "TABLE_CELL"
+      },
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | One or two sides burning: 1",
+      "quote_lang": "en",
+      "method": "ASSISTED_TEXT_LAYER",
+      "document_sha256_at_extraction": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+    },
+    {
+      "evidence_id": "EV-TM20210011385-T51-M1-flow",
+      "document_id": "NASA-TM-20210011385",
+      "test_uid": "BASS2-M1",
+      "locator": {
+        "section": "5.3",
+        "table": "5.1",
+        "figure": null,
+        "row_label": "M1",
+        "column_label": "Velocity, cm/s",
+        "page_printed": 57,
+        "page_pdf_index": 65,
+        "bbox": null,
+        "precision": "TABLE_CELL"
+      },
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Velocity, cm/s: 9",
+      "quote_lang": "en",
+      "method": "ASSISTED_TEXT_LAYER",
+      "document_sha256_at_extraction": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+    },
+    {
+      "evidence_id": "EV-TM20210011385-T51-M1-spread",
+      "document_id": "NASA-TM-20210011385",
+      "test_uid": "BASS2-M1",
+      "locator": {
+        "section": "5.3",
+        "table": "5.1",
+        "figure": null,
+        "row_label": "M1",
+        "column_label": "Spread rate, mm/s",
+        "page_printed": 57,
+        "page_pdf_index": 65,
+        "bbox": null,
+        "precision": "TABLE_CELL"
+      },
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Spread rate, mm/s: 0.071",
+      "quote_lang": "en",
+      "method": "ASSISTED_TEXT_LAYER",
+      "document_sha256_at_extraction": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+    },
+    {
+      "evidence_id": "EV-TM20210011385-T51-M1-burntime",
+      "document_id": "NASA-TM-20210011385",
+      "test_uid": "BASS2-M1",
+      "locator": {
+        "section": "5.3",
+        "table": "5.1",
+        "figure": null,
+        "row_label": "M1",
+        "column_label": "Burn time, min",
+        "page_printed": 57,
+        "page_pdf_index": 65,
+        "bbox": null,
+        "precision": "TABLE_CELL"
+      },
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Burn time, min: 6.4",
+      "quote_lang": "en",
+      "method": "ASSISTED_TEXT_LAYER",
+      "document_sha256_at_extraction": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+    },
+    {
+      "evidence_id": "EV-TM20210011385-T51-M1-o2i",
+      "document_id": "NASA-TM-20210011385",
+      "test_uid": "BASS2-M1",
+      "locator": {
+        "section": "5.3",
+        "table": "5.1",
+        "figure": null,
+        "row_label": "M1",
+        "column_label": "Initial O2, vol%",
+        "page_printed": 57,
+        "page_pdf_index": 65,
+        "bbox": null,
+        "precision": "TABLE_CELL"
+      },
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Initial O2, vol%: 22.2",
+      "quote_lang": "en",
+      "method": "ASSISTED_TEXT_LAYER",
+      "document_sha256_at_extraction": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+    },
+    {
+      "evidence_id": "EV-TM20210011385-T51-M1-o2f",
+      "document_id": "NASA-TM-20210011385",
+      "test_uid": "BASS2-M1",
+      "locator": {
+        "section": "5.3",
+        "table": "5.1",
+        "figure": null,
+        "row_label": "M1",
+        "column_label": "Final O2, vol%",
+        "page_printed": 57,
+        "page_pdf_index": 65,
+        "bbox": null,
+        "precision": "TABLE_CELL"
+      },
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Final O2, vol%: 21.9",
+      "quote_lang": "en",
+      "method": "ASSISTED_TEXT_LAYER",
+      "document_sha256_at_extraction": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+    }
+  ]
+}

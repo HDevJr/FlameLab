@@ -1,0 +1,20 @@
+{
+  "contract_version": "1.0",
+  "items": [
+    {
+      "document_id": "NASA-TM-20210011385",
+      "title": "Burning and Suppression of Solids—II (BASS—II) Summary Report",
+      "kind": "TECHNICAL_MEMORANDUM",
+      "url": "https://ntrs.nasa.gov/citations/20210011385",
+      "doi": null,
+      "version": "October 2021 (conforme folha de rosto do PDF)",
+      "local_path": "sources/NASA-TM-20210011385.pdf",
+      "size_bytes": 48972416,
+      "sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+      "sha256_computed_at": "2026-11-14T19:12:55Z",
+      "retrieved_at": "2026-11-14T17:56:34Z",
+      "license_note": "A confirmar: termos de uso do NTRS. PDF mantido fora do Git (sources/*.pdf ignorado).",
+      "lang": "en"
+    }
+  ]
+}
