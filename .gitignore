@@ -1,0 +1,51 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Node / frontend
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.tsbuildinfo
+
+# Ambiente e credenciais
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Dados originais grandes ou obtidos externamente
+sources/*.pdf
+sources/*.zip
+!sources/.gitkeep
+
+# Execuções locais e resultados pesados
+fds/runs/
+fds/**/*.smv
+fds/**/*.sf
+fds/**/*.s3d
+fds/**/*.smoke3d
+fds/**/*.csv
+fds/**/*.out
+fds/**/*.err
+fds/**/*.log
+
+# Temporários / upload
+uploads/
+tmp/
+*.tmp
