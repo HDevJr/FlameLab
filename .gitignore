@@ -49,3 +49,6 @@ fds/**/*.log
 uploads/
 tmp/
 *.tmp
+
+# Área de trabalho local do protótipo v2 (uploads, execuções, cenários)
+var/

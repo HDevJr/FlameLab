@@ -1,4 +1,4 @@
-"""FlameLab API — F00 + assistente científico (BL-05) + dataset científico (BL-02). Sem FDS."""
+"""FlameLab API — assistente (BL-05), dataset (BL-02) e protótipo v2: importação, enriquecimento NASA, simulação."""
 
 from contextlib import asynccontextmanager
 
@@ -6,6 +6,7 @@ from fastapi import FastAPI
 
 from backend.app.api.assistant import get_dataset_store, router as assistant_router
 from backend.app.api.errors import install_error_handlers
+from backend.app.api.platform import router as platform_router
 
 
 @asynccontextmanager
@@ -15,9 +16,10 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="FlameLab API", version="0.2.0-bl02", lifespan=lifespan)
+app = FastAPI(title="FlameLab API", version="0.3.0-proto", lifespan=lifespan)
 install_error_handlers(app)
 app.include_router(assistant_router)
+app.include_router(platform_router)
 
 
 @app.get("/api/health", tags=["system"])
