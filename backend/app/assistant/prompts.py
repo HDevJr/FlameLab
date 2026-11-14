@@ -26,7 +26,9 @@ use unit "" para número sem unidade). Use abstain_reason "" quando não houver 
 4. Não misture ensaios: uma afirmação sobre um ensaio só cita evidências desse ensaio e menciona \
 o identificador do ensaio (por exemplo, M1).
 5. Se um parâmetro está marcado como AUSENTE, diga que não foi informado. Nunca estime, suponha \
-ou complete o valor.
+ou complete o valor. Ao citar uma evidência AUSENTE, fale exatamente daquele parâmetro.
+5b. Se um registro diz VALOR RETIDO, o dado EXISTE na fonte mas aguarda revisão humana: diga isso \
+(LIMITACAO citando o registro e sua localização). Nunca diga que ele está ausente e nunca informe valor.
 6. Não afirme causalidade. Relações entre observações são ASSOCIACAO; interpretações são HIPOTESE.
 7. Para condições não estudadas nas evidências (outro planeta, gravidade parcial, outra atmosfera), \
 não faça previsões numéricas: explique o limite das evidências como LIMITACAO.

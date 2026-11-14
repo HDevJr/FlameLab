@@ -107,6 +107,9 @@ def detect_extrapolation(question: str) -> list[str]:
 # ------------------------------------------------------------------ recuperação
 def _eligible(item: EvidenceItem) -> bool:
     if item.kind == EvidenceKind.RECORD_CARD:
+        if item.value_withheld:
+            # registro pendente: elegível só como AVISO de existência, sem valor (DIV-20)
+            return not item.quantities and item.status == "EXTRAIDO_NAO_REVISADO"
         return item.status == "CONFERIDO_FONTE" and item.nature == "OBSERVADO"
     if item.kind == EvidenceKind.GAP:
         return item.status == "AUSENTE"
@@ -160,7 +163,7 @@ class RetrievalResult:
 
 def retrieve(source: EvidenceSource, question: str, scope: AskScope) -> RetrievalResult:
     all_items = source.items()
-    warnings: list[str] = []
+    warnings: list[str] = list(getattr(source, "warnings", []) or [])  # ex.: registros omitidos por hash divergente
     if not all_items:
         return RetrievalResult([], {}, False, "NO_ELIGIBLE_EVIDENCE",
                                ["Nenhum dataset curado carregado (dependência BL-02 pendente)."])
@@ -175,6 +178,9 @@ def retrieve(source: EvidenceSource, question: str, scope: AskScope) -> Retrieva
     excluded = len(scoped) - len(eligible)
     if excluded:
         warnings.append(f"{excluded} registro(s) no escopo excluído(s) por estado não elegível (ex.: não conferido).")
+    withheld = sum(1 for i in eligible if i.value_withheld)
+    if withheld:
+        warnings.append(f"{withheld} registro(s) com valor retido: extraído(s) da fonte, aguardando revisão humana.")
     if not eligible:
         return RetrievalResult([], {}, False, "NO_ELIGIBLE_EVIDENCE", warnings, excluded)
 

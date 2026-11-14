@@ -40,7 +40,8 @@ _ALIASES: dict[str, str] = {
     "m/s": "m/s", "m s-1": "m/s", "m·s⁻¹": "m/s", "m s⁻¹": "m/s",
     "s": "s", "seg": "s", "segundo": "s", "segundos": "s", "second": "s", "seconds": "s", "sec": "s",
     "min": "min", "minuto": "min", "minutos": "min", "minute": "min", "minutes": "min",
-    "%": "%", "% vol": "%", "% vol.": "%", "%vol": "%", "por cento": "%", "percent": "%",
+    "%": "%", "% vol": "%", "% vol.": "%", "%vol": "%", "vol%": "%", "vol.%": "%", "vol %": "%",
+    "por cento": "%", "percent": "%",
     "fraction": "fraction", "fração": "fraction", "fracao": "fraction",
     "adimensional": "adimensional", "dimensionless": "adimensional", "": "adimensional",
 }

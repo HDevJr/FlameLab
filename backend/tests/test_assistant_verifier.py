@@ -71,11 +71,36 @@ def test_v1_invented_evidence_id_blocked():
     assert "V1_EVIDENCE_NOT_RETRIEVED" in _reasons(res)
 
 
-def test_v4_unreviewed_record_is_not_retrievable():
+def test_v4_unreviewed_record_only_retrieved_with_value_withheld():
     src = two_tests_source()
     ctx = retrieve(src, "espessura", AskScope(test_uids=["SYN-M2"]))
-    assert "REC-SYN-M2.thickness" not in ctx.by_id()  # EXTRAIDO_NAO_REVISADO fica fora
-    assert any("não elegível" in w for w in ctx.warnings)
+    item = ctx.by_id()["REC-SYN-M2.thickness"]  # EXTRAIDO_NAO_REVISADO: só como aviso, sem valor (DIV-20)
+    assert item.value_withheld and not item.quantities and "0,5" not in item.text and "VALOR RETIDO" in item.text
+    assert any("valor retido" in w for w in ctx.warnings)
+    res = verify_output(output(claim("OBSERVACAO", "Em M2, a espessura foi 0,5 mm.", ["REC-SYN-M2.thickness"],
+                                     [(0.5, "mm")])), ctx.by_id(), AskScope(test_uids=["SYN-M2"]), [], src.known_tests())
+    assert {"V2_NUMBER_NOT_IN_EVIDENCE", "V4_OBSERVATION_WITHOUT_REVIEWED_RECORD"} <= set(_reasons(res))
+
+
+def test_v5b_gap_citation_must_match_parameter():
+    res = _run(two_tests_source(), M1, output(claim(
+        "LIMITACAO", "A velocidade de propagação de M1 não foi informada.",
+        ["GAP-SYN-M1-pmma_pyrolysis_properties"])))
+    assert "V5_GAP_CITATION_MISMATCH" in _reasons(res)
+
+
+def test_v5c_pending_record_is_not_absent():
+    m2 = AskScope(test_uids=["SYN-M2"])
+    bad = _run(two_tests_source(), m2, output(claim(
+        "LIMITACAO", "A espessura de M2 está ausente no relatório.", ["REC-SYN-M2.thickness"])), question="espessura")
+    assert "V5_PENDING_IS_NOT_ABSENT" in _reasons(bad)
+    uncited = _run(two_tests_source(), m2, output(claim(
+        "LIMITACAO", "A espessura de M2 não foi informada.", [])), question="espessura")
+    assert "V5_PENDING_IS_NOT_ABSENT" in _reasons(uncited)
+    ok = _run(two_tests_source(), m2, output(claim(
+        "LIMITACAO", "A espessura de M2 consta na fonte, mas aguarda revisão humana.", ["REC-SYN-M2.thickness"])),
+        question="espessura")
+    assert ok.approved and not ok.blocked
 
 
 def test_v4_observation_from_passage_blocked():

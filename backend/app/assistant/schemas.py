@@ -15,7 +15,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-PROMPT_VERSION = "v1"
+PROMPT_VERSION = "v2"  # v2: registros retidos (DIV-20)
 
 _ID_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9_-]{0,47}$"
 
@@ -40,6 +40,7 @@ class AbstainReason(str, Enum):
     NO_ELIGIBLE_EVIDENCE = "NO_ELIGIBLE_EVIDENCE"
     INSUFFICIENT_EVIDENCE = "INSUFFICIENT_EVIDENCE"
     MISSING_DATA = "MISSING_DATA"
+    PENDING_REVIEW = "PENDING_REVIEW"  # dado existe na fonte, aguarda revisão humana (DIV-20)
     EXTRAPOLATION = "EXTRAPOLATION"
     MODEL_ABSTAINED = "MODEL_ABSTAINED"
     VERIFICATION_FAILED = "VERIFICATION_FAILED"
@@ -121,11 +122,12 @@ class EvidenceItem(BaseModel):
     status: str | None = None  # estados de revisão do DM
     text: str
     quantities: list[EvidenceQuantity] = Field(default_factory=list)
-    keywords: list[str] = Field(default_factory=list)  # usado em GAP (V5)
+    keywords: list[str] = Field(default_factory=list)  # GAP e registros retidos (V5)
     source_evidence_ids: list[str] = Field(default_factory=list)
     locator: dict | None = None
     document_id: str | None = None
     synthetic: bool = False  # True somente em fixtures/smoke test; nunca dado NASA
+    value_withheld: bool = False  # registro não conferido: existe na fonte, valor não liberado (DIV-20)
 
 
 # ---------------------------------------------------------------- saída do modelo
@@ -224,6 +226,7 @@ class RetrievedEvidence(BaseModel):
     locator: dict | None = None
     document_id: str | None = None
     synthetic: bool = False
+    value_withheld: bool = False
 
 
 class AIAnswer(BaseModel):

@@ -42,7 +42,7 @@ _UNIT_ALTS = sorted(
         "metros", "metro", "meters", "meter",
         "minutos", "minuto", "minutes", "minute", "min",
         "segundos", "segundo", "seconds", "second", "sec", "seg",
-        "% vol.", "% vol", "%vol", "%", "por cento", "percent",
+        "vol%", "vol.%", "% vol.", "% vol", "%vol", "%", "por cento", "percent",
         "mm", "cm", "m", "s",
         # Unidades reconhecidas mas fora da tabela v1: só casam por igualdade literal.
         "°C", "ºC", "K", "atm", "kPa", "Pa", "bar", "psi", "kW/m²", "kW/m2", "kW", "W", "kg", "g", "mg",
