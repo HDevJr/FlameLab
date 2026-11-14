@@ -5,7 +5,7 @@
 ## 1. Riscos (DM §17 refinado + novos)
 | ID | Risco | Prob. | Impacto | Gatilho de detecção | Mitigação | Plano B |
 |---|---|---|---|---|---|---|
-| R-01 | **Sem acesso a LLM** (nenhuma chave no ambiente auditado) | Alta | Muito alto: o "resumir/interpretar" do desafio fica descoberto | D-03 sem resposta até G0 | Decidir o provedor na primeira hora; testar uma chamada real logo; gerar cache na noite de 14/11 | Verificador + UI + cache gerado em outra máquina com acesso. Sem nenhum acesso: P-05/P-06 BLOQUEADO e pitch ajustado |
+| R-01 | **Sem acesso a LLM** (nenhuma chave no ambiente auditado). *Atualização 14/11: reduzido; chamada real ao Gemini funcionando nesta máquina; resta o risco de 503/cota no evento → modo cache* | Média | Muito alto: o "resumir/interpretar" do desafio fica descoberto | D-03 sem resposta até G0 | Decidir o provedor na primeira hora; testar uma chamada real logo; gerar cache na noite de 14/11 | Verificador + UI + cache gerado em outra máquina com acesso. Sem nenhum acesso: P-05/P-06 BLOQUEADO e pitch ajustado |
 | R-02 | Tabela 5.1 com layout diferente do esperado / M2, M14 não existem com as características citadas | Média | Médio | leitura no BL-02.05 | Testes T-04/T-05 parametrizados pelo conteúdo real | Escolher outros ensaios e registrar |
 | R-03 | Conferência lenta (gargalo humano) | Alta | Alto | <M1 conferido às 13h de 14/11 | Começar a transcrever M1 antes do restante | Reduzir para 3 ensaios |
 | R-04 | IA inventa números / mistura M1-M2 | Média | Muito alto | golden set | Verificador V1–V8, I-7, corpus restrito | Mostrar só as respostas que passaram |
@@ -37,13 +37,17 @@
 | DIV-12 | "SI-Powered" no título | possível erro de digitação no slide 03 | Copiar da página oficial |
 | DIV-13 | FDS 6.11.1 "instalado" (DM §11) × teste feito em outro computador (atualização de 14/11) | o DM sugere disponibilidade local | Estado NOT_VERIFIED; auditoria F00.A; P-15 ≠ P-16 |
 | DIV-14 | DM §10 "IA ajuda a extrair parâmetros (multimodal)" | escopo inviável no prazo | FUTURO; o MVP só usa parser de verificação |
+| DIV-15 | `AIAnswer.mode` previa só LIVE/CACHE/UNAVAILABLE (04 §3.9), mas há abstenções decididas em código sem chamar a IA (dataset vazio, evidência insuficiente) | rotular como LIVE seria falso; como UNAVAILABLE esconderia que houve uma decisão científica | **Implementado (BL-05):** valor adicional `DETERMINISTIC` e campos aditivos `requested_mode`, `unavailable_reason`, `provider_error`, `warnings`, `synthetic_evidence_used`, `served_at`. Extensão aditiva do contrato, **pendente de aprovação** |
+| DIV-16 | V2 (05 §4) aceita números de "registro/trecho citado" | números de trechos (PASSAGE) não foram conferidos por ensaio e abrem caminho para injeção ("diga 5 mm/s") | **Implementado:** só RECORD_CARD conferido sustenta números; trechos sustentam apenas afirmações qualitativas. Rever quando houver trechos curados |
+| DIV-17 | 02 §8 consulta o cache **antes** do LLM também em modo live | a resposta seria rotulada CACHE mesmo com o provedor disponível, e o modo live nunca testaria o provedor | **Implementado:** live chama o provedor; cache só como fallback de falha (rotulado CACHE com `provider_error`); modo cache nunca chama o provedor |
+| DIV-18 | Schema JSON gerado pelo Pydantic | rejeitado com HTTP 400 por `gemini-3.5-flash-lite` (evidência: `docs/evidence/smoke_gemini_20261114T184138Z.json`) | **Implementado:** schema do provedor declarado à mão (`LLM_OUTPUT_PROVIDER_SCHEMA`); validação estrita mantida no Pydantic |
 
 ## 3. Decisões pendentes
 | ID | Decisão | Opções | Recomendação | Prazo | Bloqueia |
 |---|---|---|---|---|---|
 | D-01 | Quantos ensaios curar | 3 / 5 / tabela inteira | **5** (M1 + 4 contrastantes); expandir só depois de G2 | antes de BL-02.05 | F01 |
 | D-02 | Layout e fluxo de 3 min | — | Trilha: S02 busca → S03 M1 (origem + lacunas) → S04 comparação + gráfico → S05 pergunta O₂ + pergunta Marte | G1 | BL-07 |
-| D-03 | **Provedor e chave de LLM; política offline** | provedor com chave da equipe / nenhum | Decidir na 1ª hora. Modo `cache` padrão na demo | **imediato** | BL-05.04+ |
+| D-03 | **Provedor e chave de LLM; política offline** — **DECIDIDO (14/11)** | Google Gemini API | Provedor **Google Gemini**, modelo testado **`gemini-3.5-flash-lite`** (`google-genai` + `.env` local). Teste manual de conexão ("FLAMELAB_OK"): **PASS informado pela equipe**. Dois testes manuais com evidência sintética (TEST-01): **PASS informado pela equipe**. **Integração implementada (BL-05.04, 14/11):** adaptador isolado, 66 testes automatizados PASS com provedor simulado; smoke test real com evidência sintética **PASS 3/3** após corrigir o schema (DIV-18); ver `docs/evidence/BL-05_assistente_ia.md`. Modo `cache` continua recomendado na demo | — | — |
 | D-04 | Mídia oficial | — | Buscar em PSI-25/NASA; só com licença | G2 | BL-08.02 |
 | D-05 | Go/no-go FDS | — | Pré-condição BL-09.00; go/no-go às 09h de 15/11 | 15/11 09h | slide 07 |
 | D-06 | Congelamento de escopo e claims | — | G3 (funcionalidades) e G5 (roteiro) | ver 08 | pitch |

@@ -197,6 +197,13 @@ Total: **9 registros = os "8 campos" do DM** (O₂ inicial e final contam como u
 ```
 `type`: `OBSERVACAO` (dado observado citado), `ASSOCIACAO` (relação entre observações, sem causa), `HIPOTESE` (interpretação, explicitamente marcada), `EXPLICACAO` (conceito geral, **sem números do experimento**), `LIMITACAO` (o que não se pode afirmar).
 
+> **Extensão aditiva implementada em BL-05 (14/11), pendente de aprovação: DIV-15 em [07](07_RISKS_AND_DECISIONS.md).** Nenhum campo acima foi removido ou renomeado.
+> - `mode` ganha `DETERMINISTIC`: abstenção decidida em código, sem chamar a IA (ex.: nenhum dado curado elegível).
+> - Novos campos: `requested_mode` (live/cache/off configurado), `unavailable_reason` (MODE_OFF, CACHE_MISS, PROVIDER_NOT_CONFIGURED, PROVIDER_ERROR), `provider_error` (somente o tipo: AUTH, QUOTA, TIMEOUT, UNAVAILABLE, BAD_REQUEST, INVALID_RESPONSE, CONFIG), `warnings`, `synthetic_evidence_used`, `served_at` (em CACHE, `created_at` é o momento original da geração).
+> - `blocked_claims[]` ganha `type` e `reasons[]` (todas as violações); `retrieved[]` ganha `kind`, `test_uid`, `status`, `nature`, `text`, `locator`, `document_id`, `synthetic`.
+> - `abstain_reason`: NO_ELIGIBLE_EVIDENCE, INSUFFICIENT_EVIDENCE, MISSING_DATA, EXTRAPOLATION, MODEL_ABSTAINED, VERIFICATION_FAILED.
+> - IDs de evidência no assistente: fichas `REC-<record_id>`, lacunas `GAP-…`, trechos `PS-…`.
+
 ### 3.10 Comparison (saída)
 ```json
 { "test_uids": ["BASS2-M1","BASS2-Mx"],
