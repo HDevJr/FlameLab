@@ -68,18 +68,20 @@ Equipes pequenas combinam papéis. Uma combinação que funciona: {DADOS+CIÊNCI
 | BL-04.05 | UI: busca + filtros na S02, `RankExplanation`, aviso "não é segurança" | FRONT | 04.04, 03.03 | 1,5 | T-14 (UI) |
 
 ### BL-05 · P0 · Assistente com citações e abstenção (F06)
-| ID | Tarefa | Papel | Dep. | h | Aceite / teste |
-|---|---|---|---|---|---|
-| BL-05.00 | (usado também por BL-04) `extract_passages.py`: parágrafos das seções 5.x com página → `passages.jsonl` | DADOS | 02.04 | 1 | trechos com `page_pdf` e seção |
-| BL-05.01 | Fichas textuais determinísticas por ensaio (a partir dos registros conferidos) | IA | 02.07 | 0,5 | texto gerado contém só valores do registro |
-| BL-05.02 | Orquestrador: escopo, recuperação, portão de suficiência, detector de extrapolação | IA | 04.01, 05.01 | 1,5 | T-06 sem chamar LLM |
-| BL-05.03 | **Verificador V1–V8** + `numbers.py` (parse PT/EN de números e unidades) | IA | 02.02 | 2,5 | T-15, T-16, testes unitários com respostas fabricadas |
-| BL-05.04 | Adaptador LLM (D-03), schema JSON, timeout | IA | D-03 | 1 | chamada real registrada em log (sem chave) |
-| BL-05.05 | Prompt v1 (dados delimitados, saída JSON, tipos de claim) | IA+CIÊNCIA | 05.04 | 1 | golden set passa |
-| BL-05.06 | Cache verificado + `FLAMELAB_LLM_MODE` | IA | 05.03 | 0,75 | T-09, resposta `mode=CACHE` rotulada |
-| BL-05.07 | `POST /api/ask` + modo UNAVAILABLE | BACK/IA | 05.02–06 | 0,5 | T-09 |
-| BL-05.08 | UI S05: pergunta, resposta por claim com tipo, citações clicáveis, bloqueadas, banner de modo | FRONT | 05.07 | 2 | T-03, T-06 (UI) |
-| BL-05.09 | Golden set: 4 perguntas do DM §10.1 + 4 adversariais; gerar o cache das perguntas da demo | IA+CIÊNCIA | 05.05 | 1 | T-26, relatório do golden set |
+| ID | Tarefa | Papel | Dep. | h | Aceite / teste | Status (14/11) |
+|---|---|---|---|---|---|---|
+| BL-05.00 | (usado também por BL-04) `extract_passages.py`: parágrafos das seções 5.x com página → `passages.jsonl` | DADOS | 02.04 | 1 | trechos com `page_pdf` e seção | PLANEJADO |
+| BL-05.01 | Fichas textuais determinísticas por ensaio (a partir dos registros conferidos) | IA | 02.07 | 0,5 | texto gerado contém só valores do registro | **IMPLEMENTADO_E_TESTADO (sintético)**: `assistant/cards.py`. Aguarda os registros reais de BL-02 |
+| BL-05.02 | Orquestrador: escopo, recuperação, portão de suficiência, detector de extrapolação | IA | 04.01, 05.01 | 1,5 | T-06 sem chamar LLM | **IMPLEMENTADO_E_TESTADO (sintético)**: `retrieval.py` (BM25 interno, sem dependência) + `service.py` |
+| BL-05.03 | **Verificador V1–V8** + `numbers.py` (parse PT/EN de números e unidades) | IA | 02.02 | 2,5 | T-15, T-16, testes unitários com respostas fabricadas | **IMPLEMENTADO_E_TESTADO**: T-15, T-16 PASS; limitações em `docs/evidence/BL-05_assistente_ia.md §4` |
+| BL-05.04 | Adaptador LLM (D-03), schema JSON, timeout | IA | D-03 | 1 | chamada real registrada em log (sem chave) | **IMPLEMENTADO_E_TESTADO**: Gemini; smoke real PASS 3/3 (evidência sintética) |
+| BL-05.05 | Prompt v1 (dados delimitados, saída JSON, tipos de claim) | IA+CIÊNCIA | 05.04 | 1 | golden set passa | **IMPLEMENTADO_NAO_VALIDADO**: sem revisão de CIÊNCIA; golden set real depende de BL-02 |
+| BL-05.06 | Cache verificado + `FLAMELAB_LLM_MODE` | IA | 05.03 | 0,75 | T-09, resposta `mode=CACHE` rotulada | **IMPLEMENTADO_E_TESTADO (simulado)**: cache ainda não gerado para perguntas reais |
+| BL-05.07 | `POST /api/ask` + modo UNAVAILABLE | BACK/IA | 05.02–06 | 0,5 | T-09 | **IMPLEMENTADO_E_TESTADO**: servidor real nos 3 modos sem chave; dataset vazio ⇒ abstenção |
+| BL-05.08 | UI S05: pergunta, resposta por claim com tipo, citações clicáveis, bloqueadas, banner de modo | FRONT | 05.07 | 2 | T-03, T-06 (UI) | PLANEJADO (fora desta entrega) |
+| BL-05.09 | Golden set: 4 perguntas do DM §10.1 + 4 adversariais; gerar o cache das perguntas da demo | IA+CIÊNCIA | 05.05 | 1 | T-26, relatório do golden set | **PARCIAL**: cenários adversariais A–J automatizados com dados sintéticos; **BLOQUEADO** para as perguntas reais (M1/O₂) até BL-02.07 |
+
+> Dependências mínimas criadas para BL-05: `backend/app/units.py` (subconjunto de BL-02.02, apenas para V2) e a interface `EvidenceSource` (a fonte padrão é vazia até BL-02.03 existir). **Nenhum dado NASA foi criado.**
 
 ### BL-06 · P0 · Comparação e gráfico observado (F07)
 | ID | Tarefa | Papel | Dep. | h | Aceite / teste |

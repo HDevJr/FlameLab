@@ -23,7 +23,9 @@ Desafio: [Flame in Freefall — NASA Space Apps 2026](https://www.spaceappschall
 
 ## Estado verificado
 
-- Este pacote F00 adiciona um **esqueleto** com endpoint de saúde (`/api/health`) e teste básico. Não implementa dados NASA, busca, IA nem integração com FDS.
+- F00: **esqueleto** com endpoint de saúde (`/api/health`) e teste básico.
+- BL-05 (assistente de IA, só backend): `POST /api/ask` com adaptador Gemini, verificador determinístico V1–V8, abstenção e modos `live`/`cache`/`off`. **Testado com evidência sintética** (66 testes com provedor simulado + smoke test real do Gemini). Detalhes em [docs/evidence/BL-05_assistente_ia.md](docs/evidence/BL-05_assistente_ia.md).
+- **Ainda não há dataset BASS-II curado.** Por isso, em execução normal, `/api/ask` se abstém (`NO_ELIGIBLE_EVIDENCE`) e nunca responde com valores experimentais não conferidos. Não há busca, frontend nem integração com FDS.
 - Teste simples do FDS/Smokeview aconteceu em **outro computador**; a máquina atual ainda precisa de auditoria.
 - Valores BASS-II/M1 citados no planejamento **não são apresentados como conferidos na fonte primária** até dupla revisão do PDF original.
 
@@ -48,13 +50,47 @@ Em outro terminal, dentro da raiz:
 
 Verificação: abrir <http://127.0.0.1:8000/api/health>; resposta esperada `{"status":"ok","stage":"F00"}`. Isso atesta apenas a API mínima, não as integrações científicas.
 
-## Modos de IA previstos
+## Assistente científico (IA)
 
-- `off` — padrão local, nenhum serviço externo; recursos de IA não disponíveis.
-- `live` — integração futura com provedor escolhido pela equipe (preferência inicial a investigar: API Gemini em modalidade gratuita elegível).
-- `cache` — respostas já geradas e verificadas, **claramente identificadas como cache**, para apresentação sem rede.
+### Variáveis de ambiente (`.env` na raiz, nunca versionado)
 
-Nenhuma dessas integrações de IA está implementada por este pacote. Nunca adicione chaves ao Git. Use `.env` local (ignorado) ou secrets do ambiente.
+| Variável | Padrão | Uso |
+|---|---|---|
+| `FLAMELAB_LLM_MODE` | `off` | `live`, `cache` ou `off` |
+| `FLAMELAB_LLM_PROVIDER` | `none` | `gemini` (único implementado) |
+| `FLAMELAB_LLM_MODEL` | — | ex.: `gemini-3.5-flash-lite` (modelo testado pela equipe) |
+| `GEMINI_API_KEY` | — | só no `.env` local; nunca é registrada, impressa ou devolvida |
+| `FLAMELAB_LLM_TIMEOUT_S` | `20` | timeout por chamada |
+| `FLAMELAB_LLM_MAX_ATTEMPTS` | `2` | 1–3; retry só para 5xx/timeout, com espera progressiva |
+| `FLAMELAB_LLM_TOTAL_BUDGET_S` | `45` | limite total de tempo, somando as tentativas |
+| `FLAMELAB_AI_CACHE_DIR` | `data/ai_cache` | diretório do cache de respostas |
+| `FLAMELAB_AI_CACHE_WRITE` | `true` | grava respostas LIVE no cache |
+
+O `.env` é lido **pelo caminho explícito da raiz do repositório**, o que funciona tanto em `uvicorn` quanto em `python scripts\...`. Variáveis do ambiente têm precedência sobre o `.env`. Sem chave, os modos `off` e `cache` funcionam normalmente.
+
+### Modos
+- `off`: nenhuma chamada à IA. `/api/ask` responde `mode=UNAVAILABLE` (`MODE_OFF`) com as evidências recuperadas.
+- `cache`: serve respostas geradas antes pela IA, **reverificadas** contra o dataset atual e rotuladas `mode=CACHE`. `created_at` mostra quando foram geradas. Sem entrada no cache → `UNAVAILABLE` (`CACHE_MISS`). Nunca chama o provedor.
+- `live`: chama o Gemini, e toda resposta passa pelo verificador antes de ser publicada como `mode=LIVE`. Se o provedor falhar (timeout, 503, cota, autenticação), usa o cache como fallback (`mode=CACHE` com `provider_error`); se não houver cache, responde `UNAVAILABLE`. Nenhum outro provedor é acionado.
+- Sem evidência elegível, a abstenção é decidida em código, sem chamar a IA: `mode=DETERMINISTIC`.
+
+### Endpoint
+`POST /api/ask` com `{"question": "...", "scope": {"investigation_id": "PSI-25", "test_uids": ["BASS2-M1"]}, "lang": "pt"}`.
+Responde `{"data": AIAnswer, "dataset_version": ..., "warnings": [...]}` (contrato em `planning/04 §3.9`). Abstenção e indisponibilidade são **estados com HTTP 200**; entrada inválida devolve **422** `{"error": {...}}`.
+
+### Testes
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r backend/requirements-dev.txt
+.\.venv\Scripts\python.exe -m pytest -q backend/tests          # sem rede; provedor simulado
+.\.venv\Scripts\python.exe scripts\smoke_gemini.py             # REAL, explícito; usa evidência sintética
+```
+O smoke test grava o relatório em `docs/evidence/smoke_gemini_<UTC>.json`, sem credenciais. Sem chave, o resultado é `NOT_RUN`. Ele **não valida** conteúdo BASS-II.
+
+### Limitações atuais
+- Não existe dataset curado (BL-02): o assistente não responde sobre experimentos NASA.
+- Números só são aceitos quando vêm de fichas de registros `CONFERIDO_FONTE`. Trechos de documento sustentam apenas afirmações qualitativas.
+- O verificador não detecta números por extenso. Paráfrases causais e extrapolações fora da lista (Marte, Lua, gravidade parcial e outros corpos celestes) podem escapar das regras V6/V8.
+- O prompt v1 ainda não teve revisão científica. O golden set real depende da curadoria.
 
 ## Organização e colaboração
 

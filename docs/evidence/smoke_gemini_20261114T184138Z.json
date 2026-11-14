@@ -1,0 +1,53 @@
+{
+  "kind": "SMOKE_TEST_REAL_GEMINI_EVIDENCIA_SINTETICA",
+  "warning": "Evidência sintética (TEST-01). Não valida conteúdo científico BASS-II/NASA.",
+  "executed_at_utc": "2026-11-14T18:41:38.746343+00:00",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "key_present": true,
+  "cases": [
+    {
+      "case": "A_extracao",
+      "question": "Qual material foi utilizado e qual sua espessura?",
+      "status": "PROVIDER_ERROR",
+      "mode": "UNAVAILABLE",
+      "abstained": false,
+      "abstain_reason": null,
+      "provider_error": "BAD_REQUEST",
+      "extrapolation_flags": [],
+      "latency_ms": 2562,
+      "approved_claims": [],
+      "blocked_claims": []
+    },
+    {
+      "case": "B_abstencao",
+      "question": "Qual era a pressão do experimento?",
+      "status": "PROVIDER_ERROR",
+      "mode": "UNAVAILABLE",
+      "abstained": false,
+      "abstain_reason": null,
+      "provider_error": "BAD_REQUEST",
+      "extrapolation_flags": [],
+      "latency_ms": 1016,
+      "approved_claims": [],
+      "blocked_claims": []
+    },
+    {
+      "case": "J_extrapolacao",
+      "question": "Qual seria a propagação da chama na atmosfera de Marte?",
+      "status": "PROVIDER_ERROR",
+      "mode": "UNAVAILABLE",
+      "abstained": false,
+      "abstain_reason": null,
+      "provider_error": "BAD_REQUEST",
+      "extrapolation_flags": [
+        "MARTE"
+      ],
+      "latency_ms": 1171,
+      "approved_claims": [],
+      "blocked_claims": []
+    }
+  ],
+  "sdk_google_genai": "3.3.0",
+  "overall": "PROVIDER_ERROR"
+}

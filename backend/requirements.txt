@@ -2,3 +2,6 @@ fastapi>=0.120,<1
 pydantic>=2.10,<3
 uvicorn>=0.35,<1
 pymupdf>=1.25,<2
+# BL-05 — assistente científico (provedor Gemini; .env lido por caminho explícito)
+google-genai>=3.3,<4
+python-dotenv>=1.0,<2
