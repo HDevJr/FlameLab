@@ -1,0 +1,384 @@
+{
+ "samples": [
+  [
+   0.1,
+   "VALIDATING",
+   null
+  ],
+  [
+   2.1,
+   "RUNNING_FDS",
+   null
+  ],
+  [
+   4.1,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 0.57126,
+    "t_end_s": 10.0,
+    "fraction": 0.0571,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   6.1,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 1.34277,
+    "t_end_s": 10.0,
+    "fraction": 0.1343,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   8.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 1.60098,
+    "t_end_s": 10.0,
+    "fraction": 0.1601,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   10.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 1.89889,
+    "t_end_s": 10.0,
+    "fraction": 0.1899,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   12.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 1.89889,
+    "t_end_s": 10.0,
+    "fraction": 0.1899,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   14.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 1.89889,
+    "t_end_s": 10.0,
+    "fraction": 0.1899,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   16.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 1.89889,
+    "t_end_s": 10.0,
+    "fraction": 0.1899,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   18.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 2.89157,
+    "t_end_s": 10.0,
+    "fraction": 0.2892,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   20.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 2.89157,
+    "t_end_s": 10.0,
+    "fraction": 0.2892,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   22.3,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 2.89157,
+    "t_end_s": 10.0,
+    "fraction": 0.2892,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   24.3,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 2.89157,
+    "t_end_s": 10.0,
+    "fraction": 0.2892,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   26.3,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 3.90509,
+    "t_end_s": 10.0,
+    "fraction": 0.3905,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   28.3,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 3.90509,
+    "t_end_s": 10.0,
+    "fraction": 0.3905,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   30.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 3.90509,
+    "t_end_s": 10.0,
+    "fraction": 0.3905,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   32.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 3.90509,
+    "t_end_s": 10.0,
+    "fraction": 0.3905,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   34.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 3.90509,
+    "t_end_s": 10.0,
+    "fraction": 0.3905,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   36.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 4.77788,
+    "t_end_s": 10.0,
+    "fraction": 0.4778,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   38.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 4.77788,
+    "t_end_s": 10.0,
+    "fraction": 0.4778,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   40.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 4.77788,
+    "t_end_s": 10.0,
+    "fraction": 0.4778,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   42.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 5.76563,
+    "t_end_s": 10.0,
+    "fraction": 0.5766,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   44.5,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 5.76563,
+    "t_end_s": 10.0,
+    "fraction": 0.5766,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   46.5,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 5.76563,
+    "t_end_s": 10.0,
+    "fraction": 0.5766,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   48.5,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 5.76563,
+    "t_end_s": 10.0,
+    "fraction": 0.5766,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   50.5,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 6.67034,
+    "t_end_s": 10.0,
+    "fraction": 0.667,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   52.5,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 6.67034,
+    "t_end_s": 10.0,
+    "fraction": 0.667,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   54.5,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 6.67034,
+    "t_end_s": 10.0,
+    "fraction": 0.667,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   56.6,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 7.65004,
+    "t_end_s": 10.0,
+    "fraction": 0.765,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   58.6,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 7.65004,
+    "t_end_s": 10.0,
+    "fraction": 0.765,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   60.6,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 7.65004,
+    "t_end_s": 10.0,
+    "fraction": 0.765,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   62.6,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 7.65004,
+    "t_end_s": 10.0,
+    "fraction": 0.765,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   64.7,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 8.65774,
+    "t_end_s": 10.0,
+    "fraction": 0.8658,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   66.7,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 8.65774,
+    "t_end_s": 10.0,
+    "fraction": 0.8658,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   68.7,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 8.65774,
+    "t_end_s": 10.0,
+    "fraction": 0.8658,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   70.7,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 8.65774,
+    "t_end_s": 10.0,
+    "fraction": 0.8658,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   72.7,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 9.63081,
+    "t_end_s": 10.0,
+    "fraction": 0.9631,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   74.8,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 9.63081,
+    "t_end_s": 10.0,
+    "fraction": 0.9631,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   76.8,
+   "RENDERING",
+   null
+  ],
+  [
+   80.8,
+   "COMPLETED",
+   null
+  ]
+ ]
+}

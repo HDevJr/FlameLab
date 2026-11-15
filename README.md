@@ -28,7 +28,8 @@ Desafio: [Flame in Freefall — NASA Space Apps 2026](https://www.spaceappschall
 - BL-02 (dataset científico): `data/` contém o ensaio **BASS-II M1** (9 registros, 11 evidências, 12 lacunas), validado pelo `DatasetStore` (invariantes I-1–I-10). O hash do PDF-fonte confere. **Os 9 registros estão `EXTRAIDO_NAO_REVISADO`: aguardam revisão humana.** Até lá, o assistente informa que o dado "consta na fonte e aguarda revisão" (`PENDING_REVIEW`) e não cita o valor. Detalhes em [docs/evidence/BL-02_dataset_cientifico.md](docs/evidence/BL-02_dataset_cientifico.md) e [docs/curation/BASS2-M1_curation_report.md](docs/curation/BASS2-M1_curation_report.md).
 - **Plataforma v2 (ADR-09, protótipo):** importação de artigos NASA em PDF (hash e procedência por comparação com o NTRS), extração assistida por IA com citação literal, enriquecimento NASA (NTRS, PSI via DataCite, TechPort), catálogo genérico, compatibilidade com o FDS, cenários derivados e worker FDS → Smokeview → MP4. Evidências em [docs/evidence/BL-12_plataforma_v2.md](docs/evidence/BL-12_plataforma_v2.md); decisões em [planning/09](planning/09_ADR_NASA_ENRICHMENT_FDS_SMOKEVIEW.md).
 - **FDS/Smokeview/FFmpeg: verificados nesta máquina** (FDS 6.11.1, Smokeview 6.11.2, FFmpeg 9.0.2), com um **caso de integração** genérico. **Não há reprodução do BASS-II M1**: depende de revisão humana, lacunas científicas e modelo aprovado.
-- Frontend: protótipo navegável S01–S07 (React + TypeScript + Vite) em `frontend/`. Não foi inspecionado em navegador nesta sessão (NOT_RUN); compila, tipa e passa nos testes unitários.
+- **Jornada v2.1 (ADR-09 §11):** importação com etapas legíveis e tempos medidos, leitura do PDF em lotes com **cobertura de páginas** explícita, resumo consolidado (origem NASA ≠ números conferidos), **revisão humana pela interface** (mesma política do script), separação **Experimentos NASA / Demonstração FDS**, hipóteses sobre condições do experimento, vídeo em tempo real (1×) com player completo. Evidências: [docs/evidence/BL-13_jornada_v2_1.md](docs/evidence/BL-13_jornada_v2_1.md).
+- Frontend: protótipo navegável (React + TypeScript + Vite) em `frontend/`. **Validação visual: NOT_RUN** — roteiro em [docs/manual_test_roteiro_S01-S07.md](docs/manual_test_roteiro_S01-S07.md); compila, tipa e passa nos testes de componentes (jsdom).
 - Busca textual/ranking e comparação lado a lado continuam não implementados.
 - Valores BASS-II/M1 citados no planejamento **não são apresentados como conferidos na fonte primária** até dupla revisão do PDF original.
 
@@ -60,7 +61,7 @@ npm install
 npm run dev          # http://localhost:5173 (proxy de /api para 127.0.0.1:8000)
 npm run typecheck; npm test; npm run build
 ```
-Variáveis úteis do backend: `FLAMELAB_NASA_MODE=online|fixture` (padrão `online`; `fixture` usa respostas gravadas, sem rede) e `FLAMELAB_VAR_DIR` (área de trabalho local; padrão `var/`, não versionada). O executor FDS usa `C:/Program Files/firemodels`; se ausente, simulações ficam `BLOCKED` com o motivo. Importações usam o Gemini quando `FLAMELAB_LLM_MODE=live` (um PDF = uma chamada real).
+Variáveis úteis do backend: `FLAMELAB_NASA_MODE=online|fixture` (padrão `online`; `fixture` usa respostas gravadas, sem rede) e `FLAMELAB_VAR_DIR` (área de trabalho local; padrão `var/`, não versionada). O executor FDS usa `C:/Program Files/firemodels`; se ausente, simulações ficam `BLOCKED` com o motivo. Importações usam o Gemini quando `FLAMELAB_LLM_MODE=live` (um PDF = uma chamada real **por lote de páginas**; `FLAMELAB_EXTRACT_MAX_BATCHES`, padrão 8).
 
 ## Assistente científico (IA)
 

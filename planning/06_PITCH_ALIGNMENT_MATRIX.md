@@ -111,3 +111,14 @@
 |---|---|---|---|---|
 | 14/11 | P-16 | NOT_VERIFIED → IMPLEMENTADO_E_TESTADO (caso de integração) | FDS 6.11.1/Smokeview 6.11.2/FFmpeg 9.0.2 executados; runs reais | plataforma v2 |
 | 14/11 | P-17, P-18 | PLANEJADO → parcial: o worker existe; o caso científico (G1/G2) segue bloqueado | `planning/09` | plataforma v2 |
+
+## 8. Jornada v2.1 (15/11): o que mudou para o pitch
+| Capacidade | Estado | Pode ser dito? |
+|---|---|---|
+| Importação com etapas legíveis e tempos reais | IMPLEMENTADO_E_TESTADO (API e componentes); **tela não inspecionada por pessoa** | Sim: “o sistema mostra, etapa por etapa, o que está fazendo e quanto tempo levou” |
+| Cobertura do PDF explícita (páginas lidas e não lidas) | IMPLEMENTADO_E_TESTADO; medido em 2 documentos | Sim, **dizendo quando a leitura é parcial** (BASS-II completo bateu na cota antes da espera por cota; refazer a medição antes de afirmar cobertura total) |
+| Resumo “origem NASA ≠ números conferidos” | IMPLEMENTADO_E_TESTADO | Sim — é um dos pontos fortes de integridade científica |
+| Revisão humana na interface | IMPLEMENTADO_E_TESTADO (API/componente); **0/9 do M1 conferidos** | Sim: “qualquer valor só vira conferido com uma pessoa, uma conferência e hash do PDF”. **Não**: “os valores do M1 estão validados” |
+| Experimento NASA separado da demonstração FDS | IMPLEMENTADO_E_TESTADO | Sim; **sempre** chamar o vídeo de “demonstração do pipeline”, nunca de simulação do BASS-II |
+| Vídeo em tempo real com player completo | IMPLEMENTADO_E_TESTADO (execução real 10 s → 10,1 s de vídeo; player em jsdom) | Sim, como demonstração técnica |
+| Autenticação de revisores | NAO_INICIADO (R-22) | **Não** afirmar “revisão auditada por identidade verificada” |

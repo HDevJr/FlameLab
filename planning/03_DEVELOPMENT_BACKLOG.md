@@ -135,6 +135,19 @@ Equipes pequenas combinam papéis. Uma combinação que funciona: {DADOS+CIÊNCI
 | BL-12.11 | Contêiner/limite de memória, Linux/Xvfb, autenticação, fila durável | NAO_INICIADO |
 | BL-12.12 | Revisão de parâmetros importados na UI (promoção a `CONFERIDO_FONTE`) | NAO_INICIADO (hoje só por `scripts/review_record.py` no dataset curado) |
 
+### BL-13 · Jornada v2.1 — correções após o teste manual (ADR-09 §11)
+| ID | Tarefa | Estado |
+|---|---|---|
+| BL-13.01 | Etapas legíveis da importação com resumo, limitação, detalhes técnicos e **tempo real medido** | IMPLEMENTADO_E_TESTADO |
+| BL-13.02 | Leitura do PDF em lotes com cobertura de páginas explícita, tokens e espera por cota | IMPLEMENTADO_E_TESTADO (IA simulada) · medição real (DYLCO, BASS-II) |
+| BL-13.03 | Resumo consolidado da análise (procedência × revisão × enriquecimento) | IMPLEMENTADO_E_TESTADO (API) · PROTOTIPO (tela) |
+| BL-13.04 | Revisão humana na interface com a política única do script | IMPLEMENTADO_E_TESTADO (API e componente) · **tela não inspecionada em navegador** |
+| BL-13.05 | Separação **Experimentos NASA / Demonstração FDS**; cenário de hipótese do experimento | IMPLEMENTADO_E_TESTADO |
+| BL-13.06 | Tempos e progresso físico real da execução | IMPLEMENTADO_E_TESTADO · execução real medida |
+| BL-13.07 | Player (pausa, repetição, 0,25×–2×, linha do tempo, tela cheia) e vídeo em tempo real | IMPLEMENTADO_E_TESTADO (componente) · NOT_RUN visual |
+| BL-13.08 | Validação visual S01–S07 por pessoa da equipe | **NOT_RUN** (roteiro: `docs/manual_test_roteiro_S01-S07.md`) |
+| BL-13.09 | Autenticação/lista de revisores, ritmo entre lotes, OCR | NAO_INICIADO |
+
 ### BL-10 · Stretch · Visualizar resultado FDS e comparar
 | ID | Tarefa | Papel | Dep. | h | Aceite / teste |
 |---|---|---|---|---|---|

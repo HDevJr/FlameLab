@@ -1,0 +1,349 @@
+{
+ "samples": [
+  [
+   0.1,
+   "VALIDATING",
+   null
+  ],
+  [
+   2.1,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 0.20613,
+    "t_end_s": 10.0,
+    "fraction": 0.0206,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   4.1,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 0.73182,
+    "t_end_s": 10.0,
+    "fraction": 0.0732,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   6.1,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 1.31945,
+    "t_end_s": 10.0,
+    "fraction": 0.1319,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   8.1,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 1.6246,
+    "t_end_s": 10.0,
+    "fraction": 0.1625,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   10.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 1.99802,
+    "t_end_s": 10.0,
+    "fraction": 0.1998,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   12.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 1.99802,
+    "t_end_s": 10.0,
+    "fraction": 0.1998,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   14.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 1.99802,
+    "t_end_s": 10.0,
+    "fraction": 0.1998,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   16.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 1.99802,
+    "t_end_s": 10.0,
+    "fraction": 0.1998,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   18.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 1.99802,
+    "t_end_s": 10.0,
+    "fraction": 0.1998,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   20.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 3.23141,
+    "t_end_s": 10.0,
+    "fraction": 0.3231,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   22.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 3.23141,
+    "t_end_s": 10.0,
+    "fraction": 0.3231,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   24.2,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 3.23141,
+    "t_end_s": 10.0,
+    "fraction": 0.3231,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   26.3,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 3.23141,
+    "t_end_s": 10.0,
+    "fraction": 0.3231,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   28.3,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 4.38054,
+    "t_end_s": 10.0,
+    "fraction": 0.4381,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   30.3,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 4.38054,
+    "t_end_s": 10.0,
+    "fraction": 0.4381,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   32.3,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 4.38054,
+    "t_end_s": 10.0,
+    "fraction": 0.4381,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   34.3,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 4.38054,
+    "t_end_s": 10.0,
+    "fraction": 0.4381,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   36.3,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 5.54208,
+    "t_end_s": 10.0,
+    "fraction": 0.5542,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   38.3,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 5.54208,
+    "t_end_s": 10.0,
+    "fraction": 0.5542,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   40.3,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 5.54208,
+    "t_end_s": 10.0,
+    "fraction": 0.5542,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   42.3,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 5.54208,
+    "t_end_s": 10.0,
+    "fraction": 0.5542,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   44.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 6.81122,
+    "t_end_s": 10.0,
+    "fraction": 0.6811,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   46.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 6.81122,
+    "t_end_s": 10.0,
+    "fraction": 0.6811,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   48.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 6.81122,
+    "t_end_s": 10.0,
+    "fraction": 0.6811,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   50.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 6.81122,
+    "t_end_s": 10.0,
+    "fraction": 0.6811,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   52.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 6.81122,
+    "t_end_s": 10.0,
+    "fraction": 0.6811,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   54.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 7.98876,
+    "t_end_s": 10.0,
+    "fraction": 0.7989,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   56.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 7.98876,
+    "t_end_s": 10.0,
+    "fraction": 0.7989,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   58.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 7.98876,
+    "t_end_s": 10.0,
+    "fraction": 0.7989,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   60.4,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 7.98876,
+    "t_end_s": 10.0,
+    "fraction": 0.7989,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   62.5,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 9.29259,
+    "t_end_s": 10.0,
+    "fraction": 0.9293,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   64.5,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 9.29259,
+    "t_end_s": 10.0,
+    "fraction": 0.9293,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   66.5,
+   "RUNNING_FDS",
+   {
+    "simulated_time_s": 9.29259,
+    "t_end_s": 10.0,
+    "fraction": 0.9293,
+    "source": "log do FDS (Simulation Time)"
+   }
+  ],
+  [
+   68.5,
+   "RENDERING",
+   null
+  ],
+  [
+   72.6,
+   "COMPLETED",
+   null
+  ]
+ ]
+}
