@@ -135,12 +135,35 @@ export default function Review() {
           <div className="crumbs"><Link to="/">Experimentos NASA</Link> › <Link to={`/documentos/${e.document_id}/analise`}>{e.document_title ?? e.document_id}</Link> › {e.label}</div>
           {isStaleBackend(e.parameters) && <div className="box bad" role="alert"><strong>Servidor desatualizado.</strong> O backend em execução não envia a classificação das unidades nem a integridade dos parâmetros; as colunas abaixo mostram apenas a unidade bruta do registro. Reinicie o backend para carregar a versão atual.</div>}
           <div className="row"><h1 className="grow">{e.label}</h1><DataKind kind={e.review.reviewed === e.review.total && e.review.total > 0 ? "REAL" : "REVISAO"} /></div>
-          {e.gaps.length>0 && <GuidedReview experimentId={id} documentId={e.document_id} count={e.gaps.length} openSignal={reviewRequest}/>}
-          <Link className="btn" to={`/experimentos/${id}/preparar`}>Preparar modelo com decisões registradas</Link>
           {e.description && <p className="muted">{e.description}</p>}
           <p><strong>{confirmed}</strong> de <strong>{e.review.total}</strong> parâmetros <Term k="conferido">conferidos</Term> por uma pessoa, dos quais <strong>{full}</strong> com a interpretação também confirmada · <strong>{e.review.gaps}</strong> <Term k="lacuna">lacunas</Term>.
             {confirmed > full && " Conferências anteriores comparavam só número, unidade e página; recomenda-se reconfirmar a interpretação."}</p>
 
+          <p className="row"><a className="btn" href="#prontidao">Prontidão e próximos passos ↓</a><a className="btn" href="#lacunas">Lacunas declaradas ↓</a></p>
+
+          <div id="parametros" className={sel ? "split" : ""}>
+            <div>
+              <ParamTable rows={g.conditions} title="Condições experimentais" hint="Entradas do experimento, como descritas na fonte." selected={selected} onSelect={setSelected} />
+              <ParamTable rows={g.observed} title="Resultados observados" hint="Medições do experimento. São referência de comparação, nunca entradas da simulação." selected={selected} onSelect={setSelected} />
+              <ParamTable rows={g.metadata} title="Metadados" hint="Identificação do material, do equipamento ou do contexto." selected={selected} onSelect={setSelected} />
+
+              <SourceCaveats params={e.parameters} />
+              <div id="lacunas"><DeclaredGaps gaps={e.gaps} /></div>
+
+              <details className="tech big"><summary>Reconciliação técnica de lacunas com parâmetros existentes ({e.gaps.filter(g=>(g.related_parameters?.length ?? 0)>0).length})</summary>
+              {e.gaps.length === 0 ? <p className="muted">Nenhuma lacuna registrada.</p> : (
+                <table><thead><tr><th>Informação</th><th>Situação</th><th>Cobertura</th></tr></thead><tbody>
+                  {e.gaps.filter(g=>(g.related_parameters?.length ?? 0)>0).map((gap) => <GapRow key={gap.gap_id} gap={gap} onDecided={exp.reload} />)}
+                </tbody></table>
+              )}</details>
+            </div>
+            {sel && <ReviewPanel key={sel.record_id} exp={e} param={sel} onChanged={exp.reload} onClose={() => setSelected(null)} />}
+          </div>
+
+          <section id="prontidao" aria-label="Prontidão e próximos passos">
+            <h2>Prontidão e próximos passos</h2>
+          {e.gaps.length>0 && <GuidedReview experimentId={id} documentId={e.document_id} count={e.gaps.length} openSignal={reviewRequest}/>}
+          <Link className="btn" to={`/experimentos/${id}/preparar`}>Preparar modelo com decisões registradas</Link>
           <div className="card">
             <h3 style={{ marginTop: 0 }}>Prontidão — cinco dimensões independentes</h3>
             <p className="detail">Conferir os parâmetros <strong>não</strong> habilita a simulação: cada dimensão é avaliada separadamente e a execução só fica pronta quando todas estão satisfeitas.</p>
@@ -155,24 +178,7 @@ export default function Review() {
             <p className="detail">Nenhuma simulação genérica é criada no lugar deste experimento. O caso genérico do FDS é uma demonstração técnica independente: <Link to="/demonstracao-fds">Demonstração FDS</Link>.</p>
           </div>
 
-          <div id="parametros" className={sel ? "split" : ""}>
-            <div>
-              <ParamTable rows={g.conditions} title="Condições experimentais" hint="Entradas do experimento, como descritas na fonte." selected={selected} onSelect={setSelected} />
-              <ParamTable rows={g.observed} title="Resultados observados" hint="Medições do experimento. São referência de comparação, nunca entradas da simulação." selected={selected} onSelect={setSelected} />
-              <ParamTable rows={g.metadata} title="Metadados" hint="Identificação do material, do equipamento ou do contexto." selected={selected} onSelect={setSelected} />
-
-              <SourceCaveats params={e.parameters} />
-              <DeclaredGaps gaps={e.gaps} />
-
-              <details className="tech big"><summary>Reconciliação técnica de lacunas com parâmetros existentes ({e.gaps.filter(g=>(g.related_parameters?.length ?? 0)>0).length})</summary>
-              {e.gaps.length === 0 ? <p className="muted">Nenhuma lacuna registrada.</p> : (
-                <table><thead><tr><th>Informação</th><th>Situação</th><th>Cobertura</th></tr></thead><tbody>
-                  {e.gaps.filter(g=>(g.related_parameters?.length ?? 0)>0).map((gap) => <GapRow key={gap.gap_id} gap={gap} onDecided={exp.reload} />)}
-                </tbody></table>
-              )}</details>
-            </div>
-            {sel && <ReviewPanel key={sel.record_id} exp={e} param={sel} onChanged={exp.reload} onClose={() => setSelected(null)} />}
-          </div>
+          </section>
         </>
       );
     }}</Async>

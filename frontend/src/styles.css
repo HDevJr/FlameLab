@@ -294,3 +294,4 @@ details.evidence-panel > summary h2 { margin: 0; font-size: 16px; }
 .statusbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 10px clamp(16px, 3vw, 40px); background: var(--card); border-bottom: 1px solid var(--line); font-size: 13px; min-height: 48px; }
 @media (max-width: 1024px) { .statusbar { display: none; } }
 @media (max-width: 640px) { .guided-modal input:not([type=checkbox]):not([type=radio]):not([type=hidden]), .guided-modal select, .guided-modal textarea { min-height: 44px; font-size: 16px; } }
+table.selectable td:last-child button { white-space: nowrap; }
