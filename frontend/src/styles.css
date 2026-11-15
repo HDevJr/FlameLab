@@ -295,3 +295,12 @@ details.evidence-panel > summary h2 { margin: 0; font-size: 16px; }
 @media (max-width: 1024px) { .statusbar { display: none; } }
 @media (max-width: 640px) { .guided-modal input:not([type=checkbox]):not([type=radio]):not([type=hidden]), .guided-modal select, .guided-modal textarea { min-height: 44px; font-size: 16px; } }
 table.selectable td:last-child button { white-space: nowrap; }
+/* ---- detalhe de documento ---- */
+.doc-layout { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 16px; align-items: start; margin-top: 16px; }
+.doc-page { border-top: 1px solid var(--line); padding: 10px 0; } .doc-page.sel { background: var(--info-bg); margin: 0 -8px; padding: 10px 8px; border-radius: 6px; }
+.doc-page ul { margin: 6px 0 0; padding-left: 18px; } .grow-end { margin-left: auto; }
+.viewer iframe { width: 100%; height: 70vh; height: 70dvh; border: 1px solid var(--line); border-radius: 8px; margin-top: 10px; background: #fff; }
+.quote { border-left: 3px solid var(--data); padding-left: 10px; font-style: italic; font-size: 13px; margin-top: 4px; }
+input[type=range] { max-width: 100%; }
+@media (max-width: 900px) { .doc-layout { grid-template-columns: minmax(0, 1fr); } .viewer { order: -1; } }
+@media (max-width: 640px) { input[type=range] { min-height: 44px; } .viewer iframe { height: 60dvh; } }

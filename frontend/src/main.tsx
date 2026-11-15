@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "./components";
 import FdsGates from "./pages/FdsGates";
 import Assistant from "./pages/Assistant";
+import DocumentDetail from "./pages/DocumentDetail";
 import AnalysisPage from "./pages/Analysis";
 import AuditPage from "./pages/Audit";
 import DemoFds from "./pages/DemoFds";
@@ -33,6 +34,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/validacao-fds/:id" element={<FdsGates />} />
           <Route path="/assistente" element={<Assistant />} />
           <Route path="/importar" element={<Import />} />
+          <Route path="/documentos/:id" element={<DocumentDetail />} />
           <Route path="/documentos/:id/analise" element={<AnalysisPage />} />
           <Route path="/documentos/:id/enriquecimento" element={<Enrichment />} />
           <Route path="/experimentos/:id" element={<Review />} />

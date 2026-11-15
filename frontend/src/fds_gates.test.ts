@@ -5,7 +5,7 @@ import { blockedForReproduction, fdsGates } from "./fds_gates";
 const gap = (parameter: string, state: Gap["coverage_state"] = "ABERTA"): Gap => ({ gap_id: "G-" + parameter, parameter, label_pt: parameter, explanation_pt: "", purpose_blocked: [], origin: "CURADORIA", coverage_state: state });
 const exp = (gaps: Gap[]) => ({ gaps } as unknown as Experiment);
 const status: SimStatus = { executor: "local", available: true, detail: "", demo: false, versions: { fds: "6.11.1", smokeview: "6.11.2", ffmpeg: "9" }, limits: {} };
-const run = (scope: Run["scope"], state = "DONE") => ({ scope, state } as unknown as Run);
+const run = (scope: Run["scope"], state = "COMPLETED") => ({ scope, state } as unknown as Run);
 const by = (g: ReturnType<typeof fdsGates>, id: string) => g.find((x) => x.id === id)!;
 
 describe("gates FDS G0–G5", () => {

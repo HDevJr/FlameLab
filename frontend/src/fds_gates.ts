@@ -20,8 +20,8 @@ export function fdsGates(exp: Experiment | undefined, status: SimStatus | undefi
       : { id, name, criterion, tone: "warn", state: "AGUARDANDO APROVAÇÃO CIENTÍFICA", reason: "Sem lacunas abertas para este gate; a aprovação é decisão humana e ainda não foi registrada.", gaps: [] };
   };
   const g2open = by("G2").length > 0;
-  const generic = runs.filter((r) => r.scope === "DEMO" && r.state === "DONE");
-  const mine = runs.filter((r) => r.scope === "EXPERIMENT" && r.state === "DONE");
+  const generic = runs.filter((r) => r.scope === "DEMO" && r.state === "COMPLETED");
+  const mine = runs.filter((r) => r.scope === "EXPERIMENT" && r.state === "COMPLETED");
   return [
     {
       id: "G0-env", name: "Ambiente", criterion: "FDS verificado em máquina com acesso ao repositório.", gaps: [],
