@@ -26,7 +26,7 @@ from backend.app.ingest.pdf import (
 )
 from backend.app.nasa.clients.http import SourceError, Transport
 from backend.app.nasa.enrichment.service import EnrichmentService
-from backend.app.nasa.models import MatchState, SourceMatch
+from backend.app.nasa.models import MatchState, MatchType, SourceMatch
 from backend.app.nasa.provenance.log import utc_now
 
 STEPS = [
@@ -246,7 +246,10 @@ class ImportService:
         prov = verify_provenance(transport, ntrs, record["sha256"])
         record["nasa_provenance"] = prov
         workspace.write_json(workspace.area("provenance") / f"{record['document']['document_id']}.json", prov)
-        if ntrs.title and not record["document"]["curated"] and not record["document"]["title"]:
+        by_id = ntrs.match_type == MatchType.IDENTIFIER and ntrs.state in (MatchState.MATCH_CONFIRMED, MatchState.MATCH_CANDIDATE)
+        if ntrs.title and not record["document"]["curated"] and (by_id or not record["document"]["title"]):
+            # título lido do PDF pode ter erro de OCR; o registro do NTRS, achado por identificador, é a fonte melhor
+            record["document"]["title_read_from_pdf"] = record["document"]["title"]
             record["document"]["title"] = ntrs.title
         state = "FAILED" if prov["state"] == "MISMATCH" else "DONE"
         limitation = None if prov["state"] == "VERIFIED" else (

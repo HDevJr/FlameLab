@@ -10,6 +10,8 @@ Regras:
 
 from __future__ import annotations
 
+import re
+
 from typing import Any
 
 from backend.app.nasa.clients.datacite import PSI_PUBLISHER, DataCiteClient
@@ -73,6 +75,26 @@ class EnrichmentService:
                     reasons_pt=reasons, metadata=_ntrs_meta(c),
                     note_pt="Confirma a identidade do registro, não o conteúdo do arquivo nem medições.",
                 ), c
+            for rn in meta.report_numbers:
+                key = re.sub(r"[^A-Z0-9]", "", rn.upper().replace("NASA/", "NASA-"))
+                try:
+                    found = ntrs.search(q=rn.replace("NASA/", "NASA-"), size=10)
+                except SourceError:
+                    break  # sem resposta para o número: segue para a busca por título (que reporta a indisponibilidade)
+                hits = [c for c in found
+                        if any(key == re.sub(r"[^A-Z0-9]", "", x.upper().replace("REPORT NUMBER:", "")) for x in c["report_numbers"])]
+                if len(hits) == 1:
+                    c = hits[0]
+                    sim = title_similarity(doc_tokens, title_tokens(c["title"])) if meta.title else None
+                    reasons = [f"O número de relatório {rn} consta do artigo e identifica um único registro do NTRS ({c['ntrs_id']})."]
+                    if sim is not None:
+                        reasons.append(f"Semelhança do título lido no artigo com o do registro: {sim} (a leitura de capas escaneadas pode ter erros).")
+                    reasons.append("A procedência só é validada se o arquivo for idêntico ao distribuído pelo NTRS.")
+                    return SourceMatch(
+                        source="NTRS", state=MatchState.MATCH_CANDIDATE, match_type=MatchType.IDENTIFIER,
+                        source_record_id=c["ntrs_id"], source_url=c["url"], title=c["title"], score=sim,
+                        reasons_pt=reasons, metadata=_ntrs_meta(c),
+                    ), c
             if not meta.title:
                 return SourceMatch(source="NTRS", state=MatchState.NOT_QUERIED,
                                    reasons_pt=["O artigo não tem ID NTRS nem título identificado."]), None

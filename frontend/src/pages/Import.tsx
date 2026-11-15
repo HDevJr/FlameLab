@@ -1,10 +1,33 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ApiError, api, type Analysis, type ImportRecord } from "../api";
-import { Badge, ErrorBox, Provenance, StepList, Term } from "../components";
-import { formatDuration } from "../lib";
+import { Async, Badge, ErrorBox, Provenance, StepList, Term, useLoad } from "../components";
+import { fmtBytes, formatDuration } from "../lib";
 import { importOutcome } from "../import_outcome";
 import { AnalysisSummary } from "./Analysis";
+
+/** Documentos já importados neste computador, com a situação de cada um. */
+function PreviousImports() {
+  const docs = useLoad(api.documents, []);
+  return (
+    <Async state={docs}>{(list) => {
+      const imported = list.filter((d) => d.origin === "IMPORTED");
+      if (!imported.length) return null;
+      return (
+        <section aria-label="Importações anteriores">
+          <h2>Importações anteriores</h2>
+          <div className="grid">{imported.map((d) => (
+            <div className="card" key={d.document_id}>
+              <h3 style={{ marginTop: 0 }}><Link to={`/documentos/${d.document_id}`}>{d.title || "Título não identificado"}</Link></h3>
+              <div className="row"><Provenance p={d.nasa_provenance} /><Badge tone={d.experiments.length ? "info" : "muted"}>{d.experiments.length} experimento(s)</Badge></div>
+              <small className="muted">{fmtBytes(d.size_bytes)}</small>
+            </div>
+          ))}</div>
+        </section>
+      );
+    }}</Async>
+  );
+}
 
 /** S02 — Importação. O estado de cada etapa e o tempo vêm do backend (nada é animado nem estimado). */
 export default function Import() {
@@ -37,11 +60,27 @@ export default function Import() {
     <>
       <h1>Importar artigo</h1>
       <p className="muted">Envie um artigo da NASA em PDF. O arquivo é tratado como conteúdo não confiável: só o texto é lido. A consulta às fontes NASA e a extração por IA são opcionais; se falharem, o artigo continua disponível. Documentos longos podem levar alguns minutos: cada etapa mostra o tempo real decorrido.</p>
-      <div className="drop">
+      <div className="drop" onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f && !busy) void send(f); }}>
         <input ref={input} type="file" accept="application/pdf" hidden onChange={(e) => e.target.files?.[0] && send(e.target.files[0])} />
         <button className="primary" disabled={busy} onClick={() => input.current?.click()}>{busy ? "Enviando…" : "Escolher PDF"}</button>
+        <p className="muted"><small>ou arraste o arquivo para cá</small></p>
         <p className="muted"><small>Máximo 120 MB. Somente PDF com camada de texto (sem OCR nesta versão).</small></p>
       </div>
+      {!rec && (
+        <>
+          <section className="card" aria-label="O que acontece ao importar">
+            <h2 style={{ marginTop: 0 }}>O que acontece ao importar</h2>
+            <ol className="how">
+              <li><strong>Leitura do PDF.</strong> Título, identificadores e páginas com texto. Nada do arquivo é executado.</li>
+              <li><strong>Origem NASA.</strong> O FlameLab busca o número do relatório ou o ID no NTRS e só marca “publicação verificada” se o arquivo for idêntico ao distribuído pela NASA.</li>
+              <li><strong>Extração por IA</strong> (opcional). Experimentos e parâmetros com citação literal; exige a IA ligada.</li>
+              <li><strong>Pendências.</strong> O que a fonte não informa vira lacuna, nunca estimativa, e fica para revisão humana.</li>
+            </ol>
+            <p className="detail">Reenviar o mesmo PDF reprocessa o documento. Capas escaneadas são lidas com erros de OCR; o título oficial vem do NTRS quando o documento é localizado.</p>
+          </section>
+          <PreviousImports />
+        </>
+      )}
       {error && <ErrorBox error={error} />}
       {rec && doc && (
         <>

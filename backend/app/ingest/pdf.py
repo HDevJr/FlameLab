@@ -13,7 +13,9 @@ MAX_PAGES = 800
 
 _DASH = r"[-‐-―−]"
 # formato novo (o número é o ID NTRS, 11 dígitos) e formato antigo (ano-número)
-_REPORT = re.compile(rf"NASA\s*/\s*(TM|TP|CR|SP|TN|CP)\s*{_DASH}\s*(\d{{4}}\s*{_DASH}\s*\d{{4,7}}|20\d{{9}})", re.I)
+# aceita "NASA/TM-2021-0011385", "NASA-CR-191109" e "NASA CR 191109" (relatórios antigos têm só o número)
+_SEP = rf"(?:\s*(?:/|{_DASH})\s*|\s+)"
+_REPORT = re.compile(rf"NASA{_SEP}(TM|TP|CR|SP|TN|CP){_SEP}(\d{{4}}\s*{_DASH}\s*\d{{4,7}}|20\d{{9}}|\d{{5,7}})\b", re.I)
 _DOI = re.compile(r"\b10\.\d{4,9}/[^\s\"<>]+", re.I)
 
 
@@ -104,6 +106,19 @@ def _title_from_first_page(page) -> str | None:
     return title[:300] if 8 <= len(title) else None
 
 
+_CATALOG = re.compile(r"\(NASA[-/ ]\w+[-/ ]\d+\)\s+(.{8,200}?)\s+(?:Final Report|Technical (?:Report|Memorandum|Paper)|Interim|Annual|Contractor Report|\(|\d+\s*pb)", re.I)
+
+
+def _title_from_catalog_block(flat: str) -> str | None:
+    """Capas NTRS têm um bloco "(NASA-CR-n) TÍTULO Final Report (Empresa) …". É só um candidato de título,
+    sujeito a erros de OCR; a identidade do documento vem da busca por número de relatório, não daqui."""
+    m = _CATALOG.search(flat)
+    if not m:
+        return None
+    t = m.group(1).strip()
+    return (t.title() if t.isupper() else t)[:300]
+
+
 def inspect_pdf(path: Path) -> PdfInfo:
     doc = _open(path)
     try:
@@ -114,10 +129,12 @@ def inspect_pdf(path: Path) -> PdfInfo:
 
 def _inspect(doc) -> PdfInfo:
     head = "\n".join(doc[i].get_text() for i in range(min(3, doc.page_count)))
+    flat = re.sub(r"\s+", " ", head)  # capa escaneada: uma palavra por linha também casa
     meta_title = (doc.metadata or {}).get("title") or ""
     title = meta_title.strip() if len(meta_title.strip()) >= 8 else _title_from_first_page(doc[0])
+    title = title or _title_from_catalog_block(flat)
     reports, ntrs_ids = [], []
-    for m in _REPORT.finditer(head):
+    for m in _REPORT.finditer(flat):
         number = re.sub(r"\s+", "", m.group(2))
         number = re.sub(_DASH, "-", number)
         reports.append(f"NASA/{m.group(1).upper()}-{number}")
