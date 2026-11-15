@@ -1,0 +1,51 @@
+{
+ "status": "PASS",
+ "mode": "isolated server + interface TEST mode",
+ "checks": [
+  {
+   "check": "Preparação mostra requisitos campo a campo e a escada dos 5 estágios",
+   "result": "PASS"
+  },
+  {
+   "check": "Execução do experimento bloqueada com motivo explícito",
+   "result": "PASS"
+  },
+  {
+   "check": "Modo científico: “ambiente de teste” recusado antes do envio, com conversão 15 cm = 0,15 m visível",
+   "result": "PASS"
+  },
+  {
+   "check": "Modo de teste identificado na página",
+   "result": "PASS"
+  },
+  {
+   "check": "Geometria estruturada: posição x/y/z, sistema de coordenadas e consequência para o FDS visíveis",
+   "result": "PASS"
+  },
+  {
+   "check": "Hipótese de geometria salva no modo TESTE, sem resolução automática",
+   "result": "PASS"
+  },
+  {
+   "check": "Pirólise: ausência de propriedades identificada e rascunho explicitamente não aprovado",
+   "result": "PASS"
+  },
+  {
+   "check": "Propostas recuperadas após recarregar e exibidas na preparação (origem, conteúdo, autor)",
+   "result": "PASS"
+  },
+  {
+   "check": "Edição auditável: motivo e diferença registrados no histórico",
+   "result": "PASS"
+  },
+  {
+   "check": "Viewport móvel 390 px: sem rolagem horizontal da página do assistente",
+   "result": "PASS"
+  },
+  {
+   "check": "Sem exceções JavaScript durante o roteiro",
+   "result": "PASS"
+  }
+ ],
+ "js_exceptions": 0
+}

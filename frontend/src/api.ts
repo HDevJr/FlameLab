@@ -185,12 +185,22 @@ export type ReviewBody = {
   interpretation_confirmed?: boolean; unit_verified_in_pdf?: boolean;
 };
 
+const guidedQuery = (profile?: string, mode: WorkMode = "SCIENTIFIC") => {
+  const q = new URLSearchParams();
+  if (profile) q.set("profile_id", profile);
+  if (mode === "TEST") q.set("mode", "TEST");
+  const s = q.toString();
+  return s ? `?${s}` : "";
+};
+
 export const api = {
-  guidedReview: (id: string, profile?: string) => call<GuidedJourney>(`/api/experiments/${id}/guided-review${profile ? `?profile_id=${encodeURIComponent(profile)}` : ""}`),
-  guidedDecision: (id: string, gap: string, body: GuidedDecision, profile: string) => call<GuidedJourney>(`/api/experiments/${id}/guided-review/${gap}?profile_id=${encodeURIComponent(profile)}`, json("POST", body)),
-  guidedCursor: (id: string, gap_id: string, expected_revision: number, profile: string) => call<GuidedJourney>(`/api/experiments/${id}/guided-review/cursor?profile_id=${encodeURIComponent(profile)}`, json("POST", {gap_id,expected_revision})),
+  guidedReview: (id: string, profile?: string, mode: WorkMode = "SCIENTIFIC") => call<GuidedJourney>(`/api/experiments/${id}/guided-review${guidedQuery(profile, mode)}`),
+  guidedDecision: (id: string, gap: string, body: GuidedDecision, profile: string, mode: WorkMode = "SCIENTIFIC") => call<GuidedJourney>(`/api/experiments/${id}/guided-review/${gap}${guidedQuery(profile, mode)}`, json("POST", body)),
+  guidedCursor: (id: string, gap_id: string, expected_revision: number, profile: string, mode: WorkMode = "SCIENTIFIC") => call<GuidedJourney>(`/api/experiments/${id}/guided-review/cursor${guidedQuery(profile, mode)}`, json("POST", {gap_id,expected_revision})),
+  guidedPreview: (id: string, gap: string, body: {action: ProposalAction; proposal: Record<string, unknown>; change_reason?: string}, profile: string, mode: WorkMode = "SCIENTIFIC") =>
+    call<GuidedPreview>(`/api/experiments/${id}/guided-review/${gap}/preview${guidedQuery(profile, mode)}`, json("POST", body)),
   profiles: () => call<CaseProfile[]>("/api/simulation/profiles"),
-  preparation: (id: string) => call<Preparation>(`/api/experiments/${id}/simulation-preparation`),
+  preparation: (id: string, mode: WorkMode = "SCIENTIFIC") => call<Preparation>(`/api/experiments/${id}/simulation-preparation${guidedQuery(undefined, mode)}`),
   createCase: (body: CaseRequest) => call<ScientificCase>("/api/cases", json("POST", body)),
   case: (id: string, version = 1) => call<CaseDiagnostic>(`/api/cases/${id}?version=${version}`),
   caseVersion: (id: string, body: CaseRequest) => call<ScientificCase>(`/api/cases/${id}/versions`, json("POST", body)),
@@ -243,12 +253,43 @@ export type CaseAssumption = { parameter:string; value:number; unit:string; sour
 export type CaseRequest = { profile_id:string;profile_version:string;experiment_id?:string;title:string;assumptions:CaseAssumption[] };
 export type ScientificCase = { content_sha256:string;content:CaseRequest & {case_id:string;version:number;values:Record<string,number>;label_pt:string} };
 export type CaseDiagnostic = { state:string;blockers:string[];case:ScientificCase;approval:unknown;fds_sha256?:string };
-export type Preparation = { state:string;conditions:Parameter[];ambiguous:Parameter[];observables:Parameter[];gaps:(Gap & {required:boolean;assumption_allowed:boolean;impact_pt:string;categories:string[]})[];blockers:string[] };
+export type Preparation = { state:string;conditions:Parameter[];ambiguous:Parameter[];observables:Parameter[];gaps:(Gap & {required:boolean;assumption_allowed:boolean;impact_pt:string;categories:string[]})[];blockers:string[];guided_review?:GuidedJourney };
 
-export type ResolutionState = "OPEN" | "IN_PROGRESS" | "SOURCE_SUBMITTED" | "ASSUMPTION_PROPOSED" | "UNDER_REVIEW" | "RESOLVED_FOR_PROFILE" | "BLOCKED";
-export type GuidedProposal = {value:number|null;unit:string;details:string;source:string;location:string;evidence:string;author:string;justification:string;limitations:string};
-export type GuidedAction = "DRAFT" | "SOURCE" | "ASSUMPTION" | "NOT_FOUND" | "DEFER" | "REQUEST_REVIEW" | "ACCEPT" | "REJECT";
-export type GuidedEvent = {revision:number;at:string;action:GuidedAction|"NAVIGATE";author?:string;notes?:string;state:ResolutionState;review_state?:string;proposal?:GuidedProposal;draft?:Record<string,string>;case_id?:string;case_version?:number;sha256:string};
-export type GuidedTask = Gap & {why_pt:string;impact_pt:string;required:boolean;state:ResolutionState;current:GuidedEvent|null;assumption_allowed:boolean;assumption_reason_pt:string;schema:{kind:"SCALAR"|"DOCUMENT";unit:string};known:Parameter[];history:GuidedEvent[];searched_in?:string[];possible_sources_pt?:string|null};
-export type GuidedJourney = {experiment_id:string;title:string;profile:CaseProfile & {implemented:boolean;requirements?:{parameter:string;unit:string|null}[];additional_requirements?:string[]};revision:number;tasks:GuidedTask[];cursor:string|null;recorded:number;resolved:number;history:GuidedEvent[];readiness:{supported:boolean;generator_approved:boolean;satisfied:string[];pending:string[];additional:string[];can_execute:boolean;message_pt:string}};
-export type GuidedDecision = {expected_revision:number;action:GuidedAction;author:string;notes?:string;draft?:Record<string,string>;proposal?:GuidedProposal;next_gap_id?:string};
+export type WorkMode = "SCIENTIFIC" | "TEST";
+export type ResolutionState = "OPEN" | "IN_PROGRESS" | "SOURCE_SUBMITTED" | "ASSUMPTION_PROPOSED" | "EXPLORATORY_DRAFT" | "UNDER_REVIEW" | "RESOLVED_FOR_PROFILE" | "BLOCKED";
+export type ProposalAction = "SOURCE" | "ASSUMPTION" | "EXPLORATORY_DRAFT";
+export type GuidedProposal = {value:number|null;unit:string;details:string;source:string;location:string;evidence:string;author:string;justification:string;limitations:string;structured?:Record<string,unknown>|null;basis?:"EXTERNAL_LITERATURE"|"ENGINEERING_ASSUMPTION"};
+export type GuidedAction = "DRAFT" | ProposalAction | "NOT_FOUND" | "DEFER" | "REQUEST_REVIEW" | "ACCEPT" | "REJECT";
+export type FieldIssue = {field:string;code:string;message_pt:string};
+export type Conversion = {field:string;label_pt:string;original:string;si:string};
+export type Completeness = {model:string|null;required:string[];present:string[];missing:string[];missing_pt:string[];note_pt:string|null};
+export type Normalized = {kind:"SCALAR"|"STRUCTURED"|"DOCUMENT";summary_pt?:string;value?:number;unit?:string;dimension?:string;details?:string;values?:Record<string,unknown>;completeness?:Completeness|null;physical_validation:string};
+export type Check = {code:string;category:"DATA"|"REVIEW"|"PHYSICS";label_pt:string;done:boolean;detail_pt:string};
+export type Consequences = {saved_as_pt:string;requirement_pt:string;fds_use_pt:string;original_pt:string;pending:Check[]};
+export type QualityFlag = {code:string;severity:"info"|"warning";message_pt:string};
+export type Tier = "OPEN"|"DRAFT"|"NOT_FOUND"|"CORRECTIONS_REQUESTED"|"TEST_CONTENT"|"EVIDENCE_SUBMITTED"|"HYPOTHESIS_PROPOSED"|"EXPLORATORY_DRAFT"|"REVIEWED"|"REQUIREMENT_SATISFIED"|"PUBLISHED_VERIFIED"|"MISSING"|"MODEL_DEVELOPMENT";
+export type ContractOption = {value:string;label_pt:string;dimension?:string;units?:{value:string;label_pt:string}[];si_unit?:string};
+export type ContractField = {name:string;type:"quantity"|"enum"|"text"|"vector"|"rows";label_pt:string;required:boolean;help_pt?:string|null;when?:{field:string;in:string[]}|null;
+  dimension?:string|null;dimension_pt?:string|null;units?:{value:string;label_pt:string}[];si_unit?:string;min?:number|null;max?:number|null;min_exclusive?:boolean;dimension_from?:string;
+  options?:ContractOption[];multiline?:boolean;axes?:string[];columns?:ContractField[];min_rows?:number;max_rows?:number;unique_by?:string|null;increasing?:string|null};
+export type Contract = {parameter:string;kind:"QUANTITY"|"GEOMETRY"|"MATERIAL"|"PROCEDURE"|"MEASUREMENT"|"DOCUMENT";kind_pt:string;title_pt:string;version:string;fields:ContractField[];
+  physical_validation:string;hypothesis:string;development_needed_pt:string[];intro_pt:string|null;primary:string|null};
+export type Policy = {mode:"ALLOWED"|"DRAFT_ONLY"|"NOT_AVAILABLE";reason_pt:string;development_needed_pt:string[]};
+export type GuidedEvent = {revision:number;at:string;action:GuidedAction|"NAVIGATE";author?:string;notes?:string;state:ResolutionState;review_state?:string;proposal?:GuidedProposal;draft?:Record<string,string>;case_id?:string;case_version?:number;sha256:string;
+  proposal_kind?:ProposalAction;normalized?:Normalized;mode?:WorkMode;warnings?:string[];conversions?:Conversion[];revises_revision?:number;change_reason?:string;diff?:{field:string;before:unknown;after:unknown}[]};
+export type GuidedTask = Gap & {why_pt:string;impact_pt:string;required:boolean;role:"CONSTRUCTION_INPUT"|"COMPARISON_ONLY"|"FIDELITY_CONTEXT";state:ResolutionState;current:GuidedEvent|null;assumption_allowed:boolean;assumption_reason_pt:string;
+  policy:Policy;schema:{kind:"SCALAR"|"DOCUMENT"|"STRUCTURED";unit:string};contract:Contract;known:Parameter[];history:GuidedEvent[];searched_in?:string[];possible_sources_pt?:string|null;
+  quality_flags:QualityFlag[];tier:Tier;tier_pt:string;checks:Check[];next_step:{category:string;text_pt:string};consequences:Consequences|null};
+export type RequirementRow = {parameter:string;label_pt:string;category:"DATA_INPUT"|"MODEL_DEVELOPMENT";tier:Tier;tier_pt:string;satisfied:boolean;gap_id:string|null;
+  original:{value:number|string|null;unit:string|null;record_id:string;status:string;page_pdf:number|null;locator_pt:string|null}|null;original_pt?:string;
+  proposal:{revision:number;action:string;kind:ProposalAction|null;state:ResolutionState;author:string;at:string;mode:WorkMode;summary_pt:string;origin_pt:string;source:string|null}|null;
+  checks:Check[];quality_flags?:QualityFlag[];reason_pt:string;next_step_pt:string|null};
+export type LadderStep = {key:string;label_pt:string;count:number;of:number;unit_pt:string};
+export type Stage = {key:string;label_pt:string;status:"NOT_STARTED"|"IN_PROGRESS"|"COMPLETE"|"BLOCKED"|"NOT_IMPLEMENTED";detail_pt:string};
+export type JourneySummary = {gaps_total:number;gaps_handled:number;gaps_drafts:number;gaps_untouched:number;gaps_test_content:number;requirements_total:number;requirements_satisfied:number;model_checks_total:number;ladder:LadderStep[];stages:Stage[]};
+export type GuidedJourney = {experiment_id:string;title:string;mode:WorkMode;profile:CaseProfile & {implemented:boolean;requirements?:{parameter:string;unit:string|null}[];additional_requirements?:string[]};revision:number;tasks:GuidedTask[];cursor:string|null;recorded:number;resolved:number;history:GuidedEvent[];
+  readiness:{supported:boolean;generator_approved:boolean;satisfied:string[];pending:string[];additional:string[];can_execute:boolean;message_pt:string};
+  requirements:RequirementRow[];summary:JourneySummary;next_step:{gap_id:string|null;text_pt:string}};
+export type GuidedDecision = {expected_revision:number;action:GuidedAction;author:string;notes?:string;draft?:Record<string,string>;proposal?:GuidedProposal;next_gap_id?:string;change_reason?:string};
+export type GuidedPreview = {ok:boolean;errors:FieldIssue[];warnings:FieldIssue[];conversions:Conversion[];summary_pt:string;completeness:Completeness|null;revises_revision:number|null;
+  diff:{field:string;before:unknown;after:unknown}[];will_be_state:ResolutionState;tier:Tier;tier_pt:string;checks:Check[];consequences:Consequences;mode:WorkMode};

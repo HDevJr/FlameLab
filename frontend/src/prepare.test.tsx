@@ -44,4 +44,22 @@ it("mantém experimento bloqueado e apresenta lacunas da fonte",async()=>{
  expect(screen.queryByRole("navigation",{name:"Etapas de preparação"})).toBeNull();
  expect(screen.queryByRole("button",{name:"Executar caso independente"})).toBeNull();
  expect(screen.getByRole("link",{name:/Abrir caso técnico independente/}).getAttribute("href")).toBe("/preparar-simulacao");
+ expect((screen.getByRole("button",{name:"Executar simulação deste experimento"}) as HTMLButtonElement).disabled).toBe(true);
+});
+it("preparação mostra cada requisito com original, proposta e motivo, e abre o requisito no assistente",async()=>{
+ const j=structuredClone(guidedFixture) as unknown as GuidedJourney;
+ const row=j.requirements.find(r=>r.parameter==="duct_geometry")!;
+ row.tier="EVIDENCE_SUBMITTED";row.tier_pt="Evidência complementar submetida";
+ row.proposal={revision:4,action:"SOURCE",kind:"SOURCE",state:"SOURCE_SUBMITTED",author:"Pessoa Autora",at:"2026-11-15T12:00:00Z",mode:"SCIENTIFIC",summary_pt:"Forma da seção do duto: Retangular",origin_pt:"Evidência complementar",source:"Relatório complementar"};
+ row.reason_pt="Aguardando parecer de outra pessoa.";
+ vi.spyOn(api,"experiment").mockResolvedValue({experiment_id:"BASS2-M1",label:"M1",document_id:"NASA-TM-20210011385",review:{total:9,reviewed:9,pending:0,gaps:12},gaps:j.tasks,parameters:[]} as unknown as Experiment);
+ vi.spyOn(api,"guidedReview").mockResolvedValue(j);
+ vi.spyOn(api,"guidedCursor").mockImplementation(async()=>j);
+ mount("/experimentos/BASS2-M1/preparar");
+ await screen.findByText("Requisitos do perfil, campo a campo");
+ expect(screen.getByText(/Forma da seção do duto: Retangular/)).toBeTruthy();
+ expect(screen.getAllByText(/Ausente na fonte publicada/).length).toBeGreaterThan(0);
+ expect(screen.getByText("Aguardando parecer de outra pessoa.")).toBeTruthy();
+ fireEvent.click(screen.getByRole("button",{name:"Abrir requisito: Dimensões efetivas do duto"}));
+ expect(await screen.findByText("Pendência 3/12")).toBeTruthy();
 });

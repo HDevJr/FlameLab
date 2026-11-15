@@ -42,6 +42,15 @@ _UNITS: dict[str, tuple[str, float, str, float]] = {
     # frequência, potência, fluxo de calor
     "Hz": ("frequency", 1.0, "Hz", 0.0),
     "W": ("power", 1.0, "W", 0.0), "kW": ("power", 1e3, "W", 0.0), "kW/m2": ("heat_flux", 1e3, "W/m2", 0.0),
+    "W/m2": ("heat_flux", 1.0, "W/m2", 0.0),
+    # BL-17.2 (extensão aditiva v1.2): propriedades de material, cinética e atenuação
+    "kg/m3": ("density", 1.0, "kg/m3", 0.0), "g/cm3": ("density", 1e3, "kg/m3", 0.0),
+    "J/kg/K": ("specific_heat", 1.0, "J/kg/K", 0.0), "kJ/kg/K": ("specific_heat", 1e3, "J/kg/K", 0.0),
+    "W/m/K": ("thermal_conductivity", 1.0, "W/m/K", 0.0),
+    "J/kg": ("specific_energy", 1.0, "J/kg", 0.0), "kJ/kg": ("specific_energy", 1e3, "J/kg", 0.0),
+    "MJ/kg": ("specific_energy", 1e6, "J/kg", 0.0),
+    "J/mol": ("molar_energy", 1.0, "J/mol", 0.0), "kJ/mol": ("molar_energy", 1e3, "J/mol", 0.0),
+    "1/s": ("rate", 1.0, "1/s", 0.0), "1/m": ("attenuation", 1.0, "1/m", 0.0), "1/cm": ("attenuation", 1e2, "1/m", 0.0),
     # frações
     "%": ("fraction", 1e-2, "fraction", 0.0), "ppm": ("fraction", 1e-6, "fraction", 0.0),
     "fraction": ("fraction", 1.0, "fraction", 0.0),
@@ -52,11 +61,15 @@ DIMENSION_PT = {
     "length": "comprimento", "velocity": "velocidade", "time": "tempo", "temperature": "temperatura",
     "angle": "ângulo", "pressure": "pressão", "volume": "volume", "mass": "massa", "area": "área",
     "frequency": "frequência", "power": "potência", "heat_flux": "fluxo de calor", "fraction": "fração/percentual",
-    "dimensionless": "grandeza sem unidade",
+    "dimensionless": "grandeza sem unidade", "density": "densidade", "specific_heat": "calor específico",
+    "thermal_conductivity": "condutividade térmica", "specific_energy": "energia específica",
+    "molar_energy": "energia molar", "rate": "taxa (1/tempo)", "attenuation": "coeficiente de atenuação",
 }
 
 DISPLAY = {"um": "µm", "degC": "°C", "degF": "°F", "deg": "°", "cm3": "cm³", "m3": "m³", "mm2": "mm²",
-           "cm2": "cm²", "m2": "m²", "kW/m2": "kW/m²", "adimensional": "sem unidade", "fraction": "fração"}
+           "cm2": "cm²", "m2": "m²", "kW/m2": "kW/m²", "adimensional": "sem unidade", "fraction": "fração",
+           "W/m2": "W/m²", "kg/m3": "kg/m³", "g/cm3": "g/cm³", "J/kg/K": "J/(kg·K)", "kJ/kg/K": "kJ/(kg·K)",
+           "W/m/K": "W/(m·K)"}
 
 # grafias aceitas (já como seriam normalizadas) -> unidade canônica
 _RAW_ALIASES: dict[str, str] = {
@@ -85,6 +98,15 @@ _RAW_ALIASES: dict[str, str] = {
     "adimensional": "adimensional", "dimensionless": "adimensional", "none": "adimensional", "n/a": "adimensional",
     "na": "adimensional", "-": "adimensional", "—": "adimensional", "–": "adimensional", "1": "adimensional", "": "adimensional",
     "sem unidade": "adimensional",
+    # BL-17.2
+    "w/m2": "W/m2", "w m-2": "W/m2", "w·m-2": "W/m2",
+    "kg/m3": "kg/m3", "kg m-3": "kg/m3", "kg·m-3": "kg/m3", "g/cm3": "g/cm3", "g cm-3": "g/cm3",
+    "j/kg/k": "J/kg/K", "j/(kg k)": "J/kg/K", "j/(kg·k)": "J/kg/K", "j/(kg*k)": "J/kg/K", "j kg-1 k-1": "J/kg/K", "j/kg·k": "J/kg/K",
+    "kj/kg/k": "kJ/kg/K", "kj/(kg k)": "kJ/kg/K", "kj/(kg·k)": "kJ/kg/K", "kj/(kg*k)": "kJ/kg/K", "kj kg-1 k-1": "kJ/kg/K",
+    "w/m/k": "W/m/K", "w/(m k)": "W/m/K", "w/(m·k)": "W/m/K", "w/(m*k)": "W/m/K", "w m-1 k-1": "W/m/K", "w/m·k": "W/m/K",
+    "j/kg": "J/kg", "j kg-1": "J/kg", "kj/kg": "kJ/kg", "kj kg-1": "kJ/kg", "mj/kg": "MJ/kg", "mj kg-1": "MJ/kg",
+    "j/mol": "J/mol", "j mol-1": "J/mol", "kj/mol": "kJ/mol", "kj mol-1": "kJ/mol",
+    "1/s": "1/s", "s-1": "1/s", "s^-1": "1/s", "1/m": "1/m", "m-1": "1/m", "1/cm": "1/cm", "cm-1": "1/cm",
 }
 
 _TRANSLATE = str.maketrans({"º": "°", "˚": "°", "∘": "°", "µ": "u", "μ": "u", "−": "-", " ": " ", " ": " ",
@@ -146,6 +168,15 @@ def normalize(value: float, unit: str | None) -> Quantity | None:
         return None
     dimension, factor, si_unit, offset = _UNITS[canon]
     return Quantity(value=value * factor + offset, unit=si_unit, dimension=dimension)
+
+
+def units_of(dimension: str) -> list[str]:
+    """Unidades canônicas aceitas para uma dimensão (ordem da tabela)."""
+    return [c for c, spec in _UNITS.items() if spec[0] == dimension]
+
+
+def si_unit_of(dimension: str) -> str | None:
+    return next((spec[2] for spec in _UNITS.values() if spec[0] == dimension), None)
 
 
 def same_quantity(a: Quantity, b: Quantity, rel_tol: float = 1e-6, abs_tol: float = 1e-12) -> bool:

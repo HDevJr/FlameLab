@@ -1,0 +1,21 @@
+# BL-17.2 â€” execuÃ§Ã£o de testes (2026-11-15T12:39Z), branch feat/bl-17-2-formularios-cientificos, base 9418e4c
+## backend
+....................................                                     [100%]
+=========================== short test summary info ===========================
+SKIPPED [1] backend\tests\test_dataset_real_bass2.py:71: propagação de M1 já conferida; cenário coberto pelo teste seguinte
+SKIPPED [1] backend\tests\test_dataset_real_bass2.py:92: registro já conferido
+394 passed, 2 skipped in 77.80s (0:01:17)
+## frontend vitest
+ Test Files  7 passed (7)
+      Tests  81 passed (81)
+## typecheck
+PASS
+## build
+âœ“ built in 2.30s
+## git diff --check
+warning: in the working copy of 'backend/app/api/guided_review.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/app/guided_review.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/GuidedReview.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/guided_review.test.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/styles.css', LF will be replaced by CRLF the next time Git touches it
+PASS

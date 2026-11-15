@@ -217,7 +217,7 @@ export function unitView(p: Parameter): UnitView {
 }
 
 export const isStaleBackend = (params: Parameter[]) => params.length > 0 && params.some((p) => p.unit_info === undefined);
-export const REQUIRED_CAPABILITIES = ["unit_info", "integrity", "readiness", "review_scope", "review_preview", "reopen", "gap_decisions", "audit_integrity", "record_context", "condition", "scientific_cases", "guided_review"];
+export const REQUIRED_CAPABILITIES = ["unit_info", "integrity", "readiness", "review_scope", "review_preview", "reopen", "gap_decisions", "audit_integrity", "record_context", "condition", "scientific_cases", "guided_review", "structured_gap_contracts", "guided_review_test_mode"];
 
 /** Estado da revisão de um parâmetro, sem confundir número conferido com interpretação conferida. */
 export function reviewStateView(p: Parameter): { text: string; tone: "ok" | "warn" | "bad" | "info" | "muted" } {

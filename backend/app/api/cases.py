@@ -1,4 +1,6 @@
 """Additive BL-16 API; reuse existing worker."""
+from typing import Literal
+
 from fastapi import APIRouter, HTTPException
 from backend.app.api.platform import Services, _wrap
 from backend.app.simulation import bridge
@@ -18,12 +20,13 @@ def profiles(): return _wrap(bridge.profiles())
 
 
 @router.get("/experiments/{eid}/simulation-preparation")
-def preparation(eid: str):
+def preparation(eid: str, mode: Literal["SCIENTIFIC", "TEST"] = "SCIENTIFIC"):
     exp = Services.catalog().experiment(eid)
     if exp is None: raise HTTPException(404, "EXPERIMENT_NOT_FOUND")
     from backend.app.guided_review import view
     resolved = bridge.resolve(exp)
-    return _wrap({**resolved, "guided_review": view(exp, resolved["profile_id"])})
+    with workspace.use_mode(mode):
+        return _wrap({**resolved, "guided_review": view(exp, resolved["profile_id"])})
 
 
 @router.post("/cases", status_code=201)

@@ -209,14 +209,13 @@ def test_resolution_requires_current_approved_profile_and_its_domain(client,monk
     assert get(client)['tasks'][0]['state']=='UNDER_REVIEW'
 
 
-def test_documentary_complex_value_cannot_become_scalar_input(client):
+def test_complex_value_requires_structured_contract_never_scalar_or_free_text(client):
+    # BL-17.2: o duto tem contrato de geometria; texto livre e escalar avulso são recusados.
     p=proposal();p.update(value=None,unit='n/a',details='Descrição das dimensões e condições da geometria na fonte científica.')
     r=decide(client,get(client),'SOURCE',2,proposal=p)
-    assert r.status_code==200,r.text
-    event=r.json()['data']['tasks'][2]['current']
-    assert event['normalized']['physical_validation']=='REQUIRES_SPECIALIST_SCHEMA'
-    assert event['state']=='SOURCE_SUBMITTED'
+    assert r.status_code==422 and 'formulário estruturado' in r.text
     assert decide(client,get(client),'SOURCE',2,proposal=proposal()).status_code==422
+    assert get(client)['revision']==0
 
 
 def test_wrong_profile_ids_unknown_experiment_extra_fields_and_foreign_gap(client):

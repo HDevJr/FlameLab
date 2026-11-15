@@ -9,12 +9,14 @@ function ScientificPreparation({id}:{id:string}) {
   const experiment=useLoad(()=>api.experiment(id),[id]);
   const profiles=useLoad(api.profiles,[]);
   const [profileId,setProfileId]=useState("");
-  return <><h1>Preparar modelo</h1><p>As evidências e decisões da revisão guiada já fazem parte da preparação. Retome uma pendência para complementar o registro.</p>
+  return <><h1>Preparar modelo</h1><p>As evidências, hipóteses e decisões da revisão guiada já fazem parte da preparação: não é preciso preencher de novo. Abra um requisito para complementar ou editar o registro.</p>
     <Async state={experiment}>{e=><>
       <div className="crumbs"><Link to={`/documentos/${e.document_id}/analise`}>Resumo da análise</Link> › {e.label}</div>
       <p>{e.review.reviewed} parâmetros conferidos · {e.gaps.length} pendências registradas na fonte.</p>
       <Async state={profiles}>{all=><label>Perfil físico<select value={profileId || all.find(p=>!p.independent_only)?.model_id || ""} onChange={event=>setProfileId(event.target.value)}>{all.filter(p=>!p.independent_only).map(p=><option key={p.model_id} value={p.model_id}>{p.title_pt}{p.approved ? "":" — sem aprovação"}</option>)}</select></label>}</Async>
-      <GuidedReview key={profileId} experimentId={id} documentId={e.document_id} count={e.gaps.length} profileId={profileId || undefined}/>
+      <GuidedReview key={profileId} experimentId={id} documentId={e.document_id} count={e.gaps.length} profileId={profileId || undefined} showRequirements/>
+      <section className="card"><button disabled>Executar simulação deste experimento</button>
+        <p className="detail">Bloqueado: o perfil físico deste experimento não tem gerador FDS implementado e aprovado. Nenhuma combustão prescrita de propano substitui o modelo de PMMA.</p></section>
       <details className="card"><summary>Consultar os {e.parameters.length} parâmetros da fonte</summary>{e.parameters.map(p=><p key={p.record_id}><strong>{p.label_pt}</strong> · {formatValue(p)} · {reviewStateView(p).text}</p>)}</details>
       <Link className="btn" to={`/experimentos/${id}#parametros`}>Revisar parâmetros na fonte</Link>
       <p className="detail">O caso técnico de propano tem configuração independente e não recebe estes dados.</p>

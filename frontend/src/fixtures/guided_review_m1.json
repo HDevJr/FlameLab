@@ -150,6 +150,7 @@
   ]
  },
  "revision": 0,
+ "mode": "SCIENTIFIC",
  "tasks": [
   {
    "gap_id": "GAP-BASS2-M1-sample_length",
@@ -177,12 +178,72 @@
    "assumption_allowed": true,
    "impact_pt": "Bloqueia a construção do modelo físico.",
    "why_pt": "Define a extensão do sólido e o espaço disponível para a chama se propagar.",
+   "role": "CONSTRUCTION_INPUT",
    "state": "OPEN",
    "current": null,
-   "assumption_reason_pt": "Pode ser proposta para avaliação exploratória; o perfil PMMA permanece sem aprovação para uso.",
+   "assumption_reason_pt": "A hipótese será registrada como proposta exploratória sem aprovação, vinculada a este perfil. Só poderá ser entrada FDS após revisão independente e com um perfil físico implementado e aprovado.",
+   "policy": {
+    "mode": "ALLOWED",
+    "development_needed_pt": [
+     "Gerador do perfil PMMA que use o comprimento para posicionar a amostra na malha (não implementado)."
+    ],
+    "reason_pt": "A hipótese será registrada como proposta exploratória sem aprovação, vinculada a este perfil. Só poderá ser entrada FDS após revisão independente e com um perfil físico implementado e aprovado."
+   },
    "schema": {
     "kind": "SCALAR",
     "unit": "m"
+   },
+   "contract": {
+    "parameter": "sample_length",
+    "kind": "QUANTITY",
+    "kind_pt": "Grandeza física",
+    "title_pt": "Comprimento da amostra",
+    "version": "1.0.0",
+    "fields": [
+     {
+      "name": "quantity",
+      "type": "quantity",
+      "label_pt": "Comprimento da amostra",
+      "dimension": "length",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": "Comprimento na direção de propagação.",
+      "when": null,
+      "units": [
+       {
+        "value": "µm",
+        "label_pt": "µm"
+       },
+       {
+        "value": "mm",
+        "label_pt": "mm"
+       },
+       {
+        "value": "cm",
+        "label_pt": "cm"
+       },
+       {
+        "value": "m",
+        "label_pt": "m"
+       },
+       {
+        "value": "in",
+        "label_pt": "in"
+       }
+      ],
+      "si_unit": "m",
+      "dimension_pt": "comprimento"
+     }
+    ],
+    "physical_validation": "DATA_CONTRACT_AND_DOMAIN_CHECKS",
+    "hypothesis": "ALLOWED",
+    "development_needed_pt": [
+     "Gerador do perfil PMMA que use o comprimento para posicionar a amostra na malha (não implementado)."
+    ],
+    "intro_pt": null,
+    "primary": "quantity"
    },
    "known": [
     {
@@ -397,7 +458,52 @@
      "semantic_flags": []
     }
    ],
-   "history": []
+   "history": [],
+   "quality_flags": [],
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Gerador do perfil PMMA que use o comprimento para posicionar a amostra na malha (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "next_step": {
+    "category": "DATA",
+    "text_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+   },
+   "consequences": null
   },
   {
    "gap_id": "GAP-BASS2-M1-sample_holder_substrate",
@@ -421,15 +527,448 @@
     "ASSUMPTION_REQUIRED"
    ],
    "required": true,
-   "assumption_allowed": false,
+   "assumption_allowed": true,
    "impact_pt": "Bloqueia a construção do modelo físico.",
    "why_pt": "O suporte troca calor com a amostra e altera seu aquecimento e a propagação da chama.",
+   "role": "CONSTRUCTION_INPUT",
    "state": "OPEN",
    "current": null,
-   "assumption_reason_pt": "Este perfil não permite usar uma hipótese neste campo: falta contrato físico validado ou a física não é suportada. Registre evidência científica ou adie.",
+   "assumption_reason_pt": "A hipótese será registrada como proposta exploratória sem aprovação, vinculada a este perfil. Só poderá ser entrada FDS após revisão independente e com um perfil físico implementado e aprovado.",
+   "policy": {
+    "mode": "ALLOWED",
+    "development_needed_pt": [
+     "Representação do suporte como obstrução/camada no gerador do perfil PMMA (não implementado).",
+     "Modelo de material do suporte com propriedades revisadas (troca de calor com a amostra)."
+    ],
+    "reason_pt": "A hipótese será registrada como proposta exploratória sem aprovação, vinculada a este perfil. Só poderá ser entrada FDS após revisão independente e com um perfil físico implementado e aprovado."
+   },
    "schema": {
-    "kind": "DOCUMENT",
+    "kind": "STRUCTURED",
     "unit": "n/a"
+   },
+   "contract": {
+    "parameter": "sample_holder_substrate",
+    "kind": "GEOMETRY",
+    "kind_pt": "Geometria",
+    "title_pt": "Suporte / substrato da amostra",
+    "version": "1.0.0",
+    "fields": [
+     {
+      "name": "shape",
+      "type": "enum",
+      "label_pt": "Forma geométrica do suporte",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "flat_plate",
+        "label_pt": "Placa plana"
+       },
+       {
+        "value": "rectangular_block",
+        "label_pt": "Bloco retangular"
+       },
+       {
+        "value": "other",
+        "label_pt": "Outra forma (descrever)"
+       }
+      ]
+     },
+     {
+      "name": "shape_description",
+      "type": "text",
+      "label_pt": "Descrição da forma",
+      "required": true,
+      "min": 10,
+      "max": 2000,
+      "multiline": false,
+      "help_pt": null,
+      "when": {
+       "field": "shape",
+       "in": [
+        "other"
+       ]
+      }
+     },
+     {
+      "name": "length",
+      "type": "quantity",
+      "label_pt": "Comprimento do suporte",
+      "dimension": "length",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": null,
+      "when": {
+       "field": "shape",
+       "in": [
+        "flat_plate",
+        "rectangular_block"
+       ]
+      },
+      "units": [
+       {
+        "value": "µm",
+        "label_pt": "µm"
+       },
+       {
+        "value": "mm",
+        "label_pt": "mm"
+       },
+       {
+        "value": "cm",
+        "label_pt": "cm"
+       },
+       {
+        "value": "m",
+        "label_pt": "m"
+       },
+       {
+        "value": "in",
+        "label_pt": "in"
+       }
+      ],
+      "si_unit": "m",
+      "dimension_pt": "comprimento"
+     },
+     {
+      "name": "width",
+      "type": "quantity",
+      "label_pt": "Largura do suporte",
+      "dimension": "length",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": null,
+      "when": {
+       "field": "shape",
+       "in": [
+        "flat_plate",
+        "rectangular_block"
+       ]
+      },
+      "units": [
+       {
+        "value": "µm",
+        "label_pt": "µm"
+       },
+       {
+        "value": "mm",
+        "label_pt": "mm"
+       },
+       {
+        "value": "cm",
+        "label_pt": "cm"
+       },
+       {
+        "value": "m",
+        "label_pt": "m"
+       },
+       {
+        "value": "in",
+        "label_pt": "in"
+       }
+      ],
+      "si_unit": "m",
+      "dimension_pt": "comprimento"
+     },
+     {
+      "name": "thickness",
+      "type": "quantity",
+      "label_pt": "Espessura do suporte",
+      "dimension": "length",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": null,
+      "when": {
+       "field": "shape",
+       "in": [
+        "flat_plate",
+        "rectangular_block"
+       ]
+      },
+      "units": [
+       {
+        "value": "µm",
+        "label_pt": "µm"
+       },
+       {
+        "value": "mm",
+        "label_pt": "mm"
+       },
+       {
+        "value": "cm",
+        "label_pt": "cm"
+       },
+       {
+        "value": "m",
+        "label_pt": "m"
+       },
+       {
+        "value": "in",
+        "label_pt": "in"
+       }
+      ],
+      "si_unit": "m",
+      "dimension_pt": "comprimento"
+     },
+     {
+      "name": "coordinate_system",
+      "type": "text",
+      "label_pt": "Sistema de coordenadas (origem e sentido dos eixos)",
+      "required": true,
+      "min": 10,
+      "max": 2000,
+      "multiline": true,
+      "help_pt": null,
+      "when": null
+     },
+     {
+      "name": "position",
+      "type": "vector",
+      "label_pt": "Posição da origem do suporte nesse sistema",
+      "dimension": "length",
+      "axes": [
+       "x",
+       "y",
+       "z"
+      ],
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "units": [
+       {
+        "value": "µm",
+        "label_pt": "µm"
+       },
+       {
+        "value": "mm",
+        "label_pt": "mm"
+       },
+       {
+        "value": "cm",
+        "label_pt": "cm"
+       },
+       {
+        "value": "m",
+        "label_pt": "m"
+       },
+       {
+        "value": "in",
+        "label_pt": "in"
+       }
+      ],
+      "si_unit": "m",
+      "dimension_pt": "comprimento"
+     },
+     {
+      "name": "orientation",
+      "type": "enum",
+      "label_pt": "Normal da face em contato com a amostra",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "+x",
+        "label_pt": "+x"
+       },
+       {
+        "value": "-x",
+        "label_pt": "-x"
+       },
+       {
+        "value": "+y",
+        "label_pt": "+y"
+       },
+       {
+        "value": "-y",
+        "label_pt": "-y"
+       },
+       {
+        "value": "+z",
+        "label_pt": "+z"
+       },
+       {
+        "value": "-z",
+        "label_pt": "-z"
+       }
+      ]
+     },
+     {
+      "name": "contact",
+      "type": "enum",
+      "label_pt": "Contato térmico com a amostra",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "full",
+        "label_pt": "Contato total"
+       },
+       {
+        "value": "partial",
+        "label_pt": "Contato parcial"
+       },
+       {
+        "value": "gap",
+        "label_pt": "Separado por folga/ar"
+       },
+       {
+        "value": "unknown",
+        "label_pt": "Não informado na fonte"
+       }
+      ]
+     },
+     {
+      "name": "material_name",
+      "type": "text",
+      "label_pt": "Material do suporte (como consta na fonte)",
+      "required": true,
+      "min": 2,
+      "max": 200,
+      "multiline": false,
+      "help_pt": "O nome do material não define propriedades: registre-as abaixo com fonte, se existirem.",
+      "when": null
+     },
+     {
+      "name": "thermal_properties",
+      "type": "rows",
+      "label_pt": "Propriedades térmicas do suporte (opcional)",
+      "columns": [
+       {
+        "name": "property",
+        "type": "enum",
+        "label_pt": "Propriedade",
+        "required": true,
+        "help_pt": null,
+        "when": null,
+        "options": [
+         {
+          "value": "density",
+          "label_pt": "Densidade",
+          "dimension": "density",
+          "units": [
+           {
+            "value": "kg/m³",
+            "label_pt": "kg/m³"
+           },
+           {
+            "value": "g/cm³",
+            "label_pt": "g/cm³"
+           }
+          ],
+          "si_unit": "kg/m³"
+         },
+         {
+          "value": "specific_heat",
+          "label_pt": "Calor específico",
+          "dimension": "specific_heat",
+          "units": [
+           {
+            "value": "J/(kg·K)",
+            "label_pt": "J/(kg·K)"
+           },
+           {
+            "value": "kJ/(kg·K)",
+            "label_pt": "kJ/(kg·K)"
+           }
+          ],
+          "si_unit": "J/(kg·K)"
+         },
+         {
+          "value": "thermal_conductivity",
+          "label_pt": "Condutividade térmica",
+          "dimension": "thermal_conductivity",
+          "units": [
+           {
+            "value": "W/(m·K)",
+            "label_pt": "W/(m·K)"
+           }
+          ],
+          "si_unit": "W/(m·K)"
+         },
+         {
+          "value": "emissivity",
+          "label_pt": "Emissividade",
+          "dimension": "fraction",
+          "units": [
+           {
+            "value": "%",
+            "label_pt": "%"
+           },
+           {
+            "value": "ppm",
+            "label_pt": "ppm"
+           },
+           {
+            "value": "fração",
+            "label_pt": "fração"
+           }
+          ],
+          "si_unit": "fração"
+         }
+        ]
+       },
+       {
+        "name": "value",
+        "type": "quantity",
+        "label_pt": "Valor",
+        "dimension": null,
+        "required": true,
+        "min": 0,
+        "max": null,
+        "min_exclusive": false,
+        "help_pt": null,
+        "when": null,
+        "dimension_from": "property"
+       },
+       {
+        "name": "source",
+        "type": "text",
+        "label_pt": "Fonte desta propriedade",
+        "required": true,
+        "min": 5,
+        "max": 600,
+        "multiline": false,
+        "help_pt": null,
+        "when": null
+       },
+       {
+        "name": "validity",
+        "type": "text",
+        "label_pt": "Condições de validade (faixa de temperatura, estado, método)",
+        "required": true,
+        "min": 3,
+        "max": 600,
+        "multiline": false,
+        "help_pt": null,
+        "when": null
+       }
+      ],
+      "required": false,
+      "min_rows": 0,
+      "max_rows": 4,
+      "unique_by": "property",
+      "increasing": null,
+      "help_pt": null,
+      "when": null
+     }
+    ],
+    "physical_validation": "DATA_CONTRACT_ONLY",
+    "hypothesis": "ALLOWED",
+    "development_needed_pt": [
+     "Representação do suporte como obstrução/camada no gerador do perfil PMMA (não implementado).",
+     "Modelo de material do suporte com propriedades revisadas (troca de calor com a amostra)."
+    ],
+    "intro_pt": null,
+    "primary": null
    },
    "known": [
     {
@@ -575,7 +1114,52 @@
      "semantic_flags": []
     }
    ],
-   "history": []
+   "history": [],
+   "quality_flags": [],
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Representação do suporte como obstrução/camada no gerador do perfil PMMA (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "next_step": {
+    "category": "DATA",
+    "text_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+   },
+   "consequences": null
   },
   {
    "gap_id": "GAP-BASS2-M1-duct_geometry",
@@ -600,15 +1184,355 @@
     "ASSUMPTION_REQUIRED"
    ],
    "required": true,
-   "assumption_allowed": false,
+   "assumption_allowed": true,
    "impact_pt": "Bloqueia a construção do modelo físico.",
    "why_pt": "Define o domínio e as paredes que condicionam o escoamento ao redor da amostra.",
+   "role": "CONSTRUCTION_INPUT",
    "state": "OPEN",
    "current": null,
-   "assumption_reason_pt": "Este perfil não permite usar uma hipótese neste campo: falta contrato físico validado ou a física não é suportada. Registre evidência científica ou adie.",
+   "assumption_reason_pt": "A hipótese será registrada como proposta exploratória sem aprovação, vinculada a este perfil. Só poderá ser entrada FDS após revisão independente e com um perfil físico implementado e aprovado.",
+   "policy": {
+    "mode": "ALLOWED",
+    "development_needed_pt": [
+     "Mapeamento do duto e da amostra para MESH/OBST/VENT no gerador do perfil PMMA (não implementado).",
+     "Verificação de consistência entre duto, amostra e malha."
+    ],
+    "reason_pt": "A hipótese será registrada como proposta exploratória sem aprovação, vinculada a este perfil. Só poderá ser entrada FDS após revisão independente e com um perfil físico implementado e aprovado."
+   },
    "schema": {
-    "kind": "DOCUMENT",
+    "kind": "STRUCTURED",
     "unit": "n/a"
+   },
+   "contract": {
+    "parameter": "duct_geometry",
+    "kind": "GEOMETRY",
+    "kind_pt": "Geometria",
+    "title_pt": "Dimensões efetivas do duto",
+    "version": "1.0.0",
+    "fields": [
+     {
+      "name": "shape",
+      "type": "enum",
+      "label_pt": "Forma da seção do duto",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "rectangular",
+        "label_pt": "Retangular"
+       },
+       {
+        "value": "circular",
+        "label_pt": "Circular"
+       },
+       {
+        "value": "other",
+        "label_pt": "Outra (descrever)"
+       }
+      ]
+     },
+     {
+      "name": "shape_description",
+      "type": "text",
+      "label_pt": "Descrição da forma",
+      "required": true,
+      "min": 10,
+      "max": 2000,
+      "multiline": false,
+      "help_pt": null,
+      "when": {
+       "field": "shape",
+       "in": [
+        "other"
+       ]
+      }
+     },
+     {
+      "name": "width",
+      "type": "quantity",
+      "label_pt": "Largura interna",
+      "dimension": "length",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": null,
+      "when": {
+       "field": "shape",
+       "in": [
+        "rectangular"
+       ]
+      },
+      "units": [
+       {
+        "value": "µm",
+        "label_pt": "µm"
+       },
+       {
+        "value": "mm",
+        "label_pt": "mm"
+       },
+       {
+        "value": "cm",
+        "label_pt": "cm"
+       },
+       {
+        "value": "m",
+        "label_pt": "m"
+       },
+       {
+        "value": "in",
+        "label_pt": "in"
+       }
+      ],
+      "si_unit": "m",
+      "dimension_pt": "comprimento"
+     },
+     {
+      "name": "height",
+      "type": "quantity",
+      "label_pt": "Altura interna",
+      "dimension": "length",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": null,
+      "when": {
+       "field": "shape",
+       "in": [
+        "rectangular"
+       ]
+      },
+      "units": [
+       {
+        "value": "µm",
+        "label_pt": "µm"
+       },
+       {
+        "value": "mm",
+        "label_pt": "mm"
+       },
+       {
+        "value": "cm",
+        "label_pt": "cm"
+       },
+       {
+        "value": "m",
+        "label_pt": "m"
+       },
+       {
+        "value": "in",
+        "label_pt": "in"
+       }
+      ],
+      "si_unit": "m",
+      "dimension_pt": "comprimento"
+     },
+     {
+      "name": "diameter",
+      "type": "quantity",
+      "label_pt": "Diâmetro interno",
+      "dimension": "length",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": null,
+      "when": {
+       "field": "shape",
+       "in": [
+        "circular"
+       ]
+      },
+      "units": [
+       {
+        "value": "µm",
+        "label_pt": "µm"
+       },
+       {
+        "value": "mm",
+        "label_pt": "mm"
+       },
+       {
+        "value": "cm",
+        "label_pt": "cm"
+       },
+       {
+        "value": "m",
+        "label_pt": "m"
+       },
+       {
+        "value": "in",
+        "label_pt": "in"
+       }
+      ],
+      "si_unit": "m",
+      "dimension_pt": "comprimento"
+     },
+     {
+      "name": "length",
+      "type": "quantity",
+      "label_pt": "Comprimento do duto",
+      "dimension": "length",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": null,
+      "when": null,
+      "units": [
+       {
+        "value": "µm",
+        "label_pt": "µm"
+       },
+       {
+        "value": "mm",
+        "label_pt": "mm"
+       },
+       {
+        "value": "cm",
+        "label_pt": "cm"
+       },
+       {
+        "value": "m",
+        "label_pt": "m"
+       },
+       {
+        "value": "in",
+        "label_pt": "in"
+       }
+      ],
+      "si_unit": "m",
+      "dimension_pt": "comprimento"
+     },
+     {
+      "name": "coordinate_system",
+      "type": "text",
+      "label_pt": "Sistema de coordenadas (origem e sentido dos eixos)",
+      "required": true,
+      "min": 10,
+      "max": 2000,
+      "multiline": true,
+      "help_pt": null,
+      "when": null
+     },
+     {
+      "name": "sample_position",
+      "type": "vector",
+      "label_pt": "Posição da borda de ataque da amostra",
+      "dimension": "length",
+      "axes": [
+       "x",
+       "y",
+       "z"
+      ],
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "units": [
+       {
+        "value": "µm",
+        "label_pt": "µm"
+       },
+       {
+        "value": "mm",
+        "label_pt": "mm"
+       },
+       {
+        "value": "cm",
+        "label_pt": "cm"
+       },
+       {
+        "value": "m",
+        "label_pt": "m"
+       },
+       {
+        "value": "in",
+        "label_pt": "in"
+       }
+      ],
+      "si_unit": "m",
+      "dimension_pt": "comprimento"
+     },
+     {
+      "name": "sample_orientation",
+      "type": "enum",
+      "label_pt": "Normal da face exposta da amostra",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "+x",
+        "label_pt": "+x"
+       },
+       {
+        "value": "-x",
+        "label_pt": "-x"
+       },
+       {
+        "value": "+y",
+        "label_pt": "+y"
+       },
+       {
+        "value": "-y",
+        "label_pt": "-y"
+       },
+       {
+        "value": "+z",
+        "label_pt": "+z"
+       },
+       {
+        "value": "-z",
+        "label_pt": "-z"
+       }
+      ]
+     },
+     {
+      "name": "flow_direction",
+      "type": "enum",
+      "label_pt": "Sentido do escoamento",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "+x",
+        "label_pt": "+x"
+       },
+       {
+        "value": "-x",
+        "label_pt": "-x"
+       },
+       {
+        "value": "+y",
+        "label_pt": "+y"
+       },
+       {
+        "value": "-y",
+        "label_pt": "-y"
+       },
+       {
+        "value": "+z",
+        "label_pt": "+z"
+       },
+       {
+        "value": "-z",
+        "label_pt": "-z"
+       }
+      ]
+     }
+    ],
+    "physical_validation": "DATA_CONTRACT_ONLY",
+    "hypothesis": "ALLOWED",
+    "development_needed_pt": [
+     "Mapeamento do duto e da amostra para MESH/OBST/VENT no gerador do perfil PMMA (não implementado).",
+     "Verificação de consistência entre duto, amostra e malha."
+    ],
+    "intro_pt": null,
+    "primary": null
    },
    "known": [
     {
@@ -817,7 +1741,52 @@
      "semantic_flags": []
     }
    ],
-   "history": []
+   "history": [],
+   "quality_flags": [],
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Mapeamento do duto e da amostra para MESH/OBST/VENT no gerador do perfil PMMA (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "next_step": {
+    "category": "DATA",
+    "text_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+   },
+   "consequences": null
   },
   {
    "gap_id": "GAP-BASS2-M1-ambient_pressure",
@@ -844,15 +1813,128 @@
    "assumption_allowed": true,
    "impact_pt": "Bloqueia a construção do modelo físico.",
    "why_pt": "A pressão participa da densidade do gás e das condições de combustão.",
+   "role": "CONSTRUCTION_INPUT",
    "state": "OPEN",
    "current": null,
-   "assumption_reason_pt": "Pode ser proposta para avaliação exploratória; o perfil PMMA permanece sem aprovação para uso.",
+   "assumption_reason_pt": "A hipótese será registrada como proposta exploratória sem aprovação, vinculada a este perfil. Só poderá ser entrada FDS após revisão independente e com um perfil físico implementado e aprovado.",
+   "policy": {
+    "mode": "ALLOWED",
+    "development_needed_pt": [
+     "Gerador do perfil PMMA que aplique a pressão de fundo (não implementado)."
+    ],
+    "reason_pt": "A hipótese será registrada como proposta exploratória sem aprovação, vinculada a este perfil. Só poderá ser entrada FDS após revisão independente e com um perfil físico implementado e aprovado."
+   },
    "schema": {
     "kind": "SCALAR",
     "unit": "Pa"
    },
+   "contract": {
+    "parameter": "ambient_pressure",
+    "kind": "QUANTITY",
+    "kind_pt": "Grandeza física",
+    "title_pt": "Pressão ambiente",
+    "version": "1.0.0",
+    "fields": [
+     {
+      "name": "quantity",
+      "type": "quantity",
+      "label_pt": "Pressão ambiente",
+      "dimension": "pressure",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": null,
+      "when": null,
+      "units": [
+       {
+        "value": "Pa",
+        "label_pt": "Pa"
+       },
+       {
+        "value": "kPa",
+        "label_pt": "kPa"
+       },
+       {
+        "value": "MPa",
+        "label_pt": "MPa"
+       },
+       {
+        "value": "mbar",
+        "label_pt": "mbar"
+       },
+       {
+        "value": "bar",
+        "label_pt": "bar"
+       },
+       {
+        "value": "atm",
+        "label_pt": "atm"
+       },
+       {
+        "value": "psi",
+        "label_pt": "psi"
+       }
+      ],
+      "si_unit": "Pa",
+      "dimension_pt": "pressão"
+     }
+    ],
+    "physical_validation": "DATA_CONTRACT_AND_DOMAIN_CHECKS",
+    "hypothesis": "ALLOWED",
+    "development_needed_pt": [
+     "Gerador do perfil PMMA que aplique a pressão de fundo (não implementado)."
+    ],
+    "intro_pt": null,
+    "primary": "quantity"
+   },
    "known": [],
-   "history": []
+   "history": [],
+   "quality_flags": [],
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Gerador do perfil PMMA que aplique a pressão de fundo (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "next_step": {
+    "category": "DATA",
+    "text_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+   },
+   "consequences": null
   },
   {
    "gap_id": "GAP-BASS2-M1-ambient_temperature",
@@ -879,15 +1961,112 @@
    "assumption_allowed": true,
    "impact_pt": "Bloqueia a construção do modelo físico.",
    "why_pt": "Define o estado térmico inicial do gás e da amostra.",
+   "role": "CONSTRUCTION_INPUT",
    "state": "OPEN",
    "current": null,
-   "assumption_reason_pt": "Pode ser proposta para avaliação exploratória; o perfil PMMA permanece sem aprovação para uso.",
+   "assumption_reason_pt": "A hipótese será registrada como proposta exploratória sem aprovação, vinculada a este perfil. Só poderá ser entrada FDS após revisão independente e com um perfil físico implementado e aprovado.",
+   "policy": {
+    "mode": "ALLOWED",
+    "development_needed_pt": [
+     "Gerador do perfil PMMA que aplique a temperatura inicial do gás e da amostra (não implementado)."
+    ],
+    "reason_pt": "A hipótese será registrada como proposta exploratória sem aprovação, vinculada a este perfil. Só poderá ser entrada FDS após revisão independente e com um perfil físico implementado e aprovado."
+   },
    "schema": {
     "kind": "SCALAR",
     "unit": "K"
    },
+   "contract": {
+    "parameter": "ambient_temperature",
+    "kind": "QUANTITY",
+    "kind_pt": "Grandeza física",
+    "title_pt": "Temperatura ambiente",
+    "version": "1.0.0",
+    "fields": [
+     {
+      "name": "quantity",
+      "type": "quantity",
+      "label_pt": "Temperatura ambiente",
+      "dimension": "temperature",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": "Temperatura absoluta deve ser > 0 K.",
+      "when": null,
+      "units": [
+       {
+        "value": "°C",
+        "label_pt": "°C"
+       },
+       {
+        "value": "K",
+        "label_pt": "K"
+       },
+       {
+        "value": "°F",
+        "label_pt": "°F"
+       }
+      ],
+      "si_unit": "K",
+      "dimension_pt": "temperatura"
+     }
+    ],
+    "physical_validation": "DATA_CONTRACT_AND_DOMAIN_CHECKS",
+    "hypothesis": "ALLOWED",
+    "development_needed_pt": [
+     "Gerador do perfil PMMA que aplique a temperatura inicial do gás e da amostra (não implementado)."
+    ],
+    "intro_pt": null,
+    "primary": "quantity"
+   },
    "known": [],
-   "history": []
+   "history": [],
+   "quality_flags": [],
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Gerador do perfil PMMA que aplique a temperatura inicial do gás e da amostra (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "next_step": {
+    "category": "DATA",
+    "text_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+   },
+   "consequences": null
   },
   {
    "gap_id": "GAP-BASS2-M1-inlet_flow_profile",
@@ -912,15 +2091,332 @@
     "ASSUMPTION_REQUIRED"
    ],
    "required": true,
-   "assumption_allowed": false,
+   "assumption_allowed": true,
    "impact_pt": "Bloqueia a construção do modelo físico.",
    "why_pt": "Uma velocidade pontual não descreve como o ar entra em todo o duto ao longo do tempo.",
+   "role": "CONSTRUCTION_INPUT",
    "state": "OPEN",
    "current": null,
-   "assumption_reason_pt": "Este perfil não permite usar uma hipótese neste campo: falta contrato físico validado ou a física não é suportada. Registre evidência científica ou adie.",
+   "assumption_reason_pt": "A hipótese será registrada como proposta exploratória sem aprovação, vinculada a este perfil. Só poderá ser entrada FDS após revisão independente e com um perfil físico implementado e aprovado.",
+   "policy": {
+    "mode": "ALLOWED",
+    "development_needed_pt": [
+     "Condição de contorno de entrada (VENT/SURF com perfil e rampa) no gerador do perfil PMMA (não implementado)."
+    ],
+    "reason_pt": "A hipótese será registrada como proposta exploratória sem aprovação, vinculada a este perfil. Só poderá ser entrada FDS após revisão independente e com um perfil físico implementado e aprovado."
+   },
    "schema": {
-    "kind": "DOCUMENT",
+    "kind": "STRUCTURED",
     "unit": "n/a"
+   },
+   "contract": {
+    "parameter": "inlet_flow_profile",
+    "kind": "PROCEDURE",
+    "kind_pt": "Procedimento físico",
+    "title_pt": "Perfil de escoamento na entrada",
+    "version": "1.0.0",
+    "fields": [
+     {
+      "name": "profile_type",
+      "type": "enum",
+      "label_pt": "Tipo de perfil espacial",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "uniform",
+        "label_pt": "Uniforme"
+       },
+       {
+        "value": "developed",
+        "label_pt": "Desenvolvido (parabólico)"
+       },
+       {
+        "value": "measured",
+        "label_pt": "Medido (tabela)"
+       },
+       {
+        "value": "other",
+        "label_pt": "Outro (descrever)"
+       }
+      ]
+     },
+     {
+      "name": "profile_description",
+      "type": "text",
+      "label_pt": "Descrição do perfil",
+      "required": true,
+      "min": 10,
+      "max": 2000,
+      "multiline": true,
+      "help_pt": null,
+      "when": {
+       "field": "profile_type",
+       "in": [
+        "other",
+        "measured"
+       ]
+      }
+     },
+     {
+      "name": "reference_velocity",
+      "type": "quantity",
+      "label_pt": "Velocidade de referência",
+      "dimension": "velocity",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": null,
+      "when": null,
+      "units": [
+       {
+        "value": "mm/s",
+        "label_pt": "mm/s"
+       },
+       {
+        "value": "cm/s",
+        "label_pt": "cm/s"
+       },
+       {
+        "value": "m/s",
+        "label_pt": "m/s"
+       }
+      ],
+      "si_unit": "m/s",
+      "dimension_pt": "velocidade"
+     },
+     {
+      "name": "direction",
+      "type": "enum",
+      "label_pt": "Sentido do escoamento",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "+x",
+        "label_pt": "+x"
+       },
+       {
+        "value": "-x",
+        "label_pt": "-x"
+       },
+       {
+        "value": "+y",
+        "label_pt": "+y"
+       },
+       {
+        "value": "-y",
+        "label_pt": "-y"
+       },
+       {
+        "value": "+z",
+        "label_pt": "+z"
+       },
+       {
+        "value": "-z",
+        "label_pt": "-z"
+       }
+      ]
+     },
+     {
+      "name": "temporal_behavior",
+      "type": "enum",
+      "label_pt": "Variação temporal",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "steady",
+        "label_pt": "Constante"
+       },
+       {
+        "value": "ramp",
+        "label_pt": "Rampa"
+       },
+       {
+        "value": "table",
+        "label_pt": "Série temporal"
+       }
+      ]
+     },
+     {
+      "name": "ramp_duration",
+      "type": "quantity",
+      "label_pt": "Duração da rampa",
+      "dimension": "time",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": null,
+      "when": {
+       "field": "temporal_behavior",
+       "in": [
+        "ramp"
+       ]
+      },
+      "units": [
+       {
+        "value": "ms",
+        "label_pt": "ms"
+       },
+       {
+        "value": "s",
+        "label_pt": "s"
+       },
+       {
+        "value": "min",
+        "label_pt": "min"
+       },
+       {
+        "value": "h",
+        "label_pt": "h"
+       }
+      ],
+      "si_unit": "s",
+      "dimension_pt": "tempo"
+     },
+     {
+      "name": "velocity_series",
+      "type": "rows",
+      "label_pt": "Série temporal da velocidade",
+      "columns": [
+       {
+        "name": "time",
+        "type": "quantity",
+        "label_pt": "Tempo",
+        "dimension": "time",
+        "required": true,
+        "min": 0,
+        "max": null,
+        "min_exclusive": false,
+        "help_pt": null,
+        "when": null,
+        "units": [
+         {
+          "value": "ms",
+          "label_pt": "ms"
+         },
+         {
+          "value": "s",
+          "label_pt": "s"
+         },
+         {
+          "value": "min",
+          "label_pt": "min"
+         },
+         {
+          "value": "h",
+          "label_pt": "h"
+         }
+        ],
+        "si_unit": "s",
+        "dimension_pt": "tempo"
+       },
+       {
+        "name": "velocity",
+        "type": "quantity",
+        "label_pt": "Velocidade",
+        "dimension": "velocity",
+        "required": true,
+        "min": 0,
+        "max": null,
+        "min_exclusive": false,
+        "help_pt": null,
+        "when": null,
+        "units": [
+         {
+          "value": "mm/s",
+          "label_pt": "mm/s"
+         },
+         {
+          "value": "cm/s",
+          "label_pt": "cm/s"
+         },
+         {
+          "value": "m/s",
+          "label_pt": "m/s"
+         }
+        ],
+        "si_unit": "m/s",
+        "dimension_pt": "velocidade"
+       }
+      ],
+      "required": true,
+      "min_rows": 2,
+      "max_rows": 30,
+      "unique_by": null,
+      "increasing": "time",
+      "help_pt": null,
+      "when": {
+       "field": "temporal_behavior",
+       "in": [
+        "table"
+       ]
+      }
+     },
+     {
+      "name": "inlet_temperature",
+      "type": "quantity",
+      "label_pt": "Temperatura do ar na entrada",
+      "dimension": "temperature",
+      "required": false,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": null,
+      "when": null,
+      "units": [
+       {
+        "value": "°C",
+        "label_pt": "°C"
+       },
+       {
+        "value": "K",
+        "label_pt": "K"
+       },
+       {
+        "value": "°F",
+        "label_pt": "°F"
+       }
+      ],
+      "si_unit": "K",
+      "dimension_pt": "temperatura"
+     },
+     {
+      "name": "regime",
+      "type": "enum",
+      "label_pt": "Regime do escoamento",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "laminar",
+        "label_pt": "Laminar"
+       },
+       {
+        "value": "turbulent",
+        "label_pt": "Turbulento"
+       },
+       {
+        "value": "unknown",
+        "label_pt": "Não informado"
+       }
+      ]
+     }
+    ],
+    "physical_validation": "DATA_CONTRACT_ONLY",
+    "hypothesis": "ALLOWED",
+    "development_needed_pt": [
+     "Condição de contorno de entrada (VENT/SURF com perfil e rampa) no gerador do perfil PMMA (não implementado)."
+    ],
+    "intro_pt": null,
+    "primary": null
    },
    "known": [
     {
@@ -993,7 +2489,52 @@
      "semantic_flags": []
     }
    ],
-   "history": []
+   "history": [],
+   "quality_flags": [],
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Condição de contorno de entrada (VENT/SURF com perfil e rampa) no gerador do perfil PMMA (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "next_step": {
+    "category": "DATA",
+    "text_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+   },
+   "consequences": null
   },
   {
    "gap_id": "GAP-BASS2-M1-anemometer_location",
@@ -1018,12 +2559,149 @@
    "assumption_allowed": false,
    "impact_pt": "Limita a fidelidade ao ensaio; não é requisito de construção deste perfil.",
    "why_pt": "Permite interpretar onde a velocidade publicada foi medida e avaliar a fidelidade do contorno.",
+   "role": "FIDELITY_CONTEXT",
    "state": "OPEN",
    "current": null,
-   "assumption_reason_pt": "Este perfil não permite usar uma hipótese neste campo: falta contrato físico validado ou a física não é suportada. Registre evidência científica ou adie.",
+   "assumption_reason_pt": "Esta informação limita a fidelidade ao ensaio e não é requisito de construção do perfil. Você pode salvar um rascunho exploratório explicitamente NÃO APROVADO, que nunca será usado como entrada FDS.",
+   "policy": {
+    "mode": "DRAFT_ONLY",
+    "development_needed_pt": [
+     "Uso da posição medida para avaliar a fidelidade do contorno de entrada (não implementado)."
+    ],
+    "reason_pt": "Esta informação limita a fidelidade ao ensaio e não é requisito de construção do perfil. Você pode salvar um rascunho exploratório explicitamente NÃO APROVADO, que nunca será usado como entrada FDS."
+   },
    "schema": {
-    "kind": "DOCUMENT",
+    "kind": "STRUCTURED",
     "unit": "n/a"
+   },
+   "contract": {
+    "parameter": "anemometer_location",
+    "kind": "MEASUREMENT",
+    "kind_pt": "Método de medição",
+    "title_pt": "Posição do anemômetro",
+    "version": "1.0.0",
+    "fields": [
+     {
+      "name": "observed_quantity",
+      "type": "enum",
+      "label_pt": "Grandeza observada",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "air_velocity",
+        "label_pt": "Velocidade do ar"
+       }
+      ]
+     },
+     {
+      "name": "instrument",
+      "type": "text",
+      "label_pt": "Instrumento",
+      "required": true,
+      "min": 3,
+      "max": 300,
+      "multiline": false,
+      "help_pt": null,
+      "when": null
+     },
+     {
+      "name": "coordinate_system",
+      "type": "text",
+      "label_pt": "Sistema de coordenadas (origem e sentido dos eixos)",
+      "required": true,
+      "min": 10,
+      "max": 2000,
+      "multiline": true,
+      "help_pt": null,
+      "when": null
+     },
+     {
+      "name": "position",
+      "type": "vector",
+      "label_pt": "Posição do ponto de medição",
+      "dimension": "length",
+      "axes": [
+       "x",
+       "y",
+       "z"
+      ],
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "units": [
+       {
+        "value": "µm",
+        "label_pt": "µm"
+       },
+       {
+        "value": "mm",
+        "label_pt": "mm"
+       },
+       {
+        "value": "cm",
+        "label_pt": "cm"
+       },
+       {
+        "value": "m",
+        "label_pt": "m"
+       },
+       {
+        "value": "in",
+        "label_pt": "in"
+       }
+      ],
+      "si_unit": "m",
+      "dimension_pt": "comprimento"
+     },
+     {
+      "name": "criterion",
+      "type": "text",
+      "label_pt": "Critério de medição (quando e como a leitura foi feita)",
+      "required": true,
+      "min": 10,
+      "max": 2000,
+      "multiline": true,
+      "help_pt": null,
+      "when": null
+     },
+     {
+      "name": "uncertainty",
+      "type": "quantity",
+      "label_pt": "Incerteza da leitura",
+      "dimension": "velocity",
+      "required": false,
+      "min": 0,
+      "max": null,
+      "min_exclusive": false,
+      "help_pt": null,
+      "when": null,
+      "units": [
+       {
+        "value": "mm/s",
+        "label_pt": "mm/s"
+       },
+       {
+        "value": "cm/s",
+        "label_pt": "cm/s"
+       },
+       {
+        "value": "m/s",
+        "label_pt": "m/s"
+       }
+      ],
+      "si_unit": "m/s",
+      "dimension_pt": "velocidade"
+     }
+    ],
+    "physical_validation": "DATA_CONTRACT_ONLY",
+    "hypothesis": "DRAFT_ONLY",
+    "development_needed_pt": [
+     "Uso da posição medida para avaliar a fidelidade do contorno de entrada (não implementado)."
+    ],
+    "intro_pt": null,
+    "primary": null
    },
    "known": [
     {
@@ -1096,7 +2774,45 @@
      "semantic_flags": []
     }
    ],
-   "history": []
+   "history": [],
+   "quality_flags": [],
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "FIDELITY_USE",
+     "category": "PHYSICS",
+     "label_pt": "Perfil consome esta informação de fidelidade",
+     "done": false,
+     "detail_pt": "Não é requisito de construção. Uso da posição medida para avaliar a fidelidade do contorno de entrada (não implementado)."
+    }
+   ],
+   "next_step": {
+    "category": "DATA",
+    "text_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+   },
+   "consequences": null
   },
   {
    "gap_id": "GAP-BASS2-M1-ignition_procedure",
@@ -1121,15 +2837,324 @@
     "ASSUMPTION_REQUIRED"
    ],
    "required": true,
-   "assumption_allowed": false,
+   "assumption_allowed": true,
    "impact_pt": "Bloqueia a construção do modelo físico.",
    "why_pt": "A fonte e a duração de ignição determinam como o aquecimento e a chama começam.",
+   "role": "CONSTRUCTION_INPUT",
    "state": "OPEN",
    "current": null,
-   "assumption_reason_pt": "Este perfil não permite usar uma hipótese neste campo: falta contrato físico validado ou a física não é suportada. Registre evidência científica ou adie.",
+   "assumption_reason_pt": "A hipótese será registrada como proposta exploratória sem aprovação, vinculada a este perfil. Só poderá ser entrada FDS após revisão independente e com um perfil físico implementado e aprovado.",
+   "policy": {
+    "mode": "ALLOWED",
+    "development_needed_pt": [
+     "Representação da ignição (superfície aquecida/fonte temporária) no gerador do perfil PMMA (não implementado)."
+    ],
+    "reason_pt": "A hipótese será registrada como proposta exploratória sem aprovação, vinculada a este perfil. Só poderá ser entrada FDS após revisão independente e com um perfil físico implementado e aprovado."
+   },
    "schema": {
-    "kind": "DOCUMENT",
+    "kind": "STRUCTURED",
     "unit": "n/a"
+   },
+   "contract": {
+    "parameter": "ignition_procedure",
+    "kind": "PROCEDURE",
+    "kind_pt": "Procedimento físico",
+    "title_pt": "Procedimento de ignição",
+    "version": "1.0.0",
+    "fields": [
+     {
+      "name": "ignition_type",
+      "type": "enum",
+      "label_pt": "Tipo de ignição",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "hot_wire",
+        "label_pt": "Fio aquecido"
+       },
+       {
+        "value": "radiant",
+        "label_pt": "Fonte radiante"
+       },
+       {
+        "value": "pilot_flame",
+        "label_pt": "Chama piloto"
+       },
+       {
+        "value": "spark",
+        "label_pt": "Centelha"
+       },
+       {
+        "value": "other",
+        "label_pt": "Outro (descrever)"
+       }
+      ]
+     },
+     {
+      "name": "ignition_description",
+      "type": "text",
+      "label_pt": "Descrição do ignitor",
+      "required": true,
+      "min": 10,
+      "max": 2000,
+      "multiline": true,
+      "help_pt": null,
+      "when": {
+       "field": "ignition_type",
+       "in": [
+        "other"
+       ]
+      }
+     },
+     {
+      "name": "initial_conditions",
+      "type": "text",
+      "label_pt": "Condições iniciais (amostra, escoamento, atmosfera)",
+      "required": true,
+      "min": 10,
+      "max": 2000,
+      "multiline": true,
+      "help_pt": null,
+      "when": null
+     },
+     {
+      "name": "start_time",
+      "type": "quantity",
+      "label_pt": "Início da ignição",
+      "dimension": "time",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": false,
+      "help_pt": null,
+      "when": null,
+      "units": [
+       {
+        "value": "ms",
+        "label_pt": "ms"
+       },
+       {
+        "value": "s",
+        "label_pt": "s"
+       },
+       {
+        "value": "min",
+        "label_pt": "min"
+       },
+       {
+        "value": "h",
+        "label_pt": "h"
+       }
+      ],
+      "si_unit": "s",
+      "dimension_pt": "tempo"
+     },
+     {
+      "name": "duration",
+      "type": "quantity",
+      "label_pt": "Duração da ignição",
+      "dimension": "time",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": null,
+      "when": null,
+      "units": [
+       {
+        "value": "ms",
+        "label_pt": "ms"
+       },
+       {
+        "value": "s",
+        "label_pt": "s"
+       },
+       {
+        "value": "min",
+        "label_pt": "min"
+       },
+       {
+        "value": "h",
+        "label_pt": "h"
+       }
+      ],
+      "si_unit": "s",
+      "dimension_pt": "tempo"
+     },
+     {
+      "name": "temporal_variation",
+      "type": "enum",
+      "label_pt": "Variação temporal da fonte",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "constant",
+        "label_pt": "Constante"
+       },
+       {
+        "value": "ramp",
+        "label_pt": "Rampa"
+       },
+       {
+        "value": "pulse",
+        "label_pt": "Pulso"
+       },
+       {
+        "value": "unspecified",
+        "label_pt": "Não informada"
+       }
+      ]
+     },
+     {
+      "name": "coordinate_system",
+      "type": "text",
+      "label_pt": "Sistema de coordenadas (origem e sentido dos eixos)",
+      "required": true,
+      "min": 10,
+      "max": 2000,
+      "multiline": true,
+      "help_pt": null,
+      "when": null
+     },
+     {
+      "name": "position",
+      "type": "vector",
+      "label_pt": "Posição da fonte de ignição",
+      "dimension": "length",
+      "axes": [
+       "x",
+       "y",
+       "z"
+      ],
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "units": [
+       {
+        "value": "µm",
+        "label_pt": "µm"
+       },
+       {
+        "value": "mm",
+        "label_pt": "mm"
+       },
+       {
+        "value": "cm",
+        "label_pt": "cm"
+       },
+       {
+        "value": "m",
+        "label_pt": "m"
+       },
+       {
+        "value": "in",
+        "label_pt": "in"
+       }
+      ],
+      "si_unit": "m",
+      "dimension_pt": "comprimento"
+     },
+     {
+      "name": "source_quantities",
+      "type": "rows",
+      "label_pt": "Grandezas da fonte (opcional)",
+      "columns": [
+       {
+        "name": "quantity",
+        "type": "enum",
+        "label_pt": "Grandeza",
+        "required": true,
+        "help_pt": null,
+        "when": null,
+        "options": [
+         {
+          "value": "power",
+          "label_pt": "Potência",
+          "dimension": "power",
+          "units": [
+           {
+            "value": "W",
+            "label_pt": "W"
+           },
+           {
+            "value": "kW",
+            "label_pt": "kW"
+           }
+          ],
+          "si_unit": "W"
+         },
+         {
+          "value": "heat_flux",
+          "label_pt": "Fluxo de calor",
+          "dimension": "heat_flux",
+          "units": [
+           {
+            "value": "kW/m²",
+            "label_pt": "kW/m²"
+           },
+           {
+            "value": "W/m²",
+            "label_pt": "W/m²"
+           }
+          ],
+          "si_unit": "W/m²"
+         },
+         {
+          "value": "temperature",
+          "label_pt": "Temperatura",
+          "dimension": "temperature",
+          "units": [
+           {
+            "value": "°C",
+            "label_pt": "°C"
+           },
+           {
+            "value": "K",
+            "label_pt": "K"
+           },
+           {
+            "value": "°F",
+            "label_pt": "°F"
+           }
+          ],
+          "si_unit": "K"
+         }
+        ]
+       },
+       {
+        "name": "value",
+        "type": "quantity",
+        "label_pt": "Valor",
+        "dimension": null,
+        "required": true,
+        "min": 0,
+        "max": null,
+        "min_exclusive": true,
+        "help_pt": null,
+        "when": null,
+        "dimension_from": "quantity"
+       }
+      ],
+      "required": false,
+      "min_rows": 0,
+      "max_rows": 3,
+      "unique_by": "quantity",
+      "increasing": null,
+      "help_pt": null,
+      "when": null
+     }
+    ],
+    "physical_validation": "DATA_CONTRACT_ONLY",
+    "hypothesis": "ALLOWED",
+    "development_needed_pt": [
+     "Representação da ignição (superfície aquecida/fonte temporária) no gerador do perfil PMMA (não implementado)."
+    ],
+    "intro_pt": null,
+    "primary": null
    },
    "known": [
     {
@@ -1278,7 +3303,52 @@
      "semantic_flags": []
     }
    ],
-   "history": []
+   "history": [],
+   "quality_flags": [],
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Representação da ignição (superfície aquecida/fonte temporária) no gerador do perfil PMMA (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "next_step": {
+    "category": "DATA",
+    "text_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+   },
+   "consequences": null
   },
   {
    "gap_id": "GAP-BASS2-M1-pmma_pyrolysis_properties",
@@ -1305,12 +3375,326 @@
    "assumption_allowed": false,
    "impact_pt": "Bloqueia a construção do modelo físico.",
    "why_pt": "O FDS precisa de um modelo de degradação térmica e propriedades consistentes do material.",
+   "role": "CONSTRUCTION_INPUT",
    "state": "OPEN",
    "current": null,
-   "assumption_reason_pt": "Este perfil não permite usar uma hipótese neste campo: falta contrato físico validado ou a física não é suportada. Registre evidência científica ou adie.",
+   "assumption_reason_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não permite hipótese nesta informação: ela exige base física revisada. Você pode salvar um rascunho exploratório explicitamente NÃO APROVADO, que nunca será usado como entrada FDS.",
+   "policy": {
+    "mode": "DRAFT_ONLY",
+    "development_needed_pt": [
+     "Modelo de material (MATL/REAC) revisado por especialista no perfil PMMA (não implementado).",
+     "Verificação/calibração da cinética e das propriedades; revisão do modelo de material (material_model_review)."
+    ],
+    "reason_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não permite hipótese nesta informação: ela exige base física revisada. Você pode salvar um rascunho exploratório explicitamente NÃO APROVADO, que nunca será usado como entrada FDS."
+   },
    "schema": {
-    "kind": "DOCUMENT",
+    "kind": "STRUCTURED",
     "unit": "n/a"
+   },
+   "contract": {
+    "parameter": "pmma_pyrolysis_properties",
+    "kind": "MATERIAL",
+    "kind_pt": "Material",
+    "title_pt": "Propriedades termoquímicas e de pirólise",
+    "version": "1.0.0",
+    "fields": [
+     {
+      "name": "material_name",
+      "type": "text",
+      "label_pt": "Material (como definido na fonte)",
+      "required": true,
+      "min": 2,
+      "max": 200,
+      "multiline": false,
+      "help_pt": null,
+      "when": null
+     },
+     {
+      "name": "material_model",
+      "type": "enum",
+      "label_pt": "Estrutura do modelo de material",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "single_step_arrhenius",
+        "label_pt": "Pirólise em uma etapa (Arrhenius)"
+       },
+       {
+        "value": "inert_thermal",
+        "label_pt": "Somente térmico (sem pirólise)"
+       },
+       {
+        "value": "other",
+        "label_pt": "Outro modelo (descrever)"
+       }
+      ]
+     },
+     {
+      "name": "model_description",
+      "type": "text",
+      "label_pt": "Descrição do modelo",
+      "required": true,
+      "min": 10,
+      "max": 2000,
+      "multiline": true,
+      "help_pt": null,
+      "when": {
+       "field": "material_model",
+       "in": [
+        "other"
+       ]
+      }
+     },
+     {
+      "name": "properties",
+      "type": "rows",
+      "label_pt": "Propriedades com fonte e validade",
+      "columns": [
+       {
+        "name": "property",
+        "type": "enum",
+        "label_pt": "Propriedade",
+        "required": true,
+        "help_pt": null,
+        "when": null,
+        "options": [
+         {
+          "value": "density",
+          "label_pt": "Densidade",
+          "dimension": "density",
+          "units": [
+           {
+            "value": "kg/m³",
+            "label_pt": "kg/m³"
+           },
+           {
+            "value": "g/cm³",
+            "label_pt": "g/cm³"
+           }
+          ],
+          "si_unit": "kg/m³"
+         },
+         {
+          "value": "specific_heat",
+          "label_pt": "Calor específico",
+          "dimension": "specific_heat",
+          "units": [
+           {
+            "value": "J/(kg·K)",
+            "label_pt": "J/(kg·K)"
+           },
+           {
+            "value": "kJ/(kg·K)",
+            "label_pt": "kJ/(kg·K)"
+           }
+          ],
+          "si_unit": "J/(kg·K)"
+         },
+         {
+          "value": "thermal_conductivity",
+          "label_pt": "Condutividade térmica",
+          "dimension": "thermal_conductivity",
+          "units": [
+           {
+            "value": "W/(m·K)",
+            "label_pt": "W/(m·K)"
+           }
+          ],
+          "si_unit": "W/(m·K)"
+         },
+         {
+          "value": "emissivity",
+          "label_pt": "Emissividade",
+          "dimension": "fraction",
+          "units": [
+           {
+            "value": "%",
+            "label_pt": "%"
+           },
+           {
+            "value": "ppm",
+            "label_pt": "ppm"
+           },
+           {
+            "value": "fração",
+            "label_pt": "fração"
+           }
+          ],
+          "si_unit": "fração"
+         },
+         {
+          "value": "absorption_coefficient",
+          "label_pt": "Coeficiente de absorção",
+          "dimension": "attenuation",
+          "units": [
+           {
+            "value": "1/m",
+            "label_pt": "1/m"
+           },
+           {
+            "value": "1/cm",
+            "label_pt": "1/cm"
+           }
+          ],
+          "si_unit": "1/m"
+         },
+         {
+          "value": "heat_of_reaction",
+          "label_pt": "Calor de pirólise / reação",
+          "dimension": "specific_energy",
+          "units": [
+           {
+            "value": "J/kg",
+            "label_pt": "J/kg"
+           },
+           {
+            "value": "kJ/kg",
+            "label_pt": "kJ/kg"
+           },
+           {
+            "value": "MJ/kg",
+            "label_pt": "MJ/kg"
+           }
+          ],
+          "si_unit": "J/kg"
+         },
+         {
+          "value": "pre_exponential_factor",
+          "label_pt": "Fator pré-exponencial (A)",
+          "dimension": "rate",
+          "units": [
+           {
+            "value": "1/s",
+            "label_pt": "1/s"
+           }
+          ],
+          "si_unit": "1/s"
+         },
+         {
+          "value": "activation_energy",
+          "label_pt": "Energia de ativação (E)",
+          "dimension": "molar_energy",
+          "units": [
+           {
+            "value": "J/mol",
+            "label_pt": "J/mol"
+           },
+           {
+            "value": "kJ/mol",
+            "label_pt": "kJ/mol"
+           }
+          ],
+          "si_unit": "J/mol"
+         },
+         {
+          "value": "reaction_order",
+          "label_pt": "Ordem de reação",
+          "dimension": "dimensionless",
+          "units": [
+           {
+            "value": "sem unidade",
+            "label_pt": "sem unidade"
+           }
+          ],
+          "si_unit": "sem unidade"
+         },
+         {
+          "value": "heat_of_combustion",
+          "label_pt": "Calor de combustão",
+          "dimension": "specific_energy",
+          "units": [
+           {
+            "value": "J/kg",
+            "label_pt": "J/kg"
+           },
+           {
+            "value": "kJ/kg",
+            "label_pt": "kJ/kg"
+           },
+           {
+            "value": "MJ/kg",
+            "label_pt": "MJ/kg"
+           }
+          ],
+          "si_unit": "J/kg"
+         },
+         {
+          "value": "residue_yield",
+          "label_pt": "Fração de resíduo",
+          "dimension": "fraction",
+          "units": [
+           {
+            "value": "%",
+            "label_pt": "%"
+           },
+           {
+            "value": "ppm",
+            "label_pt": "ppm"
+           },
+           {
+            "value": "fração",
+            "label_pt": "fração"
+           }
+          ],
+          "si_unit": "fração"
+         }
+        ]
+       },
+       {
+        "name": "value",
+        "type": "quantity",
+        "label_pt": "Valor",
+        "dimension": null,
+        "required": true,
+        "min": 0,
+        "max": null,
+        "min_exclusive": false,
+        "help_pt": null,
+        "when": null,
+        "dimension_from": "property"
+       },
+       {
+        "name": "source",
+        "type": "text",
+        "label_pt": "Fonte desta propriedade",
+        "required": true,
+        "min": 5,
+        "max": 600,
+        "multiline": false,
+        "help_pt": null,
+        "when": null
+       },
+       {
+        "name": "validity",
+        "type": "text",
+        "label_pt": "Condições de validade (faixa de temperatura, estado, método)",
+        "required": true,
+        "min": 3,
+        "max": 600,
+        "multiline": false,
+        "help_pt": null,
+        "when": null
+       }
+      ],
+      "required": true,
+      "min_rows": 1,
+      "max_rows": 11,
+      "unique_by": "property",
+      "increasing": null,
+      "help_pt": "Cada propriedade exige valor, unidade, fonte e condições de validade. Não use valores presumidos pelo nome do material.",
+      "when": null
+     }
+    ],
+    "physical_validation": "DATA_CONTRACT_ONLY",
+    "hypothesis": "DRAFT_ONLY",
+    "development_needed_pt": [
+     "Modelo de material (MATL/REAC) revisado por especialista no perfil PMMA (não implementado).",
+     "Verificação/calibração da cinética e das propriedades; revisão do modelo de material (material_model_review)."
+    ],
+    "intro_pt": "O nome do material não determina suas propriedades. Registre somente valores com fonte identificável.",
+    "primary": null
    },
    "known": [
     {
@@ -1456,7 +3840,52 @@
      "semantic_flags": []
     }
    ],
-   "history": []
+   "history": [],
+   "quality_flags": [],
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Modelo de material (MATL/REAC) revisado por especialista no perfil PMMA (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "next_step": {
+    "category": "DATA",
+    "text_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+   },
+   "consequences": null
   },
   {
    "gap_id": "GAP-BASS2-M1-o2_time_profile",
@@ -1481,12 +3910,188 @@
    "assumption_allowed": false,
    "impact_pt": "Limita a fidelidade ao ensaio; não é requisito de construção deste perfil.",
    "why_pt": "Descreve a disponibilidade de oxigênio ao longo do ensaio; os valores inicial e final são apenas extremos.",
+   "role": "FIDELITY_CONTEXT",
    "state": "OPEN",
    "current": null,
-   "assumption_reason_pt": "Este perfil não permite usar uma hipótese neste campo: falta contrato físico validado ou a física não é suportada. Registre evidência científica ou adie.",
+   "assumption_reason_pt": "Esta informação limita a fidelidade ao ensaio e não é requisito de construção do perfil. Você pode salvar um rascunho exploratório explicitamente NÃO APROVADO, que nunca será usado como entrada FDS.",
+   "policy": {
+    "mode": "DRAFT_ONLY",
+    "development_needed_pt": [
+     "Condição de contorno de composição variável no tempo; o perfil atual não consome esta informação."
+    ],
+    "reason_pt": "Esta informação limita a fidelidade ao ensaio e não é requisito de construção do perfil. Você pode salvar um rascunho exploratório explicitamente NÃO APROVADO, que nunca será usado como entrada FDS."
+   },
    "schema": {
-    "kind": "DOCUMENT",
+    "kind": "STRUCTURED",
     "unit": "n/a"
+   },
+   "contract": {
+    "parameter": "o2_time_profile",
+    "kind": "PROCEDURE",
+    "kind_pt": "Procedimento físico",
+    "title_pt": "Perfil temporal do oxigênio",
+    "version": "1.0.0",
+    "fields": [
+     {
+      "name": "profile_type",
+      "type": "enum",
+      "label_pt": "Forma do perfil",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "constant",
+        "label_pt": "Constante"
+       },
+       {
+        "value": "table",
+        "label_pt": "Série temporal"
+       }
+      ]
+     },
+     {
+      "name": "constant_fraction",
+      "type": "quantity",
+      "label_pt": "Fração de O₂",
+      "dimension": "fraction",
+      "required": true,
+      "min": 0,
+      "max": 1,
+      "min_exclusive": false,
+      "help_pt": null,
+      "when": {
+       "field": "profile_type",
+       "in": [
+        "constant"
+       ]
+      },
+      "units": [
+       {
+        "value": "%",
+        "label_pt": "%"
+       },
+       {
+        "value": "ppm",
+        "label_pt": "ppm"
+       },
+       {
+        "value": "fração",
+        "label_pt": "fração"
+       }
+      ],
+      "si_unit": "fração",
+      "dimension_pt": "fração/percentual"
+     },
+     {
+      "name": "series",
+      "type": "rows",
+      "label_pt": "Série temporal da fração de O₂",
+      "columns": [
+       {
+        "name": "time",
+        "type": "quantity",
+        "label_pt": "Tempo",
+        "dimension": "time",
+        "required": true,
+        "min": 0,
+        "max": null,
+        "min_exclusive": false,
+        "help_pt": null,
+        "when": null,
+        "units": [
+         {
+          "value": "ms",
+          "label_pt": "ms"
+         },
+         {
+          "value": "s",
+          "label_pt": "s"
+         },
+         {
+          "value": "min",
+          "label_pt": "min"
+         },
+         {
+          "value": "h",
+          "label_pt": "h"
+         }
+        ],
+        "si_unit": "s",
+        "dimension_pt": "tempo"
+       },
+       {
+        "name": "fraction",
+        "type": "quantity",
+        "label_pt": "Fração de O₂",
+        "dimension": "fraction",
+        "required": true,
+        "min": 0,
+        "max": 1,
+        "min_exclusive": false,
+        "help_pt": null,
+        "when": null,
+        "units": [
+         {
+          "value": "%",
+          "label_pt": "%"
+         },
+         {
+          "value": "ppm",
+          "label_pt": "ppm"
+         },
+         {
+          "value": "fração",
+          "label_pt": "fração"
+         }
+        ],
+        "si_unit": "fração",
+        "dimension_pt": "fração/percentual"
+       }
+      ],
+      "required": true,
+      "min_rows": 2,
+      "max_rows": 30,
+      "unique_by": null,
+      "increasing": "time",
+      "help_pt": null,
+      "when": {
+       "field": "profile_type",
+       "in": [
+        "table"
+       ]
+      }
+     },
+     {
+      "name": "basis",
+      "type": "enum",
+      "label_pt": "Base da fração",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "volume",
+        "label_pt": "Volumétrica/molar"
+       },
+       {
+        "value": "mass",
+        "label_pt": "Mássica"
+       },
+       {
+        "value": "unknown",
+        "label_pt": "Não informada"
+       }
+      ]
+     }
+    ],
+    "physical_validation": "DATA_CONTRACT_ONLY",
+    "hypothesis": "DRAFT_ONLY",
+    "development_needed_pt": [
+     "Condição de contorno de composição variável no tempo; o perfil atual não consome esta informação."
+    ],
+    "intro_pt": null,
+    "primary": null
    },
    "known": [
     {
@@ -1629,7 +4234,45 @@
      "semantic_flags": []
     }
    ],
-   "history": []
+   "history": [],
+   "quality_flags": [],
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "FIDELITY_USE",
+     "category": "PHYSICS",
+     "label_pt": "Perfil consome esta informação de fidelidade",
+     "done": false,
+     "detail_pt": "Não é requisito de construção. Condição de contorno de composição variável no tempo; o perfil atual não consome esta informação."
+    }
+   ],
+   "next_step": {
+    "category": "DATA",
+    "text_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+   },
+   "consequences": null
   },
   {
    "gap_id": "GAP-BASS2-M1-measurement_uncertainty",
@@ -1656,12 +4299,190 @@
    "assumption_allowed": false,
    "impact_pt": "Impede comparação quantitativa; não é uma entrada de execução.",
    "why_pt": "Permite avaliar se a diferença entre resultado calculado e medição é significativa.",
+   "role": "COMPARISON_ONLY",
    "state": "OPEN",
    "current": null,
-   "assumption_reason_pt": "Este perfil não permite usar uma hipótese neste campo: falta contrato físico validado ou a física não é suportada. Registre evidência científica ou adie.",
+   "assumption_reason_pt": "Esta informação serve apenas para comparação quantitativa e não é entrada FDS. Você pode salvar um rascunho exploratório explicitamente NÃO APROVADO, que nunca será usado como entrada FDS.",
+   "policy": {
+    "mode": "DRAFT_ONLY",
+    "development_needed_pt": [
+     "Comparação quantitativa entre resultado calculado e medição (não implementada). Não é entrada FDS."
+    ],
+    "reason_pt": "Esta informação serve apenas para comparação quantitativa e não é entrada FDS. Você pode salvar um rascunho exploratório explicitamente NÃO APROVADO, que nunca será usado como entrada FDS."
+   },
    "schema": {
-    "kind": "DOCUMENT",
+    "kind": "STRUCTURED",
     "unit": "n/a"
+   },
+   "contract": {
+    "parameter": "measurement_uncertainty",
+    "kind": "MEASUREMENT",
+    "kind_pt": "Método de medição",
+    "title_pt": "Incertezas de medição",
+    "version": "1.0.0",
+    "fields": [
+     {
+      "name": "uncertainties",
+      "type": "rows",
+      "label_pt": "Incertezas por grandeza",
+      "columns": [
+       {
+        "name": "quantity",
+        "type": "enum",
+        "label_pt": "Grandeza medida",
+        "required": true,
+        "help_pt": null,
+        "when": null,
+        "options": [
+         {
+          "value": "flame_spread_rate",
+          "label_pt": "Velocidade de propagação",
+          "dimension": "velocity",
+          "units": [
+           {
+            "value": "mm/s",
+            "label_pt": "mm/s"
+           },
+           {
+            "value": "cm/s",
+            "label_pt": "cm/s"
+           },
+           {
+            "value": "m/s",
+            "label_pt": "m/s"
+           }
+          ],
+          "si_unit": "m/s"
+         },
+         {
+          "value": "airflow_velocity",
+          "label_pt": "Velocidade do ar",
+          "dimension": "velocity",
+          "units": [
+           {
+            "value": "mm/s",
+            "label_pt": "mm/s"
+           },
+           {
+            "value": "cm/s",
+            "label_pt": "cm/s"
+           },
+           {
+            "value": "m/s",
+            "label_pt": "m/s"
+           }
+          ],
+          "si_unit": "m/s"
+         },
+         {
+          "value": "o2_fraction",
+          "label_pt": "Fração de O₂",
+          "dimension": "fraction",
+          "units": [
+           {
+            "value": "%",
+            "label_pt": "%"
+           },
+           {
+            "value": "ppm",
+            "label_pt": "ppm"
+           },
+           {
+            "value": "fração",
+            "label_pt": "fração"
+           }
+          ],
+          "si_unit": "fração"
+         },
+         {
+          "value": "burn_duration",
+          "label_pt": "Duração da queima",
+          "dimension": "time",
+          "units": [
+           {
+            "value": "ms",
+            "label_pt": "ms"
+           },
+           {
+            "value": "s",
+            "label_pt": "s"
+           },
+           {
+            "value": "min",
+            "label_pt": "min"
+           },
+           {
+            "value": "h",
+            "label_pt": "h"
+           }
+          ],
+          "si_unit": "s"
+         }
+        ]
+       },
+       {
+        "name": "type",
+        "type": "enum",
+        "label_pt": "Tipo",
+        "required": true,
+        "help_pt": null,
+        "when": null,
+        "options": [
+         {
+          "value": "standard",
+          "label_pt": "Padrão (1σ)"
+         },
+         {
+          "value": "expanded",
+          "label_pt": "Expandida"
+         },
+         {
+          "value": "bound",
+          "label_pt": "Limite (±)"
+         }
+        ]
+       },
+       {
+        "name": "value",
+        "type": "quantity",
+        "label_pt": "Valor",
+        "dimension": null,
+        "required": true,
+        "min": 0,
+        "max": null,
+        "min_exclusive": false,
+        "help_pt": null,
+        "when": null,
+        "dimension_from": "quantity"
+       },
+       {
+        "name": "method",
+        "type": "text",
+        "label_pt": "Como foi estimada",
+        "required": true,
+        "min": 5,
+        "max": 600,
+        "multiline": false,
+        "help_pt": null,
+        "when": null
+       }
+      ],
+      "required": true,
+      "min_rows": 1,
+      "max_rows": 4,
+      "unique_by": "quantity",
+      "increasing": null,
+      "help_pt": null,
+      "when": null
+     }
+    ],
+    "physical_validation": "DATA_CONTRACT_ONLY",
+    "hypothesis": "DRAFT_ONLY",
+    "development_needed_pt": [
+     "Comparação quantitativa entre resultado calculado e medição (não implementada). Não é entrada FDS."
+    ],
+    "intro_pt": null,
+    "primary": null
    },
    "known": [
     {
@@ -1874,7 +4695,45 @@
      "semantic_flags": []
     }
    ],
-   "history": []
+   "history": [],
+   "quality_flags": [],
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "COMPARISON_PIPELINE",
+     "category": "PHYSICS",
+     "label_pt": "Comparação quantitativa implementada",
+     "done": false,
+     "detail_pt": "Não é entrada FDS. Comparação quantitativa entre resultado calculado e medição (não implementada). Não é entrada FDS."
+    }
+   ],
+   "next_step": {
+    "category": "DATA",
+    "text_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+   },
+   "consequences": null
   },
   {
    "gap_id": "GAP-BASS2-M1-flame_front_tracking_method",
@@ -1901,12 +4760,221 @@
    "assumption_allowed": false,
    "impact_pt": "Impede comparação quantitativa; não é uma entrada de execução.",
    "why_pt": "Define como extrair do cálculo e do vídeo uma medida de avanço comparável.",
+   "role": "COMPARISON_ONLY",
    "state": "OPEN",
    "current": null,
-   "assumption_reason_pt": "Este perfil não permite usar uma hipótese neste campo: falta contrato físico validado ou a física não é suportada. Registre evidência científica ou adie.",
+   "assumption_reason_pt": "Esta informação serve apenas para comparação quantitativa e não é entrada FDS. Você pode salvar um rascunho exploratório explicitamente NÃO APROVADO, que nunca será usado como entrada FDS.",
+   "policy": {
+    "mode": "DRAFT_ONLY",
+    "development_needed_pt": [
+     "Pós-processamento que extraia a frente de chama do cálculo com o mesmo critério (não implementado). Não é entrada FDS."
+    ],
+    "reason_pt": "Esta informação serve apenas para comparação quantitativa e não é entrada FDS. Você pode salvar um rascunho exploratório explicitamente NÃO APROVADO, que nunca será usado como entrada FDS."
+   },
    "schema": {
-    "kind": "DOCUMENT",
+    "kind": "STRUCTURED",
     "unit": "n/a"
+   },
+   "contract": {
+    "parameter": "flame_front_tracking_method",
+    "kind": "MEASUREMENT",
+    "kind_pt": "Método de medição",
+    "title_pt": "Método de rastreamento da frente de chama",
+    "version": "1.0.0",
+    "fields": [
+     {
+      "name": "method",
+      "type": "enum",
+      "label_pt": "Método",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "video_edge",
+        "label_pt": "Detecção de borda em vídeo"
+       },
+       {
+        "value": "intensity_threshold",
+        "label_pt": "Limiar de intensidade"
+       },
+       {
+        "value": "thermocouple_arrival",
+        "label_pt": "Chegada em termopares"
+       },
+       {
+        "value": "other",
+        "label_pt": "Outro (descrever)"
+       }
+      ]
+     },
+     {
+      "name": "method_description",
+      "type": "text",
+      "label_pt": "Descrição do método",
+      "required": true,
+      "min": 10,
+      "max": 2000,
+      "multiline": true,
+      "help_pt": null,
+      "when": {
+       "field": "method",
+       "in": [
+        "other"
+       ]
+      }
+     },
+     {
+      "name": "observed_quantity",
+      "type": "enum",
+      "label_pt": "Grandeza observada",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "front_position",
+        "label_pt": "Posição da frente"
+       },
+       {
+        "value": "spread_rate",
+        "label_pt": "Velocidade de propagação"
+       }
+      ]
+     },
+     {
+      "name": "criterion",
+      "type": "text",
+      "label_pt": "Critério que define a frente",
+      "required": true,
+      "min": 10,
+      "max": 2000,
+      "multiline": true,
+      "help_pt": null,
+      "when": null
+     },
+     {
+      "name": "analysis_start",
+      "type": "quantity",
+      "label_pt": "Início do intervalo de análise",
+      "dimension": "time",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": false,
+      "help_pt": null,
+      "when": null,
+      "units": [
+       {
+        "value": "ms",
+        "label_pt": "ms"
+       },
+       {
+        "value": "s",
+        "label_pt": "s"
+       },
+       {
+        "value": "min",
+        "label_pt": "min"
+       },
+       {
+        "value": "h",
+        "label_pt": "h"
+       }
+      ],
+      "si_unit": "s",
+      "dimension_pt": "tempo"
+     },
+     {
+      "name": "analysis_end",
+      "type": "quantity",
+      "label_pt": "Fim do intervalo de análise",
+      "dimension": "time",
+      "required": true,
+      "min": 0,
+      "max": null,
+      "min_exclusive": true,
+      "help_pt": null,
+      "when": null,
+      "units": [
+       {
+        "value": "ms",
+        "label_pt": "ms"
+       },
+       {
+        "value": "s",
+        "label_pt": "s"
+       },
+       {
+        "value": "min",
+        "label_pt": "min"
+       },
+       {
+        "value": "h",
+        "label_pt": "h"
+       }
+      ],
+      "si_unit": "s",
+      "dimension_pt": "tempo"
+     },
+     {
+      "name": "calculation",
+      "type": "enum",
+      "label_pt": "Cálculo da velocidade",
+      "required": true,
+      "help_pt": null,
+      "when": null,
+      "options": [
+       {
+        "value": "linear_fit",
+        "label_pt": "Ajuste linear posição × tempo"
+       },
+       {
+        "value": "finite_difference",
+        "label_pt": "Diferenças finitas"
+       },
+       {
+        "value": "other",
+        "label_pt": "Outro"
+       }
+      ]
+     },
+     {
+      "name": "uncertainty",
+      "type": "quantity",
+      "label_pt": "Incerteza da velocidade",
+      "dimension": "velocity",
+      "required": false,
+      "min": 0,
+      "max": null,
+      "min_exclusive": false,
+      "help_pt": null,
+      "when": null,
+      "units": [
+       {
+        "value": "mm/s",
+        "label_pt": "mm/s"
+       },
+       {
+        "value": "cm/s",
+        "label_pt": "cm/s"
+       },
+       {
+        "value": "m/s",
+        "label_pt": "m/s"
+       }
+      ],
+      "si_unit": "m/s",
+      "dimension_pt": "velocidade"
+     }
+    ],
+    "physical_validation": "DATA_CONTRACT_ONLY",
+    "hypothesis": "DRAFT_ONLY",
+    "development_needed_pt": [
+     "Pós-processamento que extraia a frente de chama do cálculo com o mesmo critério (não implementado). Não é entrada FDS."
+    ],
+    "intro_pt": null,
+    "primary": null
    },
    "known": [
     {
@@ -1980,7 +5048,45 @@
      "semantic_flags": []
     }
    ],
-   "history": []
+   "history": [],
+   "quality_flags": [],
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "COMPARISON_PIPELINE",
+     "category": "PHYSICS",
+     "label_pt": "Comparação quantitativa implementada",
+     "done": false,
+     "detail_pt": "Não é entrada FDS. Pós-processamento que extraia a frente de chama do cálculo com o mesmo critério (não implementado). Não é entrada FDS."
+    }
+   ],
+   "next_step": {
+    "category": "DATA",
+    "text_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+   },
+   "consequences": null
   }
  ],
  "cursor": "GAP-BASS2-M1-sample_length",
@@ -2013,6 +5119,640 @@
   ],
   "can_execute": false,
   "message_pt": "Os dados podem ser preparados, mas este modelo ainda não pode ser executado. É necessária a implementação e aprovação do perfil físico."
+ },
+ "requirements": [
+  {
+   "parameter": "material",
+   "label_pt": "Material",
+   "category": "DATA_INPUT",
+   "tier": "MISSING",
+   "tier_pt": "Sem dado conferido",
+   "satisfied": false,
+   "gap_id": null,
+   "original": null,
+   "proposal": null,
+   "checks": [],
+   "reason_pt": "Não há valor conferido nem pendência registrada; revise os parâmetros na fonte.",
+   "next_step_pt": "Revisar parâmetros na fonte."
+  },
+  {
+   "parameter": "thickness",
+   "label_pt": "Espessura da amostra",
+   "category": "DATA_INPUT",
+   "tier": "MISSING",
+   "tier_pt": "Sem dado conferido",
+   "satisfied": false,
+   "gap_id": null,
+   "original": null,
+   "proposal": null,
+   "checks": [],
+   "reason_pt": "Não há valor conferido nem pendência registrada; revise os parâmetros na fonte.",
+   "next_step_pt": "Revisar parâmetros na fonte."
+  },
+  {
+   "parameter": "width",
+   "label_pt": "Largura da amostra",
+   "category": "DATA_INPUT",
+   "tier": "MISSING",
+   "tier_pt": "Sem dado conferido",
+   "satisfied": false,
+   "gap_id": null,
+   "original": null,
+   "proposal": null,
+   "checks": [],
+   "reason_pt": "Não há valor conferido nem pendência registrada; revise os parâmetros na fonte.",
+   "next_step_pt": "Revisar parâmetros na fonte."
+  },
+  {
+   "parameter": "sample_length",
+   "label_pt": "Comprimento da amostra",
+   "category": "DATA_INPUT",
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "satisfied": false,
+   "gap_id": "GAP-BASS2-M1-sample_length",
+   "original": null,
+   "original_pt": "A Tabela 5.1 não informa o comprimento da amostra de M1.",
+   "proposal": null,
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Gerador do perfil PMMA que use o comprimento para posicionar a amostra na malha (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "quality_flags": [],
+   "reason_pt": "Nenhuma evidência ou hipótese registrada.",
+   "next_step_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+  },
+  {
+   "parameter": "airflow_velocity",
+   "label_pt": "Velocidade do ar (escoamento oposto)",
+   "category": "DATA_INPUT",
+   "tier": "MISSING",
+   "tier_pt": "Sem dado conferido",
+   "satisfied": false,
+   "gap_id": null,
+   "original": null,
+   "proposal": null,
+   "checks": [],
+   "reason_pt": "Não há valor conferido nem pendência registrada; revise os parâmetros na fonte.",
+   "next_step_pt": "Revisar parâmetros na fonte."
+  },
+  {
+   "parameter": "o2_initial",
+   "label_pt": "Concentração inicial de O₂",
+   "category": "DATA_INPUT",
+   "tier": "MISSING",
+   "tier_pt": "Sem dado conferido",
+   "satisfied": false,
+   "gap_id": null,
+   "original": null,
+   "proposal": null,
+   "checks": [],
+   "reason_pt": "Não há valor conferido nem pendência registrada; revise os parâmetros na fonte.",
+   "next_step_pt": "Revisar parâmetros na fonte."
+  },
+  {
+   "parameter": "ambient_pressure",
+   "label_pt": "Pressão",
+   "category": "DATA_INPUT",
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "satisfied": false,
+   "gap_id": "GAP-BASS2-M1-ambient_pressure",
+   "original": null,
+   "original_pt": "Nenhuma pressão é informada para M1 no capítulo 5.",
+   "proposal": null,
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Gerador do perfil PMMA que aplique a pressão de fundo (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "quality_flags": [],
+   "reason_pt": "Nenhuma evidência ou hipótese registrada.",
+   "next_step_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+  },
+  {
+   "parameter": "ambient_temperature",
+   "label_pt": "Temperatura ambiente/inicial",
+   "category": "DATA_INPUT",
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "satisfied": false,
+   "gap_id": "GAP-BASS2-M1-ambient_temperature",
+   "original": null,
+   "original_pt": "Nenhuma temperatura do gás ou da amostra é informada para M1 no capítulo 5.",
+   "proposal": null,
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Gerador do perfil PMMA que aplique a temperatura inicial do gás e da amostra (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "quality_flags": [],
+   "reason_pt": "Nenhuma evidência ou hipótese registrada.",
+   "next_step_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+  },
+  {
+   "parameter": "duct_geometry",
+   "label_pt": "Dimensões efetivas do duto",
+   "category": "DATA_INPUT",
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "satisfied": false,
+   "gap_id": "GAP-BASS2-M1-duct_geometry",
+   "original": null,
+   "original_pt": "A §5.3 descreve um \"small flow duct\" sem dimensões; a §5.5 informa que o modelo histórico usou geometria \"approximate\" do duto.",
+   "proposal": null,
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Mapeamento do duto e da amostra para MESH/OBST/VENT no gerador do perfil PMMA (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "quality_flags": [],
+   "reason_pt": "Nenhuma evidência ou hipótese registrada.",
+   "next_step_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+  },
+  {
+   "parameter": "inlet_flow_profile",
+   "label_pt": "Perfil espacial e temporal do escoamento de entrada",
+   "category": "DATA_INPUT",
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "satisfied": false,
+   "gap_id": "GAP-BASS2-M1-inlet_flow_profile",
+   "original": null,
+   "original_pt": "A §5.5 informa que o perfil foi medido em vários pontos e é \"quite irregular\", mas os valores não estão no relatório.",
+   "proposal": null,
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Condição de contorno de entrada (VENT/SURF com perfil e rampa) no gerador do perfil PMMA (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "quality_flags": [],
+   "reason_pt": "Nenhuma evidência ou hipótese registrada.",
+   "next_step_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+  },
+  {
+   "parameter": "sample_holder_substrate",
+   "label_pt": "Suporte e substrato metálico da amostra",
+   "category": "DATA_INPUT",
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "satisfied": false,
+   "gap_id": "GAP-BASS2-M1-sample_holder_substrate",
+   "original": null,
+   "original_pt": "O texto da p. 58 menciona perda de calor para o substrato metálico em amostras de uma face e para o porta-amostra, sem material, dimensões ou posição.",
+   "proposal": null,
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Representação do suporte como obstrução/camada no gerador do perfil PMMA (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "quality_flags": [],
+   "reason_pt": "Nenhuma evidência ou hipótese registrada.",
+   "next_step_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+  },
+  {
+   "parameter": "ignition_procedure",
+   "label_pt": "Procedimento, duração e fonte de ignição",
+   "category": "DATA_INPUT",
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "satisfied": false,
+   "gap_id": "GAP-BASS2-M1-ignition_procedure",
+   "original": null,
+   "original_pt": "A §5.3 menciona o ignitor e a estabilização da chama, sem potência nem duração para M1. A duração de ignição citada na §5.5 refere-se ao MODELO numérico, não ao experimento.",
+   "proposal": null,
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Representação da ignição (superfície aquecida/fonte temporária) no gerador do perfil PMMA (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "quality_flags": [],
+   "reason_pt": "Nenhuma evidência ou hipótese registrada.",
+   "next_step_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+  },
+  {
+   "parameter": "pmma_pyrolysis_properties",
+   "label_pt": "Propriedades termoquímicas e de pirólise do PMMA",
+   "category": "DATA_INPUT",
+   "tier": "OPEN",
+   "tier_pt": "Ainda não tratada",
+   "satisfied": false,
+   "gap_id": "GAP-BASS2-M1-pmma_pyrolysis_properties",
+   "original": null,
+   "original_pt": "O capítulo 5 não lista propriedades do PMMA; os autores afirmam que precisam modificar a cinética química e as propriedades do material para melhorar o modelo (§5.1, §5.7).",
+   "proposal": null,
+   "checks": [
+    {
+     "code": "DATA_PROVIDED",
+     "category": "DATA",
+     "label_pt": "Informação registrada com fonte ou hipótese declarada",
+     "done": false,
+     "detail_pt": "Nenhuma evidência ou hipótese registrada."
+    },
+    {
+     "code": "CONTRACT_COMPLETE",
+     "category": "DATA",
+     "label_pt": "Campos do contrato completos e com unidades",
+     "done": false,
+     "detail_pt": "Depende do registro da informação."
+    },
+    {
+     "code": "INDEPENDENT_REVIEW",
+     "category": "REVIEW",
+     "label_pt": "Parecer favorável de outra pessoa",
+     "done": false,
+     "detail_pt": "Revisão ainda não solicitada."
+    },
+    {
+     "code": "PROFILE_MAPPING",
+     "category": "PHYSICS",
+     "label_pt": "Perfil define faixa e uso deste campo no FDS",
+     "done": false,
+     "detail_pt": "O perfil Propagação de chama em sólido sob escoamento (reprodução) não define como este campo vira entrada FDS. Modelo de material (MATL/REAC) revisado por especialista no perfil PMMA (não implementado)."
+    },
+    {
+     "code": "GENERATOR_APPROVED",
+     "category": "PHYSICS",
+     "label_pt": "Gerador FDS do perfil implementado e aprovado",
+     "done": false,
+     "detail_pt": "O gerador deste perfil não está implementado nem aprovado; nenhum dado vira entrada FDS."
+    }
+   ],
+   "quality_flags": [],
+   "reason_pt": "Nenhuma evidência ou hipótese registrada.",
+   "next_step_pt": "Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
+  },
+  {
+   "parameter": "gravity_vector",
+   "label_pt": "Vetor de gravidade",
+   "category": "MODEL_DEVELOPMENT",
+   "tier": "MODEL_DEVELOPMENT",
+   "tier_pt": "Depende de desenvolvimento do modelo físico",
+   "satisfied": false,
+   "gap_id": null,
+   "original": null,
+   "proposal": null,
+   "checks": [],
+   "reason_pt": "Gravidade/microgravidade e orientação precisam ser definidas no gerador do perfil.",
+   "next_step_pt": "Fora desta tela: desenvolvimento e aprovação do perfil físico."
+  },
+  {
+   "parameter": "mesh_convergence",
+   "label_pt": "Convergência de malha",
+   "category": "MODEL_DEVELOPMENT",
+   "tier": "MODEL_DEVELOPMENT",
+   "tier_pt": "Depende de desenvolvimento do modelo físico",
+   "satisfied": false,
+   "gap_id": null,
+   "original": null,
+   "proposal": null,
+   "checks": [],
+   "reason_pt": "Exige estudo de convergência de malha do caso gerado.",
+   "next_step_pt": "Fora desta tela: desenvolvimento e aprovação do perfil físico."
+  },
+  {
+   "parameter": "reaction_model",
+   "label_pt": "Modelo de reação",
+   "category": "MODEL_DEVELOPMENT",
+   "tier": "MODEL_DEVELOPMENT",
+   "tier_pt": "Depende de desenvolvimento do modelo físico",
+   "satisfied": false,
+   "gap_id": null,
+   "original": null,
+   "proposal": null,
+   "checks": [],
+   "reason_pt": "Exige modelo de reação na fase gasosa revisado.",
+   "next_step_pt": "Fora desta tela: desenvolvimento e aprovação do perfil físico."
+  },
+  {
+   "parameter": "material_model_review",
+   "label_pt": "Revisão do modelo de material",
+   "category": "MODEL_DEVELOPMENT",
+   "tier": "MODEL_DEVELOPMENT",
+   "tier_pt": "Depende de desenvolvimento do modelo físico",
+   "satisfied": false,
+   "gap_id": null,
+   "original": null,
+   "proposal": null,
+   "checks": [],
+   "reason_pt": "Exige revisão por especialista do modelo de material (pirólise).",
+   "next_step_pt": "Fora desta tela: desenvolvimento e aprovação do perfil físico."
+  }
+ ],
+ "summary": {
+  "gaps_total": 12,
+  "gaps_handled": 0,
+  "gaps_drafts": 0,
+  "gaps_untouched": 12,
+  "gaps_test_content": 0,
+  "requirements_total": 13,
+  "requirements_satisfied": 0,
+  "model_checks_total": 4,
+  "ladder": [
+   {
+    "key": "PUBLISHED_VERIFIED",
+    "label_pt": "Dados publicados e conferidos",
+    "count": 0,
+    "of": 13,
+    "unit_pt": "requisitos do perfil"
+   },
+   {
+    "key": "EVIDENCE_SUBMITTED",
+    "label_pt": "Evidência complementar submetida",
+    "count": 0,
+    "of": 12,
+    "unit_pt": "pendências"
+   },
+   {
+    "key": "HYPOTHESIS_PROPOSED",
+    "label_pt": "Hipóteses e rascunhos exploratórios propostos",
+    "count": 0,
+    "of": 12,
+    "unit_pt": "pendências"
+   },
+   {
+    "key": "REVIEWED",
+    "label_pt": "Revisados por pessoa independente",
+    "count": 0,
+    "of": 12,
+    "unit_pt": "pendências"
+   },
+   {
+    "key": "REQUIREMENT_SATISFIED",
+    "label_pt": "Requisitos satisfeitos para o perfil",
+    "count": 0,
+    "of": 13,
+    "unit_pt": "requisitos do perfil"
+   },
+   {
+    "key": "MODEL_APPROVED",
+    "label_pt": "Modelo físico aprovado para execução",
+    "count": 0,
+    "of": 1,
+    "unit_pt": "perfil"
+   }
+  ],
+  "stages": [
+   {
+    "key": "DOCUMENT_PREPARATION",
+    "label_pt": "Preparação documental",
+    "status": "NOT_STARTED",
+    "detail_pt": "0 de 8 informações de construção com evidência ou hipótese registrada; 0 de 13 requisitos de dados satisfeitos."
+   },
+   {
+    "key": "HYPOTHESIS_BUILDING",
+    "label_pt": "Construção de hipóteses",
+    "status": "NOT_STARTED",
+    "detail_pt": "0 hipótese(s) ou rascunho(s) exploratório(s); 0 revisado(s). Nenhuma é aprovada automaticamente."
+   },
+   {
+    "key": "MATERIAL_MODEL_VALIDATION",
+    "label_pt": "Validação do modelo de material",
+    "status": "BLOCKED",
+    "detail_pt": "Nenhuma propriedade de pirólise registrada. A revisão do modelo de material não existe nesta versão."
+   },
+   {
+    "key": "GENERATOR_VALIDATION",
+    "label_pt": "Validação do gerador FDS",
+    "status": "NOT_IMPLEMENTED",
+    "detail_pt": "O gerador do perfil Propagação de chama em sólido sob escoamento (reprodução) não está implementado nem aprovado."
+   },
+   {
+    "key": "EXECUTION_AUTHORIZATION",
+    "label_pt": "Autorização de execução",
+    "status": "BLOCKED",
+    "detail_pt": "Bloqueada: depende das etapas anteriores e de um perfil físico aprovado."
+   }
+  ]
+ },
+ "next_step": {
+  "gap_id": "GAP-BASS2-M1-sample_length",
+  "text_pt": "Comprimento da amostra: Escolha um caminho: registrar evidência encontrada, preparar hipótese exploratória ou manter a pendência em aberto."
  },
  "history": []
 }

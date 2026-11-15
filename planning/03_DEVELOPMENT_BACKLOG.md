@@ -160,6 +160,17 @@ Equipes pequenas combinam papéis. Uma combinação que funciona: {DADOS+CIÊNCI
 | BL-14.07 | Validação em navegador por pessoa da equipe | **NOT_RUN** |
 | BL-14.08 | Autenticação de revisores; ampliar regras semânticas; ΔT como grandeza | NAO_INICIADO |
 
+### BL-17.2 · Formulários científicos estruturados e resolução de lacunas (`docs/evidence/BL-17_2_formularios_estruturados.md`)
+| ID | Tarefa | Estado |
+|---|---|---|
+| BL-17.2.01 | Diagnóstico: causa raiz dos botões desabilitados e da descontinuidade revisão→preparação | CONCLUÍDO |
+| BL-17.2.02 | Contratos tipados por lacuna (grandeza, geometria, material, procedimento, medição) e unidades v1.2 | IMPLEMENTADO_E_TESTADO |
+| BL-17.2.03 | Três caminhos, rascunho exploratório não aprovado, pré-visualização determinística, edição com motivo/diff | IMPLEMENTADO_E_TESTADO |
+| BL-17.2.04 | Requisitos campo a campo na preparação, escada de maturidade e cinco estágios PMMA | IMPLEMENTADO_E_TESTADO |
+| BL-17.2.05 | Modo de teste isolado (`var/test_mode/`) e recusa de conteúdo de teste no modo científico | IMPLEMENTADO_E_TESTADO · navegador PASS (área descartável) |
+| BL-17.2.06 | Gerador PMMA, modelo de material revisado, comparação quantitativa | BLOQUEADO (modelo físico) |
+| BL-17.2.07 | Validação com pesquisador humano e leitor de tela | NOT_RUN |
+
 ### BL-10 · Stretch · Visualizar resultado FDS e comparar
 | ID | Tarefa | Papel | Dep. | h | Aceite / teste |
 |---|---|---|---|---|---|

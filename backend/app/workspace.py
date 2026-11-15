@@ -7,12 +7,37 @@ import json
 import os
 import re
 import time
+from contextlib import contextmanager
+from contextvars import ContextVar
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
 
 from backend.app.paths import var_dir
 
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.\-]{0,95}$")
+
+# BL-17.2: modo de teste da interface. Revisões guiadas e versões de caso criadas em modo TESTE
+# ficam em `var/test_mode/`, nunca nas áreas científicas; demais áreas (importações, catálogo) são
+# apenas lidas. O modo vale para o contexto da requisição (contextvars), não para o processo.
+MODES = ("SCIENTIFIC", "TEST")
+TEST_ROOT = "test_mode"
+_ISOLATED_IN_TEST = frozenset({"guided_reviews", "cases"})
+_MODE: ContextVar[str] = ContextVar("flamelab_workspace_mode", default="SCIENTIFIC")
+
+
+def current_mode() -> str:
+    return _MODE.get()
+
+
+@contextmanager
+def use_mode(mode: str) -> Iterator[None]:
+    if mode not in MODES:
+        raise ValueError("Modo de trabalho inválido.")
+    token = _MODE.set(mode)
+    try:
+        yield
+    finally:
+        _MODE.reset(token)
 
 
 class InvalidId(ValueError):
@@ -26,7 +51,10 @@ def safe_id(value: str) -> str:
 
 
 def area(name: str) -> Path:
-    path = var_dir() / name
+    base = var_dir()
+    if _MODE.get() == "TEST" and name in _ISOLATED_IN_TEST:
+        base = base / TEST_ROOT
+    path = base / name
     path.mkdir(parents=True, exist_ok=True)
     return path
 
