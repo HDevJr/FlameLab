@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ApiError, api, type Analysis, type ImportRecord } from "../api";
-import { Async, Badge, ErrorBox, Provenance, StepList, Term, useLoad } from "../components";
+import { Async, Badge, ErrorBox, Provenance, StepList, Term, useLoad, useReadOnly } from "../components";
 import { fmtBytes, formatDuration } from "../lib";
 import { importOutcome } from "../import_outcome";
 import { ImportTimeline } from "../ImportTimeline";
@@ -36,6 +36,7 @@ export default function Import() {
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [error, setError] = useState<ApiError | null>(null);
   const [busy, setBusy] = useState(false);
+  const readOnly = useReadOnly();
   const input = useRef<HTMLInputElement>(null);
   const lastFile = useRef<File | null>(null);
 
@@ -61,9 +62,10 @@ export default function Import() {
     <>
       <h1>Importar artigo</h1>
       <p className="muted">Envie um artigo da NASA em PDF. O arquivo é tratado como conteúdo não confiável: só o texto é lido. A consulta às fontes NASA e a extração por IA são opcionais; se falharem, o artigo continua disponível. Documentos longos podem levar alguns minutos: cada etapa mostra o tempo real decorrido.</p>
-      <div className="drop" onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f && !busy) void send(f); }}>
+      <div className="drop" onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f && !busy && !readOnly) void send(f); }}>
         <input ref={input} type="file" accept="application/pdf" hidden onChange={(e) => e.target.files?.[0] && send(e.target.files[0])} />
-        <button className="primary" disabled={busy} onClick={() => input.current?.click()}>{busy ? "Enviando…" : "Escolher PDF"}</button>
+        <button className="primary" disabled={busy || readOnly} onClick={() => input.current?.click()}>{busy ? "Enviando…" : "Escolher PDF"}</button>
+        {readOnly && <p className="detail">Importação desativada na demonstração pública. Veja as importações anteriores abaixo.</p>}
         <p className="muted"><small>ou arraste o arquivo para cá</small></p>
         <p className="muted"><small>Máximo 120 MB. Somente PDF com camada de texto (sem OCR nesta versão).</small></p>
       </div>

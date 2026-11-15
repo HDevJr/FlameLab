@@ -19,6 +19,19 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(title="FlameLab API", version=APP_VERSION, lifespan=lifespan)
 install_error_handlers(app)
+
+
+@app.middleware("http")
+async def read_only_guard(request, call_next):
+    """Demonstração pública: bloqueia toda escrita. GET/HEAD/OPTIONS e POST /api/ask passam."""
+    from fastapi.responses import JSONResponse
+
+    from backend.app.readonly import READ_ONLY_ALLOWED_POSTS, is_read_only
+
+    if is_read_only() and request.method not in ("GET", "HEAD", "OPTIONS") and request.url.path not in READ_ONLY_ALLOWED_POSTS:
+        return JSONResponse(status_code=403, content={"error": {
+            "code": "READ_ONLY_DEMO", "message": "Esta é uma demonstração pública somente leitura: importar, revisar e simular ficam desativados.", "details": {}}})
+    return await call_next(request)
 app.include_router(assistant_router)
 app.include_router(platform_router)
 from backend.app.api.cases import router as cases_router
@@ -40,7 +53,8 @@ def status() -> dict:
 
     s = load_settings()
     return {"data": {
-        "api": "ok", "dataset_version": get_dataset_store().dataset_version,
+        "api": "ok", "read_only": __import__("backend.app.readonly", fromlist=["is_read_only"]).is_read_only(),
+        "dataset_version": get_dataset_store().dataset_version,
         "assistant": {"mode": s.mode, "provider": s.provider, "model": s.model, "live_ready": s.live_ready},
     }}
 

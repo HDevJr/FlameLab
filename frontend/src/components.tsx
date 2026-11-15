@@ -25,6 +25,18 @@ export function DataKind({ kind }: { kind: "REAL" | "REVISAO" | "TESTE" | "DEMO"
   return <Badge tone={map[kind][0]}>{map[kind][1]}</Badge>;
 }
 
+/** Aviso permanente da demonstração pública (somente leitura): nada é gravado e importar/revisar/simular ficam desativados. */
+export function useReadOnly(): boolean {
+  const [ro, setRo] = useState(false);
+  useEffect(() => { let alive = true; api.status().then((s) => alive && setRo(!!s.read_only)).catch(() => undefined); return () => { alive = false; }; }, []);
+  return ro;
+}
+
+function ReadOnlyBanner() {
+  if (!useReadOnly()) return null;
+  return <div className="readonly-banner" role="note"><strong>Demonstração pública somente leitura.</strong> Você pode navegar pelos dados, abrir as fontes, comparar, buscar e perguntar ao assistente (respostas do cache). Importar, revisar e simular estão desativados.</div>;
+}
+
 /** Barra superior (desktop): estado da API e do assistente. Saúde da API não implica validade científica. */
 export function StatusBar() {
   const [st, setSt] = useState<SystemStatus | null | "offline">(null);
@@ -89,6 +101,7 @@ export function Layout({ children }: { children: ReactNode }) {
       </aside>
       {open && <button type="button" className="scrim" aria-label="Fechar menu" onClick={() => { setOpen(false); menuBtn.current?.focus(); }} />}
       <div className="content">
+        <ReadOnlyBanner />
         <StatusBar />
         <main><StaleBackendBanner />{children}</main>
         <footer>

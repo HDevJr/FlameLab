@@ -319,4 +319,4 @@ export type AIAnswer = {
 export type AuditEvent = { at: string; record_id: string; reviewer: string; action: string; outcome: "APPROVED" | "REFUSED" | "RECORDED" | "CORRECTED" | "REOPENED"; notes?: string | null; code?: string; message?: string; observed_value?: string | null; observed_unit?: string | null; observed_page_pdf?: number | null };
 export type AuditEvents = { total: number; events: AuditEvent[] };
 
-export type SystemStatus = { api: "ok"; dataset_version: string | null; assistant: { mode: "off" | "cache" | "live"; provider: string; model: string | null; live_ready: boolean } };
+export type SystemStatus = { api: "ok"; read_only?: boolean; dataset_version: string | null; assistant: { mode: "off" | "cache" | "live"; provider: string; model: string | null; live_ready: boolean } };

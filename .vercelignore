@@ -1,0 +1,24 @@
+# Fora do pacote da publicação (reduz o tamanho; nada disso é lido pela demonstração)
+.git
+.claude
+.venv
+node_modules
+frontend/node_modules
+prototypes
+planning
+scripts
+sources
+fds
+FlameLab_Documento_Mestre_Desenvolvimento_e_Pitch_v1_0.docx
+docs/evidence/sim_*
+# saídas pesadas do FDS (o vídeo e o poster ficam)
+var/runs/**/*.bf
+var/runs/**/*.s3d
+var/runs/**/*.sf
+var/runs/**/*.smv
+var/runs/**/*.out
+var/runs/**/*.gbnd
+var/runs/**/*.bnd
+var/runs/**/*.sz
+var/test_mode
+var/incoming

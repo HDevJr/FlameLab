@@ -344,3 +344,5 @@ details.tl-note { margin-top: 4px; } details.tl-note > summary { cursor: pointer
 
 .path.disabled { background: var(--mut-bg); } .path.disabled small { color: var(--bad); } .path.disabled button { opacity: .55; }
 .guided-footer .row { justify-content: flex-end; }
+
+.readonly-banner { background: #FEF3C7; color: #78350F; border-bottom: 1px solid #FCD34D; padding: 8px clamp(16px, 3vw, 40px); font-size: 13px; }
