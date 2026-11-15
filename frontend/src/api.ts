@@ -72,7 +72,7 @@ export type Coverage = {
 export type ImportRecord = {
   import_id: string; filename: string; sha256: string; size_bytes: number; status: string; steps: Step[];
   document: { document_id: string; title: string | null; page_count: number; pages_with_text?: number; has_text_layer?: boolean; identifiers: Record<string, string[]> };
-  nasa_provenance: Provenance | null; experiments: Experiment[]; warnings_pt: string[]; coverage: Coverage | null;
+  nasa_provenance: Provenance | null; experiments: Experiment[]; warnings_pt: string[]; coverage: Coverage | null; extract_progress?: { completed: number; total: number } | null;
   extraction: { model: string; rejected: { name: string; reason: string }[]; batches: Batch[]; batches_planned_total: number } | null;
   metrics: { total_ms: number | null; per_step_ms?: Record<string, number | null> };
 };

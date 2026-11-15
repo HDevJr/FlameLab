@@ -297,6 +297,7 @@ class ImportService:
         self._step(record, "EXTRACT", "RUNNING", "Preparando os lotes de páginas…")
 
         def on_batch(i: int, n: int, numbers: list[int]) -> None:
+            record["extract_progress"] = {"completed": i - 1, "total": n}  # lotes já concluídos, para o indicador de progresso
             self._step(record, "EXTRACT", "RUNNING",
                        f"Lote {i} de {n}: IA lendo as páginas {extraction.ranges(numbers)}…")
 

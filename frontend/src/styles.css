@@ -328,3 +328,11 @@ ol.timeline-steps li.running .dot { background: var(--info-bg); color: var(--inf
 ol.timeline-steps li.failed .dot { background: var(--bad-bg); color: var(--bad); border-color: #DC2626; }
 ol.timeline-steps li.skipped .dot { background: var(--warn-bg); color: var(--warn); border-color: #D97706; }
 .tl-bar { height: 6px; border-radius: 3px; background: var(--mut-bg); margin-top: 6px; overflow: hidden; } .tl-bar span { display: block; height: 100%; background: var(--data); border-radius: 3px; }
+/* anel de progresso (valor real: etapas e lotes concluídos) */
+.tl-head { display: flex; align-items: center; gap: 16px; margin-bottom: 6px; }
+.ring { position: relative; width: 84px; height: 84px; flex: none; }
+.ring svg { width: 100%; height: 100%; } .ring .track { fill: none; stroke: var(--mut-bg); stroke-width: 7; }
+.ring .bar { fill: none; stroke: var(--accent); stroke-width: 7; stroke-linecap: round; transition: stroke-dashoffset .6s ease, stroke .3s; }
+.ring.ok .bar { stroke: #15803D; } .ring.bad .bar { stroke: #DC2626; }
+.ring .pct { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--mono); font-weight: 700; font-size: 17px; }
+@media (prefers-reduced-motion: reduce) { .ring .bar { transition: none; } }

@@ -12,17 +12,52 @@ export function timeShares(durations: (number | null)[]): number[] {
   return durations.map((d) => (total > 0 && d ? d / total : 0));
 }
 
+/**
+ * Progresso real do processamento: etapas encerradas (concluída, não executada ou falha) mais a fração dos lotes de IA já
+ * concluídos na etapa em andamento. Nada é estimado por tempo; sem lotes informados, a etapa em andamento conta zero.
+ */
+export function importProgress(steps: Step[], extract?: { completed: number; total: number } | null) {
+  const total = steps.length || 1;
+  const closed = steps.filter((s) => s.state === "DONE" || s.state === "SKIPPED" || s.state === "FAILED").length;
+  const running = steps.find((s) => s.state === "RUNNING");
+  const frac = running?.key === "EXTRACT" && extract && extract.total > 0 ? Math.min(1, extract.completed / extract.total) : 0;
+  const ratio = Math.min(1, (closed + (running ? frac : 0)) / total);
+  const failed = steps.some((s) => s.state === "FAILED");
+  const finished = closed === steps.length && steps.length > 0;
+  return { percent: Math.round(ratio * 100), closed, total, failed, finished };
+}
+
+function Ring({ percent, failed, finished }: { percent: number; failed: boolean; finished: boolean }) {
+  const r = 34, c = 2 * Math.PI * r;
+  return (
+    <div className={`ring ${failed ? "bad" : finished ? "ok" : "run"}`} role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={percent} aria-label="Progresso do processamento">
+      <svg viewBox="0 0 80 80" aria-hidden>
+        <circle cx="40" cy="40" r={r} className="track" />
+        <circle cx="40" cy="40" r={r} className="bar" strokeDasharray={c} strokeDashoffset={c * (1 - percent / 100)} transform="rotate(-90 40 40)" />
+      </svg>
+      <span className="pct">{percent}%</span>
+    </div>
+  );
+}
+
 /** Linha do tempo do processamento: ordem das etapas, estado, duração real e peso de cada etapa no total. */
-export function ImportTimeline({ steps, totalMs }: { steps: Step[]; totalMs: number | null }) {
+export function ImportTimeline({ steps, totalMs, extractProgress }: { steps: Step[]; totalMs: number | null; extractProgress?: { completed: number; total: number } | null }) {
   const running = steps.some((s) => s.state === "RUNNING");
   const now = useNow(running);
   const ms = steps.map((s) => (s.state === "RUNNING" ? elapsedMs(s.started_at, now) : s.duration_ms));
   const shares = timeShares(ms);
+  const prog = importProgress(steps, extractProgress);
   const slowest = ms.reduce<number>((best, d, i) => ((d ?? 0) > (ms[best] ?? 0) ? i : best), 0);
   return (
     <section aria-label="Linha do tempo do processamento">
-      <div className="row"><h3 style={{ margin: 0 }} className="grow">Linha do tempo</h3>
-        <small className="muted">{totalMs != null ? `Total ${formatDuration(totalMs)}` : "em andamento"}</small></div>
+      <div className="tl-head">
+        <Ring percent={prog.percent} failed={prog.failed} finished={prog.finished} />
+        <div className="grow">
+          <h3 style={{ margin: 0 }}>Linha do tempo</h3>
+          <div className="detail">{prog.closed} de {prog.total} etapas encerradas{extractProgress && running && steps.find((s) => s.state === "RUNNING")?.key === "EXTRACT" ? ` · lotes de IA: ${extractProgress.completed} de ${extractProgress.total}` : ""}</div>
+          <small className="muted">{totalMs != null ? `Total ${formatDuration(totalMs)}` : "em andamento"}</small>
+        </div>
+      </div>
       <ol className="timeline-steps">
         {steps.map((s, i) => (
           <li key={s.key} className={s.state.toLowerCase()}>
