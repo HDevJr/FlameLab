@@ -318,15 +318,19 @@ ul.hits { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 8px;
   table.cmp td::before { content: attr(data-l); display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
 }
 /* ---- linha do tempo da importação ---- */
-ol.timeline-steps { list-style: none; margin: 10px 0; padding: 0 0 0 4px; }
-ol.timeline-steps li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 10px; position: relative; padding-bottom: 12px; }
-ol.timeline-steps li::before { content: ""; position: absolute; left: 12px; top: 26px; bottom: 0; width: 2px; background: var(--line); }
+ol.timeline-steps { list-style: none; margin: 10px 0; padding: 0 0 0 2px; }
+ol.timeline-steps li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; position: relative; padding-bottom: 14px; }
+ol.timeline-steps li::before { content: ""; position: absolute; left: 16px; top: 36px; bottom: 0; width: 2px; background: var(--line); }
 ol.timeline-steps li:last-child::before { display: none; }
-ol.timeline-steps .dot { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; background: var(--mut-bg); color: var(--muted); border: 2px solid var(--line); z-index: 1; }
-ol.timeline-steps li.done .dot { background: var(--ok-bg); color: var(--ok); border-color: #15803D; }
-ol.timeline-steps li.running .dot { background: var(--info-bg); color: var(--info); border-color: var(--accent); }
-ol.timeline-steps li.failed .dot { background: var(--bad-bg); color: var(--bad); border-color: #DC2626; }
-ol.timeline-steps li.skipped .dot { background: var(--warn-bg); color: var(--warn); border-color: #D97706; }
+.step-ring { position: relative; width: 34px; height: 34px; flex: none; z-index: 1; background: var(--card); border-radius: 50%; }
+.step-ring svg { width: 100%; height: 100%; } .step-ring .track { fill: none; stroke: var(--line); stroke-width: 3; }
+.step-ring .arc { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset .6s ease; }
+.step-ring.done .arc { stroke: #15803D; } .step-ring.failed .arc { stroke: #DC2626; } .step-ring.skipped .arc { stroke: #D97706; stroke-dasharray: 4 4 !important; stroke-dashoffset: 0 !important; }
+.step-ring .ic { position: absolute; inset: 0; display: grid; place-items: center; font-size: 13px; font-weight: 700; font-family: var(--mono); }
+.step-ring.done .ic { color: #15803D; } .step-ring.failed .ic { color: #DC2626; } .step-ring.skipped .ic { color: #92400E; } .step-ring.running .ic { color: var(--accent); font-size: 10px; }
+.step-ring.spin svg { animation: ring-spin 1s linear infinite; }
+@keyframes ring-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .step-ring.spin svg { animation: none; } .step-ring .arc { transition: none; } }
 .tl-bar { height: 6px; border-radius: 3px; background: var(--mut-bg); margin-top: 6px; overflow: hidden; } .tl-bar span { display: block; height: 100%; background: var(--data); border-radius: 3px; }
 /* anel de progresso (valor real: etapas e lotes concluídos) */
 .tl-head { display: flex; align-items: center; gap: 16px; margin-bottom: 6px; }

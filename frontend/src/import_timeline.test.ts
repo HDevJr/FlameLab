@@ -31,3 +31,14 @@ describe("progresso real do anel", () => {
     expect(importProgress(ALL.map((k) => st(k, k === "EXTRACT" ? "SKIPPED" : "DONE")))).toMatchObject({ percent: 100, failed: false });
   });
 });
+
+import { stepFraction } from "./ImportTimeline";
+describe("círculo de cada etapa", () => {
+  it("etapa em andamento sem medida real fica indeterminada (null), nunca uma porcentagem inventada", () => {
+    expect(stepFraction(st("ORIGIN", "RUNNING"))).toBeNull();
+  });
+  it("a extração usa os lotes concluídos; encerrada = 1; pendente = 0", () => {
+    expect(stepFraction(st("EXTRACT", "RUNNING"), { completed: 3, total: 8 })).toBe(3 / 8);
+    expect(stepFraction(st("READ", "DONE"))).toBe(1); expect(stepFraction(st("SOURCES", "PENDING"))).toBe(0);
+  });
+});

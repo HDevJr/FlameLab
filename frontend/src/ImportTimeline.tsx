@@ -3,13 +3,36 @@ import { formatDuration } from "./lib";
 import { useNow } from "./components";
 import { elapsedMs } from "./lib";
 
-const ICON: Record<Step["state"], string> = { DONE: "✔", RUNNING: "⏳", FAILED: "✖", SKIPPED: "⤼", PENDING: "○" };
 const TEXT: Record<Step["state"], string> = { DONE: "concluída", RUNNING: "em andamento", FAILED: "falhou", SKIPPED: "não executada", PENDING: "pendente" };
 
 /** Fração (0–1) do tempo total gasta em cada etapa; usa só durações reais registradas pelo backend. */
 export function timeShares(durations: (number | null)[]): number[] {
   const total = durations.reduce<number>((a, d) => a + (d ?? 0), 0);
   return durations.map((d) => (total > 0 && d ? d / total : 0));
+}
+
+/** Fração real de uma etapa em andamento: só a extração por IA informa (lotes concluídos/total). Demais: desconhecida (null). */
+export function stepFraction(step: Step, extract?: { completed: number; total: number } | null): number | null {
+  if (step.state === "DONE" || step.state === "SKIPPED" || step.state === "FAILED") return 1;
+  if (step.state === "PENDING") return 0;
+  return step.key === "EXTRACT" && extract && extract.total > 0 ? Math.min(1, extract.completed / extract.total) : null;
+}
+
+/** Círculo da etapa: enche até 100% quando há progresso medido; sem medida, gira como indicador de atividade (nunca finge porcentagem). */
+function StepRing({ state, fraction }: { state: Step["state"]; fraction: number | null }) {
+  const r = 14, c = 2 * Math.PI * r;
+  const spinning = state === "RUNNING" && fraction == null;
+  const f = fraction ?? 0.25;
+  const label = state === "RUNNING" ? (fraction == null ? "em andamento" : `${Math.round(fraction * 100)}%`) : TEXT[state];
+  return (
+    <span className={`step-ring ${state.toLowerCase()} ${spinning ? "spin" : ""}`} role="img" aria-label={label}>
+      <svg viewBox="0 0 34 34" aria-hidden>
+        <circle cx="17" cy="17" r={r} className="track" />
+        {state !== "PENDING" && <circle cx="17" cy="17" r={r} className="arc" strokeDasharray={c} strokeDashoffset={c * (1 - (state === "RUNNING" ? f : 1))} transform="rotate(-90 17 17)" />}
+      </svg>
+      <span className="ic">{state === "DONE" ? "✔" : state === "FAILED" ? "✖" : state === "SKIPPED" ? "⤼" : state === "RUNNING" && fraction != null ? `${Math.round(fraction * 100)}` : ""}</span>
+    </span>
+  );
 }
 
 /**
@@ -61,7 +84,7 @@ export function ImportTimeline({ steps, totalMs, extractProgress }: { steps: Ste
       <ol className="timeline-steps">
         {steps.map((s, i) => (
           <li key={s.key} className={s.state.toLowerCase()}>
-            <span className="dot" aria-hidden>{ICON[s.state]}</span>
+            <StepRing state={s.state} fraction={stepFraction(s, extractProgress)} />
             <div className="tl-body">
               <div className="row"><strong className="grow">{s.label_pt}</strong>
                 <small className="muted">{TEXT[s.state]}{ms[i] != null && s.state !== "PENDING" ? ` · ${formatDuration(ms[i]!)}` : ""}</small></div>
