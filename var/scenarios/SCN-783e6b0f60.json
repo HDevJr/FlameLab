@@ -1,0 +1,33 @@
+{
+ "case_id": null,
+ "case_version": null,
+ "scenario_id": "SCN-783e6b0f60",
+ "kind": "DERIVED",
+ "model_id": "fds-flame-spread-thin-solid",
+ "experiment_id": "BASS2-M1",
+ "scope": "EXPERIMENT",
+ "hypothesis_pt": null,
+ "title_pt": "Hipótese sobre M1",
+ "changes": [
+  {
+   "name": "thickness",
+   "from_value": 1.0,
+   "to_value": 12.0,
+   "unit": "mm",
+   "label_pt": "Espessura da amostra",
+   "base_status": "CONFERIDO_FONTE"
+  }
+ ],
+ "values": {
+  "thickness": 12.0
+ },
+ "status": "HIPOTESE_COMPUTACIONAL",
+ "executable": false,
+ "blocked_reasons_pt": [
+  "Faltam 12 informações necessárias ao modelo (lacunas registradas).",
+  "O gerador do modelo de reprodução ainda não foi implementado e aprovado.",
+  "Resultados observados (Velocidade de propagação da chama, Tempo de queima, Concentração final de O₂) são referência de comparação, nunca condição de entrada da simulação."
+ ],
+ "created_at": "2026-11-15T03:59:19Z",
+ "note_pt": "Hipótese computacional sobre o experimento; o experimento original não foi alterado. Não é dado experimental."
+}

@@ -1,0 +1,1432 @@
+{
+ "content": {
+  "profile_id": "fds-flame-spread-thin-solid",
+  "profile_version": "1.0.0",
+  "experiment_id": "BASS2-M1",
+  "title": "M1",
+  "case_id": "CASE-97b3d24a3ca5",
+  "version": 2,
+  "values": {},
+  "assumptions": [],
+  "resolved": {
+   "experiment_id": "BASS2-M1",
+   "state": "MODEL_NOT_APPROVED",
+   "conditions": [
+    {
+     "record_id": "BASS2-M1.material",
+     "parameter": "material",
+     "label_pt": "Material",
+     "role": "METADADO",
+     "nature": "OBSERVADO",
+     "status": "CONFERIDO_FONTE",
+     "original": {
+      "value": "PMMA (polimetilmetacrilato; \"clear cast\")",
+      "unit": null,
+      "raw_text": "20 PMMA flat samples ... (Table 5.1)"
+     },
+     "normalized": null,
+     "evidence": [
+      {
+       "evidence_id": "EV-TM20210011385-S53-p56-M1-material",
+       "document_id": "NASA-TM-20210011385",
+       "page_pdf": 64,
+       "page_printed": 56,
+       "column_label": null,
+       "quote": "A total of 20 PMMA flat samples were burnt during the BASS-II experimentation (Table 5.1).",
+       "locator_pt": "§5.3, p. 56, PDF 64"
+      },
+      {
+       "evidence_id": "EV-TM20210011385-S51-p55-M1-material",
+       "document_id": "NASA-TM-20210011385",
+       "page_pdf": 63,
+       "page_printed": 55,
+       "column_label": null,
+       "quote": "Combustion of clear cast polymethylmethacrylate (PMMA) samples ...",
+       "locator_pt": "§5.1, p. 55, PDF 63"
+      }
+     ],
+     "caveats_pt": [
+      "A Tabela 5.1 não tem coluna de material; a identificação vem do texto da §5.3 (as 20 amostras planas da Tabela 5.1 são de PMMA) e da §5.1 (\"clear cast PMMA\")."
+     ],
+     "extraction": {
+      "method": "ASSISTED_TEXT_LAYER",
+      "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)"
+     },
+     "reviewer": "Junior",
+     "review": {
+      "reviewer": "Junior",
+      "reviewed_at": "2026-11-15T02:52:36+00:00",
+      "notes": null,
+      "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+     },
+     "events": [
+      {
+       "at": "2026-11-15T02:52:36Z",
+       "record_id": "BASS2-M1.material",
+       "reviewer": "Junior",
+       "action": "CONFIRM",
+       "notes": null,
+       "observed_value": "PMMA (polimetilmetacrilato; \"clear cast\")",
+       "observed_unit": null,
+       "observed_page_pdf": 64,
+       "prefilled_unchanged": true,
+       "interpretation_confirmed": true,
+       "unit_verified_in_pdf": false,
+       "outcome": "APPROVED",
+       "state_after": "CONFERIDO_FONTE",
+       "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+       "comparisons": [
+        {
+         "field": "value",
+         "label_pt": "Valor",
+         "expected": "PMMA (polimetilmetacrilato; \"clear cast\")",
+         "received": "PMMA (polimetilmetacrilato; \"clear cast\")",
+         "status": "MATCH",
+         "detail_pt": null
+        },
+        {
+         "field": "unit",
+         "label_pt": "Unidade",
+         "expected": null,
+         "received": null,
+         "status": "NOT_APPLICABLE",
+         "detail_pt": "valor textual, sem unidade"
+        },
+        {
+         "field": "page",
+         "label_pt": "Página",
+         "expected": "63, 64",
+         "received": 64,
+         "status": "MATCH",
+         "detail_pt": null
+        }
+       ],
+       "semantic_flags_info": []
+      }
+     ],
+     "technical_name": "material",
+     "label_source": "CURADORIA",
+     "unit_info": {
+      "raw": null,
+      "canonical": null,
+      "display": null,
+      "dimension": null,
+      "dimension_pt": null,
+      "supported": true,
+      "has_unit": false,
+      "expected_dimension": null,
+      "expected_dimension_pt": null,
+      "state": "NOT_APPLICABLE"
+     },
+     "integrity": {
+      "status": "OK",
+      "findings": [],
+      "pdf_value": {
+       "found": null,
+       "literal": null
+      },
+      "unit_source": null,
+      "condition_candidates": []
+     },
+     "review_scope": "FULL",
+     "semantic_flags": []
+    },
+    {
+     "record_id": "BASS2-M1.thickness",
+     "parameter": "thickness",
+     "label_pt": "Espessura da amostra",
+     "role": "CONDICAO",
+     "nature": "OBSERVADO",
+     "status": "CONFERIDO_FONTE",
+     "original": {
+      "value": 1.0,
+      "unit": "mm",
+      "raw_text": "1"
+     },
+     "normalized": {
+      "value": 0.001,
+      "unit": "m"
+     },
+     "evidence": [
+      {
+       "evidence_id": "EV-TM20210011385-T51-M1-thickness",
+       "document_id": "NASA-TM-20210011385",
+       "page_pdf": 65,
+       "page_printed": 57,
+       "column_label": "Thickness, mm",
+       "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Thickness, mm: 1",
+       "locator_pt": "§5.3, Tabela 5.1, linha M1, p. 57, PDF 65"
+      }
+     ],
+     "caveats_pt": [],
+     "extraction": {
+      "method": "ASSISTED_TEXT_LAYER",
+      "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)"
+     },
+     "reviewer": "Junior",
+     "review": {
+      "reviewer": "Junior",
+      "reviewed_at": "2026-11-15T02:51:26+00:00",
+      "notes": null,
+      "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+     },
+     "events": [
+      {
+       "at": "2026-11-15T02:51:26Z",
+       "record_id": "BASS2-M1.thickness",
+       "reviewer": "Junior",
+       "action": "CONFIRM",
+       "notes": null,
+       "observed_value": "1",
+       "observed_unit": "mm",
+       "observed_page_pdf": 65,
+       "prefilled_unchanged": true,
+       "interpretation_confirmed": true,
+       "unit_verified_in_pdf": false,
+       "outcome": "APPROVED",
+       "state_after": "CONFERIDO_FONTE",
+       "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+       "comparisons": [
+        {
+         "field": "value",
+         "label_pt": "Valor",
+         "expected": "1",
+         "received": "1",
+         "status": "MATCH",
+         "detail_pt": null
+        },
+        {
+         "field": "unit",
+         "label_pt": "Unidade",
+         "expected": "mm",
+         "received": "mm",
+         "status": "MATCH",
+         "detail_pt": null,
+         "from_value_field": false
+        },
+        {
+         "field": "page",
+         "label_pt": "Página",
+         "expected": "65",
+         "received": 65,
+         "status": "MATCH",
+         "detail_pt": null
+        }
+       ],
+       "semantic_flags_info": []
+      }
+     ],
+     "technical_name": "thickness",
+     "label_source": "CURADORIA",
+     "unit_info": {
+      "raw": "mm",
+      "canonical": "mm",
+      "display": "mm",
+      "dimension": "length",
+      "dimension_pt": "comprimento",
+      "supported": true,
+      "has_unit": true,
+      "expected_dimension": "length",
+      "expected_dimension_pt": "comprimento",
+      "state": "PHYSICAL"
+     },
+     "integrity": {
+      "status": "OK",
+      "findings": [],
+      "pdf_value": {
+       "found": true,
+       "literal": "1"
+      },
+      "unit_source": "NOT_CHECKED",
+      "condition_candidates": []
+     },
+     "review_scope": "FULL",
+     "semantic_flags": []
+    },
+    {
+     "record_id": "BASS2-M1.width",
+     "parameter": "width",
+     "label_pt": "Largura da amostra",
+     "role": "CONDICAO",
+     "nature": "OBSERVADO",
+     "status": "CONFERIDO_FONTE",
+     "original": {
+      "value": 2.2,
+      "unit": "cm",
+      "raw_text": "2.2"
+     },
+     "normalized": {
+      "value": 0.022000000000000002,
+      "unit": "m"
+     },
+     "evidence": [
+      {
+       "evidence_id": "EV-TM20210011385-T51-M1-width",
+       "document_id": "NASA-TM-20210011385",
+       "page_pdf": 65,
+       "page_printed": 57,
+       "column_label": "Width, cm",
+       "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Width, cm: 2.2",
+       "locator_pt": "§5.3, Tabela 5.1, linha M1, p. 57, PDF 65"
+      }
+     ],
+     "caveats_pt": [
+      "Divergência interna da fonte: o texto das §5.1 (p. 55) e §5.3 (p. 56) menciona larguras de \"1 or 2 cm\", enquanto a Tabela 5.1 e o texto da p. 58 listam 1,2 e 2,2 cm. Valor da tabela registrado; divergência a avaliar na revisão."
+     ],
+     "extraction": {
+      "method": "ASSISTED_TEXT_LAYER",
+      "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)"
+     },
+     "reviewer": "Junior",
+     "review": {
+      "reviewer": "Junior",
+      "reviewed_at": "2026-11-15T02:51:36+00:00",
+      "notes": null,
+      "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+     },
+     "events": [
+      {
+       "at": "2026-11-15T02:51:36Z",
+       "record_id": "BASS2-M1.width",
+       "reviewer": "Junior",
+       "action": "CONFIRM",
+       "notes": null,
+       "observed_value": "2.2",
+       "observed_unit": "cm",
+       "observed_page_pdf": 65,
+       "prefilled_unchanged": true,
+       "interpretation_confirmed": true,
+       "unit_verified_in_pdf": false,
+       "outcome": "APPROVED",
+       "state_after": "CONFERIDO_FONTE",
+       "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+       "comparisons": [
+        {
+         "field": "value",
+         "label_pt": "Valor",
+         "expected": "2.2",
+         "received": "2.2",
+         "status": "MATCH",
+         "detail_pt": null
+        },
+        {
+         "field": "unit",
+         "label_pt": "Unidade",
+         "expected": "cm",
+         "received": "cm",
+         "status": "MATCH",
+         "detail_pt": null,
+         "from_value_field": false
+        },
+        {
+         "field": "page",
+         "label_pt": "Página",
+         "expected": "65",
+         "received": 65,
+         "status": "MATCH",
+         "detail_pt": null
+        }
+       ],
+       "semantic_flags_info": []
+      }
+     ],
+     "technical_name": "width",
+     "label_source": "CURADORIA",
+     "unit_info": {
+      "raw": "cm",
+      "canonical": "cm",
+      "display": "cm",
+      "dimension": "length",
+      "dimension_pt": "comprimento",
+      "supported": true,
+      "has_unit": true,
+      "expected_dimension": "length",
+      "expected_dimension_pt": "comprimento",
+      "state": "PHYSICAL"
+     },
+     "integrity": {
+      "status": "OK",
+      "findings": [],
+      "pdf_value": {
+       "found": true,
+       "literal": "2.2"
+      },
+      "unit_source": "NOT_CHECKED",
+      "condition_candidates": []
+     },
+     "review_scope": "FULL",
+     "semantic_flags": []
+    },
+    {
+     "record_id": "BASS2-M1.burning_faces",
+     "parameter": "burning_faces",
+     "label_pt": "Faces em combustão",
+     "role": "CONDICAO",
+     "nature": "OBSERVADO",
+     "status": "CONFERIDO_FONTE",
+     "original": {
+      "value": 1.0,
+      "unit": null,
+      "raw_text": "1"
+     },
+     "normalized": {
+      "value": 1.0,
+      "unit": "adimensional"
+     },
+     "evidence": [
+      {
+       "evidence_id": "EV-TM20210011385-T51-M1-faces",
+       "document_id": "NASA-TM-20210011385",
+       "page_pdf": 65,
+       "page_printed": 57,
+       "column_label": "One or two sides burning",
+       "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | One or two sides burning: 1",
+       "locator_pt": "§5.3, Tabela 5.1, linha M1, p. 57, PDF 65"
+      }
+     ],
+     "caveats_pt": [
+      "Coluna \"One or two sides burning\" = 1 (queima em uma face)."
+     ],
+     "extraction": {
+      "method": "ASSISTED_TEXT_LAYER",
+      "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)"
+     },
+     "reviewer": "Junior",
+     "review": {
+      "reviewer": "Junior",
+      "reviewed_at": "2026-11-15T02:51:49+00:00",
+      "notes": null,
+      "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+     },
+     "events": [
+      {
+       "at": "2026-11-15T02:51:49Z",
+       "record_id": "BASS2-M1.burning_faces",
+       "reviewer": "Junior",
+       "action": "CONFIRM",
+       "notes": null,
+       "observed_value": "1",
+       "observed_unit": null,
+       "observed_page_pdf": 65,
+       "prefilled_unchanged": true,
+       "interpretation_confirmed": true,
+       "unit_verified_in_pdf": false,
+       "outcome": "APPROVED",
+       "state_after": "CONFERIDO_FONTE",
+       "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+       "comparisons": [
+        {
+         "field": "value",
+         "label_pt": "Valor",
+         "expected": "1",
+         "received": "1",
+         "status": "MATCH",
+         "detail_pt": null
+        },
+        {
+         "field": "unit",
+         "label_pt": "Unidade",
+         "expected": null,
+         "received": null,
+         "status": "MATCH",
+         "detail_pt": "sem unidade"
+        },
+        {
+         "field": "page",
+         "label_pt": "Página",
+         "expected": "65",
+         "received": 65,
+         "status": "MATCH",
+         "detail_pt": null
+        }
+       ],
+       "semantic_flags_info": []
+      }
+     ],
+     "technical_name": "burning_faces",
+     "label_source": "CURADORIA",
+     "unit_info": {
+      "raw": null,
+      "canonical": null,
+      "display": null,
+      "dimension": null,
+      "dimension_pt": null,
+      "supported": true,
+      "has_unit": false,
+      "expected_dimension": "dimensionless",
+      "expected_dimension_pt": "grandeza sem unidade",
+      "state": "DIMENSIONLESS"
+     },
+     "integrity": {
+      "status": "OK",
+      "findings": [],
+      "pdf_value": {
+       "found": true,
+       "literal": "1"
+      },
+      "unit_source": null,
+      "condition_candidates": []
+     },
+     "review_scope": "FULL",
+     "semantic_flags": []
+    },
+    {
+     "record_id": "BASS2-M1.airflow_velocity",
+     "parameter": "airflow_velocity",
+     "label_pt": "Velocidade do ar (escoamento oposto)",
+     "role": "CONDICAO",
+     "nature": "OBSERVADO",
+     "status": "CONFERIDO_FONTE",
+     "original": {
+      "value": 9.0,
+      "unit": "cm/s",
+      "raw_text": "9"
+     },
+     "normalized": {
+      "value": 0.09,
+      "unit": "m/s"
+     },
+     "evidence": [
+      {
+       "evidence_id": "EV-TM20210011385-T51-M1-flow",
+       "document_id": "NASA-TM-20210011385",
+       "page_pdf": 65,
+       "page_printed": 57,
+       "column_label": "Velocity, cm/s",
+       "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Velocity, cm/s: 9",
+       "locator_pt": "§5.3, Tabela 5.1, linha M1, p. 57, PDF 65"
+      }
+     ],
+     "caveats_pt": [
+      "Valor tabulado único para M1; não descreve o perfil espacial nem a variação temporal."
+     ],
+     "extraction": {
+      "method": "ASSISTED_TEXT_LAYER",
+      "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)"
+     },
+     "reviewer": "Junior",
+     "review": {
+      "reviewer": "Junior",
+      "reviewed_at": "2026-11-15T02:51:58+00:00",
+      "notes": null,
+      "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+     },
+     "events": [
+      {
+       "at": "2026-11-15T02:51:58Z",
+       "record_id": "BASS2-M1.airflow_velocity",
+       "reviewer": "Junior",
+       "action": "CONFIRM",
+       "notes": null,
+       "observed_value": "9",
+       "observed_unit": "cm/s",
+       "observed_page_pdf": 65,
+       "prefilled_unchanged": true,
+       "interpretation_confirmed": true,
+       "unit_verified_in_pdf": false,
+       "outcome": "APPROVED",
+       "state_after": "CONFERIDO_FONTE",
+       "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+       "comparisons": [
+        {
+         "field": "value",
+         "label_pt": "Valor",
+         "expected": "9",
+         "received": "9",
+         "status": "MATCH",
+         "detail_pt": null
+        },
+        {
+         "field": "unit",
+         "label_pt": "Unidade",
+         "expected": "cm/s",
+         "received": "cm/s",
+         "status": "MATCH",
+         "detail_pt": null,
+         "from_value_field": false
+        },
+        {
+         "field": "page",
+         "label_pt": "Página",
+         "expected": "65",
+         "received": 65,
+         "status": "MATCH",
+         "detail_pt": null
+        }
+       ],
+       "semantic_flags_info": []
+      }
+     ],
+     "technical_name": "airflow_velocity",
+     "label_source": "CURADORIA",
+     "unit_info": {
+      "raw": "cm/s",
+      "canonical": "cm/s",
+      "display": "cm/s",
+      "dimension": "velocity",
+      "dimension_pt": "velocidade",
+      "supported": true,
+      "has_unit": true,
+      "expected_dimension": "velocity",
+      "expected_dimension_pt": "velocidade",
+      "state": "PHYSICAL"
+     },
+     "integrity": {
+      "status": "OK",
+      "findings": [],
+      "pdf_value": {
+       "found": true,
+       "literal": "9"
+      },
+      "unit_source": "NOT_CHECKED",
+      "condition_candidates": []
+     },
+     "review_scope": "FULL",
+     "semantic_flags": []
+    },
+    {
+     "record_id": "BASS2-M1.o2_initial",
+     "parameter": "o2_initial",
+     "label_pt": "Concentração inicial de O₂",
+     "role": "CONDICAO",
+     "nature": "OBSERVADO",
+     "status": "CONFERIDO_FONTE",
+     "original": {
+      "value": 22.2,
+      "unit": "vol%",
+      "raw_text": "22.2"
+     },
+     "normalized": {
+      "value": 0.222,
+      "unit": "fraction"
+     },
+     "evidence": [
+      {
+       "evidence_id": "EV-TM20210011385-T51-M1-o2i",
+       "document_id": "NASA-TM-20210011385",
+       "page_pdf": 65,
+       "page_printed": 57,
+       "column_label": "Initial O2, vol%",
+       "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Initial O2, vol%: 22.2",
+       "locator_pt": "§5.3, Tabela 5.1, linha M1, p. 57, PDF 65"
+      }
+     ],
+     "caveats_pt": [
+      "Base volumétrica (vol%) declarada no cabeçalho da Tabela 5.1.",
+      "O₂ medido apenas no início e no fim do ensaio; os autores assumem perfil linear entre os dois pontos (§5.4, p. 60)."
+     ],
+     "extraction": {
+      "method": "ASSISTED_TEXT_LAYER",
+      "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)"
+     },
+     "reviewer": "Junior",
+     "review": {
+      "reviewer": "Junior",
+      "reviewed_at": "2026-11-15T02:52:04+00:00",
+      "notes": null,
+      "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+     },
+     "events": [
+      {
+       "at": "2026-11-15T02:52:05Z",
+       "record_id": "BASS2-M1.o2_initial",
+       "reviewer": "Junior",
+       "action": "CONFIRM",
+       "notes": null,
+       "observed_value": "22.2",
+       "observed_unit": "%",
+       "observed_page_pdf": 65,
+       "prefilled_unchanged": true,
+       "interpretation_confirmed": true,
+       "unit_verified_in_pdf": false,
+       "outcome": "APPROVED",
+       "state_after": "CONFERIDO_FONTE",
+       "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+       "comparisons": [
+        {
+         "field": "value",
+         "label_pt": "Valor",
+         "expected": "22.2",
+         "received": "22.2",
+         "status": "MATCH",
+         "detail_pt": null
+        },
+        {
+         "field": "unit",
+         "label_pt": "Unidade",
+         "expected": "%",
+         "received": "%",
+         "status": "MATCH",
+         "detail_pt": null,
+         "from_value_field": false
+        },
+        {
+         "field": "page",
+         "label_pt": "Página",
+         "expected": "65",
+         "received": 65,
+         "status": "MATCH",
+         "detail_pt": null
+        }
+       ],
+       "semantic_flags_info": []
+      }
+     ],
+     "technical_name": "o2_initial",
+     "label_source": "CURADORIA",
+     "unit_info": {
+      "raw": "vol%",
+      "canonical": "%",
+      "display": "%",
+      "dimension": "fraction",
+      "dimension_pt": "fração/percentual",
+      "supported": true,
+      "has_unit": true,
+      "expected_dimension": null,
+      "expected_dimension_pt": null,
+      "state": "PHYSICAL"
+     },
+     "integrity": {
+      "status": "OK",
+      "findings": [],
+      "pdf_value": {
+       "found": true,
+       "literal": "22.2"
+      },
+      "unit_source": "NOT_CHECKED",
+      "condition_candidates": []
+     },
+     "review_scope": "FULL",
+     "semantic_flags": []
+    }
+   ],
+   "missing_inputs": [
+    "sample_length",
+    "ambient_pressure",
+    "ambient_temperature",
+    "duct_geometry",
+    "inlet_flow_profile",
+    "sample_holder_substrate",
+    "ignition_procedure",
+    "pmma_pyrolysis_properties"
+   ],
+   "input_state": "MISSING_INPUTS",
+   "ambiguous": [],
+   "observables": [
+    {
+     "record_id": "BASS2-M1.flame_spread_rate",
+     "parameter": "flame_spread_rate",
+     "label_pt": "Velocidade de propagação da chama",
+     "role": "OBSERVAVEL",
+     "nature": "OBSERVADO",
+     "status": "CONFERIDO_FONTE",
+     "original": {
+      "value": 0.071,
+      "unit": "mm/s",
+      "raw_text": "0.071"
+     },
+     "normalized": {
+      "value": 7.099999999999999e-05,
+      "unit": "m/s"
+     },
+     "evidence": [
+      {
+       "evidence_id": "EV-TM20210011385-T51-M1-spread",
+       "document_id": "NASA-TM-20210011385",
+       "page_pdf": 65,
+       "page_printed": 57,
+       "column_label": "Spread rate, mm/s",
+       "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Spread rate, mm/s: 0.071",
+       "locator_pt": "§5.3, Tabela 5.1, linha M1, p. 57, PDF 65"
+      }
+     ],
+     "caveats_pt": [
+      "RESULTADO OBSERVADO: nunca usar como entrada ou alvo de calibração de modelo.",
+      "Obtida por rastreamento de imagens/vídeo (§5.1, §5.3); incerteza não informada."
+     ],
+     "extraction": {
+      "method": "ASSISTED_TEXT_LAYER",
+      "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)"
+     },
+     "reviewer": "Junior",
+     "review": {
+      "reviewer": "Junior",
+      "reviewed_at": "2026-11-15T02:52:12+00:00",
+      "notes": null,
+      "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+     },
+     "events": [
+      {
+       "at": "2026-11-15T02:52:12Z",
+       "record_id": "BASS2-M1.flame_spread_rate",
+       "reviewer": "Junior",
+       "action": "CONFIRM",
+       "notes": null,
+       "observed_value": "0.071",
+       "observed_unit": "mm/s",
+       "observed_page_pdf": 65,
+       "prefilled_unchanged": true,
+       "interpretation_confirmed": true,
+       "unit_verified_in_pdf": false,
+       "outcome": "APPROVED",
+       "state_after": "CONFERIDO_FONTE",
+       "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+       "comparisons": [
+        {
+         "field": "value",
+         "label_pt": "Valor",
+         "expected": "0.071",
+         "received": "0.071",
+         "status": "MATCH",
+         "detail_pt": null
+        },
+        {
+         "field": "unit",
+         "label_pt": "Unidade",
+         "expected": "mm/s",
+         "received": "mm/s",
+         "status": "MATCH",
+         "detail_pt": null,
+         "from_value_field": false
+        },
+        {
+         "field": "page",
+         "label_pt": "Página",
+         "expected": "65",
+         "received": 65,
+         "status": "MATCH",
+         "detail_pt": null
+        }
+       ],
+       "semantic_flags_info": []
+      }
+     ],
+     "technical_name": "flame_spread_rate",
+     "label_source": "CURADORIA",
+     "unit_info": {
+      "raw": "mm/s",
+      "canonical": "mm/s",
+      "display": "mm/s",
+      "dimension": "velocity",
+      "dimension_pt": "velocidade",
+      "supported": true,
+      "has_unit": true,
+      "expected_dimension": null,
+      "expected_dimension_pt": null,
+      "state": "PHYSICAL"
+     },
+     "integrity": {
+      "status": "OK",
+      "findings": [],
+      "pdf_value": {
+       "found": true,
+       "literal": "0.071"
+      },
+      "unit_source": "NOT_CHECKED",
+      "condition_candidates": []
+     },
+     "review_scope": "FULL",
+     "semantic_flags": []
+    },
+    {
+     "record_id": "BASS2-M1.burn_duration",
+     "parameter": "burn_duration",
+     "label_pt": "Tempo de queima",
+     "role": "OBSERVAVEL",
+     "nature": "OBSERVADO",
+     "status": "CONFERIDO_FONTE",
+     "original": {
+      "value": 6.4,
+      "unit": "min",
+      "raw_text": "6.4"
+     },
+     "normalized": {
+      "value": 384.0,
+      "unit": "s"
+     },
+     "evidence": [
+      {
+       "evidence_id": "EV-TM20210011385-T51-M1-burntime",
+       "document_id": "NASA-TM-20210011385",
+       "page_pdf": 65,
+       "page_printed": 57,
+       "column_label": "Burn time, min",
+       "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Burn time, min: 6.4",
+       "locator_pt": "§5.3, Tabela 5.1, linha M1, p. 57, PDF 65"
+      }
+     ],
+     "caveats_pt": [
+      "Duração reportada; não implica regime estacionário."
+     ],
+     "extraction": {
+      "method": "ASSISTED_TEXT_LAYER",
+      "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)"
+     },
+     "reviewer": "Junior",
+     "review": {
+      "reviewer": "Junior",
+      "reviewed_at": "2026-11-15T02:52:19+00:00",
+      "notes": null,
+      "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+     },
+     "events": [
+      {
+       "at": "2026-11-15T02:52:19Z",
+       "record_id": "BASS2-M1.burn_duration",
+       "reviewer": "Junior",
+       "action": "CONFIRM",
+       "notes": null,
+       "observed_value": "6.4",
+       "observed_unit": "min",
+       "observed_page_pdf": 65,
+       "prefilled_unchanged": true,
+       "interpretation_confirmed": true,
+       "unit_verified_in_pdf": false,
+       "outcome": "APPROVED",
+       "state_after": "CONFERIDO_FONTE",
+       "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+       "comparisons": [
+        {
+         "field": "value",
+         "label_pt": "Valor",
+         "expected": "6.4",
+         "received": "6.4",
+         "status": "MATCH",
+         "detail_pt": null
+        },
+        {
+         "field": "unit",
+         "label_pt": "Unidade",
+         "expected": "min",
+         "received": "min",
+         "status": "MATCH",
+         "detail_pt": null,
+         "from_value_field": false
+        },
+        {
+         "field": "page",
+         "label_pt": "Página",
+         "expected": "65",
+         "received": 65,
+         "status": "MATCH",
+         "detail_pt": null
+        }
+       ],
+       "semantic_flags_info": []
+      }
+     ],
+     "technical_name": "burn_duration",
+     "label_source": "CURADORIA",
+     "unit_info": {
+      "raw": "min",
+      "canonical": "min",
+      "display": "min",
+      "dimension": "time",
+      "dimension_pt": "tempo",
+      "supported": true,
+      "has_unit": true,
+      "expected_dimension": "time",
+      "expected_dimension_pt": "tempo",
+      "state": "PHYSICAL"
+     },
+     "integrity": {
+      "status": "OK",
+      "findings": [],
+      "pdf_value": {
+       "found": true,
+       "literal": "6.4"
+      },
+      "unit_source": "NOT_CHECKED",
+      "condition_candidates": []
+     },
+     "review_scope": "FULL",
+     "semantic_flags": []
+    },
+    {
+     "record_id": "BASS2-M1.o2_final",
+     "parameter": "o2_final",
+     "label_pt": "Concentração final de O₂",
+     "role": "OBSERVAVEL",
+     "nature": "OBSERVADO",
+     "status": "CONFERIDO_FONTE",
+     "original": {
+      "value": 21.9,
+      "unit": "vol%",
+      "raw_text": "21.9"
+     },
+     "normalized": {
+      "value": 0.219,
+      "unit": "fraction"
+     },
+     "evidence": [
+      {
+       "evidence_id": "EV-TM20210011385-T51-M1-o2f",
+       "document_id": "NASA-TM-20210011385",
+       "page_pdf": 65,
+       "page_printed": 57,
+       "column_label": "Final O2, vol%",
+       "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Final O2, vol%: 21.9",
+       "locator_pt": "§5.3, Tabela 5.1, linha M1, p. 57, PDF 65"
+      }
+     ],
+     "caveats_pt": [
+      "O₂ medido apenas no início e no fim; não é concentração constante durante o ensaio (§5.4, p. 60)."
+     ],
+     "extraction": {
+      "method": "ASSISTED_TEXT_LAYER",
+      "by": "claude-code (extração preliminar assistida; camada de texto PyMuPDF)"
+     },
+     "reviewer": "Junior",
+     "review": {
+      "reviewer": "Junior",
+      "reviewed_at": "2026-11-15T02:52:28+00:00",
+      "notes": null,
+      "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+     },
+     "events": [
+      {
+       "at": "2026-11-15T02:52:29Z",
+       "record_id": "BASS2-M1.o2_final",
+       "reviewer": "Junior",
+       "action": "CONFIRM",
+       "notes": null,
+       "observed_value": "21.9",
+       "observed_unit": "%",
+       "observed_page_pdf": 65,
+       "prefilled_unchanged": true,
+       "interpretation_confirmed": true,
+       "unit_verified_in_pdf": false,
+       "outcome": "APPROVED",
+       "state_after": "CONFERIDO_FONTE",
+       "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+       "comparisons": [
+        {
+         "field": "value",
+         "label_pt": "Valor",
+         "expected": "21.9",
+         "received": "21.9",
+         "status": "MATCH",
+         "detail_pt": null
+        },
+        {
+         "field": "unit",
+         "label_pt": "Unidade",
+         "expected": "%",
+         "received": "%",
+         "status": "MATCH",
+         "detail_pt": null,
+         "from_value_field": false
+        },
+        {
+         "field": "page",
+         "label_pt": "Página",
+         "expected": "65",
+         "received": 65,
+         "status": "MATCH",
+         "detail_pt": null
+        }
+       ],
+       "semantic_flags_info": []
+      }
+     ],
+     "technical_name": "o2_final",
+     "label_source": "CURADORIA",
+     "unit_info": {
+      "raw": "vol%",
+      "canonical": "%",
+      "display": "%",
+      "dimension": "fraction",
+      "dimension_pt": "fração/percentual",
+      "supported": true,
+      "has_unit": true,
+      "expected_dimension": null,
+      "expected_dimension_pt": null,
+      "state": "PHYSICAL"
+     },
+     "integrity": {
+      "status": "OK",
+      "findings": [],
+      "pdf_value": {
+       "found": true,
+       "literal": "21.9"
+      },
+      "unit_source": "NOT_CHECKED",
+      "condition_candidates": []
+     },
+     "review_scope": "FULL",
+     "semantic_flags": []
+    }
+   ],
+   "gaps": [
+    {
+     "gap_id": "GAP-BASS2-M1-sample_length",
+     "parameter": "sample_length",
+     "label_pt": "Comprimento da amostra",
+     "explanation_pt": "A Tabela 5.1 não informa o comprimento da amostra de M1.",
+     "purpose_blocked": [
+      "FDS_REPRODUCTION"
+     ],
+     "searched_in": [
+      "NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)",
+      "Tabela 5.1 (p. 57)"
+     ],
+     "possible_sources_pt": "A §5.1 (p. 55) traz uma afirmação geral sobre o comprimento das amostras do conjunto, não específica de M1. Candidata a registro somente após revisão humana.",
+     "origin": "CURADORIA",
+     "related_parameters": [],
+     "decision": null,
+     "coverage_state": "ABERTA",
+     "categories": [
+      "FIDELITY",
+      "CONSTRUCTION",
+      "ASSUMPTION_REQUIRED"
+     ],
+     "required": true,
+     "assumption_allowed": true,
+     "impact_pt": "Assumir este valor altera a fidelidade ao ensaio; não fecha a lacuna publicada."
+    },
+    {
+     "gap_id": "GAP-BASS2-M1-sample_holder_substrate",
+     "parameter": "sample_holder_substrate",
+     "label_pt": "Suporte e substrato metálico da amostra",
+     "explanation_pt": "O texto da p. 58 menciona perda de calor para o substrato metálico em amostras de uma face e para o porta-amostra, sem material, dimensões ou posição.",
+     "purpose_blocked": [
+      "FDS_REPRODUCTION"
+     ],
+     "searched_in": [
+      "NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"
+     ],
+     "possible_sources_pt": "Referências 7, 8, 10 e 11 do capítulo 5 (teses e artigos da SDSU) — a investigar.",
+     "origin": "CURADORIA",
+     "related_parameters": [],
+     "decision": null,
+     "coverage_state": "ABERTA",
+     "categories": [
+      "FIDELITY",
+      "CONSTRUCTION",
+      "ASSUMPTION_REQUIRED"
+     ],
+     "required": true,
+     "assumption_allowed": true,
+     "impact_pt": "Assumir este valor altera a fidelidade ao ensaio; não fecha a lacuna publicada."
+    },
+    {
+     "gap_id": "GAP-BASS2-M1-duct_geometry",
+     "parameter": "duct_geometry",
+     "label_pt": "Dimensões efetivas do duto",
+     "explanation_pt": "A §5.3 descreve um \"small flow duct\" sem dimensões; a §5.5 informa que o modelo histórico usou geometria \"approximate\" do duto.",
+     "purpose_blocked": [
+      "FDS_REPRODUCTION"
+     ],
+     "searched_in": [
+      "NASA-TM-20210011385 §5.3 (p. 56)",
+      "§5.5 (p. 60–61)"
+     ],
+     "possible_sources_pt": "Figuras 5.1 e 5.6 (imagens não analisadas nesta etapa) e Ref. 3/4 do capítulo 5.",
+     "origin": "CURADORIA",
+     "related_parameters": [],
+     "decision": null,
+     "coverage_state": "ABERTA",
+     "categories": [
+      "FIDELITY",
+      "CONSTRUCTION",
+      "ASSUMPTION_REQUIRED"
+     ],
+     "required": true,
+     "assumption_allowed": true,
+     "impact_pt": "Assumir este valor altera a fidelidade ao ensaio; não fecha a lacuna publicada."
+    },
+    {
+     "gap_id": "GAP-BASS2-M1-ambient_pressure",
+     "parameter": "ambient_pressure",
+     "label_pt": "Pressão",
+     "explanation_pt": "Nenhuma pressão é informada para M1 no capítulo 5.",
+     "purpose_blocked": [
+      "FDS_REPRODUCTION"
+     ],
+     "searched_in": [
+      "NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"
+     ],
+     "possible_sources_pt": "Outros capítulos do relatório e dados do PSI-25 — a investigar.",
+     "origin": "CURADORIA",
+     "related_parameters": [],
+     "decision": null,
+     "coverage_state": "ABERTA",
+     "categories": [
+      "FIDELITY",
+      "CONSTRUCTION",
+      "ASSUMPTION_REQUIRED"
+     ],
+     "required": true,
+     "assumption_allowed": true,
+     "impact_pt": "Assumir este valor altera a fidelidade ao ensaio; não fecha a lacuna publicada."
+    },
+    {
+     "gap_id": "GAP-BASS2-M1-ambient_temperature",
+     "parameter": "ambient_temperature",
+     "label_pt": "Temperatura ambiente/inicial",
+     "explanation_pt": "Nenhuma temperatura do gás ou da amostra é informada para M1 no capítulo 5.",
+     "purpose_blocked": [
+      "FDS_REPRODUCTION"
+     ],
+     "searched_in": [
+      "NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"
+     ],
+     "possible_sources_pt": "Outros capítulos do relatório e dados do PSI-25 — a investigar.",
+     "origin": "CURADORIA",
+     "related_parameters": [],
+     "decision": null,
+     "coverage_state": "ABERTA",
+     "categories": [
+      "FIDELITY",
+      "CONSTRUCTION",
+      "ASSUMPTION_REQUIRED"
+     ],
+     "required": true,
+     "assumption_allowed": true,
+     "impact_pt": "Assumir este valor altera a fidelidade ao ensaio; não fecha a lacuna publicada."
+    },
+    {
+     "gap_id": "GAP-BASS2-M1-inlet_flow_profile",
+     "parameter": "inlet_flow_profile",
+     "label_pt": "Perfil espacial e temporal do escoamento de entrada",
+     "explanation_pt": "A §5.5 informa que o perfil foi medido em vários pontos e é \"quite irregular\", mas os valores não estão no relatório.",
+     "purpose_blocked": [
+      "FDS_REPRODUCTION"
+     ],
+     "searched_in": [
+      "NASA-TM-20210011385 §5.3 (p. 56)",
+      "§5.5 (p. 60)"
+     ],
+     "possible_sources_pt": "Dados brutos do anemômetro no PSI-25 — a investigar.",
+     "origin": "CURADORIA",
+     "related_parameters": [],
+     "decision": null,
+     "coverage_state": "ABERTA",
+     "categories": [
+      "FIDELITY",
+      "CONSTRUCTION",
+      "ASSUMPTION_REQUIRED"
+     ],
+     "required": true,
+     "assumption_allowed": true,
+     "impact_pt": "Assumir este valor altera a fidelidade ao ensaio; não fecha a lacuna publicada."
+    },
+    {
+     "gap_id": "GAP-BASS2-M1-anemometer_location",
+     "parameter": "anemometer_location",
+     "label_pt": "Posição de medição do anemômetro",
+     "explanation_pt": "A §5.3 informa apenas que o anemômetro mede o ar que entra no duto; a posição exata não é dada.",
+     "purpose_blocked": [
+      "FDS_REPRODUCTION"
+     ],
+     "searched_in": [
+      "NASA-TM-20210011385 §5.3 (p. 56)"
+     ],
+     "possible_sources_pt": "Documentação do hardware BASS (Ref. 3 do capítulo 5) — a investigar.",
+     "origin": "CURADORIA",
+     "related_parameters": [],
+     "decision": null,
+     "coverage_state": "ABERTA",
+     "categories": [
+      "FIDELITY"
+     ],
+     "required": false,
+     "assumption_allowed": true,
+     "impact_pt": "Assumir este valor altera a fidelidade ao ensaio; não fecha a lacuna publicada."
+    },
+    {
+     "gap_id": "GAP-BASS2-M1-ignition_procedure",
+     "parameter": "ignition_procedure",
+     "label_pt": "Procedimento, duração e fonte de ignição",
+     "explanation_pt": "A §5.3 menciona o ignitor e a estabilização da chama, sem potência nem duração para M1. A duração de ignição citada na §5.5 refere-se ao MODELO numérico, não ao experimento.",
+     "purpose_blocked": [
+      "FDS_REPRODUCTION"
+     ],
+     "searched_in": [
+      "NASA-TM-20210011385 §5.3 (p. 56)",
+      "§5.5 (p. 61)"
+     ],
+     "possible_sources_pt": "Documentação do hardware BASS — a investigar.",
+     "origin": "CURADORIA",
+     "related_parameters": [],
+     "decision": null,
+     "coverage_state": "ABERTA",
+     "categories": [
+      "FIDELITY",
+      "CONSTRUCTION",
+      "ASSUMPTION_REQUIRED"
+     ],
+     "required": true,
+     "assumption_allowed": true,
+     "impact_pt": "Assumir este valor altera a fidelidade ao ensaio; não fecha a lacuna publicada."
+    },
+    {
+     "gap_id": "GAP-BASS2-M1-pmma_pyrolysis_properties",
+     "parameter": "pmma_pyrolysis_properties",
+     "label_pt": "Propriedades termoquímicas e de pirólise do PMMA",
+     "explanation_pt": "O capítulo 5 não lista propriedades do PMMA; os autores afirmam que precisam modificar a cinética química e as propriedades do material para melhorar o modelo (§5.1, §5.7).",
+     "purpose_blocked": [
+      "FDS_REPRODUCTION"
+     ],
+     "searched_in": [
+      "NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"
+     ],
+     "possible_sources_pt": "Outros capítulos trazem propriedades usadas em análises de OUTRAS geometrias (amostras cilíndricas); não transferir para M1 sem revisão científica.",
+     "origin": "CURADORIA",
+     "related_parameters": [],
+     "decision": null,
+     "coverage_state": "ABERTA",
+     "categories": [
+      "FIDELITY",
+      "CONSTRUCTION",
+      "ASSUMPTION_REQUIRED"
+     ],
+     "required": true,
+     "assumption_allowed": false,
+     "impact_pt": "Assumir este valor altera a fidelidade ao ensaio; não fecha a lacuna publicada."
+    },
+    {
+     "gap_id": "GAP-BASS2-M1-o2_time_profile",
+     "parameter": "o2_time_profile",
+     "label_pt": "Perfil temporal do O₂ durante o ensaio",
+     "explanation_pt": "A §5.4 informa que o O₂ só foi medido no início e no fim; o perfil intermediário é uma suposição linear dos autores, não uma medição.",
+     "purpose_blocked": [
+      "FDS_REPRODUCTION"
+     ],
+     "searched_in": [
+      "NASA-TM-20210011385 §5.4 (p. 60)"
+     ],
+     "possible_sources_pt": null,
+     "origin": "CURADORIA",
+     "related_parameters": [],
+     "decision": null,
+     "coverage_state": "ABERTA",
+     "categories": [
+      "FIDELITY"
+     ],
+     "required": false,
+     "assumption_allowed": true,
+     "impact_pt": "Assumir este valor altera a fidelidade ao ensaio; não fecha a lacuna publicada."
+    },
+    {
+     "gap_id": "GAP-BASS2-M1-measurement_uncertainty",
+     "parameter": "measurement_uncertainty",
+     "label_pt": "Incertezas de medição",
+     "explanation_pt": "Não há incertezas declaradas para os valores de M1 na Tabela 5.1 nem no texto do capítulo 5.",
+     "purpose_blocked": [
+      "FDS_REPRODUCTION",
+      "QUANTITATIVE_COMPARISON"
+     ],
+     "searched_in": [
+      "NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"
+     ],
+     "possible_sources_pt": "Referências 9–11 do capítulo 5 — a investigar.",
+     "origin": "CURADORIA",
+     "related_parameters": [],
+     "decision": null,
+     "coverage_state": "ABERTA",
+     "categories": [
+      "FIDELITY",
+      "QUANTITATIVE_COMPARISON"
+     ],
+     "required": false,
+     "assumption_allowed": true,
+     "impact_pt": "Assumir este valor altera a fidelidade ao ensaio; não fecha a lacuna publicada."
+    },
+    {
+     "gap_id": "GAP-BASS2-M1-flame_front_tracking_method",
+     "parameter": "flame_front_tracking_method",
+     "label_pt": "Método de cálculo do avanço da frente de chama",
+     "explanation_pt": "Parcial: imagens e vídeos foram rastreados com software de rastreamento de imagens da NASA e os dados processados em planilha (§5.3); critério de frente, janela de ajuste e incerteza não são descritos.",
+     "purpose_blocked": [
+      "QUANTITATIVE_COMPARISON"
+     ],
+     "searched_in": [
+      "NASA-TM-20210011385 §5.1 (p. 55)",
+      "§5.3 (p. 56)"
+     ],
+     "possible_sources_pt": "Ref. 6 do capítulo 5 (software de rastreamento) e teses da SDSU — a investigar.",
+     "origin": "CURADORIA",
+     "related_parameters": [],
+     "decision": null,
+     "coverage_state": "ABERTA",
+     "categories": [
+      "FIDELITY",
+      "QUANTITATIVE_COMPARISON"
+     ],
+     "required": false,
+     "assumption_allowed": true,
+     "impact_pt": "Assumir este valor altera a fidelidade ao ensaio; não fecha a lacuna publicada."
+    }
+   ],
+   "profile_id": "fds-flame-spread-thin-solid",
+   "profile_version": "1.0.0",
+   "aliases": {
+    "material_pyrolysis_properties": "pmma_pyrolysis_properties"
+   },
+   "blockers": [
+    "Perfil PMMA sem gerador físico aprovado",
+    "Propriedades de pirólise e domínio sem revisão"
+   ],
+   "comparison": {
+    "status": "UNAVAILABLE",
+    "message_pt": "Comparação quantitativa não disponível para este perfil.",
+    "method": null,
+    "uncertainties": null,
+    "limitations": [
+     "Exploração técnica independente — não é reprodução de experimento NASA"
+    ]
+   },
+   "reproduction_ready": false
+  },
+  "profile_sha256": "2f9672ba812d1934e06b2b4c653352639b1ef73faab2a0ac3f0649683c6492e8",
+  "label_pt": "Experimento documentado — execução bloqueada",
+  "comparison": {
+   "status": "UNAVAILABLE",
+   "message_pt": "Comparação quantitativa não disponível para este perfil.",
+   "method": null,
+   "uncertainties": null,
+   "limitations": [
+    "Exploração técnica independente — não é reprodução de experimento NASA"
+   ]
+  },
+  "guided_review": {
+   "previous_audit_sha256": "3db23356088969b6572fc24cf058b11892231d2ec01aefeac30036ba9483c576",
+   "decision": {
+    "gap_id": "GAP-BASS2-M1-sample_holder_substrate",
+    "parameter": "sample_holder_substrate",
+    "action": "SOURCE",
+    "author": "Flavio",
+    "notes": "",
+    "cursor": "GAP-BASS2-M1-sample_holder_substrate",
+    "profile_sha256": "2f9672ba812d1934e06b2b4c653352639b1ef73faab2a0ac3f0649683c6492e8",
+    "profile_version": "1.0.0",
+    "profile_id": "fds-flame-spread-thin-solid",
+    "catalog_sha256": "0b15eb092c479946a53541ad440fa4c40b4c8e66ee551902ff2acf9cc99cd041",
+    "state": "SOURCE_SUBMITTED",
+    "proposal": {
+     "value": null,
+     "unit": "n/a",
+     "details": "O ensaio BASS-II utiliza amostras planas de PMMA. O relatório menciona transferência de calor para o substrato metálico e para o porta-amostra nas configurações de combustão de uma face. Para M1, a amostra possui espessura de 1 mm. O material específico do substrato metálico, suas dimensões, propriedades térmicas e posicionamento não estão suficientemente descritos nas evidências apresentadas.",
+     "source": "NASA/TM-20210011385 — Burning and Suppression of Solids–II (BASS-II) Summary Report, capítulo 5, §5.3.",
+     "location": "p. 58 do relatório (confirmar página correspondente no PDF); Tabela 5.1, p. 57, PDF 65.",
+     "evidence": "O texto da p. 58 menciona perdas de calor para o substrato metálico e o porta-amostra. A Tabela 5.1 identifica M1 como amostra de PMMA com espessura de 1 mm. Não há especificação completa da geometria e das propriedades do suporte nas evidências apresentadas.",
+     "author": "Flavio",
+     "justification": "",
+     "limitations": ""
+    },
+    "normalized": {
+     "kind": "DOCUMENT",
+     "details": "O ensaio BASS-II utiliza amostras planas de PMMA. O relatório menciona transferência de calor para o substrato metálico e para o porta-amostra nas configurações de combustão de uma face. Para M1, a amostra possui espessura de 1 mm. O material específico do substrato metálico, suas dimensões, propriedades térmicas e posicionamento não estão suficientemente descritos nas evidências apresentadas.",
+     "physical_validation": "REQUIRES_SPECIALIST_SCHEMA"
+    },
+    "proposal_kind": "SOURCE",
+    "assumption": null,
+    "review_state": "PENDING"
+   },
+   "usage": "DOCUMENTATION_ONLY_NOT_GENERATOR_INPUT"
+  }
+ },
+ "content_sha256": "ffb6a0cf30188d37f7d9df1f21818172d2a47276a49762851398122b2d8ed401",
+ "created_at": "2026-11-15T11:44:03Z"
+}

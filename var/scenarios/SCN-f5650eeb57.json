@@ -1,0 +1,20 @@
+{
+ "scenario_id": "SCN-f5650eeb57",
+ "kind": "BASE",
+ "model_id": "fds-integration-simple-fire",
+ "experiment_id": null,
+ "scope": "DEMO",
+ "hypothesis_pt": null,
+ "title_pt": "Prova real v2.1",
+ "changes": [],
+ "values": {
+  "hrrpua": 1000.0,
+  "soot_yield": 0.01,
+  "t_end": 10.0
+ },
+ "status": "HIPOTESE_COMPUTACIONAL",
+ "executable": true,
+ "blocked_reasons_pt": [],
+ "created_at": "2026-11-15T01:04:13Z",
+ "note_pt": "Caso-base do modelo, sem alterações. Teste de integração do pipeline FDS/Smokeview — não é reprodução de experimento NASA"
+}

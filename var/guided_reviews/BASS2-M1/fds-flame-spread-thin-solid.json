@@ -1,0 +1,941 @@
+{
+ "events": [
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-sample_holder_substrate",
+   "revision": 1,
+   "at": "2026-11-15T11:11:52Z",
+   "previous_sha256": null,
+   "sha256": "52694104ebe668a430b554eb0d057a3e41e407a4b33188ea7186a77bf037a78a"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-duct_geometry",
+   "revision": 2,
+   "at": "2026-11-15T11:12:03Z",
+   "previous_sha256": "52694104ebe668a430b554eb0d057a3e41e407a4b33188ea7186a77bf037a78a",
+   "sha256": "e29ecc96edcce1e8f9ee4f45483433798f499c5ec47b3c834fafa0d93b86fc97"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ambient_pressure",
+   "revision": 3,
+   "at": "2026-11-15T11:12:18Z",
+   "previous_sha256": "e29ecc96edcce1e8f9ee4f45483433798f499c5ec47b3c834fafa0d93b86fc97",
+   "sha256": "d0b4659b5593341f9c5d867feb304f924c4f0873bc6c8c531eddeb879417b0d6"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ambient_temperature",
+   "revision": 4,
+   "at": "2026-11-15T11:12:27Z",
+   "previous_sha256": "d0b4659b5593341f9c5d867feb304f924c4f0873bc6c8c531eddeb879417b0d6",
+   "sha256": "7eb79d5e9885d9820cf8eae42b41cd7228c8653cb69e984d32c07707ddc610d5"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-inlet_flow_profile",
+   "revision": 5,
+   "at": "2026-11-15T11:12:34Z",
+   "previous_sha256": "7eb79d5e9885d9820cf8eae42b41cd7228c8653cb69e984d32c07707ddc610d5",
+   "sha256": "4b1bb4b620a98e4df840e0d9fd52d5712b926309eb454e1e22be8f3c3e9e7b0c"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-anemometer_location",
+   "revision": 6,
+   "at": "2026-11-15T11:13:02Z",
+   "previous_sha256": "4b1bb4b620a98e4df840e0d9fd52d5712b926309eb454e1e22be8f3c3e9e7b0c",
+   "sha256": "2c9e60e4e88b79349f4aef7bc6de016eed773d4081d5a8f7c7761e984a773013"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ignition_procedure",
+   "revision": 7,
+   "at": "2026-11-15T11:13:08Z",
+   "previous_sha256": "2c9e60e4e88b79349f4aef7bc6de016eed773d4081d5a8f7c7761e984a773013",
+   "sha256": "38f9d397002ef7a876907eb401319aa18c3a086f0a49da1731ea1fc34c826886"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-pmma_pyrolysis_properties",
+   "revision": 8,
+   "at": "2026-11-15T11:13:16Z",
+   "previous_sha256": "38f9d397002ef7a876907eb401319aa18c3a086f0a49da1731ea1fc34c826886",
+   "sha256": "3e8e2bb5db593dda148909dcfc18725346d9ae7bb290f664e78da7757be7ccc1"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-o2_time_profile",
+   "revision": 9,
+   "at": "2026-11-15T11:13:23Z",
+   "previous_sha256": "3e8e2bb5db593dda148909dcfc18725346d9ae7bb290f664e78da7757be7ccc1",
+   "sha256": "4750c334f9c5d925bad9dec28be4c5fa68c303bfcab11502342a7a32ea17e903"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-measurement_uncertainty",
+   "revision": 10,
+   "at": "2026-11-15T11:13:30Z",
+   "previous_sha256": "4750c334f9c5d925bad9dec28be4c5fa68c303bfcab11502342a7a32ea17e903",
+   "sha256": "caec34e52d435439e773d633c938dbea65c6f02ed5bba8d4cbda4842ae3726fb"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-flame_front_tracking_method",
+   "revision": 11,
+   "at": "2026-11-15T11:13:35Z",
+   "previous_sha256": "caec34e52d435439e773d633c938dbea65c6f02ed5bba8d4cbda4842ae3726fb",
+   "sha256": "381587809ee34fbbdde8c2968703bde3e171c07f2b6d72c45baa4b3e85e16a01"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-measurement_uncertainty",
+   "revision": 12,
+   "at": "2026-11-15T11:15:07Z",
+   "previous_sha256": "381587809ee34fbbdde8c2968703bde3e171c07f2b6d72c45baa4b3e85e16a01",
+   "sha256": "77bab0db09bdf92f9240258f6ada53a995d136e5cafa1b056ac621f99c569c74"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-o2_time_profile",
+   "revision": 13,
+   "at": "2026-11-15T11:15:07Z",
+   "previous_sha256": "77bab0db09bdf92f9240258f6ada53a995d136e5cafa1b056ac621f99c569c74",
+   "sha256": "9611d349c2b91eed40d538f0ec0843ee8e0cb88284fee8e7a6b1fa2b209a4117"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-pmma_pyrolysis_properties",
+   "revision": 14,
+   "at": "2026-11-15T11:15:07Z",
+   "previous_sha256": "9611d349c2b91eed40d538f0ec0843ee8e0cb88284fee8e7a6b1fa2b209a4117",
+   "sha256": "c6b41c29cf1bf4c5565fdcf77d65b23736a93f7e870112316f60dc76f5c08697"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ignition_procedure",
+   "revision": 15,
+   "at": "2026-11-15T11:15:08Z",
+   "previous_sha256": "c6b41c29cf1bf4c5565fdcf77d65b23736a93f7e870112316f60dc76f5c08697",
+   "sha256": "78f62396dab8f519caefb720094ad10279b1e3eae697871cddadd2dd739b1547"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-anemometer_location",
+   "revision": 16,
+   "at": "2026-11-15T11:15:08Z",
+   "previous_sha256": "78f62396dab8f519caefb720094ad10279b1e3eae697871cddadd2dd739b1547",
+   "sha256": "1a8e4f36e47aba9c1ace2791eb4ceefb9776fa336fc79780ef77d8d19e5c5ade"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-inlet_flow_profile",
+   "revision": 17,
+   "at": "2026-11-15T11:15:08Z",
+   "previous_sha256": "1a8e4f36e47aba9c1ace2791eb4ceefb9776fa336fc79780ef77d8d19e5c5ade",
+   "sha256": "d56bbe7eca6340b5d1b784455e3889b96c74335da1027b99523e6220f0298615"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ambient_temperature",
+   "revision": 18,
+   "at": "2026-11-15T11:15:08Z",
+   "previous_sha256": "d56bbe7eca6340b5d1b784455e3889b96c74335da1027b99523e6220f0298615",
+   "sha256": "5f1f0cccab01829eadd3a38c05d969a43d5c99dc88df14b5c432e149aa6a1121"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ambient_pressure",
+   "revision": 19,
+   "at": "2026-11-15T11:15:08Z",
+   "previous_sha256": "5f1f0cccab01829eadd3a38c05d969a43d5c99dc88df14b5c432e149aa6a1121",
+   "sha256": "2950c5bb4b738c9019bf2fadb828defb0ad5a2b47c2a01993b08ebeaf1ab7d22"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-duct_geometry",
+   "revision": 20,
+   "at": "2026-11-15T11:15:09Z",
+   "previous_sha256": "2950c5bb4b738c9019bf2fadb828defb0ad5a2b47c2a01993b08ebeaf1ab7d22",
+   "sha256": "c0512b5f38969af9b890df9b8d8e56f18a4e7515290f3f2a1f30a8d7a15f5322"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-sample_holder_substrate",
+   "revision": 21,
+   "at": "2026-11-15T11:15:09Z",
+   "previous_sha256": "c0512b5f38969af9b890df9b8d8e56f18a4e7515290f3f2a1f30a8d7a15f5322",
+   "sha256": "0369af225e5d4767986cdcb384820a9a7d1f6041db73551a0f2ccb2ea5128a48"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-sample_length",
+   "revision": 22,
+   "at": "2026-11-15T11:15:09Z",
+   "previous_sha256": "0369af225e5d4767986cdcb384820a9a7d1f6041db73551a0f2ccb2ea5128a48",
+   "sha256": "7fe1b4d4398fe1effa9341a65d86e46b6207b1b227ea1ecc89b2b0546a2c639d"
+  },
+  {
+   "gap_id": "GAP-BASS2-M1-sample_length",
+   "parameter": "sample_length",
+   "action": "ASSUMPTION",
+   "author": "Heráclito",
+   "notes": "",
+   "cursor": "GAP-BASS2-M1-sample_length",
+   "profile_sha256": "2f9672ba812d1934e06b2b4c653352639b1ef73faab2a0ac3f0649683c6492e8",
+   "profile_version": "1.0.0",
+   "profile_id": "fds-flame-spread-thin-solid",
+   "catalog_sha256": "0b15eb092c479946a53541ad440fa4c40b4c8e66ee551902ff2acf9cc99cd041",
+   "state": "ASSUMPTION_PROPOSED",
+   "proposal": {
+    "value": 10.0,
+    "unit": "cm",
+    "details": "",
+    "source": "Hipótese sintética de engenharia para teste interno; sem fonte científica que confirme este comprimento para M1.",
+    "location": "Não se aplica à hipótese. Referência de contexto: NASA/TM-20210011385, Tabela 5.1, PDF p. 65.",
+    "evidence": "A Tabela 5.1 informa espessura de 1 mm e largura de 2,2 cm para M1, mas não fornece seu comprimento. O valor de 10 cm não foi extraído da NASA.",
+    "author": "Heráclito",
+    "justification": "Adotar provisoriamente comprimento de 10 cm para uma amostra de PMMA com 2,2 cm de largura e 1 mm de espessura, exclusivamente para testar o registro e a preparação de um cenário exploratório.",
+    "limitations": "Valor arbitrário, sem confirmação experimental. Não utilizar como dado medido da NASA, reprodução validada do M1 ou aprovação do modelo de pirólise do PMMA."
+   },
+   "normalized": {
+    "kind": "SCALAR",
+    "value": 0.1,
+    "unit": "m",
+    "dimension": "length",
+    "physical_validation": "BASIC_DOMAIN_ONLY"
+   },
+   "proposal_kind": "ASSUMPTION",
+   "assumption": {
+    "parameter": "sample_length",
+    "value": 10.0,
+    "unit": "cm",
+    "source": "Hipótese sintética de engenharia para teste interno; sem fonte científica que confirme este comprimento para M1.",
+    "source_type": "EXTERNAL_LITERATURE",
+    "justification": "Adotar provisoriamente comprimento de 10 cm para uma amostra de PMMA com 2,2 cm de largura e 1 mm de espessura, exclusivamente para testar o registro e a preparação de um cenário exploratório.",
+    "author": "Heráclito",
+    "limitations": "Valor arbitrário, sem confirmação experimental. Não utilizar como dado medido da NASA, reprodução validada do M1 ou aprovação do modelo de pirólise do PMMA."
+   },
+   "review_state": "PENDING",
+   "case_id": "CASE-97b3d24a3ca5",
+   "case_version": 1,
+   "case_sha256": "d65c35b563297ceb65e1539517bb31e833b467547003b5cb55ee7d33c2c0e9b2",
+   "revision": 23,
+   "at": "2026-11-15T11:18:26Z",
+   "previous_sha256": "7fe1b4d4398fe1effa9341a65d86e46b6207b1b227ea1ecc89b2b0546a2c639d",
+   "sha256": "ca3f7b57cd2a31b3ea00e1077b45684760e53f1fa0cfd06d0afa986138feabfd"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-sample_holder_substrate",
+   "revision": 24,
+   "at": "2026-11-15T11:18:35Z",
+   "previous_sha256": "ca3f7b57cd2a31b3ea00e1077b45684760e53f1fa0cfd06d0afa986138feabfd",
+   "sha256": "3db23356088969b6572fc24cf058b11892231d2ec01aefeac30036ba9483c576"
+  },
+  {
+   "gap_id": "GAP-BASS2-M1-sample_holder_substrate",
+   "parameter": "sample_holder_substrate",
+   "action": "SOURCE",
+   "author": "Flavio",
+   "notes": "",
+   "cursor": "GAP-BASS2-M1-sample_holder_substrate",
+   "profile_sha256": "2f9672ba812d1934e06b2b4c653352639b1ef73faab2a0ac3f0649683c6492e8",
+   "profile_version": "1.0.0",
+   "profile_id": "fds-flame-spread-thin-solid",
+   "catalog_sha256": "0b15eb092c479946a53541ad440fa4c40b4c8e66ee551902ff2acf9cc99cd041",
+   "state": "SOURCE_SUBMITTED",
+   "proposal": {
+    "value": null,
+    "unit": "n/a",
+    "details": "O ensaio BASS-II utiliza amostras planas de PMMA. O relatório menciona transferência de calor para o substrato metálico e para o porta-amostra nas configurações de combustão de uma face. Para M1, a amostra possui espessura de 1 mm. O material específico do substrato metálico, suas dimensões, propriedades térmicas e posicionamento não estão suficientemente descritos nas evidências apresentadas.",
+    "source": "NASA/TM-20210011385 — Burning and Suppression of Solids–II (BASS-II) Summary Report, capítulo 5, §5.3.",
+    "location": "p. 58 do relatório (confirmar página correspondente no PDF); Tabela 5.1, p. 57, PDF 65.",
+    "evidence": "O texto da p. 58 menciona perdas de calor para o substrato metálico e o porta-amostra. A Tabela 5.1 identifica M1 como amostra de PMMA com espessura de 1 mm. Não há especificação completa da geometria e das propriedades do suporte nas evidências apresentadas.",
+    "author": "Flavio",
+    "justification": "",
+    "limitations": ""
+   },
+   "normalized": {
+    "kind": "DOCUMENT",
+    "details": "O ensaio BASS-II utiliza amostras planas de PMMA. O relatório menciona transferência de calor para o substrato metálico e para o porta-amostra nas configurações de combustão de uma face. Para M1, a amostra possui espessura de 1 mm. O material específico do substrato metálico, suas dimensões, propriedades térmicas e posicionamento não estão suficientemente descritos nas evidências apresentadas.",
+    "physical_validation": "REQUIRES_SPECIALIST_SCHEMA"
+   },
+   "proposal_kind": "SOURCE",
+   "assumption": null,
+   "review_state": "PENDING",
+   "case_id": "CASE-97b3d24a3ca5",
+   "case_version": 2,
+   "case_sha256": "ffb6a0cf30188d37f7d9df1f21818172d2a47276a49762851398122b2d8ed401",
+   "revision": 25,
+   "at": "2026-11-15T11:44:03Z",
+   "previous_sha256": "3db23356088969b6572fc24cf058b11892231d2ec01aefeac30036ba9483c576",
+   "sha256": "908e06618cce9d38d5467179c9df57f3a938f68df8f967c9c4233009b3458773"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-duct_geometry",
+   "revision": 26,
+   "at": "2026-11-15T11:44:15Z",
+   "previous_sha256": "908e06618cce9d38d5467179c9df57f3a938f68df8f967c9c4233009b3458773",
+   "sha256": "08e92c38525f254f7e6d3b9fa4b08a4dba3cc91c1a9411b41d769b4399781f28"
+  },
+  {
+   "gap_id": "GAP-BASS2-M1-duct_geometry",
+   "parameter": "duct_geometry",
+   "action": "SOURCE",
+   "author": "Junior",
+   "notes": "",
+   "cursor": "GAP-BASS2-M1-duct_geometry",
+   "profile_sha256": "2f9672ba812d1934e06b2b4c653352639b1ef73faab2a0ac3f0649683c6492e8",
+   "profile_version": "1.0.0",
+   "profile_id": "fds-flame-spread-thin-solid",
+   "catalog_sha256": "0b15eb092c479946a53541ad440fa4c40b4c8e66ee551902ff2acf9cc99cd041",
+   "state": "SOURCE_SUBMITTED",
+   "proposal": {
+    "value": null,
+    "unit": "n/a",
+    "details": "O ensaio BASS-II utiliza amostras planas de PMMA. O relatório menciona transferência de calor para o substrato metálico e para o porta-amostra nas configurações de combustão de uma face. Para M1, a amostra possui espessura de 1 mm. O material específico do substrato metálico, suas dimensões, propriedades térmicas e posicionamento não estão suficientemente descritos nas evidências apresentadas.",
+    "source": "NASA/TM-20210011385 — Burning and Suppression of Solids–II (BASS-II) Summary Report, capítulo 5, §5.3.",
+    "location": "p. 58 do relatório (confirmar página correspondente no PDF); Tabela 5.1, p. 57, PDF 65.",
+    "evidence": "O texto da p. 58 menciona perdas de calor para o substrato metálico e o porta-amostra. A Tabela 5.1 identifica M1 como amostra de PMMA com espessura de 1 mm. Não há especificação completa da geometria e das propriedades do suporte nas evidências apresentadas.",
+    "author": "Junior",
+    "justification": "",
+    "limitations": ""
+   },
+   "normalized": {
+    "kind": "DOCUMENT",
+    "details": "O ensaio BASS-II utiliza amostras planas de PMMA. O relatório menciona transferência de calor para o substrato metálico e para o porta-amostra nas configurações de combustão de uma face. Para M1, a amostra possui espessura de 1 mm. O material específico do substrato metálico, suas dimensões, propriedades térmicas e posicionamento não estão suficientemente descritos nas evidências apresentadas.",
+    "physical_validation": "REQUIRES_SPECIALIST_SCHEMA"
+   },
+   "proposal_kind": "SOURCE",
+   "assumption": null,
+   "review_state": "PENDING",
+   "case_id": "CASE-97b3d24a3ca5",
+   "case_version": 3,
+   "case_sha256": "73acc2ab69f562b0e1e2f2680932bbf080a27585d3ae584bc3b3b07b5eba18ad",
+   "revision": 27,
+   "at": "2026-11-15T11:45:34Z",
+   "previous_sha256": "08e92c38525f254f7e6d3b9fa4b08a4dba3cc91c1a9411b41d769b4399781f28",
+   "sha256": "47dd5aa9729567dd44a17d7a11de906f8d9797aedabb4c1415e48576d21417fa"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ambient_pressure",
+   "revision": 28,
+   "at": "2026-11-15T11:45:45Z",
+   "previous_sha256": "47dd5aa9729567dd44a17d7a11de906f8d9797aedabb4c1415e48576d21417fa",
+   "sha256": "736d8f8cf7263ae3e6f078dd584ad2e1e81b44fbe940c7983e7b2f5735dd1c19"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-duct_geometry",
+   "revision": 29,
+   "at": "2026-11-15T11:45:47Z",
+   "previous_sha256": "736d8f8cf7263ae3e6f078dd584ad2e1e81b44fbe940c7983e7b2f5735dd1c19",
+   "sha256": "9eed5e8db6de00b3d5e845f27e55888da487d97bd0fdbdfa96ee66acfe4e8e68"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-sample_holder_substrate",
+   "revision": 30,
+   "at": "2026-11-15T11:45:47Z",
+   "previous_sha256": "9eed5e8db6de00b3d5e845f27e55888da487d97bd0fdbdfa96ee66acfe4e8e68",
+   "sha256": "ee0bc7225934a2681d35292a23200fa47c7eb045f12c14a3ed0a5d3d1f7fac27"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-duct_geometry",
+   "revision": 31,
+   "at": "2026-11-15T11:45:49Z",
+   "previous_sha256": "ee0bc7225934a2681d35292a23200fa47c7eb045f12c14a3ed0a5d3d1f7fac27",
+   "sha256": "9d030e8a3317b67c03cb92e5b37f95f81b89a55d88d95690cce1c2367a0cd179"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ambient_pressure",
+   "revision": 32,
+   "at": "2026-11-15T11:45:50Z",
+   "previous_sha256": "9d030e8a3317b67c03cb92e5b37f95f81b89a55d88d95690cce1c2367a0cd179",
+   "sha256": "2e745dbc5d26a788209352e88cec163587989b15eb0d4e39354c60c91ee7c191"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ambient_temperature",
+   "revision": 33,
+   "at": "2026-11-15T11:45:52Z",
+   "previous_sha256": "2e745dbc5d26a788209352e88cec163587989b15eb0d4e39354c60c91ee7c191",
+   "sha256": "1b24fcb6ee0c39ab2102cce0cfec296d74e032cbfcb7a660d1f5a3551e9ca1e2"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-inlet_flow_profile",
+   "revision": 34,
+   "at": "2026-11-15T11:45:54Z",
+   "previous_sha256": "1b24fcb6ee0c39ab2102cce0cfec296d74e032cbfcb7a660d1f5a3551e9ca1e2",
+   "sha256": "5c0f8017dd775d4079581e5124d43a96b0f8cc6cbe818beeb449204c3bef39ca"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-anemometer_location",
+   "revision": 35,
+   "at": "2026-11-15T11:45:54Z",
+   "previous_sha256": "5c0f8017dd775d4079581e5124d43a96b0f8cc6cbe818beeb449204c3bef39ca",
+   "sha256": "cb969b0ae8dc95906eacd2071c82a1613c983d9d6a1b48d00dadebdff657d9e9"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ignition_procedure",
+   "revision": 36,
+   "at": "2026-11-15T11:45:55Z",
+   "previous_sha256": "cb969b0ae8dc95906eacd2071c82a1613c983d9d6a1b48d00dadebdff657d9e9",
+   "sha256": "30a65b21e527a0e4768c86c9f4db102e6ac530a583164f17691273e09339464e"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-pmma_pyrolysis_properties",
+   "revision": 37,
+   "at": "2026-11-15T11:45:55Z",
+   "previous_sha256": "30a65b21e527a0e4768c86c9f4db102e6ac530a583164f17691273e09339464e",
+   "sha256": "93219edf44c37a8af79aa3685bceae0b2f04b9b9a50cf6d02b2f74db9d3fa638"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-o2_time_profile",
+   "revision": 38,
+   "at": "2026-11-15T11:45:56Z",
+   "previous_sha256": "93219edf44c37a8af79aa3685bceae0b2f04b9b9a50cf6d02b2f74db9d3fa638",
+   "sha256": "f866f2a3b1dc7abfe88bdfab5baa690afea694487ff851f32af002526e046c0c"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-measurement_uncertainty",
+   "revision": 39,
+   "at": "2026-11-15T11:45:56Z",
+   "previous_sha256": "f866f2a3b1dc7abfe88bdfab5baa690afea694487ff851f32af002526e046c0c",
+   "sha256": "5a9ae23cc3001bf03b565bdc511a60f752ba46f4f204e2161fb8588a021b192a"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-flame_front_tracking_method",
+   "revision": 40,
+   "at": "2026-11-15T11:45:58Z",
+   "previous_sha256": "5a9ae23cc3001bf03b565bdc511a60f752ba46f4f204e2161fb8588a021b192a",
+   "sha256": "a52e03c2f51337d5258d3c930ef5e09ca91ccf70a7f7c7586d606e4f000a35a1"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-measurement_uncertainty",
+   "revision": 41,
+   "at": "2026-11-15T11:46:29Z",
+   "previous_sha256": "a52e03c2f51337d5258d3c930ef5e09ca91ccf70a7f7c7586d606e4f000a35a1",
+   "sha256": "8e5fdccfc4449be72d464cfee10a54a927d58a5dcd9f16f0de7a95b96686f037"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-o2_time_profile",
+   "revision": 42,
+   "at": "2026-11-15T11:46:29Z",
+   "previous_sha256": "8e5fdccfc4449be72d464cfee10a54a927d58a5dcd9f16f0de7a95b96686f037",
+   "sha256": "45064b9dfdd98201cffed9feb3b8bfdfaed0a7aee3cb49dd9ed74c8fb0551e39"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-pmma_pyrolysis_properties",
+   "revision": 43,
+   "at": "2026-11-15T11:46:29Z",
+   "previous_sha256": "45064b9dfdd98201cffed9feb3b8bfdfaed0a7aee3cb49dd9ed74c8fb0551e39",
+   "sha256": "0e3d903052b5ed1eaef1092f2a1e8fd606b0c0b2d5c031ea8c0e9bcc5ecd5c75"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ignition_procedure",
+   "revision": 44,
+   "at": "2026-11-15T11:46:29Z",
+   "previous_sha256": "0e3d903052b5ed1eaef1092f2a1e8fd606b0c0b2d5c031ea8c0e9bcc5ecd5c75",
+   "sha256": "3a663bb3ac50e002a17fc7d9e94141facedff37b26d7b65e6fa6acf3403bff7a"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-anemometer_location",
+   "revision": 45,
+   "at": "2026-11-15T11:46:29Z",
+   "previous_sha256": "3a663bb3ac50e002a17fc7d9e94141facedff37b26d7b65e6fa6acf3403bff7a",
+   "sha256": "200c93b5486e2680b7907e72c8ce1cf6e827ecd4a2e672c5c6e3506151f49e00"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-inlet_flow_profile",
+   "revision": 46,
+   "at": "2026-11-15T11:46:29Z",
+   "previous_sha256": "200c93b5486e2680b7907e72c8ce1cf6e827ecd4a2e672c5c6e3506151f49e00",
+   "sha256": "95617d841a176dffd285cbd82d618f964330eeb58d25e878366af4fc28f9f48f"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ambient_temperature",
+   "revision": 47,
+   "at": "2026-11-15T11:46:30Z",
+   "previous_sha256": "95617d841a176dffd285cbd82d618f964330eeb58d25e878366af4fc28f9f48f",
+   "sha256": "0f828518b2d857ffbcf54c6c540fc354c7f6f9d08c70d377d3f4eff826c4584d"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ambient_pressure",
+   "revision": 48,
+   "at": "2026-11-15T11:46:30Z",
+   "previous_sha256": "0f828518b2d857ffbcf54c6c540fc354c7f6f9d08c70d377d3f4eff826c4584d",
+   "sha256": "09f159691b20b0ae1a3b4cd31ef8743fb04d826a0affeceb205ec2941aec6676"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-duct_geometry",
+   "revision": 49,
+   "at": "2026-11-15T11:46:31Z",
+   "previous_sha256": "09f159691b20b0ae1a3b4cd31ef8743fb04d826a0affeceb205ec2941aec6676",
+   "sha256": "1be1892bb9fc22c65774587cc544aa6c26509b77149b561ada40bcb838149cac"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-sample_holder_substrate",
+   "revision": 50,
+   "at": "2026-11-15T11:46:32Z",
+   "previous_sha256": "1be1892bb9fc22c65774587cc544aa6c26509b77149b561ada40bcb838149cac",
+   "sha256": "160ac7b8a326088e8eb647d6df9ba36a4dae1b89bb34991c96f93ce9f54d1130"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-duct_geometry",
+   "revision": 51,
+   "at": "2026-11-15T11:46:36Z",
+   "previous_sha256": "160ac7b8a326088e8eb647d6df9ba36a4dae1b89bb34991c96f93ce9f54d1130",
+   "sha256": "9407d81f59c488ba1797939102d00f9a5590fabcf8ac8e8c4a5e7939f4bda9dc"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ambient_pressure",
+   "revision": 52,
+   "at": "2026-11-15T11:46:45Z",
+   "previous_sha256": "9407d81f59c488ba1797939102d00f9a5590fabcf8ac8e8c4a5e7939f4bda9dc",
+   "sha256": "df42bfa90515c541dcc3bb13a3349f34be411d23d8d53fc84cfc7accf62509f5"
+  },
+  {
+   "gap_id": "GAP-BASS2-M1-ambient_pressure",
+   "parameter": "ambient_pressure",
+   "action": "ASSUMPTION",
+   "author": "Junior",
+   "notes": "",
+   "cursor": "GAP-BASS2-M1-ambient_pressure",
+   "profile_sha256": "2f9672ba812d1934e06b2b4c653352639b1ef73faab2a0ac3f0649683c6492e8",
+   "profile_version": "1.0.0",
+   "profile_id": "fds-flame-spread-thin-solid",
+   "catalog_sha256": "0b15eb092c479946a53541ad440fa4c40b4c8e66ee551902ff2acf9cc99cd041",
+   "state": "ASSUMPTION_PROPOSED",
+   "proposal": {
+    "value": 101325.0,
+    "unit": "Pa",
+    "details": "",
+    "source": "Hipótese exploratória baseada na pressão atmosférica padrão: 1 atm = 101325 Pa. Não é um valor publicado para o ensaio M1.",
+    "location": "Não se aplica à hipótese. NASA/TM-20210011385, capítulo 5: pressão específica de M1 não identificada.",
+    "evidence": "O capítulo 5 do relatório BASS-II não informa uma pressão ambiente específica para M1. O valor de 101325 Pa foi adotado como condição de referência hipotética, não como medição da NASA.",
+    "author": "Junior",
+    "justification": "Adotar provisoriamente pressão ambiente uniforme de 101325 Pa (1 atm) para testar a configuração das condições iniciais de um cenário exploratório no FDS.",
+    "limitations": "Aplicável exclusivamente a testes exploratórios. A pressão real do ensaio M1 não foi confirmada. Esta hipótese não valida a reprodução experimental, não substitui dados NASA e não autoriza a execução do perfil PMMA ainda não aprovado."
+   },
+   "normalized": {
+    "kind": "SCALAR",
+    "value": 101325.0,
+    "unit": "Pa",
+    "dimension": "pressure",
+    "physical_validation": "BASIC_DOMAIN_ONLY"
+   },
+   "proposal_kind": "ASSUMPTION",
+   "assumption": {
+    "parameter": "ambient_pressure",
+    "value": 101325.0,
+    "unit": "Pa",
+    "source": "Hipótese exploratória baseada na pressão atmosférica padrão: 1 atm = 101325 Pa. Não é um valor publicado para o ensaio M1.",
+    "source_type": "EXTERNAL_LITERATURE",
+    "justification": "Adotar provisoriamente pressão ambiente uniforme de 101325 Pa (1 atm) para testar a configuração das condições iniciais de um cenário exploratório no FDS.",
+    "author": "Junior",
+    "limitations": "Aplicável exclusivamente a testes exploratórios. A pressão real do ensaio M1 não foi confirmada. Esta hipótese não valida a reprodução experimental, não substitui dados NASA e não autoriza a execução do perfil PMMA ainda não aprovado."
+   },
+   "review_state": "PENDING",
+   "case_id": "CASE-97b3d24a3ca5",
+   "case_version": 4,
+   "case_sha256": "693a599fa07e0f75d0647312f05d3f7ca725ac18e35a6782772a62b64fa613ad",
+   "revision": 53,
+   "at": "2026-11-15T11:48:26Z",
+   "previous_sha256": "df42bfa90515c541dcc3bb13a3349f34be411d23d8d53fc84cfc7accf62509f5",
+   "sha256": "4464dcc88898df8d8c1a9acf0814c07a24764769461a8a65b05fc63e56313722"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ambient_temperature",
+   "revision": 54,
+   "at": "2026-11-15T11:48:35Z",
+   "previous_sha256": "4464dcc88898df8d8c1a9acf0814c07a24764769461a8a65b05fc63e56313722",
+   "sha256": "157894603ad5d88856e66f2bfabc7a770b1bc83499cd93a878a84164cc50780a"
+  },
+  {
+   "gap_id": "GAP-BASS2-M1-ambient_temperature",
+   "parameter": "ambient_temperature",
+   "action": "ASSUMPTION",
+   "author": "Junior",
+   "notes": "",
+   "cursor": "GAP-BASS2-M1-ambient_temperature",
+   "profile_sha256": "2f9672ba812d1934e06b2b4c653352639b1ef73faab2a0ac3f0649683c6492e8",
+   "profile_version": "1.0.0",
+   "profile_id": "fds-flame-spread-thin-solid",
+   "catalog_sha256": "0b15eb092c479946a53541ad440fa4c40b4c8e66ee551902ff2acf9cc99cd041",
+   "state": "ASSUMPTION_PROPOSED",
+   "proposal": {
+    "value": 293.15,
+    "unit": "K",
+    "details": "",
+    "source": "Hipótese exploratória de teste: temperatura ambiente nominal de 20 °C (293,15 K). Não há fonte experimental confirmando esse valor para M1.",
+    "location": "Não se aplica ao valor hipotético. Referência de contexto: NASA/TM-20210011385, capítulo 5.",
+    "evidence": "Nas informações disponíveis do capítulo 5, não foi identificada uma temperatura inicial específica do gás ou da amostra para M1. O valor de 293,15 K não foi extraído do relatório.",
+    "author": "Junior",
+    "justification": "Adotar provisoriamente temperatura inicial uniforme de 293,15 K (20 °C) para o gás e a amostra, exclusivamente para testar o registro e a preparação de um cenário computacional exploratório.",
+    "limitations": "Hipótese sintética para testes internos. Não representa uma medição do M1, não comprova equilíbrio térmico inicial e não permite afirmar reprodução científica. Exige avaliação do modelo físico antes de qualquer execução vinculada ao M1."
+   },
+   "normalized": {
+    "kind": "SCALAR",
+    "value": 293.15,
+    "unit": "K",
+    "dimension": "temperature",
+    "physical_validation": "BASIC_DOMAIN_ONLY"
+   },
+   "proposal_kind": "ASSUMPTION",
+   "assumption": {
+    "parameter": "ambient_temperature",
+    "value": 293.15,
+    "unit": "K",
+    "source": "Hipótese exploratória de teste: temperatura ambiente nominal de 20 °C (293,15 K). Não há fonte experimental confirmando esse valor para M1.",
+    "source_type": "EXTERNAL_LITERATURE",
+    "justification": "Adotar provisoriamente temperatura inicial uniforme de 293,15 K (20 °C) para o gás e a amostra, exclusivamente para testar o registro e a preparação de um cenário computacional exploratório.",
+    "author": "Junior",
+    "limitations": "Hipótese sintética para testes internos. Não representa uma medição do M1, não comprova equilíbrio térmico inicial e não permite afirmar reprodução científica. Exige avaliação do modelo físico antes de qualquer execução vinculada ao M1."
+   },
+   "review_state": "PENDING",
+   "case_id": "CASE-97b3d24a3ca5",
+   "case_version": 5,
+   "case_sha256": "945b5b6cde2389f2c0dedbc906df9704b3449503b0aefd5b31847ed6c7676d83",
+   "revision": 55,
+   "at": "2026-11-15T11:50:05Z",
+   "previous_sha256": "157894603ad5d88856e66f2bfabc7a770b1bc83499cd93a878a84164cc50780a",
+   "sha256": "5b99c8669ff251b60a9de2d6dc822857241d48034ab981207f6ef9850a451cb1"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-inlet_flow_profile",
+   "revision": 56,
+   "at": "2026-11-15T11:50:08Z",
+   "previous_sha256": "5b99c8669ff251b60a9de2d6dc822857241d48034ab981207f6ef9850a451cb1",
+   "sha256": "e723447c29a852af64bc13957241ea3ab27cf8d28c699a31103f59ee245dcaeb"
+  },
+  {
+   "gap_id": "GAP-BASS2-M1-inlet_flow_profile",
+   "parameter": "inlet_flow_profile",
+   "action": "SOURCE",
+   "author": "Junior",
+   "notes": "",
+   "cursor": "GAP-BASS2-M1-inlet_flow_profile",
+   "profile_sha256": "2f9672ba812d1934e06b2b4c653352639b1ef73faab2a0ac3f0649683c6492e8",
+   "profile_version": "1.0.0",
+   "profile_id": "fds-flame-spread-thin-solid",
+   "catalog_sha256": "0b15eb092c479946a53541ad440fa4c40b4c8e66ee551902ff2acf9cc99cd041",
+   "state": "SOURCE_SUBMITTED",
+   "proposal": {
+    "value": null,
+    "unit": "n/a",
+    "details": "Ambiente de teste",
+    "source": "ambiente de teste",
+    "location": "pagina 45",
+    "evidence": "ambiente de teste",
+    "author": "Junior",
+    "justification": "",
+    "limitations": ""
+   },
+   "normalized": {
+    "kind": "DOCUMENT",
+    "details": "Ambiente de teste",
+    "physical_validation": "REQUIRES_SPECIALIST_SCHEMA"
+   },
+   "proposal_kind": "SOURCE",
+   "assumption": null,
+   "review_state": "PENDING",
+   "case_id": "CASE-97b3d24a3ca5",
+   "case_version": 6,
+   "case_sha256": "0f7bb59219fad034a0fe137b6340e3c97608ab09f839e558e97efa6e61895186",
+   "revision": 57,
+   "at": "2026-11-15T11:50:41Z",
+   "previous_sha256": "e723447c29a852af64bc13957241ea3ab27cf8d28c699a31103f59ee245dcaeb",
+   "sha256": "6ed07c9a369ab247c7e5e249b156470eedc89d7163e48e3c2736fca085d72cfb"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-anemometer_location",
+   "revision": 58,
+   "at": "2026-11-15T11:50:43Z",
+   "previous_sha256": "6ed07c9a369ab247c7e5e249b156470eedc89d7163e48e3c2736fca085d72cfb",
+   "sha256": "4948865d29f7095eab3125fdf84387d6e8936de448f696ceca7abee79d6b068c"
+  },
+  {
+   "gap_id": "GAP-BASS2-M1-anemometer_location",
+   "parameter": "anemometer_location",
+   "action": "SOURCE",
+   "author": "Junior",
+   "notes": "",
+   "cursor": "GAP-BASS2-M1-anemometer_location",
+   "profile_sha256": "2f9672ba812d1934e06b2b4c653352639b1ef73faab2a0ac3f0649683c6492e8",
+   "profile_version": "1.0.0",
+   "profile_id": "fds-flame-spread-thin-solid",
+   "catalog_sha256": "0b15eb092c479946a53541ad440fa4c40b4c8e66ee551902ff2acf9cc99cd041",
+   "state": "SOURCE_SUBMITTED",
+   "proposal": {
+    "value": null,
+    "unit": "n/a",
+    "details": "ambiente de testew",
+    "source": "ambiente de teste",
+    "location": "ambiente de teste",
+    "evidence": "ambiente de teste",
+    "author": "Junior",
+    "justification": "",
+    "limitations": ""
+   },
+   "normalized": {
+    "kind": "DOCUMENT",
+    "details": "ambiente de testew",
+    "physical_validation": "REQUIRES_SPECIALIST_SCHEMA"
+   },
+   "proposal_kind": "SOURCE",
+   "assumption": null,
+   "review_state": "PENDING",
+   "case_id": "CASE-97b3d24a3ca5",
+   "case_version": 7,
+   "case_sha256": "c820eace726f2cedb5a4fc06c10263d7173d39ed24d624f3027af1446a1efa74",
+   "revision": 59,
+   "at": "2026-11-15T11:51:12Z",
+   "previous_sha256": "4948865d29f7095eab3125fdf84387d6e8936de448f696ceca7abee79d6b068c",
+   "sha256": "649c1e25a0cfaa0322c1c8e711909da58fe6713d474a995823faf685d70d4099"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-ignition_procedure",
+   "revision": 60,
+   "at": "2026-11-15T11:51:13Z",
+   "previous_sha256": "649c1e25a0cfaa0322c1c8e711909da58fe6713d474a995823faf685d70d4099",
+   "sha256": "72a24083df6d01393ac207e1a0ab4a8435e7f074a9965d3be8ffac129ffb0a25"
+  },
+  {
+   "gap_id": "GAP-BASS2-M1-ignition_procedure",
+   "parameter": "ignition_procedure",
+   "action": "SOURCE",
+   "author": "junior",
+   "notes": "",
+   "cursor": "GAP-BASS2-M1-ignition_procedure",
+   "profile_sha256": "2f9672ba812d1934e06b2b4c653352639b1ef73faab2a0ac3f0649683c6492e8",
+   "profile_version": "1.0.0",
+   "profile_id": "fds-flame-spread-thin-solid",
+   "catalog_sha256": "0b15eb092c479946a53541ad440fa4c40b4c8e66ee551902ff2acf9cc99cd041",
+   "state": "SOURCE_SUBMITTED",
+   "proposal": {
+    "value": null,
+    "unit": "n/a",
+    "details": "ambiente de teste",
+    "source": "ambiente de teste",
+    "location": "ambiente de teste",
+    "evidence": "ambiente de teste",
+    "author": "junior",
+    "justification": "",
+    "limitations": ""
+   },
+   "normalized": {
+    "kind": "DOCUMENT",
+    "details": "ambiente de teste",
+    "physical_validation": "REQUIRES_SPECIALIST_SCHEMA"
+   },
+   "proposal_kind": "SOURCE",
+   "assumption": null,
+   "review_state": "PENDING",
+   "case_id": "CASE-97b3d24a3ca5",
+   "case_version": 8,
+   "case_sha256": "a39394720713082e7c121093174f8b50e5c0afd50cb2f4383c6ab5b4a373cf00",
+   "revision": 61,
+   "at": "2026-11-15T11:51:27Z",
+   "previous_sha256": "72a24083df6d01393ac207e1a0ab4a8435e7f074a9965d3be8ffac129ffb0a25",
+   "sha256": "cca0636a1340f79f0692569e01567305c731832ad3ec53561286384c9ec25fce"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-pmma_pyrolysis_properties",
+   "revision": 62,
+   "at": "2026-11-15T11:51:30Z",
+   "previous_sha256": "cca0636a1340f79f0692569e01567305c731832ad3ec53561286384c9ec25fce",
+   "sha256": "95cf527fd56238d779dbf97923aa00a629c1b7fd28d40ab3fbe52b779e7106c1"
+  },
+  {
+   "gap_id": "GAP-BASS2-M1-pmma_pyrolysis_properties",
+   "parameter": "pmma_pyrolysis_properties",
+   "action": "DRAFT",
+   "author": "Junior",
+   "notes": "",
+   "cursor": "GAP-BASS2-M1-pmma_pyrolysis_properties",
+   "profile_sha256": "2f9672ba812d1934e06b2b4c653352639b1ef73faab2a0ac3f0649683c6492e8",
+   "profile_version": "1.0.0",
+   "profile_id": "fds-flame-spread-thin-solid",
+   "catalog_sha256": "0b15eb092c479946a53541ad440fa4c40b4c8e66ee551902ff2acf9cc99cd041",
+   "state": "IN_PROGRESS",
+   "draft": {
+    "action": "SOURCE",
+    "value": "",
+    "unit": "n/a",
+    "source": "ambiente de teste",
+    "location": "ambiente de teste",
+    "evidence": "ambiente de teste",
+    "author": "Junior",
+    "justification": "",
+    "limitations": "",
+    "details": "ambiente de teste",
+    "notes": ""
+   },
+   "review_state": "DRAFT_UNVALIDATED",
+   "case_id": "CASE-97b3d24a3ca5",
+   "case_version": 9,
+   "case_sha256": "ca15dcfe73556827cb0a3cdce402d5e79fc9dfd5b7213752f4f38d0cd839e9da",
+   "revision": 63,
+   "at": "2026-11-15T11:51:43Z",
+   "previous_sha256": "95cf527fd56238d779dbf97923aa00a629c1b7fd28d40ab3fbe52b779e7106c1",
+   "sha256": "ab213dd3823c8cc350209935266f479ff7821e74400a37c65a378a8e24dafdbc"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-o2_time_profile",
+   "revision": 64,
+   "at": "2026-11-15T11:51:43Z",
+   "previous_sha256": "ab213dd3823c8cc350209935266f479ff7821e74400a37c65a378a8e24dafdbc",
+   "sha256": "dbac183fabf8a7be7964ee768c500f8eddd3f97cda3eb6c34e1b3873b3eb232b"
+  },
+  {
+   "gap_id": "GAP-BASS2-M1-o2_time_profile",
+   "parameter": "o2_time_profile",
+   "action": "DRAFT",
+   "author": "junior",
+   "notes": "",
+   "cursor": "GAP-BASS2-M1-o2_time_profile",
+   "profile_sha256": "2f9672ba812d1934e06b2b4c653352639b1ef73faab2a0ac3f0649683c6492e8",
+   "profile_version": "1.0.0",
+   "profile_id": "fds-flame-spread-thin-solid",
+   "catalog_sha256": "0b15eb092c479946a53541ad440fa4c40b4c8e66ee551902ff2acf9cc99cd041",
+   "state": "IN_PROGRESS",
+   "draft": {
+    "action": "SOURCE",
+    "value": "",
+    "unit": "n/a",
+    "source": "ambiente de teste",
+    "location": "ambiente de teste",
+    "evidence": "ambiente de teste",
+    "author": "junior",
+    "justification": "",
+    "limitations": "",
+    "details": "ambiente de teste",
+    "notes": ""
+   },
+   "review_state": "DRAFT_UNVALIDATED",
+   "case_id": "CASE-97b3d24a3ca5",
+   "case_version": 10,
+   "case_sha256": "3f8b264631ce9e0223b661dcdd77eb7042645ccb77f7988be4cf70a51ab0c4fb",
+   "revision": 65,
+   "at": "2026-11-15T11:51:54Z",
+   "previous_sha256": "dbac183fabf8a7be7964ee768c500f8eddd3f97cda3eb6c34e1b3873b3eb232b",
+   "sha256": "612961c6e5bbeaa251c36955d5f6aa076e3c2cdd6d4bf86e0f8a73f8278003fb"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-measurement_uncertainty",
+   "revision": 66,
+   "at": "2026-11-15T11:51:54Z",
+   "previous_sha256": "612961c6e5bbeaa251c36955d5f6aa076e3c2cdd6d4bf86e0f8a73f8278003fb",
+   "sha256": "6ecf1a72eeb206d4e5888eeb39d5e499a93a3c5555b09f57c78c3f4693030638"
+  },
+  {
+   "gap_id": "GAP-BASS2-M1-measurement_uncertainty",
+   "parameter": "measurement_uncertainty",
+   "action": "DRAFT",
+   "author": "junior",
+   "notes": "",
+   "cursor": "GAP-BASS2-M1-measurement_uncertainty",
+   "profile_sha256": "2f9672ba812d1934e06b2b4c653352639b1ef73faab2a0ac3f0649683c6492e8",
+   "profile_version": "1.0.0",
+   "profile_id": "fds-flame-spread-thin-solid",
+   "catalog_sha256": "0b15eb092c479946a53541ad440fa4c40b4c8e66ee551902ff2acf9cc99cd041",
+   "state": "IN_PROGRESS",
+   "draft": {
+    "action": "SOURCE",
+    "value": "",
+    "unit": "n/a",
+    "source": "ambiente de teste",
+    "location": "ambiente de teste",
+    "evidence": "ambiente de teste",
+    "author": "junior",
+    "justification": "",
+    "limitations": "",
+    "details": "ambiente de teste",
+    "notes": ""
+   },
+   "review_state": "DRAFT_UNVALIDATED",
+   "case_id": "CASE-97b3d24a3ca5",
+   "case_version": 11,
+   "case_sha256": "a7d08fa9829505fffa6a491af9955b3fac85fb77f4143e5235ef7c221da54082",
+   "revision": 67,
+   "at": "2026-11-15T11:52:05Z",
+   "previous_sha256": "6ecf1a72eeb206d4e5888eeb39d5e499a93a3c5555b09f57c78c3f4693030638",
+   "sha256": "8a8ee44f12ae5cfc68e972396fded33fe6a53fb3babe825024a1fc787952154a"
+  },
+  {
+   "action": "NAVIGATE",
+   "cursor": "GAP-BASS2-M1-flame_front_tracking_method",
+   "revision": 68,
+   "at": "2026-11-15T11:52:05Z",
+   "previous_sha256": "8a8ee44f12ae5cfc68e972396fded33fe6a53fb3babe825024a1fc787952154a",
+   "sha256": "1134cf3f49a789505b2149d1b4b5dc42b016844d7411a971bd6daae4161c5a54"
+  },
+  {
+   "gap_id": "GAP-BASS2-M1-flame_front_tracking_method",
+   "parameter": "flame_front_tracking_method",
+   "action": "DRAFT",
+   "author": "junior",
+   "notes": "",
+   "cursor": "GAP-BASS2-M1-flame_front_tracking_method",
+   "profile_sha256": "2f9672ba812d1934e06b2b4c653352639b1ef73faab2a0ac3f0649683c6492e8",
+   "profile_version": "1.0.0",
+   "profile_id": "fds-flame-spread-thin-solid",
+   "catalog_sha256": "0b15eb092c479946a53541ad440fa4c40b4c8e66ee551902ff2acf9cc99cd041",
+   "state": "IN_PROGRESS",
+   "draft": {
+    "action": "SOURCE",
+    "value": "",
+    "unit": "n/a",
+    "source": "ambiente de teste",
+    "location": "ambiente de teste",
+    "evidence": "ambiente de teste",
+    "author": "junior",
+    "justification": "",
+    "limitations": "",
+    "details": "ambiente de teste",
+    "notes": ""
+   },
+   "review_state": "DRAFT_UNVALIDATED",
+   "case_id": "CASE-97b3d24a3ca5",
+   "case_version": 12,
+   "case_sha256": "3c37c00588aa9206038a5c4c005bf2c62603078f5918cee8314bea2ef11cf51a",
+   "revision": 69,
+   "at": "2026-11-15T11:52:15Z",
+   "previous_sha256": "1134cf3f49a789505b2149d1b4b5dc42b016844d7411a971bd6daae4161c5a54",
+   "sha256": "830845b82cca5e53952e066eb66706370741d909e6c110dbb1658701c01cd469"
+  }
+ ]
+}

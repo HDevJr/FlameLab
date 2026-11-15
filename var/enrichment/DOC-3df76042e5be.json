@@ -1,0 +1,466 @@
+{
+ "document_id": "DOC-3df76042e5be",
+ "generated_at": "2026-11-15T03:54:46Z",
+ "mode": "ONLINE",
+ "document": {
+  "document_id": "DOC-3df76042e5be",
+  "title": "Dynamics of Liquids in Edges and Corners (DYLCO) IML-2 Experiment for the BDPU",
+  "authors": [],
+  "ntrs_id": null,
+  "report_numbers": [],
+  "doi": null,
+  "year": 1998
+ },
+ "matches": [
+  {
+   "source": "NTRS",
+   "state": "MATCH_CANDIDATE",
+   "match_type": "TITLE_ONLY",
+   "source_record_id": "19980232607",
+   "source_url": "https://ntrs.nasa.gov/citations/19980232607",
+   "title": "Dynamics of Liquids in Edges and Corners (DYLCO): IML-2 Experiment for the BDPU",
+   "score": 1.0,
+   "reasons_pt": [
+    "Busca por título no NTRS: semelhança 1.0 com o registro 19980232607.",
+    "Sem identificador forte no artigo: a correspondência exige revisão humana."
+   ],
+   "rejected_candidates": [
+    {
+     "id": "19950004804",
+     "title": "Latex samples for RAMSES electrophoresis experiment on IML 2",
+     "score": 0.231
+    },
+    {
+     "id": "19920014378",
+     "title": "Phase partitioning experiment (8-IML-1)",
+     "score": 0.154
+    },
+    {
+     "id": "19970035095",
+     "title": "Second International Microgravity Laboratory (IML-2)",
+     "score": 0.154
+    },
+    {
+     "id": "19920014385",
+     "title": "Mental workload and performance experiment (15-IML-1)",
+     "score": 0.143
+    }
+   ],
+   "metadata": {
+    "sti_type": "TECHNICAL_MEMORANDUM",
+    "authors": [
+     "Langbein, D.",
+     "Weislogel, M."
+    ],
+    "center": "Legacy CDMS",
+    "publication_date": "1998-08-01",
+    "report_numbers": [
+     "NAS 1.15:207916",
+     "E-11190",
+     "NASA/TM-1998-207916",
+     "Report Number: NAS 1.15:207916",
+     "Report Number: E-11190",
+     "Report Number: NASA/TM-1998-207916"
+    ],
+    "keywords": [],
+    "distribution": "PUBLIC",
+    "downloads": [
+     {
+      "name": "19980232607.pdf",
+      "pdf": "/api/citations/19980232607/downloads/19980232607.pdf",
+      "fulltext": "/api/citations/19980232607/downloads/19980232607.txt"
+     }
+    ],
+    "related": []
+   },
+   "curation_decision": "PENDENTE",
+   "note_pt": null
+  },
+  {
+   "source": "PSI",
+   "state": "NOT_FOUND",
+   "match_type": "NONE",
+   "source_record_id": null,
+   "source_url": null,
+   "title": null,
+   "score": null,
+   "reasons_pt": [
+    "Nenhum dataset do NASA PSI no DataCite corresponde ao título."
+   ],
+   "rejected_candidates": [],
+   "metadata": {},
+   "curation_decision": "PENDENTE",
+   "note_pt": "O NASA PSI não publica API documentada. A descoberta usa o registro de DOI no DataCite; os arquivos de dados da investigação exigem consulta manual ao portal."
+  },
+  {
+   "source": "TECHPORT",
+   "state": "NOT_FOUND",
+   "match_type": "NONE",
+   "source_record_id": null,
+   "source_url": null,
+   "title": null,
+   "score": null,
+   "reasons_pt": [
+    "Nenhum projeto do TechPort tem título correspondente ao do artigo. Projetos de tema parecido não são tratados como equivalentes."
+   ],
+   "rejected_candidates": [
+    {
+     "id": 156820,
+     "title": "Appendix D: Impacts of Gravity and Surfactants on Drainage Flow and Rheology of Wet Foams - Z.Li",
+     "score": 0.0
+    },
+    {
+     "id": 32933,
+     "title": "Fundamental Research into Hyperelastic Materials for Flight Applications Element, Year 1",
+     "score": 0.0
+    },
+    {
+     "id": 4297,
+     "title": "Multi-Functional Stimuli-Responsive Materials",
+     "score": 0.0
+    },
+    {
+     "id": 93965,
+     "title": "Maximizing Function through Intelligent Robot Actuator Control",
+     "score": 0.0
+    },
+    {
+     "id": 95732,
+     "title": "Soft Robotic Manipulators with Enhanced Perception using Multimodal Sensory Skins",
+     "score": 0.0
+    }
+   ],
+   "metadata": {},
+   "curation_decision": "PENDENTE",
+   "note_pt": null
+  }
+ ],
+ "records": [
+  {
+   "field": "title",
+   "label_pt": "Título",
+   "scope": "DOCUMENT_METADATA",
+   "experiment_id": null,
+   "original_value": "Dynamics of Liquids in Edges and Corners (DYLCO) IML-2 Experiment for the BDPU",
+   "original_source": "artigo",
+   "complementary_value": "Dynamics of Liquids in Edges and Corners (DYLCO): IML-2 Experiment for the BDPU",
+   "complementary_source": "NTRS",
+   "complementary_source_id": "19980232607",
+   "match_type": "IDENTIFIER",
+   "state": "MATCH_CONFIRMED",
+   "review_status": "NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "report_numbers",
+   "label_pt": "Números de relatório",
+   "scope": "DOCUMENT_METADATA",
+   "experiment_id": null,
+   "original_value": null,
+   "original_source": null,
+   "complementary_value": [
+    "NAS 1.15:207916",
+    "E-11190",
+    "NASA/TM-1998-207916",
+    "Report Number: NAS 1.15:207916",
+    "Report Number: E-11190",
+    "Report Number: NASA/TM-1998-207916"
+   ],
+   "complementary_source": "NTRS",
+   "complementary_source_id": "19980232607",
+   "match_type": "NONE",
+   "state": "ADDITIONAL_DATA_FOUND",
+   "review_status": "NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "publication_date",
+   "label_pt": "Data de publicação",
+   "scope": "DOCUMENT_METADATA",
+   "experiment_id": null,
+   "original_value": null,
+   "original_source": null,
+   "complementary_value": "1998-08-01",
+   "complementary_source": "NTRS",
+   "complementary_source_id": "19980232607",
+   "match_type": "NONE",
+   "state": "ADDITIONAL_DATA_FOUND",
+   "review_status": "NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "subject_categories",
+   "label_pt": "Categorias de assunto",
+   "scope": "DOCUMENT_METADATA",
+   "experiment_id": null,
+   "original_value": null,
+   "original_source": null,
+   "complementary_value": [
+    "Fluid Mechanics And Heat Transfer"
+   ],
+   "complementary_source": "NTRS",
+   "complementary_source_id": "19980232607",
+   "match_type": "NONE",
+   "state": "ADDITIONAL_DATA_FOUND",
+   "review_status": "NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "fulltext",
+   "label_pt": "Texto completo no NTRS",
+   "scope": "DOCUMENT_METADATA",
+   "experiment_id": null,
+   "original_value": null,
+   "original_source": null,
+   "complementary_value": [
+    "/api/citations/19980232607/downloads/19980232607.pdf"
+   ],
+   "complementary_source": "NTRS",
+   "complementary_source_id": "19980232607",
+   "match_type": "NONE",
+   "state": "ADDITIONAL_DATA_FOUND",
+   "review_status": "NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "initial_temperature",
+   "label_pt": "temperatura inicial",
+   "scope": "EXPERIMENT_PARAMETER",
+   "experiment_id": "DOC-3df76042e5be-E1",
+   "original_value": "20.0 °C",
+   "original_source": "artigo",
+   "complementary_value": null,
+   "complementary_source": null,
+   "complementary_source_id": null,
+   "match_type": "NONE",
+   "state": "NOT_FOUND",
+   "review_status": "EXTRAIDO_NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "peak_temperature",
+   "label_pt": "temperatura de pico",
+   "scope": "EXPERIMENT_PARAMETER",
+   "experiment_id": "DOC-3df76042e5be-E1",
+   "original_value": "80.0 °C",
+   "original_source": "artigo",
+   "complementary_value": null,
+   "complementary_source": null,
+   "complementary_source_id": null,
+   "match_type": "NONE",
+   "state": "NOT_FOUND",
+   "review_status": "EXTRAIDO_NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "maximum_system_temperature",
+   "label_pt": "temperatura do sistema",
+   "scope": "EXPERIMENT_PARAMETER",
+   "experiment_id": "DOC-3df76042e5be-E1",
+   "original_value": "95.0 °C",
+   "original_source": "artigo",
+   "complementary_value": null,
+   "complementary_source": null,
+   "complementary_source_id": null,
+   "match_type": "NONE",
+   "state": "NOT_FOUND",
+   "review_status": "EXTRAIDO_NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "temperature_increment",
+   "label_pt": "incrementos de temperatura",
+   "scope": "EXPERIMENT_PARAMETER",
+   "experiment_id": "DOC-3df76042e5be-E1",
+   "original_value": "20.0 °C",
+   "original_source": "artigo",
+   "complementary_value": null,
+   "complementary_source": null,
+   "complementary_source_id": null,
+   "match_type": "NONE",
+   "state": "NOT_FOUND",
+   "review_status": "EXTRAIDO_NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "uncoated_cells_contact_angle",
+   "label_pt": "ângulo de contato",
+   "scope": "EXPERIMENT_PARAMETER",
+   "experiment_id": "DOC-3df76042e5be-E1",
+   "original_value": "19.0 °",
+   "original_source": "artigo",
+   "complementary_value": null,
+   "complementary_source": null,
+   "complementary_source_id": null,
+   "match_type": "NONE",
+   "state": "NOT_FOUND",
+   "review_status": "EXTRAIDO_NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "cell_half_width",
+   "label_pt": "meia largura",
+   "scope": "EXPERIMENT_PARAMETER",
+   "experiment_id": "DOC-3df76042e5be-E1",
+   "original_value": "5.09 mm",
+   "original_source": "artigo",
+   "complementary_value": null,
+   "complementary_source": null,
+   "complementary_source_id": null,
+   "match_type": "NONE",
+   "state": "NOT_FOUND",
+   "review_status": "EXTRAIDO_NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "refractive_index",
+   "label_pt": "índice de refração",
+   "scope": "EXPERIMENT_PARAMETER",
+   "experiment_id": "DOC-3df76042e5be-E1",
+   "original_value": 1.4587,
+   "original_source": "artigo",
+   "complementary_value": null,
+   "complementary_source": null,
+   "complementary_source_id": null,
+   "match_type": "NONE",
+   "state": "NOT_FOUND",
+   "review_status": "EXTRAIDO_NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "contact_angle_uncertainty",
+   "label_pt": "incerteza da medição do ângulo de contato",
+   "scope": "EXPERIMENT_PARAMETER",
+   "experiment_id": "DOC-3df76042e5be-E1",
+   "original_value": "+2* °",
+   "original_source": "artigo",
+   "complementary_value": null,
+   "complementary_source": null,
+   "complementary_source_id": null,
+   "match_type": "NONE",
+   "state": "NOT_FOUND",
+   "review_status": "EXTRAIDO_NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "contact_angle_repeatability",
+   "label_pt": "repetibilidade do ângulo de contato",
+   "scope": "EXPERIMENT_PARAMETER",
+   "experiment_id": "DOC-3df76042e5be-E1",
+   "original_value": "3.0 °",
+   "original_source": "artigo",
+   "complementary_value": null,
+   "complementary_source": null,
+   "complementary_source_id": null,
+   "match_type": "NONE",
+   "state": "NOT_FOUND",
+   "review_status": "EXTRAIDO_NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "equilibrium_contact_angle",
+   "label_pt": "ângulo de contato de equilíbrio",
+   "scope": "EXPERIMENT_PARAMETER",
+   "experiment_id": "DOC-3df76042e5be-E1",
+   "original_value": "70.0 °",
+   "original_source": "artigo",
+   "complementary_value": null,
+   "complementary_source": null,
+   "complementary_source_id": null,
+   "match_type": "NONE",
+   "state": "NOT_FOUND",
+   "review_status": "EXTRAIDO_NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  },
+  {
+   "field": "temperature",
+   "label_pt": "temperatura",
+   "scope": "EXPERIMENT_PARAMETER",
+   "experiment_id": "DOC-3df76042e5be-E1",
+   "original_value": "60.0 °C",
+   "original_source": "artigo",
+   "complementary_value": null,
+   "complementary_source": null,
+   "complementary_source_id": null,
+   "match_type": "NONE",
+   "state": "NOT_FOUND",
+   "review_status": "EXTRAIDO_NAO_REVISADO",
+   "divergence_pt": null,
+   "curation_decision": "PENDENTE"
+  }
+ ],
+ "related_documents": [],
+ "operations": [
+  {
+   "source": "NTRS",
+   "method": "GET",
+   "url": "https://ntrs.nasa.gov/api/citations/search?page.size=10&title=Dynamics+of+Liquids+in+Edges+and+Corners+%28DYLCO%29+IML-2+Experiment+for+the+BDPU",
+   "mode": "ONLINE",
+   "http_status": 200,
+   "ok": true,
+   "error": null,
+   "response_sha256": "6dc28103eb78a4fb8fe8fc36e8eb76904894617584f369330f48931c8f0f64d3",
+   "response_bytes": 53960,
+   "at": "2026-11-15T03:54:32Z",
+   "elapsed_ms": 1703
+  },
+  {
+   "source": "NTRS",
+   "method": "GET",
+   "url": "https://ntrs.nasa.gov/api/citations/search?page.size=6&q=dynamics+liquids+edges+corners",
+   "mode": "ONLINE",
+   "http_status": 200,
+   "ok": true,
+   "error": null,
+   "response_sha256": "07bc5c8d19b1fb61fc070230de0886e59ff758a9ea9ac9d0c95c3aac686aba59",
+   "response_bytes": 7141,
+   "at": "2026-11-15T03:54:44Z",
+   "elapsed_ms": 1562
+  },
+  {
+   "source": "DATACITE",
+   "method": "GET",
+   "url": "https://api.datacite.org/dois?query=publisher%3A%22NASA+PSI%22+AND+titles.title%3A%28dynamics+AND+liquids+AND+edges%29&page%5Bsize%5D=10",
+   "mode": "ONLINE",
+   "http_status": 200,
+   "ok": true,
+   "error": null,
+   "response_sha256": "9a3789c968a44b4f56d50416e0f6739acc58fd749e918e1b0882b8f67290378d",
+   "response_bytes": 215,
+   "at": "2026-11-15T03:54:45Z",
+   "elapsed_ms": 1000
+  },
+  {
+   "source": "TECHPORT",
+   "method": "GET",
+   "url": "https://techport.nasa.gov/api/projects/search?query=dynamics+liquids+edges",
+   "mode": "ONLINE",
+   "http_status": 200,
+   "ok": true,
+   "error": null,
+   "response_sha256": "e8ee274c7799769bc24b90b5fd44290b1efde9efce16ff07bc3deab3b7f52e30",
+   "response_bytes": 67283,
+   "at": "2026-11-15T03:54:46Z",
+   "elapsed_ms": 1578
+  }
+ ],
+ "warnings_pt": [
+  "Nenhuma fonte consultada expõe valores por ensaio em API documentada; os parâmetros do artigo não puderam ser confrontados com medições de outra fonte."
+ ],
+ "promoted_records": 0
+}

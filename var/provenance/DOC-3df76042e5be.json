@@ -1,0 +1,16 @@
+{
+ "checked_at": "2026-11-15T03:54:32Z",
+ "ntrs_id": "19980232607",
+ "ntrs_url": "https://ntrs.nasa.gov/citations/19980232607",
+ "local_sha256": "3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101",
+ "state": "VERIFIED",
+ "label_pt": "Publicação NASA verificada (arquivo idêntico ao do NTRS)",
+ "reasons_pt": [
+  "Busca por título no NTRS: semelhança 1.0 com o registro 19980232607.",
+  "Sem identificador forte no artigo: a correspondência exige revisão humana.",
+  "SHA-256 do arquivo distribuído pelo NTRS (1395530 bytes): 3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101. É idêntico ao arquivo importado."
+ ],
+ "ntrs_file": "/api/citations/19980232607/downloads/19980232607.pdf",
+ "ntrs_sha256": "3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101",
+ "mode": "ONLINE"
+}

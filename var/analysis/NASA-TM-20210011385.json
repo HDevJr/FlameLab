@@ -1,0 +1,250 @@
+{
+ "generated_at": "2026-11-15T01:03:55Z",
+ "document": {
+  "document_id": "NASA-TM-20210011385",
+  "title": "Burning and Suppression of Solids—II (BASS—II) Summary Report",
+  "origin": "CURATED",
+  "import_id": "IMP-5ffa911fd9b6",
+  "sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+  "pages": 144,
+  "url": "https://ntrs.nasa.gov/citations/20210011385"
+ },
+ "provenance": {
+  "checked_at": "2026-11-15T01:03:43Z",
+  "ntrs_id": "20210011385",
+  "ntrs_url": "https://ntrs.nasa.gov/citations/20210011385",
+  "local_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+  "state": "VERIFIED",
+  "label_pt": "Publicação NASA verificada (arquivo idêntico ao do NTRS)",
+  "reasons_pt": [
+   "O ID NTRS 20210011385 consta do artigo e existe no NTRS.",
+   "O título do registro é coerente com o do artigo (semelhança 1.0).",
+   "SHA-256 do arquivo distribuído pelo NTRS (48972416 bytes): 5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770. É idêntico ao arquivo importado."
+  ],
+  "ntrs_file": "/api/citations/20210011385/downloads/TM-20210011385.pdf",
+  "ntrs_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+  "mode": "ONLINE"
+ },
+ "coverage": {
+  "mode": "CURATED",
+  "total_pages": 144,
+  "pages_processed": [],
+  "processed_ranges": "",
+  "pages_not_processed": [],
+  "not_processed_ranges": "",
+  "pages_without_text": [],
+  "without_text_ranges": "",
+  "reasons_pt": [],
+  "batches": [],
+  "summary_pt": "Os valores vêm do dataset curado pela equipe (leitura assistida de trechos específicos do relatório, com página e tabela de cada valor). O PDF completo não foi lido automaticamente por IA."
+ },
+ "experiments": [
+  {
+   "experiment_id": "BASS2-M1",
+   "label": "M1",
+   "phenomena": [
+    "flame_spread",
+    "opposed_flow"
+   ],
+   "origin": "CURATED",
+   "parameters": 9,
+   "reviewed": 0,
+   "pending": 9,
+   "gaps": 12,
+   "fds": {
+    "status": "MISSING_PARAMETERS",
+    "label_pt": "faltam parâmetros para o FDS",
+    "reasons_pt": [
+     "Faltam 12 informações necessárias ao modelo (lacunas registradas).",
+     "5 condições existem na fonte, mas ainda não foram conferidas por humano.",
+     "O gerador do modelo de reprodução ainda não foi implementado e aprovado."
+    ],
+    "can_simulate": false
+   }
+  }
+ ],
+ "totals": {
+  "parameters": 9,
+  "reviewed": 0,
+  "pending": 9,
+  "gaps": 12,
+  "experiments": 1
+ },
+ "sources": [
+  {
+   "source": "NTRS",
+   "state": "MATCH_CONFIRMED",
+   "state_pt": "confirmada",
+   "record_id": "20210011385",
+   "url": "https://ntrs.nasa.gov/citations/20210011385",
+   "title": "Burning and Suppression of Solids–II  (BASS-II) Summary Report"
+  },
+  {
+   "source": "PSI",
+   "state": "MATCH_CANDIDATE",
+   "state_pt": "candidata (precisa de revisão humana)",
+   "record_id": "PSI-25",
+   "url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-25",
+   "title": "Burning and Suppression of Solids - II"
+  },
+  {
+   "source": "TECHPORT",
+   "state": "NOT_FOUND",
+   "state_pt": "não encontrada",
+   "record_id": null,
+   "url": null,
+   "title": null
+  }
+ ],
+ "divergences": [
+  {
+   "field": "people",
+   "label_pt": "Autores × criadores do dataset",
+   "divergence_pt": "grafias diferentes: bhattacharjee × bhattachjee; as listas de pessoas não coincidem",
+   "complementary_source": "PSI (DataCite)"
+  }
+ ],
+ "enrichment": {
+  "available": true,
+  "mode": "ONLINE",
+  "generated_at": "2026-11-15T01:03:55Z",
+  "warnings_pt": [
+   "Nenhuma fonte consultada expõe valores por ensaio em API documentada; os parâmetros do artigo não puderam ser confrontados com medições de outra fonte."
+  ],
+  "related_count": 5
+ },
+ "conclusions_pt": [
+  "Origem NASA verificada: o arquivo é idêntico ao publicado no NTRS (mesmo SHA-256).",
+  "Os valores vêm do dataset curado pela equipe (leitura assistida de trechos específicos do relatório, com página e tabela de cada valor). O PDF completo não foi lido automaticamente por IA.",
+  "Foram identificados 1 experimento(s) com 9 parâmetro(s) e 12 lacuna(s).",
+  "0 parâmetro(s) foram conferidos por uma pessoa; 9 aguardam revisão.",
+  "Fontes NASA: NTRS confirmada (20210011385); PSI candidata (precisa de revisão humana) (PSI-25); TECHPORT não encontrada.",
+  "1 divergência(s) de metadados entre fontes (não são divergências de medição).",
+  "Nenhum experimento está pronto para simulação no FDS; os motivos estão em cada experimento."
+ ],
+ "not_validated_pt": [
+  "Procedência verificada não significa números conferidos: a procedência diz que o arquivo é o publicado; a revisão diz que uma pessoa conferiu cada valor na fonte.",
+  "Fontes NASA relacionadas contextualizam o trabalho; elas não validam os números do artigo.",
+  "Experimentos propostos pela IA são hipóteses de leitura até a revisão humana."
+ ],
+ "metrics": {
+  "started_at": "2026-11-15T01:03:43Z",
+  "total_ms": null
+ },
+ "steps": [
+  {
+   "key": "RECEIVE",
+   "label_pt": "Arquivo recebido",
+   "state": "DONE",
+   "summary_pt": "Arquivo recebido: NASA-TM-20210011385.pdf (49.0 MB).",
+   "technical": [
+    "nome: NASA-TM-20210011385.pdf",
+    "tamanho: 48972416 bytes",
+    "limite de upload: 125829120 bytes"
+   ],
+   "limitation_pt": null,
+   "started_at": "2026-11-15T01:03:43Z",
+   "finished_at": "2026-11-15T01:03:43Z",
+   "duration_ms": 62
+  },
+  {
+   "key": "IDENTIFY",
+   "label_pt": "Identificando o documento",
+   "state": "DONE",
+   "summary_pt": "Título: Burning and Suppression of Solids—II (BASS—II) Summary Report. Identificadores no texto: NASA/TM-20210011385, 20210011385.",
+   "technical": [
+    "SHA-256: 5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+    "144 páginas",
+    "camada de texto: sim",
+    "identificadores: NASA/TM-20210011385, 20210011385",
+    "O SHA-256 é a impressão digital do arquivo: dois arquivos iguais têm o mesmo valor."
+   ],
+   "limitation_pt": null,
+   "started_at": "2026-11-15T01:03:43Z",
+   "finished_at": "2026-11-15T01:03:43Z",
+   "duration_ms": 171
+  },
+  {
+   "key": "ORIGIN",
+   "label_pt": "Verificando a origem NASA",
+   "state": "DONE",
+   "summary_pt": "Publicação NASA verificada (arquivo idêntico ao do NTRS)",
+   "technical": [
+    "O ID NTRS 20210011385 consta do artigo e existe no NTRS.",
+    "O título do registro é coerente com o do artigo (semelhança 1.0).",
+    "SHA-256 do arquivo distribuído pelo NTRS (48972416 bytes): 5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770. É idêntico ao arquivo importado."
+   ],
+   "limitation_pt": null,
+   "started_at": "2026-11-15T01:03:43Z",
+   "finished_at": "2026-11-15T01:03:51Z",
+   "duration_ms": 8468
+  },
+  {
+   "key": "READ",
+   "label_pt": "Lendo o PDF",
+   "state": "DONE",
+   "summary_pt": "144 páginas lidas; 137 com texto. 7 sem texto (figuras ou imagens).",
+   "technical": [
+    "144 páginas, 137 com texto, 343563 caracteres"
+   ],
+   "limitation_pt": "7 página(s) sem texto não podem ser lidas (sem OCR).",
+   "started_at": "2026-11-15T01:03:51Z",
+   "finished_at": "2026-11-15T01:03:52Z",
+   "duration_ms": 438
+  },
+  {
+   "key": "EXTRACT",
+   "label_pt": "Extraindo experimentos e parâmetros",
+   "state": "SKIPPED",
+   "summary_pt": "Este documento já está no dataset curado; os registros da equipe são usados.",
+   "technical": [
+    "Nenhuma chamada à IA foi feita para este documento."
+   ],
+   "limitation_pt": null,
+   "started_at": "2026-11-15T01:03:52Z",
+   "finished_at": "2026-11-15T01:03:52Z",
+   "duration_ms": 0
+  },
+  {
+   "key": "SOURCES",
+   "label_pt": "Pesquisando fontes complementares NASA",
+   "state": "DONE",
+   "summary_pt": "PSI: MATCH_CANDIDATE (PSI-25); TechPort: NOT_FOUND; 5 documento(s) possivelmente relacionado(s).",
+   "technical": [
+    "DataCite: dataset do publicador \"NASA PSI\" com título semelhante ao do artigo (semelhança 1.0).",
+    "Pessoas em comum entre autores e criadores: ferkul, fernandezpello, miller, tien.",
+    "Os dois registros não citam um ao outro por identificador: é candidato até revisão humana.",
+    "Nenhum projeto do TechPort tem título correspondente ao do artigo. Projetos de tema parecido não são tratados como equivalentes.",
+    "4 chamada(s) de API"
+   ],
+   "limitation_pt": null,
+   "started_at": "2026-11-15T01:03:52Z",
+   "finished_at": "2026-11-15T01:03:55Z",
+   "duration_ms": 3343
+  },
+  {
+   "key": "COMPARE",
+   "label_pt": "Comparando informações",
+   "state": "DONE",
+   "summary_pt": "11 campo(s) de metadados comparado(s); 1 divergência(s). Os valores do artigo não foram alterados nem promovidos.",
+   "technical": [
+    "Autores × criadores do dataset: grafias diferentes: bhattacharjee × bhattachjee; as listas de pessoas não coincidem"
+   ],
+   "limitation_pt": null,
+   "started_at": "2026-11-15T01:03:55Z",
+   "finished_at": "2026-11-15T01:03:55Z",
+   "duration_ms": 31
+  },
+  {
+   "key": "REPORT",
+   "label_pt": "Preparando o relatório de análise",
+   "state": "RUNNING",
+   "summary_pt": "Consolidando o resumo da análise…",
+   "technical": [],
+   "limitation_pt": null,
+   "started_at": "2026-11-15T01:03:55Z",
+   "finished_at": null,
+   "duration_ms": null
+  }
+ ]
+}
