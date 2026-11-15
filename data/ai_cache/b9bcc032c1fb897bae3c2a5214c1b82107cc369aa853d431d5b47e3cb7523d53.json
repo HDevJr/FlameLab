@@ -1,0 +1,56 @@
+{
+  "key": "b9bcc032c1fb897bae3c2a5214c1b82107cc369aa853d431d5b47e3cb7523d53",
+  "question": "Esse material seria seguro para uma nave espacial?",
+  "scope": {
+    "investigation_id": "PSI-25",
+    "test_uids": [
+      "BASS2-M1"
+    ]
+  },
+  "dataset_version": "sha256:165bbebf4c8e12a7e33e8629e30327a0cf8bde502e8f23f02e0af26d630ecaeb",
+  "prompt_version": "v2",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "created_at": "2026-11-15T17:10:52.417084Z",
+  "output": {
+    "claims": [
+      {
+        "type": "LIMITACAO",
+        "text_pt": "As evidências do ensaio BASS2-M1 não avaliam a segurança geral do material para uso em naves espaciais.",
+        "evidence_ids": [
+          "REC-BASS2-M1.material"
+        ],
+        "numbers": []
+      },
+      {
+        "type": "OBSERVACAO",
+        "text_pt": "No ensaio BASS2-M1, o material utilizado foi PMMA com espessura de 1 mm.",
+        "evidence_ids": [
+          "REC-BASS2-M1.material",
+          "REC-BASS2-M1.thickness"
+        ],
+        "numbers": [
+          {
+            "value": 1.0,
+            "unit": "mm"
+          }
+        ]
+      },
+      {
+        "type": "OBSERVACAO",
+        "text_pt": "A velocidade de propagação da chama registrada no ensaio BASS2-M1 foi de 0,071 mm/s.",
+        "evidence_ids": [
+          "REC-BASS2-M1.flame_spread_rate"
+        ],
+        "numbers": [
+          {
+            "value": 0.071,
+            "unit": "mm/s"
+          }
+        ]
+      }
+    ],
+    "abstain": true,
+    "abstain_reason": "As evidências disponíveis fornecem apenas dados parciais de combustão para o ensaio M1 e não contêm avaliações de segurança para aplicação em naves espaciais."
+  }
+}

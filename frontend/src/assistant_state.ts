@@ -38,10 +38,18 @@ export const MODE_TEXT: Record<AIAnswer["mode"], { tone: Tone; text: string; tit
   UNAVAILABLE: { tone: "muted", text: "Modo: IA indisponível", title: "A IA não foi utilizada nesta resposta." },
 };
 
-/** Perguntas de partida: todas sobre o ensaio M1, para demonstrar suporte, ausência e abstenção. */
+/** Perguntas de partida (todas sobre o M1). Cada uma tem resposta real gravada no cache, para funcionar na demonstração pública. */
 export const SUGGESTIONS = [
   { q: "Qual era a pressão no ensaio M1?", hint: "dado ausente na fonte" },
   { q: "Qual foi a velocidade de propagação da chama no ensaio M1?", hint: "resultado observado" },
   { q: "Qual seria a propagação da chama na atmosfera de Marte?", hint: "extrapolação — deve ser bloqueada" },
   { q: "Qual foi a concentração inicial de oxigênio no M1?", hint: "condição de entrada" },
+  { q: "Qual era a largura da amostra no ensaio M1?", hint: "valor com ressalva na fonte" },
+  { q: "Qual era a velocidade do ar no ensaio M1?", hint: "condição de entrada" },
+  { q: "Quais valores do M1 são condições de entrada e quais são resultados observados?", hint: "entrada × resultado" },
+  { q: "O que a fonte não informa sobre o ensaio M1?", hint: "lacunas" },
+  { q: "Qual era a geometria do duto no ensaio M1?", hint: "dado ausente na fonte" },
+  { q: "Qual seria a velocidade de propagação da chama com 30% de oxigênio?", hint: "extrapolação numérica" },
+  { q: "Como a chama se comportaria na Estação Espacial Internacional com outra pressão?", hint: "extrapolação" },
+  { q: "Esse material seria seguro para uma nave espacial?", hint: "fora do escopo" },
 ];

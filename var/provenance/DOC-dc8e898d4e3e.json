@@ -1,0 +1,17 @@
+{
+ "checked_at": "2026-11-15T16:10:07Z",
+ "ntrs_id": "19930021842",
+ "ntrs_url": "https://ntrs.nasa.gov/citations/19930021842",
+ "local_sha256": "dc8e898d4e3ef7ebb0474479b53408fe5e2e7c6a9d0f556628fd33db2c1a1c93",
+ "state": "VERIFIED",
+ "label_pt": "Publicação NASA verificada (arquivo idêntico ao do NTRS)",
+ "reasons_pt": [
+  "O número de relatório NASA/CR-191109 consta do artigo e identifica um único registro do NTRS (19930021842).",
+  "Semelhança do título lido no artigo com o do registro: 0.714 (a leitura de capas escaneadas pode ter erros).",
+  "A procedência só é validada se o arquivo for idêntico ao distribuído pelo NTRS.",
+  "SHA-256 do arquivo distribuído pelo NTRS (14093768 bytes): dc8e898d4e3ef7ebb0474479b53408fe5e2e7c6a9d0f556628fd33db2c1a1c93. É idêntico ao arquivo importado."
+ ],
+ "ntrs_file": "/api/citations/19930021842/downloads/19930021842.pdf",
+ "ntrs_sha256": "dc8e898d4e3ef7ebb0474479b53408fe5e2e7c6a9d0f556628fd33db2c1a1c93",
+ "mode": "ONLINE"
+}

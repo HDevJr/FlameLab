@@ -1,7 +1,7 @@
 import { useRef, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { ApiError, api, type AIAnswer, type RetrievedEvidence } from "../api";
-import { Badge, ErrorBox } from "../components";
+import { Badge, ErrorBox, useReadOnly } from "../components";
 import { MODE_TEXT, SUGGESTIONS, answerState } from "../assistant_state";
 
 type Turn = { id: number; question: string; answer?: AIAnswer; error?: ApiError; pending: boolean };
@@ -89,6 +89,7 @@ export default function Assistant() {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
+  const readOnly = useReadOnly();
   const panel = useRef<HTMLDetailsElement | null>(null);
   const last = [...turns].reverse().find((t) => t.answer)?.answer;
 
@@ -119,6 +120,7 @@ export default function Assistant() {
           {turns.length === 0 && (
             <div>
               <p className="muted">Escolha uma pergunta ou escreva a sua. Se a fonte não sustentar a resposta, o assistente se abstém.</p>
+              {readOnly && <p className="box info">Na demonstração pública, só as perguntas abaixo têm resposta gravada (respostas reais da IA, verificadas). Uma pergunta nova volta como “sem resposta em cache”.</p>}
               <div className="suggest">{SUGGESTIONS.map((s) => <button key={s.q} onClick={() => void send(s.q)} disabled={busy}>{s.q}<small>{s.hint}</small></button>)}</div>
             </div>
           )}

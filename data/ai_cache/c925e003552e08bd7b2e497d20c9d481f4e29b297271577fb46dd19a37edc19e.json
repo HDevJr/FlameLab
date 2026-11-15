@@ -1,0 +1,55 @@
+{
+  "key": "c925e003552e08bd7b2e497d20c9d481f4e29b297271577fb46dd19a37edc19e",
+  "question": "Qual era a largura da amostra no ensaio M1?",
+  "scope": {
+    "investigation_id": "PSI-25",
+    "test_uids": [
+      "BASS2-M1"
+    ]
+  },
+  "dataset_version": "sha256:165bbebf4c8e12a7e33e8629e30327a0cf8bde502e8f23f02e0af26d630ecaeb",
+  "prompt_version": "v2",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "created_at": "2026-11-15T17:09:46.150677Z",
+  "output": {
+    "claims": [
+      {
+        "type": "OBSERVACAO",
+        "text_pt": "No ensaio M1, a largura da amostra registrada na tabela é de 2,2 cm.",
+        "evidence_ids": [
+          "REC-BASS2-M1.width"
+        ],
+        "numbers": [
+          {
+            "value": 2.2,
+            "unit": "cm"
+          }
+        ]
+      },
+      {
+        "type": "LIMITACAO",
+        "text_pt": "Existe divergência interna na fonte sobre a largura da amostra do ensaio M1, pois o texto menciona larguras de 1 ou 2 cm, enquanto a Tabela 5.1 lista 2,2 cm, havendo necessidade de avaliação na revisão.",
+        "evidence_ids": [
+          "REC-BASS2-M1.width"
+        ],
+        "numbers": [
+          {
+            "value": 1.0,
+            "unit": "cm"
+          },
+          {
+            "value": 2.0,
+            "unit": "cm"
+          },
+          {
+            "value": 2.2,
+            "unit": "cm"
+          }
+        ]
+      }
+    ],
+    "abstain": false,
+    "abstain_reason": null
+  }
+}

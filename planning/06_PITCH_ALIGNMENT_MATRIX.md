@@ -155,3 +155,5 @@
 | Novos | Exportar relatório (.md/.json): IMPLEMENTADO_E_TESTADO. Responsivo 360–1920 px e teclado em Chrome real: verificados automaticamente | Sim. **Celular real: NOT_RUN** |
 
 **Continua proibido:** "reprodução fiel do M1", "a IA prevê/simula fogo", "aprovado/endossado pela NASA", telemetria ou gráfico sem dado real (não há CSV do Wokwi no repositório), vídeo FDS como se fosse do M1.
+
+**Publicação (15/11):** demonstração pública somente leitura em https://flame-lab-gamma.vercel.app/ (Vercel). Pode ser dito: "o protótipo está publicado para consulta". As respostas do assistente na versão pública vêm do **cache** (25 perguntas gravadas) e isso deve ser dito. **Não** dizer que qualquer pessoa pode importar ou revisar dados online: essas funções estão desativadas e exigiriam banco, login e processamento em segundo plano (ver `docs/PUBLICAR_NA_VERCEL.md`).

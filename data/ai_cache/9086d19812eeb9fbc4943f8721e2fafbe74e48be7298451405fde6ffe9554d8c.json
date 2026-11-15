@@ -1,0 +1,29 @@
+{
+  "key": "9086d19812eeb9fbc4943f8721e2fafbe74e48be7298451405fde6ffe9554d8c",
+  "question": "Qual era o comprimento da amostra no M1?",
+  "scope": {
+    "investigation_id": "PSI-25",
+    "test_uids": [
+      "BASS2-M1"
+    ]
+  },
+  "dataset_version": "sha256:165bbebf4c8e12a7e33e8629e30327a0cf8bde502e8f23f02e0af26d630ecaeb",
+  "prompt_version": "v2",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "created_at": "2026-11-15T17:10:04.749076Z",
+  "output": {
+    "claims": [
+      {
+        "type": "LIMITACAO",
+        "text_pt": "Para o ensaio M1, o comprimento da amostra está ausente nas evidências fornecidas.",
+        "evidence_ids": [
+          "GAP-BASS2-M1-sample_length"
+        ],
+        "numbers": []
+      }
+    ],
+    "abstain": true,
+    "abstain_reason": "O comprimento da amostra no ensaio M1 está ausente no corpus curado."
+  }
+}

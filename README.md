@@ -23,6 +23,8 @@ Desafio: [Flame in Freefall — NASA Space Apps 2026](https://www.spaceappschall
 
 ## Estado em 15/11/2026 (entrega)
 
+**Demonstração pública (somente leitura):** https://flame-lab-gamma.vercel.app/ — navegação pelos dados, fontes, comparar, buscar e assistente com **perguntas gravadas** (respostas reais da IA, verificadas e servidas do cache; pergunta nova volta "sem resposta em cache"). Importar, revisar e simular ficam desativados (`403 READ_ONLY_DEMO`). Como foi publicada: [docs/PUBLICAR_NA_VERCEL.md](docs/PUBLICAR_NA_VERCEL.md). Inclui, como dado de demonstração, a importação do relatório NASA CR-191109 (1993): origem verificada no NTRS e 130 parâmetros extraídos por IA, **todos não revisados**.
+
 **O que funciona hoje, com evidência:**
 
 | Área | Estado | Onde ver |
