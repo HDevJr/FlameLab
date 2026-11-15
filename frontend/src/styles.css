@@ -307,3 +307,13 @@ input[type=range] { max-width: 100%; }
 /* ---- importação: guia e importações anteriores ---- */
 ol.how { margin: 8px 0; padding-left: 20px; } ol.how li { margin: 6px 0; }
 .drop { transition: border-color .15s, background .15s; } .drop:hover { border-color: var(--accent); background: var(--info-bg); }
+/* ---- P2: comparar e buscar ---- */
+.compare-pick { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 12px 0; } .compare-pick label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); } .compare-pick select { width: 100%; }
+table.cmp tr.diff td { background: #FFFBEB; }
+ul.hits { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 8px; } ul.hits .card { margin: 0; }
+@media (max-width: 900px) { .compare-pick { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  table.cmp { display: block; } table.cmp thead { position: absolute; left: -9999px; } table.cmp tbody, table.cmp tr, table.cmp td { display: block; width: 100%; }
+  table.cmp tr { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 0 0 10px; background: var(--card); } table.cmp td { border: 0; padding: 4px 0; }
+  table.cmp td::before { content: attr(data-l); display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+}

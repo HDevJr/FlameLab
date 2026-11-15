@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "./components";
 import FdsGates from "./pages/FdsGates";
+import Compare from "./pages/Compare";
+import Search from "./pages/Search";
 import Assistant from "./pages/Assistant";
 import DocumentDetail from "./pages/DocumentDetail";
 import AnalysisPage from "./pages/Analysis";
@@ -32,6 +34,8 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/" element={<Library />} />
           <Route path="/validacao-fds" element={<FdsGates />} />
           <Route path="/validacao-fds/:id" element={<FdsGates />} />
+          <Route path="/comparar" element={<Compare />} />
+          <Route path="/buscar" element={<Search />} />
           <Route path="/assistente" element={<Assistant />} />
           <Route path="/importar" element={<Import />} />
           <Route path="/documentos/:id" element={<DocumentDetail />} />

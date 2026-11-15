@@ -5,6 +5,7 @@ import { Async, Badge, DataKind, ErrorBox, ReadinessPanel, Term, UnitCell, useLo
 import ReviewPanel from "../ReviewPanel";
 import GuidedReview from "../GuidedReview";
 import { groupGaps } from "../gap_themes";
+import { downloadText, experimentJson, experimentMarkdown } from "../report";
 import { COVERAGE_STATE, groupByRole, isStaleBackend, reviewStateView, valueText } from "../lib";
 
 function ParamTable({ rows, title, hint, selected, onSelect }: { rows: Parameter[]; title: string; hint: string; selected: string | null; onSelect: (id: string) => void }) {
@@ -116,6 +117,15 @@ function SourceCaveats({ params }: { params: Parameter[] }) {
   );
 }
 
+/** Exporta o experimento exatamente como está na tela (valores, estados, origens, ressalvas, lacunas) e a versão do dataset. */
+async function exportReport(e: Experiment, fmt: "md" | "json") {
+  const st = await api.status().catch(() => null);
+  const meta = { datasetVersion: st?.dataset_version ?? null, generatedAt: new Date().toISOString() };
+  const base = `flamelab-${e.experiment_id}`;
+  if (fmt === "md") downloadText(`${base}.md`, experimentMarkdown(e, meta), "text/markdown");
+  else downloadText(`${base}.json`, experimentJson(e, meta), "application/json");
+}
+
 /** S04 — Revisão dos parâmetros: integridade, revisão, cobertura, compatibilidade e prontidão como dimensões SEPARADAS. */
 export default function Review() {
   const { id = "" } = useParams();
@@ -139,7 +149,7 @@ export default function Review() {
           <p><strong>{confirmed}</strong> de <strong>{e.review.total}</strong> parâmetros <Term k="conferido">conferidos</Term> por uma pessoa, dos quais <strong>{full}</strong> com a interpretação também confirmada · <strong>{e.review.gaps}</strong> <Term k="lacuna">lacunas</Term>.
             {confirmed > full && " Conferências anteriores comparavam só número, unidade e página; recomenda-se reconfirmar a interpretação."}</p>
 
-          <p className="row"><a className="btn" href="#prontidao">Prontidão e próximos passos ↓</a><a className="btn" href="#lacunas">Lacunas declaradas ↓</a></p>
+          <p className="row"><button onClick={() => exportReport(e, "md")}>Exportar relatório (.md)</button><button onClick={() => exportReport(e, "json")}>Exportar dados (.json)</button><a className="btn" href="#prontidao">Prontidão e próximos passos ↓</a><a className="btn" href="#lacunas">Lacunas declaradas ↓</a></p>
 
           <div id="parametros" className={sel ? "split" : ""}>
             <div>

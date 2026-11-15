@@ -77,6 +77,8 @@ export function Layout({ children }: { children: ReactNode }) {
           <NavLink to="/" end>Experimentos NASA</NavLink>
           <NavLink to="/importar">Importar artigo</NavLink>
           <span className="nav-label">Ferramentas</span>
+          <NavLink to="/buscar">Buscar</NavLink>
+          <NavLink to="/comparar">Comparar</NavLink>
           <NavLink to="/assistente">Assistente científico</NavLink>
           <NavLink to="/validacao-fds">Validação FDS</NavLink>
           <NavLink to="/demonstracao-fds">Demonstração FDS</NavLink>
