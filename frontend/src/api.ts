@@ -71,7 +71,7 @@ export type Coverage = {
 };
 export type ImportRecord = {
   import_id: string; filename: string; sha256: string; size_bytes: number; status: string; steps: Step[];
-  document: { document_id: string; title: string | null; page_count: number; identifiers: Record<string, string[]> };
+  document: { document_id: string; title: string | null; page_count: number; pages_with_text?: number; has_text_layer?: boolean; identifiers: Record<string, string[]> };
   nasa_provenance: Provenance | null; experiments: Experiment[]; warnings_pt: string[]; coverage: Coverage | null;
   extraction: { model: string; rejected: { name: string; reason: string }[]; batches: Batch[]; batches_planned_total: number } | null;
   metrics: { total_ms: number | null; per_step_ms?: Record<string, number | null> };
@@ -242,6 +242,9 @@ export const api = {
   submit: (scenario_id: string) => call<Run>("/api/simulations", json("POST", { scenario_id })),
   runs: () => call<Run[]>("/api/simulations"),
   run: (id: string) => call<Run>(`/api/simulations/${id}`),
+  status: () => call<SystemStatus>("/api/status"),
+  auditEvents: (limit = 100) => call<AuditEvents>(`/api/audit/events?limit=${limit}`),
+  ask: (question: string, scope: AskScope = { investigation_id: "PSI-25", test_uids: ["BASS2-M1"] }) => call<AIAnswer>("/api/ask", json("POST", { question, scope, lang: "pt" })),
 };
 
 export const artifactUrl = (runId: string, name: string) => `/api/simulations/${runId}/artifacts/${name}`;
@@ -293,3 +296,27 @@ export type GuidedJourney = {experiment_id:string;title:string;mode:WorkMode;pro
 export type GuidedDecision = {expected_revision:number;action:GuidedAction;author:string;notes?:string;draft?:Record<string,string>;proposal?:GuidedProposal;next_gap_id?:string;change_reason?:string};
 export type GuidedPreview = {ok:boolean;errors:FieldIssue[];warnings:FieldIssue[];conversions:Conversion[];summary_pt:string;completeness:Completeness|null;revises_revision:number|null;
   diff:{field:string;before:unknown;after:unknown}[];will_be_state:ResolutionState;tier:Tier;tier_pt:string;checks:Check[];consequences:Consequences;mode:WorkMode};
+
+// ---------------------------------------------------------------- assistente científico (POST /api/ask)
+export type AskScope = { investigation_id?: string | null; test_uids?: string[] };
+export type AnswerMode = "LIVE" | "CACHE" | "UNAVAILABLE" | "DETERMINISTIC";
+export type AbstainReason = "NO_ELIGIBLE_EVIDENCE" | "INSUFFICIENT_EVIDENCE" | "MISSING_DATA" | "PENDING_REVIEW" | "EXTRAPOLATION" | "MODEL_ABSTAINED" | "VERIFICATION_FAILED";
+export type UnavailableReason = "MODE_OFF" | "CACHE_MISS" | "PROVIDER_NOT_CONFIGURED" | "PROVIDER_ERROR";
+export type AnswerClaim = { type: string; text_pt: string; evidence_ids: string[]; numbers: { value: number; unit: string | null }[]; verification: "PASS" };
+export type BlockedClaim = { type: string | null; text_pt: string; reason: string; reasons: string[] };
+export type RetrievedEvidence = {
+  id: string; score: number; kind: "RECORD_CARD" | "GAP" | "PASSAGE"; test_uid: string | null; status: string | null; nature: string | null;
+  text: string; locator: Record<string, unknown> | null; document_id: string | null; synthetic: boolean; value_withheld: boolean;
+};
+export type AIAnswer = {
+  answer_id: string; question: string; scope: AskScope; mode: AnswerMode; requested_mode: "live" | "cache" | "off"; abstained: boolean;
+  abstain_reason: AbstainReason | null; unavailable_reason: UnavailableReason | null; provider_error: string | null; extrapolation_flags: string[];
+  claims: AnswerClaim[]; blocked_claims: BlockedClaim[]; retrieved: RetrievedEvidence[]; warnings: string[]; synthetic_evidence_used: boolean;
+  provider: string | null; model: string | null; prompt_version: string; dataset_version: string | null; created_at: string; served_at: string; latency_ms: number;
+};
+
+// ---------------------------------------------------------------- trilha de revisão (GET /api/audit/events)
+export type AuditEvent = { at: string; record_id: string; reviewer: string; action: string; outcome: "APPROVED" | "REFUSED" | "RECORDED" | "CORRECTED" | "REOPENED"; notes?: string | null; code?: string; message?: string; observed_value?: string | null; observed_unit?: string | null; observed_page_pdf?: number | null };
+export type AuditEvents = { total: number; events: AuditEvent[] };
+
+export type SystemStatus = { api: "ok"; dataset_version: string | null; assistant: { mode: "off" | "cache" | "live"; provider: string; model: string | null; live_ready: boolean } };

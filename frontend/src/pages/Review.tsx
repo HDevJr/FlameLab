@@ -4,6 +4,7 @@ import { ApiError, api, type Experiment, type Gap, type Parameter } from "../api
 import { Async, Badge, DataKind, ErrorBox, ReadinessPanel, Term, UnitCell, useLoad } from "../components";
 import ReviewPanel from "../ReviewPanel";
 import GuidedReview from "../GuidedReview";
+import { groupGaps } from "../gap_themes";
 import { COVERAGE_STATE, groupByRole, isStaleBackend, reviewStateView, valueText } from "../lib";
 
 function ParamTable({ rows, title, hint, selected, onSelect }: { rows: Parameter[]; title: string; hint: string; selected: string | null; onSelect: (id: string) => void }) {
@@ -81,6 +82,40 @@ function GapRow({ gap, onDecided }: { gap: Gap; onDecided: () => void }) {
   );
 }
 
+/** Lacunas declaradas, por tema: dado procurado e AUSENTE NA FONTE. Nunca preenchido por estimativa. */
+function DeclaredGaps({ gaps }: { gaps: Gap[] }) {
+  if (!gaps.length) return null;
+  return (
+    <section className="card" aria-label="Lacunas declaradas" style={{ borderLeft: "4px solid #D97706" }}>
+      <h2 style={{ marginTop: 0 }}>Lacunas declaradas <Badge tone="warn">{gaps.length} AUSENTE NA FONTE</Badge></h2>
+      <p className="detail">Procuradas no documento e não encontradas. O FlameLab não as estimou.</p>
+      {groupGaps(gaps).map(([theme, list]) => (
+        <div className="gap-theme" key={theme}><h4>{theme}</h4>
+          {list.map((g) => (
+            <div className="gap-item" key={g.gap_id}>
+              <div><strong>{g.label_pt}</strong><div className="detail">{g.explanation_pt}</div>
+                {g.purpose_blocked.length > 0 && <div className="detail">Impede: {g.purpose_blocked.join(", ")}</div>}</div>
+              <Badge tone="warn"><span aria-hidden>⚠</span> AUSENTE NA FONTE</Badge>
+            </div>
+          ))}
+        </div>
+      ))}
+    </section>
+  );
+}
+
+/** Ressalvas registradas por parâmetro. Ficam visíveis (não em tooltip), como pede o design. */
+function SourceCaveats({ params }: { params: Parameter[] }) {
+  const rows = params.filter((p) => (p.caveats_pt?.length ?? 0) > 0);
+  if (!rows.length) return null;
+  return (
+    <section className="card caveat-panel" aria-label="Ressalvas da fonte">
+      <h2 style={{ marginTop: 0 }}>Ressalvas da fonte</h2>
+      {rows.map((p) => <div key={p.record_id}><strong>{p.label_pt}</strong><ul>{p.caveats_pt.map((c, i) => <li key={i}>{c}</li>)}</ul></div>)}
+    </section>
+  );
+}
+
 /** S04 — Revisão dos parâmetros: integridade, revisão, cobertura, compatibilidade e prontidão como dimensões SEPARADAS. */
 export default function Review() {
   const { id = "" } = useParams();
@@ -125,6 +160,9 @@ export default function Review() {
               <ParamTable rows={g.conditions} title="Condições experimentais" hint="Entradas do experimento, como descritas na fonte." selected={selected} onSelect={setSelected} />
               <ParamTable rows={g.observed} title="Resultados observados" hint="Medições do experimento. São referência de comparação, nunca entradas da simulação." selected={selected} onSelect={setSelected} />
               <ParamTable rows={g.metadata} title="Metadados" hint="Identificação do material, do equipamento ou do contexto." selected={selected} onSelect={setSelected} />
+
+              <SourceCaveats params={e.parameters} />
+              <DeclaredGaps gaps={e.gaps} />
 
               <details className="tech big"><summary>Reconciliação técnica de lacunas com parâmetros existentes ({e.gaps.filter(g=>(g.related_parameters?.length ?? 0)>0).length})</summary>
               {e.gaps.length === 0 ? <p className="muted">Nenhuma lacuna registrada.</p> : (

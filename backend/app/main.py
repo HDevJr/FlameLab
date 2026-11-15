@@ -33,6 +33,18 @@ def version() -> dict:
     return {"app_version": APP_VERSION, "capabilities": CAPABILITIES}
 
 
+@app.get("/api/status", tags=["system"])
+def status() -> dict:
+    """Estado operacional para a barra superior. Nunca devolve credenciais; saúde da API não implica validade científica."""
+    from backend.app.assistant.config import load_settings
+
+    s = load_settings()
+    return {"data": {
+        "api": "ok", "dataset_version": get_dataset_store().dataset_version,
+        "assistant": {"mode": s.mode, "provider": s.provider, "model": s.model, "live_ready": s.live_ready},
+    }}
+
+
 @app.get("/api/health", tags=["system"])
 def health() -> dict[str, str]:
     """Não implica que IA, dados ou FDS estejam disponíveis."""

@@ -1,0 +1,40 @@
+{
+  "key": "608b3cbd8700487c70832b00b0e594c3533e8fdcfd09c1052b23c3161913bc85",
+  "question": "Qual seria a velocidade de propagação na Lua com gravidade parcial?",
+  "scope": {
+    "investigation_id": "PSI-25",
+    "test_uids": [
+      "BASS2-M1"
+    ]
+  },
+  "dataset_version": "sha256:165bbebf4c8e12a7e33e8629e30327a0cf8bde502e8f23f02e0af26d630ecaeb",
+  "prompt_version": "v2",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "created_at": "2026-11-15T14:13:17.514795Z",
+  "output": {
+    "claims": [
+      {
+        "type": "LIMITACAO",
+        "text_pt": "A condição de gravidade parcial na Lua não foi estudada nas evidências disponíveis para o ensaio M1, impedindo previsões numéricas para esse ambiente.",
+        "evidence_ids": [],
+        "numbers": []
+      },
+      {
+        "type": "OBSERVACAO",
+        "text_pt": "No ensaio M1 (BASS2-M1), a velocidade de propagação da chama observada foi de 0,071 mm/s.",
+        "evidence_ids": [
+          "REC-BASS2-M1.flame_spread_rate"
+        ],
+        "numbers": [
+          {
+            "value": 0.071,
+            "unit": "mm/s"
+          }
+        ]
+      }
+    ],
+    "abstain": true,
+    "abstain_reason": "As evidências fornecidas correspondem apenas a dados obtidos em microgravidade no ensaio M1 e não cobrem condições na Lua ou gravidade parcial, sendo impossível realizar previsões numéricas para tal ambiente."
+  }
+}

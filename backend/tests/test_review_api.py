@@ -160,3 +160,13 @@ def test_review_does_not_touch_the_real_dataset(client, tmp_path):
     real = (DEFAULT_DATA_DIR / "parameters" / "BASS2-M1.json").read_text(encoding="utf-8-sig")
     review(client)
     assert (DEFAULT_DATA_DIR / "parameters" / "BASS2-M1.json").read_text(encoding="utf-8-sig") == real
+
+
+def test_audit_events_is_read_only_and_newest_first(client):
+    """GET /api/audit/events devolve a trilha sem alterá-la."""
+    r = client.get("/api/audit/events?limit=5")
+    assert r.status_code == 200
+    data = r.json()["data"]
+    assert set(data) == {"total", "events"} and len(data["events"]) <= 5
+    ats = [e["at"] for e in data["events"]]
+    assert ats == sorted(ats, reverse=True)

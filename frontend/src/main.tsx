@@ -2,6 +2,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "./components";
+import FdsGates from "./pages/FdsGates";
+import Assistant from "./pages/Assistant";
 import AnalysisPage from "./pages/Analysis";
 import AuditPage from "./pages/Audit";
 import DemoFds from "./pages/DemoFds";
@@ -13,6 +15,12 @@ import Review from "./pages/Review";
 import RunPage from "./pages/RunPage";
 import Scenario from "./pages/Scenario";
 import Prepare from "./pages/Prepare";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/inter/700.css";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/600.css";
 import "./styles.css";
 
 createRoot(document.getElementById("root")!).render(
@@ -21,6 +29,9 @@ createRoot(document.getElementById("root")!).render(
       <Layout>
         <Routes>
           <Route path="/" element={<Library />} />
+          <Route path="/validacao-fds" element={<FdsGates />} />
+          <Route path="/validacao-fds/:id" element={<FdsGates />} />
+          <Route path="/assistente" element={<Assistant />} />
           <Route path="/importar" element={<Import />} />
           <Route path="/documentos/:id/analise" element={<AnalysisPage />} />
           <Route path="/documentos/:id/enriquecimento" element={<Enrichment />} />

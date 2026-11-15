@@ -1,0 +1,42 @@
+{
+  "key": "9c83b6362debdb3dfe9c7df0f3397157fc4861566e32e3a3c2518148579fb7b4",
+  "question": "Qual material e qual espessura foram usados no M1?",
+  "scope": {
+    "investigation_id": "PSI-25",
+    "test_uids": [
+      "BASS2-M1"
+    ]
+  },
+  "dataset_version": "sha256:165bbebf4c8e12a7e33e8629e30327a0cf8bde502e8f23f02e0af26d630ecaeb",
+  "prompt_version": "v2",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "created_at": "2026-11-15T14:13:09.100388Z",
+  "output": {
+    "claims": [
+      {
+        "type": "OBSERVACAO",
+        "text_pt": "No ensaio M1, o material utilizado foi PMMA polimetilmetacrilato clear cast.",
+        "evidence_ids": [
+          "REC-BASS2-M1.material"
+        ],
+        "numbers": []
+      },
+      {
+        "type": "OBSERVACAO",
+        "text_pt": "No ensaio M1, a espessura da amostra foi de 1 mm.",
+        "evidence_ids": [
+          "REC-BASS2-M1.thickness"
+        ],
+        "numbers": [
+          {
+            "value": 1.0,
+            "unit": "mm"
+          }
+        ]
+      }
+    ],
+    "abstain": false,
+    "abstain_reason": null
+  }
+}

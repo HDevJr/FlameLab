@@ -348,6 +348,16 @@ def audit_integrity() -> dict:
     return _wrap(build_integrity_report(Services.catalog()))
 
 
+@router.get("/audit/events")
+def audit_events(limit: int = 100) -> dict:
+    """Trilha de revisão humana (somente leitura), do evento mais recente para o mais antigo. Inclui tentativas recusadas."""
+    from backend.app.review_service import read_events
+
+    events = read_events()
+    limit = max(1, min(limit, 500))
+    return _wrap({"total": len(events), "events": list(reversed(events))[:limit]})
+
+
 @router.get("/records/{record_id}/events")
 def record_events(record_id: str) -> dict:
     try:

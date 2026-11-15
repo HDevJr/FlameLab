@@ -123,8 +123,14 @@ class Catalog:
         doc = self._store.documents.get(document_id)
         if doc and doc.local_path:
             path = (REPO_ROOT / doc.local_path).resolve()
-            return path if path.is_relative_to(REPO_ROOT.resolve()) and path.is_file() else None
-        imp = self.import_for_document(document_id)
+            if path.is_relative_to(REPO_ROOT.resolve()) and path.is_file():
+                return path
+            # PDF de curadoria ausente: usa a cópia importada só se o SHA-256 for o do documento catalogado.
+            imp = self.import_for_document(document_id)
+            if not (imp and doc.sha256 and imp.get("sha256") == doc.sha256):
+                return None
+        else:
+            imp = self.import_for_document(document_id)
         if imp:
             path = workspace.area("imports") / workspace.safe_id(imp["import_id"]) / "source.pdf"
             return path if path.is_file() else None
