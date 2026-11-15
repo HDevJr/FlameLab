@@ -1,0 +1,29 @@
+{
+  "key": "63c4d5c8d34510eb46881b627714b9761298467035c7bb70a1f33616a11397af",
+  "question": "Qual era a pressão no ensaio M1?",
+  "scope": {
+    "investigation_id": "PSI-25",
+    "test_uids": [
+      "BASS2-M1"
+    ]
+  },
+  "dataset_version": "sha256:165bbebf4c8e12a7e33e8629e30327a0cf8bde502e8f23f02e0af26d630ecaeb",
+  "prompt_version": "v2",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "created_at": "2026-11-15T14:53:56.484180Z",
+  "output": {
+    "claims": [
+      {
+        "type": "LIMITACAO",
+        "text_pt": "No ensaio BASS2-M1, a pressão está ausente e não foi informada no corpus curado.",
+        "evidence_ids": [
+          "GAP-BASS2-M1-ambient_pressure"
+        ],
+        "numbers": []
+      }
+    ],
+    "abstain": true,
+    "abstain_reason": "As evidências disponíveis para o ensaio BASS2-M1 não contêm a pressão solicitada na pergunta, pois o parâmetro está marcado como ausente."
+  }
+}

@@ -21,6 +21,8 @@ const compat: Compatibility = {
 function mount(exp: Experiment) {
   vi.spyOn(api, "experiment").mockResolvedValue(exp);
   vi.spyOn(api, "compatibility").mockResolvedValue(compat);
+  // GuidedReview busca a jornada ao montar; sem mock a falha de rede (alerta) disputava o getByRole("alert") do teste.
+  vi.spyOn(api, "guidedReview").mockImplementation(() => new Promise(() => {}));
   return render(<MemoryRouter initialEntries={["/experimentos/E"]}><Routes><Route path="/experimentos/:id" element={<Review />} /></Routes></MemoryRouter>);
 }
 const rowOf = (technical: string) => screen.getByText(technical, { selector: "code" }).closest("tr") as HTMLElement;

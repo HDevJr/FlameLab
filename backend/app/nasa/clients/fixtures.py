@@ -36,7 +36,7 @@ class FixtureTransport:
             raise SourceError("NETWORK")
         return 200, (self._dir / name).read_bytes()
 
-    def stream_sha256(self, url: str, timeout: float, max_bytes: int) -> tuple[str, int]:
+    def stream_sha256(self, url: str, timeout: float, max_bytes: int, progress=None) -> tuple[str, int]:
         entry = self._index.get("sha256::" + url)
         if urllib.parse.urlsplit(url).hostname in self._fail_hosts or entry is None:
             raise SourceError("NETWORK")
@@ -62,8 +62,8 @@ class RecordingTransport:
         (self._dir / "index.json").write_text(json.dumps(self._index, indent=1, sort_keys=True), encoding="utf-8")
         return status, body
 
-    def stream_sha256(self, url: str, timeout: float, max_bytes: int) -> tuple[str, int]:
-        digest, size = self._inner.stream_sha256(url, timeout, max_bytes)
+    def stream_sha256(self, url: str, timeout: float, max_bytes: int, progress=None) -> tuple[str, int]:
+        digest, size = self._inner.stream_sha256(url, timeout, max_bytes, progress)
         self._index["sha256::" + url] = f"{digest}:{size}"
         (self._dir / "index.json").write_text(json.dumps(self._index, indent=1, sort_keys=True), encoding="utf-8")
         return digest, size

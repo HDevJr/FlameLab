@@ -1,6 +1,6 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { ApiError } from "./api";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { ApiError, type SystemStatus } from "./api";
 import type { Provenance as ProvenanceT, Step } from "./api";
 import { GLOSSARY, elapsedMs, formatDuration } from "./lib";
 
@@ -25,25 +25,91 @@ export function DataKind({ kind }: { kind: "REAL" | "REVISAO" | "TESTE" | "DEMO"
   return <Badge tone={map[kind][0]}>{map[kind][1]}</Badge>;
 }
 
-export function Layout({ children }: { children: ReactNode }) {
+/** Aviso permanente da demonstração pública (somente leitura): nada é gravado e importar/revisar/simular ficam desativados. */
+export function useReadOnly(): boolean {
+  const [ro, setRo] = useState(false);
+  useEffect(() => { let alive = true; api.status().then((s) => alive && setRo(!!s.read_only)).catch(() => undefined); return () => { alive = false; }; }, []);
+  return ro;
+}
+
+function ReadOnlyBanner() {
+  if (!useReadOnly()) return null;
+  return <div className="readonly-banner" role="note"><strong>Demonstração pública somente leitura.</strong> Você pode navegar pelos dados, abrir as fontes, comparar, buscar e perguntar ao assistente (respostas do cache). Importar, revisar e simular estão desativados.</div>;
+}
+
+/** Barra superior (desktop): estado da API e do assistente. Saúde da API não implica validade científica. */
+export function StatusBar() {
+  const [st, setSt] = useState<SystemStatus | null | "offline">(null);
+  useEffect(() => {
+    let alive = true;
+    const load = () => api.status().then((v) => alive && setSt(v)).catch(() => alive && setSt("offline"));
+    load();
+    const t = setInterval(load, 30000);
+    return () => { alive = false; clearInterval(t); };
+  }, []);
+  const mode = st && st !== "offline" ? st.assistant.mode : null;
+  const modeText = { off: "IA desligada", cache: "IA em cache", live: "IA ao vivo" } as const;
   return (
-    <>
-      <header className="top">
-        <Link to="/" className="brand">🔥 FlameLab <small>protótipo navegável</small></Link>
+    <div className="statusbar" role="status" aria-label="Estado do sistema">
+      {st === null && <span className="muted">Verificando servidor…</span>}
+      {st === "offline" && <Badge tone="bad">Servidor indisponível</Badge>}
+      {st && st !== "offline" && (
+        <>
+          <Badge tone="ok">API online</Badge>
+          <Badge tone={mode === "live" ? "info" : mode === "cache" ? "warn" : "muted"} title="Modo do assistente científico">{modeText[mode!]}</Badge>
+          {st.assistant.provider !== "none" && <span className="muted">{st.assistant.provider}{st.assistant.model ? ` · ${st.assistant.model}` : ""}{mode === "live" && !st.assistant.live_ready ? " · chave ausente" : ""}</span>}
+          {st.dataset_version && <span className="muted" title={st.dataset_version}>dataset <code>{st.dataset_version.slice(7, 15)}</code></span>}
+        </>
+      )}
+    </div>
+  );
+}
+
+export function Layout({ children }: { children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const { pathname } = useLocation();
+  const menuBtn = useRef<HTMLButtonElement>(null);
+  useEffect(() => { setOpen(false); }, [pathname]);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { setOpen(false); menuBtn.current?.focus(); } };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+  return (
+    <div className={`shell ${open ? "nav-open" : ""}`}>
+      <div className="topbar">
+        <button type="button" ref={menuBtn} className="menu-btn" aria-label="Abrir menu" aria-expanded={open} aria-controls="sidebar" onClick={() => setOpen((v) => !v)}>☰</button>
+        <Link to="/" className="brand"><img src="/logo-mark.webp" alt="" width="34" height="32" />FlameLab</Link>
+      </div>
+      <aside className="side" id="sidebar">
+        <Link to="/" className="brand"><img src="/logo-mark.webp" alt="" width="38" height="36" /><span>FlameLab<small>Combustão em microgravidade</small></span></Link>
         <nav aria-label="Navegação principal">
+          <span className="nav-label">Biblioteca</span>
           <NavLink to="/" end>Experimentos NASA</NavLink>
           <NavLink to="/importar">Importar artigo</NavLink>
+          <span className="nav-label">Ferramentas</span>
+          <NavLink to="/buscar">Buscar</NavLink>
+          <NavLink to="/comparar">Comparar</NavLink>
+          <NavLink to="/assistente">Assistente científico</NavLink>
+          <NavLink to="/validacao-fds">Validação FDS</NavLink>
           <NavLink to="/demonstracao-fds">Demonstração FDS</NavLink>
           <NavLink to="/execucoes">Execuções</NavLink>
           <NavLink to="/auditoria">Auditoria</NavLink>
         </nav>
-      </header>
-      <main><StaleBackendBanner />{children}</main>
-      <footer>
-        FlameLab não é produto oficial nem endossado pela NASA ou pelo NIST. Valores marcados “não revisado” não são
-        dados conferidos. Simulações exibidas aqui são hipóteses computacionais, não resultados experimentais.
-      </footer>
-    </>
+        <p className="side-foot"><strong>Projeto independente</strong>Desenvolvido para o NASA Space Apps Challenge. Não é endossado pela NASA.</p>
+      </aside>
+      {open && <button type="button" className="scrim" aria-label="Fechar menu" onClick={() => { setOpen(false); menuBtn.current?.focus(); }} />}
+      <div className="content">
+        <ReadOnlyBanner />
+        <StatusBar />
+        <main><StaleBackendBanner />{children}</main>
+        <footer>
+          FlameLab não é produto oficial nem endossado pela NASA ou pelo NIST. Valores marcados “não revisado” não são
+          dados conferidos. Simulações exibidas aqui são hipóteses computacionais, não resultados experimentais.
+        </footer>
+      </div>
+    </div>
   );
 }
 
@@ -65,13 +131,25 @@ export function useLoad<T>(fn: () => Promise<T>, deps: unknown[]) {
 }
 
 export function Async<T>({ state, children }: { state: ReturnType<typeof useLoad<T>>; children: (d: T) => ReactNode }) {
-  if (state.loading && !state.data) return <p className="muted">Carregando…</p>;
-  if (state.error) return <ErrorBox error={state.error} />;
+  if (state.loading && !state.data) return <p className="muted" role="status" aria-live="polite">Carregando…</p>;
+  if (state.error) return <ErrorBox error={state.error} onRetry={state.reload} />;
   return state.data ? <>{children(state.data)}</> : null;
 }
 
-export function ErrorBox({ error }: { error: { message: string; code?: string } }) {
-  return <div className="box bad" role="alert"><strong>Não foi possível concluir.</strong> {error.message}{error.code ? <small> ({error.code})</small> : null}</div>;
+/** Estado vazio explicativo: diz o que falta e como o dado passa a existir (nunca uma tela em branco). */
+export function EmptyState({ title, children }: { title: string; children?: ReactNode }) {
+  return <div className="empty-state" role="status"><strong>{title}</strong>{children && <p className="muted">{children}</p>}</div>;
+}
+
+export function ErrorBox({ error, onRetry }: { error: { message: string; code?: string }; onRetry?: () => void }) {
+  const offline = error.code === "BACKEND_UNREACHABLE";
+  return (
+    <div className="box bad" role="alert">
+      <strong>{offline ? "Servidor local indisponível." : "Não foi possível concluir."}</strong> {error.message}{error.code ? <small> ({error.code})</small> : null}
+      {offline && <p className="detail" style={{ color: "inherit" }}>Nenhum dado foi alterado. Inicie o backend e tente novamente.</p>}
+      {onRetry && <p><button onClick={onRetry}>Tentar novamente</button></p>}
+    </div>
+  );
 }
 
 export function Provenance({ p }: { p: ProvenanceT }) {

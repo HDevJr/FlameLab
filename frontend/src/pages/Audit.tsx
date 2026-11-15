@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { api, type AuditRecord } from "../api";
-import { Async, Badge, Term, useLoad } from "../components";
+import { Async, Badge, EmptyState, Term, useLoad } from "../components";
 import { valueText } from "../lib";
 
 const CLASS: Record<AuditRecord["classification"], { text: string; tone: "ok" | "warn" | "bad" | "info" | "muted" }> = {
@@ -9,6 +9,7 @@ const CLASS: Record<AuditRecord["classification"], { text: string; tone: "ok" | 
   ATTENTION: { text: "Ressalvas informativas", tone: "info" },
   OK: { text: "Sem achados", tone: "ok" },
 };
+const OUTCOME: Record<string, string> = { APPROVED: "Aprovado", REFUSED: "Recusado", RECORDED: "Registrado", CORRECTED: "Corrigido", REOPENED: "Reaberto" };
 const ACTION: Record<string, string> = {
   CORRECT: "Corrigir extração", CORRECT_OR_REOPEN: "Corrigir extração ou reabrir", REOPEN: "Reabrir conferência", REOPEN_THEN_CONFIRM: "Reabrir e reconfirmar",
 };
@@ -16,6 +17,7 @@ const ACTION: Record<string, string> = {
 /** Auditoria de integridade (somente leitura): o que foi conferido, o que a fonte sustenta e a correção auditável proposta. */
 export default function AuditPage() {
   const report = useLoad(api.auditIntegrity, []);
+  const events = useLoad(() => api.auditEvents(100), []);
   return (
     <>
       <h1>Auditoria de integridade científica</h1>
@@ -42,6 +44,24 @@ export default function AuditPage() {
           </tbody></table>
         </>
       )}</Async>
+      <h2>Histórico de revisões humanas</h2>
+      <p className="muted">Toda tentativa fica registrada, inclusive as recusadas. Somente leitura.</p>
+      <Async state={events}>{(ev) => ev.events.length === 0
+        ? <EmptyState title="Nenhum evento de revisão registrado">Eventos aparecem aqui quando uma pessoa confirma, corrige ou reabre um registro.</EmptyState>
+        : (
+          <>
+            <p className="detail">Mostrando {ev.events.length} de {ev.total} eventos, do mais recente para o mais antigo.</p>
+            <ol className="timeline">{ev.events.map((e, i) => (
+              <li key={e.at + e.record_id + i} className={e.outcome === "REFUSED" ? "bad" : e.outcome === "APPROVED" || e.outcome === "CORRECTED" ? "ok" : "info"}>
+                <div className="row"><code>{e.at.replace("T", " ").replace("Z", " UTC")}</code>
+                  <Badge tone={e.outcome === "REFUSED" ? "bad" : e.outcome === "APPROVED" ? "ok" : "info"}>{OUTCOME[e.outcome] ?? e.outcome}</Badge>
+                  <span>{e.action}</span><span className="muted">por {e.reviewer}</span></div>
+                <div className="detail"><code>{e.record_id}</code>{e.observed_page_pdf ? ` · p. ${e.observed_page_pdf}` : ""}</div>
+                {e.message && <div className="detail">{e.message}</div>}
+              </li>))}
+            </ol>
+          </>
+        )}</Async>
     </>
   );
 }

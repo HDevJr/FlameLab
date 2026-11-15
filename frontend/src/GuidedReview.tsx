@@ -23,7 +23,7 @@ export function ModeSwitch() {
 
 export function TestBanner({mode}:{mode:WorkMode}) {
   if(mode!=="TEST")return null;
-  return <p className="box bad test-banner" role="note"><strong>MODO DE TESTE</strong> — dados sintéticos em armazenamento isolado. Nada registrado aqui vira dado NASA, fonte bibliográfica ou aprovação científica. Tipos e unidades continuam sendo verificados.</p>;
+  return <p className="test-banner" role="note"><strong>MODO DE TESTE</strong> · dados sintéticos em armazenamento isolado; nada vira dado NASA, fonte bibliográfica ou aprovação científica. Tipos e unidades continuam verificados.</p>;
 }
 
 export function ModelReadiness({journey:j,onOpen}:{journey:GuidedJourney;onOpen?:(gap:string)=>void}) {
@@ -85,8 +85,8 @@ function PathCards({task,action,choose}:{task:GuidedTask;action:string;choose:(a
   return <div className="paths" role="group" aria-label="Como resolver esta pendência">
     <div className="path"><button onClick={()=>choose("SOURCE")} aria-pressed={action==="SOURCE"}>Registrar evidência científica</button>
       <small>Para informação encontrada em fonte verificável (referência, página e trecho).</small></div>
-    <div className="path"><button disabled={hyp==="NOT_AVAILABLE"} onClick={()=>choose(hypAction)} aria-pressed={action===hypAction}>Preparar hipótese exploratória</button>
-      <small>{hyp==="ALLOWED" ? "Monta uma variante com valores declarados; começa sem aprovação.":hyp==="DRAFT_ONLY" ? "Salva somente como rascunho exploratório NÃO APROVADO, que nunca é entrada FDS.":"Indisponível: veja o motivo abaixo."}</small></div>
+    <div className={`path ${hyp==="NOT_AVAILABLE" ? "disabled":""}`}><button disabled={hyp==="NOT_AVAILABLE"} onClick={()=>choose(hypAction)} aria-pressed={action===hypAction}>Preparar hipótese exploratória</button>
+      <small>{hyp==="ALLOWED" ? "Monta uma variante com valores declarados; começa sem aprovação.":hyp==="DRAFT_ONLY" ? "Salva somente como rascunho exploratório NÃO APROVADO, que nunca é entrada FDS.":`Indisponível para este perfil. ${task.assumption_reason_pt || ""}`.trim()}</small></div>
     <div className="path"><button onClick={()=>choose("KEEP_OPEN")} aria-pressed={action==="KEEP_OPEN"}>Manter pendência em aberto</button>
       <small>Quando a informação não está disponível ou não há suporte técnico para usá-la.</small></div>
   </div>;
@@ -212,9 +212,9 @@ export function GuidedModal({initial,documentId,onClose,onChange,startGap}:{init
   return <div className="guided-backdrop"><div className={`guided-modal ${mode==="TEST" ? "test-mode":""}`} role="dialog" aria-modal="true" aria-labelledby="guided-title" tabIndex={-1} ref={dialog}>
     <header className="guided-header"><div className="row"><div className="grow"><small>REVISÃO GUIADA{mode==="TEST" ? " · MODO DE TESTE":""}</small><h2 id="guided-title">{j.title}</h2></div><button disabled={busy} onClick={()=>void close()}>Voltar ao resumo</button></div>
       <TestBanner mode={mode}/>
-      <div className="row"><strong>Pendência {index+1}/{j.tasks.length}</strong><span>{j.summary.gaps_handled} tratadas · {j.resolved} satisfeitas para o perfil · {j.summary.requirements_satisfied}/{j.summary.requirements_total} requisitos de dados</span></div>
+      <div className="row"><strong>Pendência {index+1}/{j.tasks.length}</strong><span>{j.summary.gaps_handled} de {j.tasks.length} tratadas · {j.resolved} satisfeitas para o perfil{j.summary.requirements_total>0 ? ` · ${j.summary.requirements_satisfied}/${j.summary.requirements_total} requisitos de dados`:""}</span></div>
       <progress aria-label="Requisitos de pendências satisfeitos para o perfil" max={j.tasks.length} value={j.resolved}/>
-      <p className="detail">A barra mede pendências satisfeitas para o perfil, não telas visitadas nem registros enviados. O perfil físico tem aprovação separada.</p>
+      <details className="tech"><summary>Como ler a barra</summary><p className="detail">A barra mede pendências satisfeitas para o perfil, não telas visitadas nem registros enviados. O perfil físico tem aprovação separada.</p></details>
     </header>
     <div className="guided-body" aria-busy={busy}>
       {error && <p className="box bad" role="alert">{error}</p>}
@@ -230,11 +230,11 @@ export function GuidedModal({initial,documentId,onClose,onChange,startGap}:{init
         <h3>D. Como resolver?</h3>
         <CurrentRecord task={task} onEdit={()=>choose(task.current?.proposal_kind ?? "SOURCE")}/>
         <PathCards task={task} action={form.action} choose={choose}/>
-        <p className="detail">{task.assumption_reason_pt}</p>
+        {task.policy.mode!=="NOT_AVAILABLE" && task.assumption_reason_pt && <p className="detail">{task.assumption_reason_pt}</p>}
         {task.policy.mode!=="ALLOWED" && <details><summary>O que falta desenvolver para usar esta informação</summary><ul>{task.policy.development_needed_pt.map(d=><li key={d}>{d}</li>)}</ul></details>}
         {documentId && <Link to={`/documentos/${documentId}/enriquecimento`} target="_blank">Consultar fontes relacionadas disponíveis</Link>}
         {task.possible_sources_pt && <p className="box info">Onde procurar: {task.possible_sources_pt}</p>}
-        {!form.action && <p className="detail">Escolha um caminho para abrir o formulário. As informações anteriores estão preservadas.</p>}
+        {!form.action && <p className="detail">As informações anteriores estão preservadas.</p>}
         {proposalAction && <form onSubmit={e=>{e.preventDefault();void submit(proposalAction);}}>
           <div className="form">
             {proposalAction==="EXPLORATORY_DRAFT" && <p className="box warn wide">Rascunho exploratório: será salvo como NÃO APROVADO e nunca poderá ser entrada FDS neste perfil.</p>}
@@ -273,7 +273,7 @@ export function GuidedModal({initial,documentId,onClose,onChange,startGap}:{init
         </details>
       </>}
     </div>
-    <footer className="guided-footer"><p role="status" aria-live="polite">{busy ? "Salvando…":status}</p><div className="row"><button disabled={busy || index===0 || summary} onClick={()=>void move(index-1)}>Anterior</button><button disabled={busy || summary} onClick={()=>void move(index+1)}>Próxima</button><button className="primary" disabled={busy || summary} onClick={()=>void move(index+1,true)}>Salvar e continuar</button><button disabled={busy} onClick={()=>void perform(async()=>{await draft();setSummary(!summary);})}>{summary ? "Revisar pendência":"Consultar resumo das decisões"}</button></div></footer>
+    <footer className="guided-footer">{(busy || status!=="Registros carregados") ? <p role="status" aria-live="polite">{busy ? "Salvando…":status}</p> : <p className="sr-only" role="status" aria-live="polite">{status}</p>}<div className="row"><button disabled={busy || index===0 || summary} onClick={()=>void move(index-1)}>Anterior</button><button disabled={busy || summary} onClick={()=>void move(index+1)}>Próxima</button><button className="primary" disabled={busy || summary} onClick={()=>void move(index+1,true)}>Salvar e continuar</button><button disabled={busy} onClick={()=>void perform(async()=>{await draft();setSummary(!summary);})}>{summary ? "Revisar pendência":"Consultar resumo das decisões"}</button></div></footer>
   </div></div>;
 }
 

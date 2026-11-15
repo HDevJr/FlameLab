@@ -1,0 +1,75 @@
+{
+  "kind": "SMOKE_REAL_GEMINI_REAL_DATASET",
+  "executed_at_utc": "2026-11-15T14:11:19.584747+00:00",
+  "model": "gemini-3.5-flash-lite",
+  "dataset_version": "sha256:165bbebf4c8e12a7e33e8629e30327a0cf8bde502e8f23f02e0af26d630ecaeb",
+  "record_statuses": [
+    "CONFERIDO_FONTE"
+  ],
+  "cases": [
+    {
+      "question": "Qual era a pressão no ensaio M1?",
+      "mode": "LIVE",
+      "abstained": true,
+      "abstain_reason": "MISSING_DATA",
+      "provider_error": null,
+      "latency_ms": 2033,
+      "retrieved_kinds": [
+        "GAP",
+        "RECORD_CARD"
+      ],
+      "approved_claims": [
+        {
+          "type": "LIMITACAO",
+          "text_pt": "No ensaio M1, a pressão está ausente e não é informada no corpus curado.",
+          "evidence_ids": [
+            "GAP-BASS2-M1-ambient_pressure"
+          ],
+          "numbers": [],
+          "verification": "PASS"
+        }
+      ],
+      "blocked_claims": [],
+      "numbers_published": [],
+      "warnings": []
+    },
+    {
+      "question": "Qual foi a velocidade de propagação da chama no ensaio M1?",
+      "mode": "LIVE",
+      "abstained": false,
+      "abstain_reason": null,
+      "provider_error": null,
+      "latency_ms": 2049,
+      "retrieved_kinds": [
+        "GAP",
+        "RECORD_CARD"
+      ],
+      "approved_claims": [
+        {
+          "type": "OBSERVACAO",
+          "text_pt": "No ensaio M1, a velocidade de propagação da chama foi de 0,071 mm/s.",
+          "evidence_ids": [
+            "REC-BASS2-M1.flame_spread_rate"
+          ],
+          "numbers": [
+            {
+              "value": 0.071,
+              "unit": "mm/s"
+            }
+          ],
+          "verification": "PASS"
+        }
+      ],
+      "blocked_claims": [],
+      "numbers_published": [
+        {
+          "value": 0.071,
+          "unit": "mm/s"
+        }
+      ],
+      "warnings": []
+    }
+  ],
+  "overall": "FAIL",
+  "pass_criterion": "Antes da revisão humana: LIVE, abstenção e nenhum número publicado."
+}

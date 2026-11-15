@@ -1,6 +1,6 @@
 # FlameLab — NASA Space Apps Challenge 2026
 
-**Status:** planejamento e preparação (F00). **Não há reprodução científica validada de experimentos NASA neste repositório.**
+**Status (15/11/2026):** protótipo funcional entregue ao hackathon, com dataset curado do ensaio BASS-II M1, assistente com verificador, interface responsiva e trilha FDS isolada. **Não há reprodução científica validada de experimentos NASA neste repositório:** a reprodução do M1 no FDS está bloqueada por lacunas na fonte (gates G1, G2 e G4).
 
 ## O que é
 
@@ -21,18 +21,46 @@ Desafio: [Flame in Freefall — NASA Space Apps 2026](https://www.spaceappschall
 
 > O documento mestre `.docx` na raiz é a visão do produto. O conteúdo de `planning/` é o plano de execução. Divergências e decisões precisam ser registradas, não resolvidas silenciosamente.
 
-## Estado verificado
+## Estado em 15/11/2026 (entrega)
+
+**Demonstração pública (somente leitura):** https://flame-lab-gamma.vercel.app/ — navegação pelos dados, fontes, comparar, buscar e assistente com **perguntas gravadas** (respostas reais da IA, verificadas e servidas do cache; pergunta nova volta "sem resposta em cache"). Importar, revisar e simular ficam desativados (`403 READ_ONLY_DEMO`). Como foi publicada: [docs/PUBLICAR_NA_VERCEL.md](docs/PUBLICAR_NA_VERCEL.md). Inclui, como dado de demonstração, a importação do relatório NASA CR-191109 (1993): origem verificada no NTRS e 130 parâmetros extraídos por IA, **todos não revisados**.
+
+**O que funciona hoje, com evidência:**
+
+| Área | Estado | Onde ver |
+|---|---|---|
+| Dataset BASS-II M1 | 9 registros **conferidos na fonte** (revisão humana registrada), 12 lacunas `AUSENTE NA FONTE`, evidências com página, tabela, linha e coluna | `data/`, ficha em `/experimentos/BASS2-M1` |
+| Assistente (`POST /api/ask`) | Gemini ao vivo e em cache, verificador V1–V8. Golden set real: 9 perguntas (4 factuais, 2 de dado ausente, 2 de extrapolação e 1 tentativa de injeção de prompt), com valores iguais aos do dataset conferido e extrapolações bloqueadas | [docs/evidence/golden_set_real_20261115.json](docs/evidence/golden_set_real_20261115.json) |
+| Interface | Sidebar/menu lateral, ficha M1 (condições, resultados, ressalvas, lacunas por tema), Assistente com estados e evidências, Validação FDS (G0–G5), Auditoria com histórico de revisões, detalhe de documento com PDF na página, importação com resultado em três estados, **exportar relatório (.md/.json)**, **comparar** e **buscar** | `frontend/` |
+| Importação de PDF | Reconhece número de relatório (`NASA-CR-191109`) mesmo em capas escaneadas, localiza o registro no NTRS e só marca "verificada" se o SHA-256 for idêntico ao do NTRS | `backend/app/ingest/`, `backend/app/nasa/` |
+| Responsivo | 360 a 1920 px (referência Pixel 9, 412×923), sem rolagem horizontal, alvos de toque de 44 px; teclado verificado em Chrome real | [docs/evidence/](docs/evidence/) `keyboard_check_*.json` |
+| FDS | Caso **genérico** verificado (FDS 6.11.1, Smokeview 6.11.2, FFmpeg 9.0.2 na máquina da equipe). **Não** reproduz o M1 | [fds/README.md](fds/README.md) |
+
+**O que continua pendente (não presumir como pronto):**
+- Validação visual manual (`NOT_RUN`): executar [docs/manual_test_roteiro_S01-S07.md](docs/manual_test_roteiro_S01-S07.md) e [docs/CHECKLIST_VALIDACAO_HUMANA.md](docs/CHECKLIST_VALIDACAO_HUMANA.md), incluindo celular real.
+- Telemetria do protótipo (Arduino Uno + BMP180 + 2 potenciômetros, Wokwi): **não há CSV nem projeto no repositório**; nenhuma tela de gráficos existe.
+- Reprodução do M1 no FDS: bloqueada (geometria, pirólise do PMMA e método de comparação ausentes na fonte).
+- Prompt v1 do assistente sem revisão científica. Parâmetros extraídos de outros artigos importados (ex.: relatório NASA CR-191109) estão **não revisados** e a leitura por IA é parcial (limite de lotes).
+- Vídeo de fallback do pitch e atualização da matriz [planning/06](planning/06_PITCH_ALIGNMENT_MATRIX.md).
+
+**Testes:** `pytest -q backend/tests` (397 passam, 3 ignorados) · `npm test` em `frontend/` (104) · `scripts/check_keyboard.py` (Chrome real).
+
+**Planos e briefings desta fase:** [plano até a entrega](docs/PLANO_ENTREGA_FINAL_15-11.md), [briefing de contexto](docs/BRIEFING_PARA_CHATGPT.md), protótipos de design em `prototypes/`.
+
+## Histórico de estado verificado
+
+> Os itens abaixo registram o que foi verificado em cada etapa e **podem estar superados** pelo quadro acima. Onde houver conflito, vale o quadro de 15/11/2026.
 
 - **Retomada da auditoria de integridade (15/11/2026):** código e testes estabilizados; dados e revisões anteriores preservados. O estado local tem 9 registros BASS-II conferidos com interpretação registrada e 14 DYLCO com revisão legada, dos quais 3 apresentam bloqueios. As descrições históricas abaixo sobre BASS-II pendente antecedem essas aprovações. Diagnóstico, política e validação: [BL-15 — continuidade da auditoria](docs/evidence/BL-15_integridade_continuidade.md). Nenhum achado foi promovido ou rebaixado automaticamente.
 - F00: **esqueleto** com endpoint de saúde (`/api/health`) e teste básico.
 - BL-05 (assistente de IA, só backend): `POST /api/ask` com adaptador Gemini, verificador determinístico V1–V8, abstenção e modos `live`/`cache`/`off`. **Testado com evidência sintética** (66 testes com provedor simulado + smoke test real do Gemini). Detalhes em [docs/evidence/BL-05_assistente_ia.md](docs/evidence/BL-05_assistente_ia.md).
-- BL-02 (dataset científico): `data/` contém o ensaio **BASS-II M1** (9 registros, 11 evidências, 12 lacunas), validado pelo `DatasetStore` (invariantes I-1–I-10). O hash do PDF-fonte confere. **Os 9 registros estão `EXTRAIDO_NAO_REVISADO`: aguardam revisão humana.** Até lá, o assistente informa que o dado "consta na fonte e aguarda revisão" (`PENDING_REVIEW`) e não cita o valor. Detalhes em [docs/evidence/BL-02_dataset_cientifico.md](docs/evidence/BL-02_dataset_cientifico.md) e [docs/curation/BASS2-M1_curation_report.md](docs/curation/BASS2-M1_curation_report.md).
+- BL-02 (dataset científico): `data/` contém o ensaio **BASS-II M1** (9 registros, 11 evidências, 12 lacunas), validado pelo `DatasetStore` (invariantes I-1–I-10). O hash do PDF-fonte confere. **(Histórico de 14/11: os 9 registros estavam `EXTRAIDO_NAO_REVISADO`; hoje estão conferidos, ver quadro acima.)** Enquanto um registro não é conferido, o assistente informa que o dado "consta na fonte e aguarda revisão" (`PENDING_REVIEW`) e não cita o valor. Detalhes em [docs/evidence/BL-02_dataset_cientifico.md](docs/evidence/BL-02_dataset_cientifico.md) e [docs/curation/BASS2-M1_curation_report.md](docs/curation/BASS2-M1_curation_report.md).
 - **Plataforma v2 (ADR-09, protótipo):** importação de artigos NASA em PDF (hash e procedência por comparação com o NTRS), extração assistida por IA com citação literal, enriquecimento NASA (NTRS, PSI via DataCite, TechPort), catálogo genérico, compatibilidade com o FDS, cenários derivados e worker FDS → Smokeview → MP4. Evidências em [docs/evidence/BL-12_plataforma_v2.md](docs/evidence/BL-12_plataforma_v2.md); decisões em [planning/09](planning/09_ADR_NASA_ENRICHMENT_FDS_SMOKEVIEW.md).
 - **FDS/Smokeview/FFmpeg: verificados nesta máquina** (FDS 6.11.1, Smokeview 6.11.2, FFmpeg 9.0.2), com um **caso de integração** genérico. **Não há reprodução do BASS-II M1**: depende de revisão humana, lacunas científicas e modelo aprovado.
 - **Jornada v2.1 (ADR-09 §11):** importação com etapas legíveis e tempos medidos, leitura do PDF em lotes com **cobertura de páginas** explícita, resumo consolidado (origem NASA ≠ números conferidos), **revisão humana pela interface** (mesma política do script), separação **Experimentos NASA / Demonstração FDS**, hipóteses sobre condições do experimento, vídeo em tempo real (1×) com player completo. Evidências: [docs/evidence/BL-13_jornada_v2_1.md](docs/evidence/BL-13_jornada_v2_1.md).
 - **Revisão científica assistida (ADR-09 §12):** a conferência compara **valor, unidade e página** separadamente (com conversão °C/K e Unicode), mostra qual campo divergiu, bloqueia interpretações que o trecho não sustenta e permite corrigir a extração preservando o original. Causa do `VALUE_MISMATCH` de 15/11 em [docs/evidence/BL-14_value_mismatch_revisao_assistida.md](docs/evidence/BL-14_value_mismatch_revisao_assistida.md).
-- Frontend: protótipo navegável (React + TypeScript + Vite) em `frontend/`. **Validação visual: NOT_RUN** — roteiro em [docs/manual_test_roteiro_S01-S07.md](docs/manual_test_roteiro_S01-S07.md); compila, tipa e passa nos testes de componentes (jsdom).
-- Busca textual/ranking e comparação lado a lado continuam não implementados.
+- Frontend: protótipo navegável (React + TypeScript + Vite) em `frontend/`. **Validação visual manual: NOT_RUN** (as verificações automáticas de largura, toque e teclado foram feitas) — roteiro em [docs/manual_test_roteiro_S01-S07.md](docs/manual_test_roteiro_S01-S07.md); compila, tipa e passa nos testes de componentes (jsdom).
+- Busca textual simples (relevância explicada), comparação lado a lado e exportação de relatório foram implementadas em 15/11 (`/buscar`, `/comparar`, botões na ficha do experimento). Ranking por similaridade de condições e relatório com gráficos **não** existem.
 - Valores BASS-II/M1 citados no planejamento **não são apresentados como conferidos na fonte primária** até dupla revisão do PDF original.
 
 ## Executar localmente (Windows / PowerShell)
@@ -81,7 +109,7 @@ Variáveis úteis do backend: `FLAMELAB_NASA_MODE=online|fixture` (padrão `onli
 | `FLAMELAB_AI_CACHE_DIR` | `data/ai_cache` | diretório do cache de respostas |
 | `FLAMELAB_AI_CACHE_WRITE` | `true` | grava respostas LIVE no cache |
 
-O `.env` é lido **pelo caminho explícito da raiz do repositório**, o que funciona tanto em `uvicorn` quanto em `python scripts\...`. Variáveis do ambiente têm precedência sobre o `.env`. Sem chave, os modos `off` e `cache` funcionam normalmente.
+O `.env` é lido **pelo caminho explícito da raiz do repositório** (nunca versionado; a chave do Gemini fica só aqui), o que funciona tanto em `uvicorn` quanto em `python scripts\...`. Variáveis do ambiente têm precedência sobre o `.env`. Sem chave, os modos `off` e `cache` funcionam normalmente.
 
 ### Modos
 - `off`: nenhuma chamada à IA. `/api/ask` responde `mode=UNAVAILABLE` (`MODE_OFF`) com as evidências recuperadas.
@@ -126,7 +154,7 @@ O smoke test grava o relatório em `docs/evidence/smoke_gemini_<UTC>.json`, sem 
 - `sources/` — documentos científicos locais; PDFs grandes/externos não são adicionados por padrão ao Git.
 - `data/` — dados estruturados versionados, quando validados.
 - `backend/` — API e testes.
-- `frontend/` — reservado à experiência visual do MVP.
+- `frontend/` — interface React (ver quadro de estado).
 - `scripts/` — tarefas de preparação/validação.
 - `fds/` — trilha experimental isolada; não execute entradas arbitrárias por rota web.
 

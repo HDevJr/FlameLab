@@ -131,3 +131,29 @@
 | O sistema **não confirma só porque o número coincide**: sinaliza quando o trecho não sustenta o conceito (ex.: ciclo de 20 a 80 °C ≠ “temperatura inicial”) | IMPLEMENTADO_E_TESTADO (heurística limitada) | Sim, como exemplo; **não** dizer que detecta toda ambiguidade |
 | Correção da extração preservando o original e exigindo outra pessoa | IMPLEMENTADO_E_TESTADO | Sim |
 | Identidade do revisor verificada | NAO_INICIADO (R-22) | **Não** |
+
+
+## 10. Estado de entrega (15/11, branch `feat/ui-p0`): o que pode ser dito agora
+> Atualização aditiva: as seções 1–9 ficam como registro histórico. Onde houver conflito com linhas antigas da §2, vale esta seção. Evidências: `docs/evidence/golden_set_real_20261115.json`, `docs/evidence/keyboard_check_*.json`, `docs/PLANO_ENTREGA_FINAL_15-11.md` e os testes (backend 397, frontend 115).
+
+| Req. | Estado em 15/11 | Pode ser dito? |
+|---|---|---|
+| P-01 Catálogo | IMPLEMENTADO_E_TESTADO: biblioteca com documentos e experimentos reais; **só o M1 é curado**, o restante é importado e não revisado | Sim: "começamos pelo BASS-II M1". **Não**: "catálogo dos ensaios da Tabela 5.1" |
+| P-02 Ficha M1 rastreável | IMPLEMENTADO_E_TESTADO: **9/9 conferidos** por revisor registrado; origem por página, tabela, linha e coluna; "Ver origem" abre o PDF na página | Sim. Validação visual manual: **NOT_RUN** |
+| P-03 Lacunas | IMPLEMENTADO_E_TESTADO: 12 lacunas por tema, "AUSENTE NA FONTE" | Sim |
+| P-04 Busca + ranking | **Parcial:** busca textual simples com relevância explicada (IMPLEMENTADO_E_TESTADO). **Ranking por similaridade de condições: PLANEJADO** | Sim para a busca. **Não** dizer "ranking de ensaios parecidos" |
+| P-05 Assistente citado | IMPLEMENTADO_E_TESTADO com **dados reais do M1**: golden set de 9 perguntas, valores iguais ao dataset conferido. **Prompt v1 sem revisão científica** | Sim, dizendo "resposta gerada pela IA e verificada" e, se for cache, "reproduzida do cache" |
+| P-06 Abstenção | IMPLEMENTADO_E_TESTADO com dados reais: Marte e Lua bloqueados, pressão e temperatura ausentes, injeção de prompt ignorada | Sim — é o ponto central do pitch |
+| P-07 Comparação | IMPLEMENTADO_E_TESTADO (valores registrados, SI, avisos de unidade e de documentos distintos). Sem gráfico nem análise causal | Sim, com o aviso "não é avaliação de risco" |
+| P-08 Gráfico observado | **PLANEJADO** (não existe) | Não mostrar |
+| P-09 Modo offline/degradado | Modos `off`, `cache` e `live` e estados na interface: IMPLEMENTADO_E_TESTADO. **Demo com a rede desligada: não testada de ponta a ponta** | Sim para os estados; testar a rede antes de afirmar |
+| P-10 Trilha ≤3 min | **PLANEJADO**: vídeo de fallback não gravado; checklist de validação humana pendente | Não afirmar |
+| P-14 Importação de PDF completo | IMPLEMENTADO_NAO_VALIDADO: título e origem NASA por número de relatório (hash idêntico ao do NTRS), linha do tempo com progresso real. **Extração parcial** (ex.: 96 de 402 páginas) e **parâmetros não revisados** | Sim, **dizendo que a leitura é parcial e que nada é conferido sem uma pessoa** |
+| P-17 Prontidão FDS | IMPLEMENTADO_E_TESTADO: página G0–G5 derivada de dados reais, M1 bloqueado, sem botão de execução | Sim |
+| P-19 Reprodução do M1 | **BLOQUEADO** (G1, G2, G4) | "Ainda não reproduzimos o M1" |
+| P-22 Independência da NASA | IMPLEMENTADO_E_TESTADO: sidebar e rodapé | Sim |
+| Novos | Exportar relatório (.md/.json): IMPLEMENTADO_E_TESTADO. Responsivo 360–1920 px e teclado em Chrome real: verificados automaticamente | Sim. **Celular real: NOT_RUN** |
+
+**Continua proibido:** "reprodução fiel do M1", "a IA prevê/simula fogo", "aprovado/endossado pela NASA", telemetria ou gráfico sem dado real (não há CSV do Wokwi no repositório), vídeo FDS como se fosse do M1.
+
+**Publicação (15/11):** demonstração pública somente leitura em https://flame-lab-gamma.vercel.app/ (Vercel). Pode ser dito: "o protótipo está publicado para consulta". As respostas do assistente na versão pública vêm do **cache** (25 perguntas gravadas) e isso deve ser dito. **Não** dizer que qualquer pessoa pode importar ou revisar dados online: essas funções estão desativadas e exigiriam banco, login e processamento em segundo plano (ver `docs/PUBLICAR_NA_VERCEL.md`).

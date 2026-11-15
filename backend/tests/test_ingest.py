@@ -230,3 +230,46 @@ def test_literal_check_tolerates_line_end_hyphenation_but_not_paraphrase():
     exps, rejected = extraction.validate(out, pages, "DOC-X", "m", "2026-11-14T00:00:00Z")
     assert [p["parameter"] for p in exps[0]["parameters"]] == ["peak_temperature"]
     assert [r["reason"] for r in rejected] == ["QUOTE_NOT_LITERAL"]
+
+
+def test_scanned_cover_one_word_per_line_gives_report_number_and_title(tmp_path):
+    """Capa escaneada (OCR com uma palavra por linha), como a dos relatórios NTRS antigos."""
+    words = "(NASA-CR-191109) EFFECTS OF BUOYANCY ON GAS JET DIFFUSION FLAMES Final Report (Science Applications) 364 p".split()
+    doc = pymupdf.open()
+    page = doc.new_page()
+    for i, w in enumerate(words):
+        page.insert_text((50, 40 + 12 * i), w, fontsize=9)
+    path = tmp_path / "cover.pdf"
+    doc.save(path)
+    info = inspect_pdf(path)
+    assert info.report_numbers == ["NASA/CR-191109"]
+    assert info.title and "BUOYANCY" in info.title.upper()
+
+
+def test_ntrs_match_by_report_number_uses_the_unique_record():
+    from backend.app.nasa.enrichment.service import EnrichmentService
+    from backend.app.nasa.models import DocumentMeta, MatchState, MatchType
+
+    class StubNtrs:
+        def search(self, **kw):
+            assert kw["q"] == "NASA-CR-191109"
+            return [{"ntrs_id": "19930021842", "title": "Effects of buoyancy on gas jet diffusion flames", "url": "u",
+                     "report_numbers": ["NASA-CR-191109", "E-7720"], "authors": [], "sti_type": "CR", "center": None,
+                     "publication_date": None, "keywords": [], "distribution": None, "downloads": [], "related": []}]
+
+    svc = EnrichmentService.__new__(EnrichmentService)
+    meta = DocumentMeta(document_id="DOC-x", title="EFFFCTS OF bUOYANCY ON GAS JET DIFFUSION FLAMES", report_numbers=["NASA/CR-191109"])
+    match, citation = svc._ntrs(meta, StubNtrs())
+    assert match.state == MatchState.MATCH_CANDIDATE and match.match_type == MatchType.IDENTIFIER
+    assert match.source_record_id == "19930021842" and citation["title"].startswith("Effects of buoyancy")
+
+
+def test_batch_limit_is_read_from_dotenv_and_environment_wins(tmp_path):
+    from backend.app.ingest.service import max_batches_from_env
+
+    f = tmp_path / ".env"
+    f.write_text("FLAMELAB_EXTRACT_MAX_BATCHES=30\n", encoding="utf-8")
+    assert max_batches_from_env(env={}, env_file=f) == 30
+    assert max_batches_from_env(env={"FLAMELAB_EXTRACT_MAX_BATCHES": "12"}, env_file=f) == 12  # ambiente tem precedência
+    assert max_batches_from_env(env={"FLAMELAB_EXTRACT_MAX_BATCHES": "999"}, env_file=f) == 40  # teto
+    assert max_batches_from_env(env={}, env_file=tmp_path / "nao_existe") == 8

@@ -1,0 +1,55 @@
+{
+  "key": "de44b5861ae78b734f16b85c085f0fad633d7c2026197115bf647be1152a98c6",
+  "question": "Qual seria a propagação da chama na atmosfera de Marte?",
+  "scope": {
+    "investigation_id": "PSI-25",
+    "test_uids": [
+      "BASS2-M1"
+    ]
+  },
+  "dataset_version": "sha256:165bbebf4c8e12a7e33e8629e30327a0cf8bde502e8f23f02e0af26d630ecaeb",
+  "prompt_version": "v2",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "created_at": "2026-11-15T14:13:14.686329Z",
+  "output": {
+    "claims": [
+      {
+        "type": "LIMITACAO",
+        "text_pt": "A atmosfera de Marte é uma condição não estudada nas evidências disponíveis do ensaio BASS2-M1, impossibilitando previsões numéricas.",
+        "evidence_ids": [
+          "REC-BASS2-M1.flame_spread_rate"
+        ],
+        "numbers": []
+      },
+      {
+        "type": "OBSERVACAO",
+        "text_pt": "No ensaio BASS2-M1, a velocidade de propagação da chama observada foi de 0,071 mm/s.",
+        "evidence_ids": [
+          "REC-BASS2-M1.flame_spread_rate"
+        ],
+        "numbers": [
+          {
+            "value": 0.071,
+            "unit": "mm/s"
+          }
+        ]
+      },
+      {
+        "type": "OBSERVACAO",
+        "text_pt": "O ensaio BASS2-M1 utilizou uma concentração inicial de oxigênio de 22,2 vol%.",
+        "evidence_ids": [
+          "REC-BASS2-M1.o2_initial"
+        ],
+        "numbers": [
+          {
+            "value": 22.2,
+            "unit": "vol%"
+          }
+        ]
+      }
+    ],
+    "abstain": true,
+    "abstain_reason": "As evidências do ensaio BASS2-M1 cobrem apenas condições terrestres ou de microgravidade em atmosfera enriquecida com oxigênio, não contendo dados sobre a atmosfera de Marte."
+  }
+}

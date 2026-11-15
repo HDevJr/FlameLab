@@ -1,0 +1,34 @@
+{
+  "key": "c7ba54afc045985681b55961517265caa8144d69b71d16d9e0d5ad11e2cb2869",
+  "question": "Qual foi a velocidade de propagação da chama no ensaio M1?",
+  "scope": {
+    "investigation_id": "PSI-25",
+    "test_uids": [
+      "BASS2-M1"
+    ]
+  },
+  "dataset_version": "sha256:165bbebf4c8e12a7e33e8629e30327a0cf8bde502e8f23f02e0af26d630ecaeb",
+  "prompt_version": "v2",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "created_at": "2026-11-15T14:13:03.862438Z",
+  "output": {
+    "claims": [
+      {
+        "type": "OBSERVACAO",
+        "text_pt": "No ensaio M1, a velocidade de propagação da chama foi de 0,071 mm/s.",
+        "evidence_ids": [
+          "REC-BASS2-M1.flame_spread_rate"
+        ],
+        "numbers": [
+          {
+            "value": 0.071,
+            "unit": "mm/s"
+          }
+        ]
+      }
+    ],
+    "abstain": false,
+    "abstain_reason": null
+  }
+}

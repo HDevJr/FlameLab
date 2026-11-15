@@ -1,0 +1,29 @@
+{
+  "key": "f30f20cd9ccb521fe8f12b12a97c8942f96a2f8c0cb5bcb8a028ff9f32cd6930",
+  "question": "Qual foi o procedimento de ignição no ensaio M1?",
+  "scope": {
+    "investigation_id": "PSI-25",
+    "test_uids": [
+      "BASS2-M1"
+    ]
+  },
+  "dataset_version": "sha256:165bbebf4c8e12a7e33e8629e30327a0cf8bde502e8f23f02e0af26d630ecaeb",
+  "prompt_version": "v2",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "created_at": "2026-11-15T17:10:07.243219Z",
+  "output": {
+    "claims": [
+      {
+        "type": "LIMITACAO",
+        "text_pt": "O procedimento, a duração e a fonte de ignição no ensaio M1 estão ausentes no corpus curado.",
+        "evidence_ids": [
+          "GAP-BASS2-M1-ignition_procedure"
+        ],
+        "numbers": []
+      }
+    ],
+    "abstain": true,
+    "abstain_reason": "As evidências disponíveis não informam o procedimento de ignição no ensaio M1, pois esse parâmetro está ausente."
+  }
+}

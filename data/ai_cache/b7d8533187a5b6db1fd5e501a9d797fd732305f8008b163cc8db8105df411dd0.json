@@ -1,0 +1,37 @@
+{
+  "key": "b7d8533187a5b6db1fd5e501a9d797fd732305f8008b163cc8db8105df411dd0",
+  "question": "Como a chama se comportaria na Estação Espacial Internacional com outra pressão?",
+  "scope": {
+    "investigation_id": "PSI-25",
+    "test_uids": [
+      "BASS2-M1"
+    ]
+  },
+  "dataset_version": "sha256:165bbebf4c8e12a7e33e8629e30327a0cf8bde502e8f23f02e0af26d630ecaeb",
+  "prompt_version": "v2",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "created_at": "2026-11-15T17:10:31.884652Z",
+  "output": {
+    "claims": [
+      {
+        "type": "LIMITACAO",
+        "text_pt": "Para o ensaio BASS2-M1, a pressão ambiente é um dado ausente no corpus curado.",
+        "evidence_ids": [
+          "GAP-BASS2-M1-ambient_pressure"
+        ],
+        "numbers": []
+      },
+      {
+        "type": "LIMITACAO",
+        "text_pt": "As evidências não permitem prever numericamente o comportamento da chama sob outra pressão para o ensaio BASS2-M1.",
+        "evidence_ids": [
+          "GAP-BASS2-M1-ambient_pressure"
+        ],
+        "numbers": []
+      }
+    ],
+    "abstain": true,
+    "abstain_reason": "As evidências disponíveis não contêm informações sobre o comportamento da chama em pressões diferentes para o ensaio BASS2-M1, pois o parâmetro de pressão está ausente."
+  }
+}

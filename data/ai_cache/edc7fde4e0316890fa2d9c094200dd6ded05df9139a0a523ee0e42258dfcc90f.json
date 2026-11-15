@@ -1,0 +1,68 @@
+{
+  "key": "edc7fde4e0316890fa2d9c094200dd6ded05df9139a0a523ee0e42258dfcc90f",
+  "question": "Qual seria a velocidade de propagação da chama com 30% de oxigênio?",
+  "scope": {
+    "investigation_id": "PSI-25",
+    "test_uids": [
+      "BASS2-M1"
+    ]
+  },
+  "dataset_version": "sha256:165bbebf4c8e12a7e33e8629e30327a0cf8bde502e8f23f02e0af26d630ecaeb",
+  "prompt_version": "v2",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "created_at": "2026-11-15T17:10:46.933058Z",
+  "output": {
+    "claims": [
+      {
+        "type": "LIMITACAO",
+        "text_pt": "As evidências para o ensaio BASS2-M1 não incluem testes com concentração de 30% de oxigênio.",
+        "evidence_ids": [
+          "REC-BASS2-M1.o2_initial"
+        ],
+        "numbers": [
+          {
+            "value": 30.0,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "type": "OBSERVACAO",
+        "text_pt": "No ensaio BASS2-M1, a concentração inicial de O2 registrada foi de 22,2 vol%.",
+        "evidence_ids": [
+          "REC-BASS2-M1.o2_initial"
+        ],
+        "numbers": [
+          {
+            "value": 22.2,
+            "unit": "vol%"
+          }
+        ]
+      },
+      {
+        "type": "OBSERVACAO",
+        "text_pt": "No ensaio BASS2-M1, a velocidade de propagação da chama observada foi de 0,071 mm/s.",
+        "evidence_ids": [
+          "REC-BASS2-M1.flame_spread_rate"
+        ],
+        "numbers": [
+          {
+            "value": 0.071,
+            "unit": "mm/s"
+          }
+        ]
+      },
+      {
+        "type": "LIMITACAO",
+        "text_pt": "Não é permitido fazer previsões numéricas para condições não estudadas nas evidências, como outra atmosfera.",
+        "evidence_ids": [
+          "REC-BASS2-M1.o2_initial"
+        ],
+        "numbers": []
+      }
+    ],
+    "abstain": true,
+    "abstain_reason": "As evidências disponíveis cobrem apenas uma concentração inicial de O2 de 22,2 vol% no ensaio BASS2-M1, sem dados para 30% de oxigênio."
+  }
+}

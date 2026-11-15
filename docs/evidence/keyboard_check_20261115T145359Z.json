@@ -1,0 +1,85 @@
+{
+ "executed_at_utc": "2026-11-15T14:53:32.438302+00:00",
+ "browser": "chrome (Playwright)",
+ "routes": [
+  {
+   "route": "/",
+   "focusable_reached": 25,
+   "reaches_main": true,
+   "without_visible_focus": [],
+   "keyboard_trap": false
+  },
+  {
+   "route": "/importar",
+   "focusable_reached": 13,
+   "reaches_main": true,
+   "without_visible_focus": [],
+   "keyboard_trap": false
+  },
+  {
+   "route": "/assistente",
+   "focusable_reached": 17,
+   "reaches_main": true,
+   "without_visible_focus": [],
+   "keyboard_trap": false
+  },
+  {
+   "route": "/validacao-fds",
+   "focusable_reached": 11,
+   "reaches_main": true,
+   "without_visible_focus": [],
+   "keyboard_trap": false
+  },
+  {
+   "route": "/demonstracao-fds",
+   "focusable_reached": 14,
+   "reaches_main": true,
+   "without_visible_focus": [],
+   "keyboard_trap": false
+  },
+  {
+   "route": "/execucoes",
+   "focusable_reached": 13,
+   "reaches_main": true,
+   "without_visible_focus": [],
+   "keyboard_trap": false
+  },
+  {
+   "route": "/auditoria",
+   "focusable_reached": 12,
+   "reaches_main": true,
+   "without_visible_focus": [],
+   "keyboard_trap": false
+  },
+  {
+   "route": "/experimentos/BASS2-M1",
+   "focusable_reached": 38,
+   "reaches_main": true,
+   "without_visible_focus": [],
+   "keyboard_trap": false
+  },
+  {
+   "route": "/documentos/NASA-TM-20210011385",
+   "focusable_reached": 16,
+   "reaches_main": true,
+   "without_visible_focus": [],
+   "keyboard_trap": false
+  },
+  {
+   "route": "/documentos/NASA-TM-20210011385/analise",
+   "focusable_reached": 19,
+   "reaches_main": true,
+   "without_visible_focus": [],
+   "keyboard_trap": false
+  }
+ ],
+ "checks": {
+  "assistant_enter_sends": true,
+  "mobile_menu": {
+   "opens_with_enter": true,
+   "closes_with_esc": true,
+   "focus_returns": true
+  }
+ },
+ "overall": "PASS"
+}

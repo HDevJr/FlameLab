@@ -13,5 +13,9 @@ CASES_DIR = REPO_ROOT / "fds" / "cases"
 def var_dir() -> Path:
     raw = os.environ.get("FLAMELAB_VAR_DIR")
     path = Path(raw) if raw else REPO_ROOT / "var"
-    path.mkdir(parents=True, exist_ok=True)
+    try:
+        path.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        if os.environ.get("FLAMELAB_READ_ONLY", "").strip().lower() not in ("1", "true", "yes", "on"):
+            raise
     return path

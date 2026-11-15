@@ -1,0 +1,77 @@
+{
+  "key": "29eb87af50c3da59371691176c081c920cd3b92acd1e612d7fd7cfde3a690786",
+  "question": "Quais valores do M1 são condições de entrada e quais são resultados observados?",
+  "scope": {
+    "investigation_id": "PSI-25",
+    "test_uids": [
+      "BASS2-M1"
+    ]
+  },
+  "dataset_version": "sha256:165bbebf4c8e12a7e33e8629e30327a0cf8bde502e8f23f02e0af26d630ecaeb",
+  "prompt_version": "v2",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "created_at": "2026-11-15T17:10:50.737644Z",
+  "output": {
+    "claims": [
+      {
+        "type": "OBSERVACAO",
+        "text_pt": "No ensaio BASS2-M1, são condições de entrada a velocidade do ar de 9 cm/s, a queima em 1 face, a concentração inicial de O₂ de 22,2 vol%, a espessura da amostra de 1 mm e a largura da amostra de 2,2 cm.",
+        "evidence_ids": [
+          "REC-BASS2-M1.airflow_velocity",
+          "REC-BASS2-M1.burning_faces",
+          "REC-BASS2-M1.o2_initial",
+          "REC-BASS2-M1.thickness",
+          "REC-BASS2-M1.width"
+        ],
+        "numbers": [
+          {
+            "value": 9.0,
+            "unit": "cm/s"
+          },
+          {
+            "value": 1.0,
+            "unit": null
+          },
+          {
+            "value": 22.2,
+            "unit": "vol%"
+          },
+          {
+            "value": 1.0,
+            "unit": "mm"
+          },
+          {
+            "value": 2.2,
+            "unit": "cm"
+          }
+        ]
+      },
+      {
+        "type": "OBSERVACAO",
+        "text_pt": "No ensaio BASS2-M1, são resultados observados o tempo de queima de 6,4 min, a velocidade de propagação da chama de 0,071 mm/s e a concentração final de O₂ de 21,9 vol%.",
+        "evidence_ids": [
+          "REC-BASS2-M1.burn_duration",
+          "REC-BASS2-M1.flame_spread_rate",
+          "REC-BASS2-M1.o2_final"
+        ],
+        "numbers": [
+          {
+            "value": 6.4,
+            "unit": "min"
+          },
+          {
+            "value": 0.071,
+            "unit": "mm/s"
+          },
+          {
+            "value": 21.9,
+            "unit": "vol%"
+          }
+        ]
+      }
+    ],
+    "abstain": false,
+    "abstain_reason": null
+  }
+}

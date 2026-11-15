@@ -19,7 +19,7 @@ export default function Library() {
         <div className="grid">{list.map((d) => (
           <div className="card" key={d.document_id}>
             <div className="row"><Badge tone="info">{d.origin === "CURATED" ? "Dataset curado" : "Importado"}</Badge><Provenance p={d.nasa_provenance} /></div>
-            <h3>{d.title}</h3>
+            <h3><Link to={`/documentos/${d.document_id}`}>{d.title}</Link></h3>
             <small className="muted">{fmtBytes(d.size_bytes)}</small>
             <h3>Experimentos ({d.experiments.length})</h3>
             {d.experiments.length === 0 && <p className="muted">Nenhum experimento extraído. O artigo continua disponível para análise e enriquecimento.</p>}

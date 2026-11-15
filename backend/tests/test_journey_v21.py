@@ -154,10 +154,22 @@ def test_batch_cap_leaves_explicit_partial_coverage():
 
 def test_failed_batch_is_not_counted_as_read_and_others_continue():
     r = extraction.run_batched(SeqProvider([out("Run A", 3), ProviderErrorKind.UNAVAILABLE, out("Run A", 27, "z")]),
-                               pages_30(), "DOC-X", "t")
+                               pages_30(), "DOC-X", "t", retry_wait_s=-1)  # -1 desliga a nova tentativa
     cov = r["coverage"]
     assert cov["mode"] == "AI_PARTIAL" and cov["not_processed_ranges"] == "13–24"
     assert r["batches"][1]["error"] == "UNAVAILABLE"
+
+
+def test_transient_failure_gets_one_more_attempt_and_the_batch_is_recovered():
+    prov = SeqProvider([out("Run A", 3), ProviderErrorKind.UNAVAILABLE, out("Run A", 15, "w2"), out("Run A", 27, "z")])
+    r = extraction.run_batched(prov, pages_30(), "DOC-X", "t", retry_wait_s=0, sleep=lambda _s: None)
+    assert r["coverage"]["mode"] == "AI_FULL" and r["batches"][1].get("retried") is True and r["batches"][1]["error"] is None
+
+
+def test_persistent_failure_is_still_reported_after_the_retry():
+    prov = SeqProvider([out("Run A", 3), ProviderErrorKind.UNAVAILABLE, ProviderErrorKind.UNAVAILABLE, out("Run A", 27, "z")])
+    r = extraction.run_batched(prov, pages_30(), "DOC-X", "t", retry_wait_s=0, sleep=lambda _s: None)
+    assert r["coverage"]["not_processed_ranges"] == "13–24" and r["batches"][1]["error"] == "UNAVAILABLE"
 
 
 def test_auth_error_aborts_and_marks_remaining_pages_unread():
