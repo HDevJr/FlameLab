@@ -4,6 +4,7 @@ import { ApiError, api, type Analysis, type ImportRecord } from "../api";
 import { Async, Badge, ErrorBox, Provenance, StepList, Term, useLoad } from "../components";
 import { fmtBytes, formatDuration } from "../lib";
 import { importOutcome } from "../import_outcome";
+import { ImportTimeline } from "../ImportTimeline";
 import { AnalysisSummary } from "./Analysis";
 
 /** Documentos já importados neste computador, com a situação de cada um. */
@@ -112,7 +113,8 @@ export default function Import() {
                 </>
               );
             })()}
-            <details className="tech big" open={!done}><summary>{done ? `Ver as ${rec.steps.length} etapas e os tempos` : "Etapas do processamento"}</summary><StepList steps={rec.steps} /></details>
+            <ImportTimeline steps={rec.steps} totalMs={rec.metrics.total_ms} />
+            <details className="tech big" open={false}><summary>Detalhes técnicos das etapas</summary><StepList steps={rec.steps} /></details>
             {!done && rec.warnings_pt.map((w) => <div className="box warn" key={w}>{w}</div>)}
           </div>
           {done && analysis && (
