@@ -336,3 +336,4 @@ ol.timeline-steps li.skipped .dot { background: var(--warn-bg); color: var(--war
 .ring.ok .bar { stroke: #15803D; } .ring.bad .bar { stroke: #DC2626; }
 .ring .pct { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--mono); font-weight: 700; font-size: 17px; }
 @media (prefers-reduced-motion: reduce) { .ring .bar { transition: none; } }
+details.tl-note { margin-top: 4px; } details.tl-note > summary { cursor: pointer; font-size: 13px; color: var(--warn); font-weight: 600; min-height: 32px; display: flex; align-items: center; } details.tl-note .limit { margin-top: 4px; }

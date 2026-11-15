@@ -70,7 +70,9 @@ export function ImportTimeline({ steps, totalMs, extractProgress }: { steps: Ste
                   <span style={{ width: `${Math.max(2, Math.round(shares[i] * 100))}%` }} />
                 </div>
               )}
-              {s.limitation_pt && s.state !== "PENDING" && <div className="limit">⚠ {s.limitation_pt}</div>}
+              {s.limitation_pt && s.state !== "PENDING" && (
+                <details className="tl-note"><summary>⚠ Ver aviso desta etapa</summary><div className="limit">{s.limitation_pt}</div></details>
+              )}
             </div>
           </li>
         ))}
