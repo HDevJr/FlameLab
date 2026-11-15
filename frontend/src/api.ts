@@ -4,11 +4,19 @@ export type Evidence = {
   evidence_id?: string; document_id?: string; page_pdf: number | null; page_printed: number | null;
   column_label?: string | null; quote: string | null; locator_pt: string; literal_check?: string;
 };
-export type ReviewEvent = {
-  at: string; action: "CONFIRM" | "DOUBT" | "DIVERGENCE"; outcome: "APPROVED" | "REFUSED" | "RECORDED";
-  reviewer: string; notes: string | null; observed_value: string | null; observed_unit: string | null;
-  observed_page_pdf: number | null; code?: string; message?: string;
+export type FieldComparison = {
+  field: "value" | "unit" | "page"; label_pt: string; expected: string | number | null; received: string | number | null;
+  status: "MATCH" | "CONVERTIBLE" | "MISMATCH" | "MISSING" | "INCOMPATIBLE" | "UNSUPPORTED" | "UNEXPECTED" | "UNREADABLE" | "AMBIGUOUS" | "NOT_APPLICABLE";
+  detail_pt: string | null; expected_si?: string; received_si?: string; from_value_field?: boolean;
 };
+export type SemanticFlag = { code: string; severity: "BLOCKING" | "INFO"; title_pt: string; detail_pt: string; terms: string[] };
+export type ReviewEvent = {
+  at: string; action: "CONFIRM" | "CORRECT" | "DOUBT" | "DIVERGENCE"; outcome: "APPROVED" | "REFUSED" | "RECORDED" | "CORRECTED";
+  reviewer: string; notes: string | null; observed_value: string | null; observed_unit: string | null;
+  observed_page_pdf: number | null; code?: string; message?: string; comparisons?: FieldComparison[] | null;
+  semantic_flags?: SemanticFlag[] | null; prefilled_unchanged?: boolean; before?: Record<string, unknown>; after?: Record<string, unknown>;
+};
+export type UnitInfo = { raw: string | null; canonical: string | null; display: string | null; dimension_pt: string | null; supported: boolean; has_unit: boolean };
 export type Parameter = {
   record_id: string; parameter: string; label_pt: string; role: "CONDICAO" | "OBSERVAVEL" | "METADADO";
   nature: string; status: string; original: { value: number | string | null; unit: string | null; raw_text?: string } | null;
@@ -16,6 +24,10 @@ export type Parameter = {
   extraction?: { method: string; by: string } | null; reviewer?: string | null;
   review?: { reviewer: string; reviewed_at: string | null; notes: string | null; checked_document_sha256: string | null } | null;
   events?: ReviewEvent[];
+  technical_name?: string; label_source?: "IA" | "GLOSSARIO" | "HUMANO" | "CURADORIA"; unit_info?: UnitInfo; semantic_flags?: SemanticFlag[];
+  original_extraction?: { label_pt: string | null; original: { value: number | string | null; unit: string | null } } | null;
+  corrections?: { at: string; by: string; notes: string; before: Record<string, unknown>; after: Record<string, unknown>; reopened: boolean }[];
+  review_history?: { reviewer: string; reviewed_at: string | null }[];
 };
 export type Gap = { gap_id: string; parameter: string; label_pt: string; explanation_pt: string; purpose_blocked: string[]; origin: string };
 export type Review = { total: number; reviewed: number; pending: number; gaps: number };
@@ -102,10 +114,18 @@ export type Run = {
   log_tail: string[];
 };
 export type SimStatus = { executor: string; available: boolean; detail: string; demo: boolean; versions: { fds: string | null; smokeview: string | null; ffmpeg: string | null } | null; limits: Record<string, unknown> };
-export type ReviewResult = { outcome: "APPROVED" | "RECORDED"; status: string; event: ReviewEvent; reviewed_at?: string };
+export type ReviewResult = { outcome: "APPROVED" | "RECORDED" | "CORRECTED"; status: string; event: ReviewEvent; reviewed_at?: string; reopened?: boolean };
+
+export type ReviewDetails = { accepted: boolean; code: string; reason_code: string; comparisons: FieldComparison[]; failed_fields: string[]; semantic_flags?: SemanticFlag[] };
+export type ReviewPreview = {
+  record_id: string; status: string; comparisons: FieldComparison[]; fields_accepted: boolean; field_code: string | null;
+  field_message_pt: string | null; failed_fields: string[]; semantic_flags: SemanticFlag[]; blocking_flags: SemanticFlag[];
+  reviewer_issue: string | null; accepted: boolean;
+};
+export type RecordContext = { found: boolean; page: number | null; quote: string | null; before: string; after: string; reason_pt?: string };
 
 export class ApiError extends Error {
-  constructor(public status: number, public code: string, message: string) { super(message); }
+  constructor(public status: number, public code: string, message: string, public details?: ReviewDetails) { super(message); }
 }
 
 async function call<T>(path: string, init?: RequestInit): Promise<T> {
@@ -118,7 +138,7 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
   const body = await resp.json().catch(() => null);
   if (!resp.ok) {
     const e = body?.error ?? {};
-    throw new ApiError(resp.status, e.code ?? "HTTP_ERROR", e.message ?? `Erro ${resp.status}`);
+    throw new ApiError(resp.status, e.code ?? "HTTP_ERROR", e.message ?? `Erro ${resp.status}`, e.details);
   }
   return body.data as T;
 }
@@ -126,8 +146,9 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
 const json = (method: string, data: unknown): RequestInit => ({ method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
 
 export type ReviewBody = {
-  action: "CONFIRM" | "DOUBT" | "DIVERGENCE"; reviewer: string; observed_value?: string | null; observed_unit?: string | null;
-  observed_page_pdf?: number | null; notes?: string | null; checked_pdf?: boolean;
+  action: "CONFIRM" | "CORRECT" | "DOUBT" | "DIVERGENCE"; reviewer: string; observed_value?: string | null; observed_unit?: string | null;
+  observed_page_pdf?: number | null; notes?: string | null; checked_pdf?: boolean; prefilled_unchanged?: boolean;
+  corrected_label_pt?: string | null; corrected_value?: string | null; corrected_unit?: string | null;
 };
 
 export const api = {
@@ -141,6 +162,9 @@ export const api = {
   upload: (file: File) => { const f = new FormData(); f.append("file", file); return call<ImportRecord>("/api/imports", { method: "POST", body: f }); },
   importRecord: (id: string) => call<ImportRecord>(`/api/imports/${id}`),
   review: (recordId: string, body: ReviewBody) => call<ReviewResult>(`/api/records/${recordId}/review`, json("POST", body)),
+  reviewPreview: (recordId: string, body: { reviewer?: string | null; observed_value?: string | null; observed_unit?: string | null; observed_page_pdf?: number | null }) =>
+    call<ReviewPreview>(`/api/records/${recordId}/review/preview`, json("POST", body)),
+  recordContext: (recordId: string, evidence = 0) => call<RecordContext>(`/api/records/${recordId}/context?evidence=${evidence}`),
   simStatus: () => call<SimStatus>("/api/simulation/status"),
   models: () => call<SimModel[]>("/api/simulation/models"),
   createScenario: (d: { model_id: string; values: Record<string, number>; title?: string }) => call<Scenario>("/api/scenarios", json("POST", d)),

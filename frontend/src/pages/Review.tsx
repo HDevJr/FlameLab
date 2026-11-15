@@ -3,21 +3,22 @@ import { Link, useParams } from "react-router-dom";
 import { api, type Experiment, type Parameter } from "../api";
 import { Async, Badge, DataKind, Term, useLoad } from "../components";
 import ReviewPanel from "../ReviewPanel";
-import { COMPAT_LABEL, STATUS_LABEL, formatValue, groupByRole } from "../lib";
+import { COMPAT_LABEL, STATUS_LABEL, groupByRole, valueText } from "../lib";
 
 function ParamTable({ rows, title, hint, selected, onSelect }: { rows: Parameter[]; title: string; hint: string; selected: string | null; onSelect: (id: string) => void }) {
   if (!rows.length) return null;
   return (
     <>
       <h2>{title}</h2><p className="muted">{hint}</p>
-      <table className="selectable"><thead><tr><th>Parâmetro</th><th>Valor (original)</th><th>Estado</th><th>Origem</th><th></th></tr></thead><tbody>
+      <table className="selectable"><thead><tr><th>Parâmetro</th><th>Valor</th><th>Unidade</th><th>Estado</th><th>Origem</th><th></th></tr></thead><tbody>
         {rows.map((p) => {
           const s = STATUS_LABEL[p.status] ?? { text: p.status, tone: "muted" as const };
           return (
             <tr key={p.record_id} className={selected === p.record_id ? "sel" : ""}>
-              <td><strong>{p.label_pt}</strong></td>
-              <td>{formatValue(p)}{p.normalized && <div className="detail">SI: {p.normalized.value} {p.normalized.unit}</div>}</td>
-              <td><Badge tone={s.tone}>{s.text}</Badge>{(p.events?.length ?? 0) > 0 && <div className="detail">{p.events!.length} registro(s) de revisão</div>}</td>
+              <td><strong>{p.label_pt}</strong><div className="detail"><code>{p.technical_name ?? p.parameter}</code></div></td>
+              <td><strong>{valueText(p.original?.value) || "—"}</strong>{p.normalized && <div className="detail">SI: {valueText(Number(p.normalized.value.toPrecision(8)))} {p.normalized.unit}</div>}</td>
+              <td>{p.unit_info?.display ?? (p.unit_info && !p.unit_info.supported ? p.original?.unit : <span className="muted">—</span>)}</td>
+              <td><Badge tone={s.tone}>{s.text}</Badge>{(p.semantic_flags ?? []).some((f) => f.severity === "BLOCKING") && <div className="detail" title="O trecho não sustenta a interpretação do parâmetro">⚠ ambiguidade científica</div>}{(p.events?.length ?? 0) > 0 && <div className="detail">{p.events!.length} registro(s) de revisão</div>}</td>
               <td>{p.evidence.map((e, i) => <div key={i}><small>{e.locator_pt || (e.page_pdf ? `PDF p. ${e.page_pdf}` : "—")}</small></div>)}</td>
               <td><button onClick={() => onSelect(p.record_id)} aria-label={`Ver origem e revisar ${p.label_pt}`}>{p.status === "EXTRAIDO_NAO_REVISADO" ? "Ver origem e revisar" : "Ver origem"}</button></td>
             </tr>
@@ -73,7 +74,7 @@ export default function Review() {
                 </tbody></table>
               )}
             </div>
-            {sel && <ReviewPanel exp={e} param={sel} onChanged={exp.reload} onClose={() => setSelected(null)} />}
+            {sel && <ReviewPanel key={sel.record_id} exp={e} param={sel} onChanged={exp.reload} onClose={() => setSelected(null)} />}
           </div>
         </>
       );

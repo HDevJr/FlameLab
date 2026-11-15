@@ -119,8 +119,11 @@ class Services:
         return cls._review
 
 
-def _err(status: int, code: str, message: str) -> HTTPException:
-    return HTTPException(status_code=status, detail={"code": code, "message": message})
+def _err(status: int, code: str, message: str, details: dict | None = None) -> HTTPException:
+    detail: dict[str, Any] = {"code": code, "message": message}
+    if details:
+        detail["details"] = details
+    return HTTPException(status_code=status, detail=detail)
 
 
 def _wrap(data: Any, **extra: Any) -> dict[str, Any]:
@@ -250,25 +253,61 @@ def get_analysis(document_id: str) -> dict:
 
 # ------------------------------------------------------------------ revisão humana
 class ReviewRequest(BaseModel):
-    action: Literal["CONFIRM", "DOUBT", "DIVERGENCE"]
+    action: Literal["CONFIRM", "CORRECT", "DOUBT", "DIVERGENCE"]
     reviewer: str = Field(max_length=80)
     observed_value: str | None = Field(default=None, max_length=120)
     observed_unit: str | None = Field(default=None, max_length=30)
     observed_page_pdf: int | None = Field(default=None, ge=1, le=100000)
     notes: str | None = Field(default=None, max_length=1000)
     checked_pdf: bool = False
+    prefilled_unchanged: bool = False  # o revisor não alterou os campos pré-preenchidos com a extração
+    corrected_label_pt: str | None = Field(default=None, max_length=80)
+    corrected_value: str | None = Field(default=None, max_length=120)
+    corrected_unit: str | None = Field(default=None, max_length=30)
+
+
+class PreviewRequest(BaseModel):
+    reviewer: str | None = Field(default=None, max_length=80)
+    observed_value: str | None = Field(default=None, max_length=120)
+    observed_unit: str | None = Field(default=None, max_length=30)
+    observed_page_pdf: int | None = Field(default=None, ge=1, le=100000)
+
+
+@router.post("/records/{record_id}/review/preview")
+def review_preview(record_id: str, req: PreviewRequest) -> dict:
+    """Mesma lógica de normalização e comparação da revisão, SEM gravar nem auditar. O backend é a autoridade."""
+    try:
+        return _wrap(Services.review().preview(record_id, req.reviewer, req.observed_value, req.observed_unit,
+                                               req.observed_page_pdf))
+    except workspace.InvalidId:
+        raise _err(422, "INVALID_ID", "Identificador inválido.") from None
+    except ReviewRejected as exc:
+        raise _err(404 if exc.code == "RECORD_NOT_FOUND" else 422, exc.code, str(exc), exc.details) from None
+
+
+@router.get("/records/{record_id}/context")
+def record_context(record_id: str, evidence: int = 0) -> dict:
+    try:
+        ctx = Services.catalog().record_context(workspace.safe_id(record_id), max(0, evidence))
+    except workspace.InvalidId:
+        raise _err(422, "INVALID_ID", "Identificador inválido.") from None
+    if ctx is None:
+        raise _err(404, "RECORD_NOT_FOUND", "Registro não encontrado.")
+    return _wrap(ctx)
 
 
 @router.post("/records/{record_id}/review")
 def review_record(record_id: str, req: ReviewRequest) -> dict:
     """Mesma política do `scripts/review_record.py`. A identidade do revisor é declarada, não autenticada."""
     try:
-        result = Services.review().submit(record_id, req.action, req.reviewer, req.observed_value,
-                                          req.observed_unit, req.observed_page_pdf, req.notes, req.checked_pdf)
+        result = Services.review().submit(
+            record_id, req.action, req.reviewer, req.observed_value, req.observed_unit, req.observed_page_pdf,
+            req.notes, req.checked_pdf, req.prefilled_unchanged, req.corrected_label_pt, req.corrected_value,
+            req.corrected_unit)
     except workspace.InvalidId:
         raise _err(422, "INVALID_ID", "Identificador inválido.") from None
     except ReviewRejected as exc:
-        raise _err(404 if exc.code == "RECORD_NOT_FOUND" else 422, exc.code, str(exc)) from None
+        raise _err(404 if exc.code == "RECORD_NOT_FOUND" else 422, exc.code, str(exc), exc.details) from None
     return _wrap(result)
 
 

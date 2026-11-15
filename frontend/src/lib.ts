@@ -108,6 +108,15 @@ export const REVIEW_ERRORS: Record<string, string> = {
   WRONG_STATE: "Este registro já foi conferido; não pode ser aprovado de novo.",
 };
 
+REVIEW_ERRORS.UNIT_MISSING = "A unidade não foi informada. O número confere, mas a unidade é obrigatória para comparar a grandeza.";
+REVIEW_ERRORS.UNIT_INCOMPATIBLE = "A unidade informada mede outra grandeza que a do registro (por exemplo, °C × ângulo em °).";
+REVIEW_ERRORS.UNIT_UNSUPPORTED = "Esta unidade não é suportada pela tabela de unidades; a conferência automática não é possível.";
+REVIEW_ERRORS.UNIT_UNEXPECTED = "O registro não tem unidade, mas uma unidade foi informada.";
+REVIEW_ERRORS.VALUE_AMBIGUOUS = "O valor informado é ambíguo (ex.: “1,234” ou “20 a 80”). Informe um único número sem separador de milhar.";
+REVIEW_ERRORS.SEMANTIC_AMBIGUITY = "O número confere, mas o trecho não sustenta a interpretação do parâmetro. Corrija a extração ou mantenha pendente.";
+REVIEW_ERRORS.CURATED_READONLY = "Registros do dataset curado são corrigidos pela curadoria, não pela interface.";
+REVIEW_ERRORS.NO_CHANGE = "Nenhuma alteração: informe um nome, valor ou unidade diferentes dos atuais.";
+
 export const reviewErrorMessage = (code: string, fallback: string) => REVIEW_ERRORS[code] ?? fallback;
 
 // ---------------------------------------------------------------- tempos
@@ -146,3 +155,35 @@ export function playbackRatio(videoDuration: number | null | undefined, simulate
 
 export const SPEEDS = [0.25, 0.5, 1, 2] as const;
 export const speedLabel = (s: number) => `${String(s).replace(".", ",")}×`;
+
+// ---------------------------------------------------------------- revisão assistida
+export const FIELD_STATUS: Record<string, { text: string; tone: "ok" | "warn" | "bad" | "info" | "muted" }> = {
+  MATCH: { text: "Confere", tone: "ok" }, CONVERTIBLE: { text: "Confere após conversão", tone: "ok" },
+  MISMATCH: { text: "Diverge", tone: "bad" }, MISSING: { text: "Falta", tone: "bad" }, INCOMPATIBLE: { text: "Incompatível", tone: "bad" },
+  UNSUPPORTED: { text: "Unidade não suportada", tone: "bad" }, UNEXPECTED: { text: "Inesperada", tone: "bad" },
+  UNREADABLE: { text: "Ilegível", tone: "bad" }, AMBIGUOUS: { text: "Ambíguo", tone: "bad" }, NOT_APPLICABLE: { text: "—", tone: "muted" },
+};
+export const FIELD_OK = new Set(["MATCH", "CONVERTIBLE", "NOT_APPLICABLE"]);
+export const failedFields = (c: { field: string; status: string }[] | null | undefined) => (c ?? []).filter((x) => !FIELD_OK.has(x.status)).map((x) => x.field);
+
+export const LABEL_SOURCE: Record<string, string> = { IA: "nome sugerido pela IA", GLOSSARIO: "nome traduzido pelo glossário", HUMANO: "nome definido por uma pessoa", CURADORIA: "nome da curadoria" };
+
+/** Divide `text` em trechos, marcando os que coincidem (sem distinguir maiúsculas) com algum dos `terms`. */
+export function highlightSegments(text: string, terms: string[]): { text: string; hit: boolean }[] {
+  const clean = [...new Set(terms.map((t) => t.trim()).filter((t) => t.length > 0))].sort((a, b) => b.length - a.length);
+  if (!text || clean.length === 0) return [{ text, hit: false }];
+  const re = new RegExp(clean.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"), "gi");
+  const out: { text: string; hit: boolean }[] = [];
+  let last = 0;
+  for (const m of text.matchAll(re)) {
+    const at = m.index ?? 0;
+    if (at > last) out.push({ text: text.slice(last, at), hit: false });
+    out.push({ text: m[0], hit: true });
+    last = at + m[0].length;
+  }
+  if (last < text.length) out.push({ text: text.slice(last), hit: false });
+  return out;
+}
+
+/** Valor extraído como texto de campo (sem unidade): 20.0 → "20". */
+export const valueText = (v: number | string | null | undefined): string => (v == null ? "" : typeof v === "number" ? String(Number.isInteger(v) ? v : Number(v.toPrecision(12))) : v);

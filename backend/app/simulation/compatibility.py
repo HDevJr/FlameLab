@@ -25,9 +25,13 @@ def is_editable(p: dict[str, Any]) -> bool:
 
 def range_rule(unit: str | None) -> tuple[str, float | None, float | None]:
     """Regra física genérica por dimensão. Devolve (texto, mínimo exclusivo, máximo inclusivo) na unidade dada."""
+    canon = units.canonical_unit(unit)
     q = units.normalize(1.0, unit)
     dim = q.dimension if q else None
-    if dim in ("length", "velocity", "time"):
+    if dim == "temperature":  # limite = zero absoluto, expresso na MESMA unidade (exclusivo)
+        floor = {"K": 0.0, "degC": -273.15, "degF": -459.67}.get(canon or "", 0.0)
+        return f"acima do zero absoluto ({floor:g} {units.display_unit(canon)})", floor, None
+    if dim in ("length", "velocity", "time", "pressure", "volume", "mass", "area", "frequency", "power"):
         return "maior que zero", 0.0, None
     if dim == "fraction":
         top = 100.0 if units.canonical_unit(unit) == "%" else 1.0

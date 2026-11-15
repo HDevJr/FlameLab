@@ -74,6 +74,20 @@ def page_texts(path: Path, first: int = 1, last: int | None = None) -> dict[int,
         doc.close()
 
 
+def page_text(path: Path, number: int) -> str | None:
+    """Texto de UMA página (1 = primeira). Abre pelo caminho (sem ler o arquivo todo em memória)."""
+    import pymupdf
+
+    try:
+        doc = pymupdf.open(path)
+    except Exception:  # noqa: BLE001
+        return None
+    try:
+        return doc[number - 1].get_text() if 1 <= number <= doc.page_count else None
+    finally:
+        doc.close()
+
+
 def _title_from_first_page(page) -> str | None:
     spans = [
         (round(s["size"], 1), s["text"].strip())

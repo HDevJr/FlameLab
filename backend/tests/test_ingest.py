@@ -26,7 +26,10 @@ def make_pdf(path, title=TITLE, body="Capillary experiment. The test fluid tempe
     page.insert_text((50, 80), title[:cut], fontsize=20)
     page.insert_text((50, 110), title[cut:].strip(), fontsize=20)
     page.insert_text((50, 150), report, fontsize=11)
-    page.insert_text((50, 200), body, fontsize=10)
+    import textwrap
+
+    for i, line in enumerate(textwrap.wrap(body, 80)):  # insert_text não quebra linha: texto fora da página seria perdido
+        page.insert_text((50, 200 + 14 * i), line, fontsize=10)
     doc.save(path)
     return path.read_bytes()
 
@@ -160,7 +163,8 @@ def test_extraction_accepts_only_literal_quotes_and_values():
     p = exps[0]["parameters"][0]
     assert p["status"] == "EXTRAIDO_NAO_REVISADO" and p["extraction"]["method"] == "LLM"
     assert exps[0]["gaps"][0]["origin"] == "SUGERIDA_POR_IA"
-    assert p["original"]["value"] == 25.0 and p["normalized"] is None  # unidade desconhecida: sem conversão
+    assert p["original"]["value"] == 25.0
+    assert p["normalized"]["unit"] == "K" and abs(p["normalized"]["value"] - 298.15) < 1e-9  # °C → K com deslocamento
 
 
 def test_ai_extraction_end_to_end_marks_everything_unreviewed(client, tmp_path):

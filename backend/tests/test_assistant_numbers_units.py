@@ -16,7 +16,8 @@ def test_t07_unit_normalization(value, unit, si, si_unit):
 
 
 def test_unknown_unit_is_not_approximated():
-    assert units.normalize(101.3, "kPa") is None
+    assert units.normalize(101.3, "furlong/fortnight") is None
+    assert units.normalize(5, "mmHg") is None  # fora da tabela: nunca aproximado
 
 
 def _vals(text):

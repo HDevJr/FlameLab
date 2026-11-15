@@ -78,3 +78,9 @@ table.selectable tr.sel { background: var(--info-bg); }
 @keyframes slide { 0% { left: -30%; } 100% { left: 100%; } }
 @media (prefers-reduced-motion: reduce) { .bar.indeterminate::after { animation: none; width: 100%; opacity: .35; } }
 @media (max-width: 900px) { .split { grid-template-columns: 1fr; } .panel { position: static; max-height: none; } .form { grid-template-columns: 1fr; } }
+
+/* ---- revisão assistida (v2.2) ---- */
+table.cmp { margin: 6px 0; } table.cmp tr.failed { background: var(--bad-bg); } table.cmp td input { width: 100%; min-width: 80px; }
+mark { background: #fde68a; color: #1c1917; padding: 0 2px; border-radius: 3px; } mark.q { background: transparent; outline: 1px solid var(--accent); }
+.context { font-size: 13px; line-height: 1.6; } .big { font-size: 22px; }
+.audit .detail { margin-left: 8px; }

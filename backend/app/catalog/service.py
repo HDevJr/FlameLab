@@ -11,9 +11,13 @@ from typing import Any
 
 from typing import Callable
 
-from backend.app import workspace
+import re
+
+from backend.app import units, workspace
 from backend.app.dataset.store import DatasetStore
+from backend.app.labels import friendly_label
 from backend.app.review_service import events_for
+from backend.app.semantic import semantic_flags
 from backend.app.nasa.models import DocumentMeta
 
 PROVENANCE_LABELS = {
@@ -144,7 +148,7 @@ class Catalog:
         for imp in self._imports():
             for exp in imp.get("experiments") or []:
                 if exp["experiment_id"] == experiment_id:
-                    exp = {**exp, "parameters": [_with_events(p) for p in exp["parameters"]]}
+                    exp = {**exp, "parameters": [_decorate(_with_events(p), imported=True) for p in exp["parameters"]]}
                     return {**exp, "review": _review(exp), "document_title": imp["document"].get("title"),
                             "document_sha256": imp["sha256"]}
         return None
@@ -187,6 +191,7 @@ class Catalog:
                            if r.review and r.review.reviewer else None),
                 "events": events_for(r.record_id),
             })
+            params[-1] = _decorate(params[-1], imported=False)
         gaps = [{"gap_id": g.gap_id, "parameter": g.parameter, "label_pt": g.label_pt,
                  "explanation_pt": g.explanation_pt, "purpose_blocked": list(g.purpose_blocked),
                  "searched_in": list(g.searched_in), "origin": "CURADORIA"} for g in store.gaps_for(test_uid)]
@@ -201,6 +206,39 @@ class Catalog:
         exp["review"] = _review(exp)
         return exp
 
+    def record_context(self, record_id: str, index: int = 0, radius: int = 360) -> dict[str, Any] | None:
+        """Trecho da evidência com o texto anterior/posterior da página (do PDF local)."""
+        from backend.app.ingest.pdf import page_text
+
+        exp = self.experiment(record_id.rsplit(".", 1)[0])
+        param = next((p for p in (exp or {}).get("parameters", []) if p["record_id"] == record_id), None)
+        if exp is None or param is None:
+            return None
+        evs = param.get("evidence") or []
+        if not (0 <= index < len(evs)):
+            return {"found": False, "reason_pt": "evidência inexistente"}
+        ev = evs[index]
+        out: dict[str, Any] = {"found": False, "page": ev.get("page_pdf"), "quote": ev.get("quote"),
+                               "before": "", "after": "", "document_id": exp["document_id"]}
+        path = self.local_file(exp["document_id"]) if exp["document_id"] else None
+        if path is None or not ev.get("page_pdf") or not ev.get("quote"):
+            out["reason_pt"] = "o PDF local ou a página não estão disponíveis"
+            return out
+        raw = page_text(path, ev["page_pdf"])
+        if raw is None:
+            out["reason_pt"] = "não foi possível ler a página"
+            return out
+        text = _clean_page(raw)
+        quote = _clean_page(ev["quote"])
+        at = text.lower().find(quote.lower())
+        if at < 0:
+            out.update(reason_pt="o trecho não foi localizado literalmente no texto da página (tabelas e figuras podem divergir)",
+                       before=text[: radius * 2])
+            return out
+        out.update(found=True, before=text[max(0, at - radius): at], quote=text[at: at + len(quote)],
+                   after=text[at + len(quote): at + len(quote) + radius])
+        return out
+
     def flat_parameters(self, document_id: str) -> list[dict[str, Any]]:
         out = []
         for exp in self.experiments_for(document_id):
@@ -213,8 +251,39 @@ class Catalog:
         return out
 
 
+def _decorate(p: dict[str, Any], imported: bool) -> dict[str, Any]:
+    """Campos de apresentação: nome técnico × amigável, unidade separada do valor e sinalizações semânticas."""
+    p = dict(p)
+    p["technical_name"] = p.get("technical_name") or p["parameter"]
+    if imported:
+        if p.get("label_source") not in ("IA", "HUMANO"):
+            p["label_pt"], p["label_source"] = friendly_label(p["parameter"]), "GLOSSARIO"
+    else:
+        p["label_source"] = "CURADORIA"
+    orig = p.get("original") or {}
+    unit = orig.get("unit")
+    canon = units.canonical_unit(unit) if unit is not None else "adimensional"
+    has_unit = canon not in (None, "adimensional")
+    dim = units.dimension_of(canon) if has_unit else None
+    p["unit_info"] = {"raw": unit, "canonical": canon if has_unit else None,
+                      "display": units.display_unit(canon) if has_unit else None,
+                      "dimension_pt": units.DIMENSION_PT.get(dim) if dim else None,
+                      "supported": canon is not None, "has_unit": has_unit}
+    quotes = [e["quote"] for e in p.get("evidence") or [] if e.get("quote")]
+    p["semantic_flags"] = semantic_flags(parameter=p["parameter"], label=p.get("label_pt"), value=orig.get("value"),
+                                         unit=unit, quotes=quotes, method=(p.get("extraction") or {}).get("method"),
+                                         label_source=p.get("label_source"))
+    return p
+
+
 def _with_events(p: dict[str, Any]) -> dict[str, Any]:
     return {**p, "events": events_for(p["record_id"]), "reviewer": (p.get("review") or {}).get("reviewer")}
+
+
+def _clean_page(text: str) -> str:
+    text = text.replace("\u00ad", "")
+    text = re.sub(r"(?<=[A-Za-z])-\s+(?=[a-z])", "", text)
+    return " ".join(text.split())
 
 
 def _review(exp: dict[str, Any]) -> dict[str, int]:
