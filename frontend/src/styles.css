@@ -195,7 +195,10 @@ ul.diff { font-size:12px; margin:2px 0; } .req-links li { margin:4px 0; }
 /* ---- ficha: ressalvas e lacunas por tema ---- */
 .caveat-panel { border-left: 4px solid var(--warn); } .caveat-panel ul { margin: 6px 0 0; padding-left: 18px; }
 .gap-theme { margin: 10px 0; } .gap-theme h4 { margin: 0 0 4px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-.gap-item { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 10px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.gap-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 6px 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.gap-item > .badge { align-self: start; white-space: nowrap; }
+.gap-theme:last-child .gap-item:last-child { border-bottom: 0; }
+@media (max-width: 640px) { .gap-item { grid-template-columns: 1fr; } .gap-item > .badge { justify-self: start; } }
 @media (max-width: 1100px) { .assist-layout { grid-template-columns: minmax(0, 1fr); } .evidence-panel { position: static; max-height: none; } }
 @media (max-width: 520px) { .msg-user { max-width: 92%; } .composer { flex-direction: column; align-items: stretch; } }
 /* tabelas largas rolam dentro do próprio bloco, sem criar rolagem horizontal na página */
