@@ -44,9 +44,20 @@ STEPS = [
 NTRS_FILE_MAX = 200 * 1024 * 1024
 
 
-def max_batches_from_env() -> int:
+def max_batches_from_env(env: dict[str, str] | None = None, env_file: Path | None = None) -> int:
+    """Limite de lotes de IA por documento. Lê o `.env` da raiz (como o restante da configuração) e o ambiente do
+    processo, que tem precedência. `env`/`env_file` existem para teste."""
+    from dotenv import dotenv_values
+
+    from backend.app.paths import REPO_ROOT
+
+    values: dict[str, str | None] = {}
+    path = env_file if env_file is not None else REPO_ROOT / ".env"
+    if path.is_file():
+        values.update(dotenv_values(path))
+    values.update(dict(os.environ if env is None else env))
     try:
-        return max(1, min(40, int(os.environ.get("FLAMELAB_EXTRACT_MAX_BATCHES", extraction.DEFAULT_MAX_BATCHES))))
+        return max(1, min(40, int(values.get("FLAMELAB_EXTRACT_MAX_BATCHES") or extraction.DEFAULT_MAX_BATCHES)))
     except ValueError:
         return extraction.DEFAULT_MAX_BATCHES
 

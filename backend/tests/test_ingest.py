@@ -262,3 +262,14 @@ def test_ntrs_match_by_report_number_uses_the_unique_record():
     match, citation = svc._ntrs(meta, StubNtrs())
     assert match.state == MatchState.MATCH_CANDIDATE and match.match_type == MatchType.IDENTIFIER
     assert match.source_record_id == "19930021842" and citation["title"].startswith("Effects of buoyancy")
+
+
+def test_batch_limit_is_read_from_dotenv_and_environment_wins(tmp_path):
+    from backend.app.ingest.service import max_batches_from_env
+
+    f = tmp_path / ".env"
+    f.write_text("FLAMELAB_EXTRACT_MAX_BATCHES=30\n", encoding="utf-8")
+    assert max_batches_from_env(env={}, env_file=f) == 30
+    assert max_batches_from_env(env={"FLAMELAB_EXTRACT_MAX_BATCHES": "12"}, env_file=f) == 12  # ambiente tem precedência
+    assert max_batches_from_env(env={"FLAMELAB_EXTRACT_MAX_BATCHES": "999"}, env_file=f) == 40  # teto
+    assert max_batches_from_env(env={}, env_file=tmp_path / "nao_existe") == 8
