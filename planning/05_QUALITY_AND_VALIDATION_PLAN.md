@@ -86,5 +86,33 @@ Legenda de tipo: **A** automatizado (pytest), **M** manual, ⓘ integração rea
 | FDS-G5 alteração | uma variável alterada com rastreabilidade | CIÊNCIA | **FUTURO** |
 Proibição: usar `flame_spread_rate` (observável) como entrada ou alvo de calibração apresentado como reprodução.
 
+### 6.1 Atualização (14/11/2026, ADR-09): testes da plataforma
+| Área | Testes | Natureza | Resultado |
+|---|---|---|---|
+| Enriquecimento NASA | `test_nasa_enrichment.py` (10) | fixtures de respostas reais gravadas | PASS |
+| Genericidade | `test_generic_architecture.py` — nenhum identificador de referência em módulos genéricos | estático | PASS |
+| Importação/procedência/extração | `test_ingest.py` (17) — hash, VERIFIED/MISMATCH/PENDING, fontes fora do ar, PDF inválido, caminho, citação literal, hifenização | provedor e transporte simulados | PASS |
+| Simulação | `test_simulation.py` (25) — gerador, faixas, compatibilidade, estados, falhas, executor indisponível, reinício, segurança de API e artefatos | **executor simulado** (`FakeExecutor`, `demo=true`) | PASS |
+| Frontend | `lib.test.ts` (5) + `tsc` + `vite build` | unitário/estático | PASS |
+| Execução FDS/Smokeview/FFmpeg **real** | evidências em `docs/evidence/` (2 execuções, 1 spike manual) | **real, fora da suíte automática** | registrado |
+| Gemini real (extração) | 1 importação real (DYLCO) | **real, fora da suíte** | registrado |
+| Navegador (renderização das telas) | — | **NOT_RUN** (sem ferramenta de navegador na sessão) | NOT_RUN |
+Gates G0-env e G3 (execução) passam a **possível/verificado para o caso de integração**; G1, G2 e G4 seguem bloqueados para o BASS-II.
+
+### 6.2 Atualização v2.1 (15/11/2026)
+| Área | Testes | Natureza | Resultado |
+|---|---|---|---|
+| Revisão pela API (curada e importada) | `test_review_api.py` (20): política única, recusas, auditoria, dúvida/divergência, hash, evidência, não toca o `data/` real | dataset sintético | PASS |
+| Jornada v2.1 | `test_journey_v21.py` (31): experimento × demonstração, hipóteses, lotes, cobertura, cota, resumo, tempos, progresso, Range, render 1× | simulado/fixture | PASS |
+| Frontend | `lib.test.ts`, `components.test.tsx`, `pages.test.tsx` (31): player, painel de revisão, etapas, menu, estados longos de execução, separação artigo × demonstração, vídeo persistente | jsdom | PASS |
+| Validação visual S01–S07 | roteiro `docs/manual_test_roteiro_S01-S07.md` | **pessoa da equipe** | **NOT_RUN** |
+
+### 6.3 Atualização v2.2 (15/11/2026)
+| Área | Testes | Natureza | Resultado |
+|---|---|---|---|
+| Comparação número × unidade × página; Unicode; °C/K/°F; ambiguidades; semântica; rótulos; API (diagnóstico, prévia, correção, auditoria, contexto) | `test_review_v22.py` (77) | dataset/PDF sintético com o **trecho real** do caso relatado | PASS |
+| Painel de revisão (A–D), recusas com tabela por campo, correção, dúvida/divergência | `review.test.tsx` (18) | jsdom | PASS |
+| Inspeção do painel em navegador | roteiro §5 | **pessoa da equipe** | **NOT_RUN** |
+
 ## 7. Revisão de interface
 Checklist (M): toda tela tem rodapé com `dataset_version` e aviso de independência; todo número tem unidade; o estado não é comunicado só por cor (chip com texto); contraste mínimo AA nos chips e badges; termos em PT com o original em EN na primeira menção; largura mínima de 1280 px na máquina de demo e sem quebra em 1024 px.

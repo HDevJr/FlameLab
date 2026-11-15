@@ -1,0 +1,300 @@
+{
+ "data": {
+  "generated_at": "2026-11-15T01:06:57Z",
+  "document": {
+   "document_id": "DOC-3df76042e5be",
+   "title": "Dynamics of Liquids in Edges and Corners (DYLCO) IML-2 Experiment for the BDPU",
+   "origin": "IMPORTED",
+   "import_id": "IMP-3df76042e5be",
+   "sha256": "3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101",
+   "pages": 32,
+   "url": "https://ntrs.nasa.gov/citations/19980232607"
+  },
+  "provenance": {
+   "checked_at": "2026-11-15T01:03:27Z",
+   "ntrs_id": "19980232607",
+   "ntrs_url": "https://ntrs.nasa.gov/citations/19980232607",
+   "local_sha256": "3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101",
+   "state": "VERIFIED",
+   "label_pt": "Publicação NASA verificada (arquivo idêntico ao do NTRS)",
+   "reasons_pt": [
+    "Busca por título no NTRS: semelhança 1.0 com o registro 19980232607.",
+    "Sem identificador forte no artigo: a correspondência exige revisão humana.",
+    "SHA-256 do arquivo distribuído pelo NTRS (1395530 bytes): 3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101. É idêntico ao arquivo importado."
+   ],
+   "ntrs_file": "/api/citations/19980232607/downloads/19980232607.pdf",
+   "ntrs_sha256": "3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101",
+   "mode": "ONLINE"
+  },
+  "coverage": {
+   "mode": "AI_FULL",
+   "total_pages": 32,
+   "pages_processed": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+   ],
+   "processed_ranges": "1–32",
+   "pages_without_text": [],
+   "without_text_ranges": "",
+   "pages_not_processed": [],
+   "not_processed_ranges": "",
+   "reasons_pt": [],
+   "limits": {
+    "max_batches": 8,
+    "batch_max_pages": 12,
+    "batch_max_chars": 40000
+   },
+   "summary_pt": "A IA leu todas as páginas com texto (1–32; 32 páginas de 32)."
+  },
+  "experiments": [
+   {
+    "experiment_id": "DOC-3df76042e5be-E1",
+    "label": "DYLCO IML-2 Thermal Cycling Experiment",
+    "phenomena": [
+     "fluid_capillary",
+     "fluid_flow",
+     "heat_transfer"
+    ],
+    "origin": "IMPORTED",
+    "parameters": 11,
+    "reviewed": 0,
+    "pending": 11,
+    "gaps": 4,
+    "fds": {
+     "status": "UNSUPPORTED_PHYSICS",
+     "label_pt": "física fora do alcance do FDS",
+     "reasons_pt": [
+      "Fenômenos do experimento (fluid_capillary, fluid_flow, heat_transfer) não são tratados pelo FDS, que modela incêndio e transporte de fumaça. Nenhum caso será gerado.",
+      "Análise, comparação de fontes e exportação continuam disponíveis.",
+      "Resultados observados (radius of curvature cell 1 increment 1, radius of curvature cell 1 increment 2, radius of curvature cell 1 increment 3) são referência de comparação, nunca condição de entrada da simulação."
+     ],
+     "can_simulate": false
+    }
+   }
+  ],
+  "totals": {
+   "parameters": 11,
+   "reviewed": 0,
+   "pending": 11,
+   "gaps": 4,
+   "experiments": 1
+  },
+  "sources": [
+   {
+    "source": "NTRS",
+    "state": "MATCH_CANDIDATE",
+    "state_pt": "candidata (precisa de revisão humana)",
+    "record_id": "19980232607",
+    "url": "https://ntrs.nasa.gov/citations/19980232607",
+    "title": "Dynamics of Liquids in Edges and Corners (DYLCO): IML-2 Experiment for the BDPU"
+   },
+   {
+    "source": "PSI",
+    "state": "NOT_FOUND",
+    "state_pt": "não encontrada",
+    "record_id": null,
+    "url": null,
+    "title": null
+   },
+   {
+    "source": "TECHPORT",
+    "state": "NOT_FOUND",
+    "state_pt": "não encontrada",
+    "record_id": null,
+    "url": null,
+    "title": null
+   }
+  ],
+  "divergences": [],
+  "enrichment": {
+   "available": true,
+   "mode": "ONLINE",
+   "generated_at": "2026-11-15T01:03:40Z",
+   "warnings_pt": [
+    "Nenhuma fonte consultada expõe valores por ensaio em API documentada; os parâmetros do artigo não puderam ser confrontados com medições de outra fonte."
+   ],
+   "related_count": 0
+  },
+  "conclusions_pt": [
+   "Origem NASA verificada: o arquivo é idêntico ao publicado no NTRS (mesmo SHA-256).",
+   "A IA leu todas as páginas com texto (1–32; 32 páginas de 32).",
+   "Foram identificados 1 experimento(s) com 11 parâmetro(s) e 4 lacuna(s).",
+   "0 parâmetro(s) foram conferidos por uma pessoa; 11 aguardam revisão.",
+   "Fontes NASA: NTRS candidata (precisa de revisão humana) (19980232607); PSI não encontrada; TECHPORT não encontrada.",
+   "Nenhum experimento está pronto para simulação no FDS; os motivos estão em cada experimento."
+  ],
+  "not_validated_pt": [
+   "Procedência verificada não significa números conferidos: a procedência diz que o arquivo é o publicado; a revisão diz que uma pessoa conferiu cada valor na fonte.",
+   "Fontes NASA relacionadas contextualizam o trabalho; elas não validam os números do artigo.",
+   "Experimentos propostos pela IA são hipóteses de leitura até a revisão humana."
+  ],
+  "metrics": {
+   "started_at": "2026-11-15T01:03:25Z",
+   "total_ms": 15110,
+   "finished_at": "2026-11-15T01:03:40Z",
+   "per_step_ms": {
+    "RECEIVE": 16,
+    "IDENTIFY": 202,
+    "ORIGIN": 4187,
+    "READ": 46,
+    "EXTRACT": 7453,
+    "SOURCES": 3093,
+    "COMPARE": 14,
+    "REPORT": 62
+   }
+  },
+  "steps": [
+   {
+    "key": "RECEIVE",
+    "label_pt": "Arquivo recebido",
+    "state": "DONE",
+    "summary_pt": "Arquivo recebido: NASA-TM-1998-207916.pdf (1.4 MB).",
+    "technical": [
+     "nome: NASA-TM-1998-207916.pdf",
+     "tamanho: 1395530 bytes",
+     "limite de upload: 125829120 bytes"
+    ],
+    "limitation_pt": null,
+    "started_at": "2026-11-15T01:03:25Z",
+    "finished_at": "2026-11-15T01:03:25Z",
+    "duration_ms": 16
+   },
+   {
+    "key": "IDENTIFY",
+    "label_pt": "Identificando o documento",
+    "state": "DONE",
+    "summary_pt": "Título: Dynamics of Liquids in Edges and Corners (DYLCO) IML-2 Experiment for the BDPU. Nenhum identificador NASA no texto.",
+    "technical": [
+     "SHA-256: 3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101",
+     "32 páginas",
+     "camada de texto: sim",
+     "identificadores: nenhum",
+     "O SHA-256 é a impressão digital do arquivo: dois arquivos iguais têm o mesmo valor."
+    ],
+    "limitation_pt": null,
+    "started_at": "2026-11-15T01:03:25Z",
+    "finished_at": "2026-11-15T01:03:25Z",
+    "duration_ms": 202
+   },
+   {
+    "key": "ORIGIN",
+    "label_pt": "Verificando a origem NASA",
+    "state": "DONE",
+    "summary_pt": "Publicação NASA verificada (arquivo idêntico ao do NTRS)",
+    "technical": [
+     "Busca por título no NTRS: semelhança 1.0 com o registro 19980232607.",
+     "Sem identificador forte no artigo: a correspondência exige revisão humana.",
+     "SHA-256 do arquivo distribuído pelo NTRS (1395530 bytes): 3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101. É idêntico ao arquivo importado."
+    ],
+    "limitation_pt": null,
+    "started_at": "2026-11-15T01:03:25Z",
+    "finished_at": "2026-11-15T01:03:29Z",
+    "duration_ms": 4187
+   },
+   {
+    "key": "READ",
+    "label_pt": "Lendo o PDF",
+    "state": "DONE",
+    "summary_pt": "32 páginas lidas; 32 com texto.",
+    "technical": [
+     "32 páginas, 32 com texto, 54187 caracteres"
+    ],
+    "limitation_pt": null,
+    "started_at": "2026-11-15T01:03:29Z",
+    "finished_at": "2026-11-15T01:03:29Z",
+    "duration_ms": 46
+   },
+   {
+    "key": "EXTRACT",
+    "label_pt": "Extraindo experimentos e parâmetros",
+    "state": "DONE",
+    "summary_pt": "1 experimento(s) e 11 parâmetro(s) com citação literal conferida pelo código; 3 proposta(s) descartada(s). A IA leu todas as páginas com texto (1–32; 32 páginas de 32). Tudo aguarda revisão humana.",
+    "technical": [
+     "modelo: gemini-3.5-flash-lite",
+     "prompt: ext-v2",
+     "lotes: 3 executado(s) de 3 planejado(s)",
+     "lote 1: páginas 1–12, 33685 caracteres, 3672 ms, 5 aceito(s), 1 descartado(s), 12838 tokens",
+     "lote 2: páginas 13–24, 13090 caracteres, 2485 ms, 5 aceito(s), 1 descartado(s), 6778 tokens",
+     "lote 3: páginas 25–32, 7380 caracteres, 1296 ms, 1 aceito(s), 1 descartado(s), 3928 tokens",
+     "descartes: 3 (citação não literal, valor fora da citação ou página inválida)"
+    ],
+    "limitation_pt": null,
+    "started_at": "2026-11-15T01:03:29Z",
+    "finished_at": "2026-11-15T01:03:37Z",
+    "duration_ms": 7453
+   },
+   {
+    "key": "SOURCES",
+    "label_pt": "Pesquisando fontes complementares NASA",
+    "state": "DONE",
+    "summary_pt": "PSI: NOT_FOUND; TechPort: NOT_FOUND; 0 documento(s) possivelmente relacionado(s).",
+    "technical": [
+     "Nenhum dataset do NASA PSI no DataCite corresponde ao título.",
+     "Nenhum projeto do TechPort tem título correspondente ao do artigo. Projetos de tema parecido não são tratados como equivalentes.",
+     "4 chamada(s) de API"
+    ],
+    "limitation_pt": null,
+    "started_at": "2026-11-15T01:03:37Z",
+    "finished_at": "2026-11-15T01:03:40Z",
+    "duration_ms": 3093
+   },
+   {
+    "key": "COMPARE",
+    "label_pt": "Comparando informações",
+    "state": "DONE",
+    "summary_pt": "5 campo(s) de metadados comparado(s); 0 divergência(s). Os valores do artigo não foram alterados nem promovidos.",
+    "technical": [
+     "sem divergências de metadados"
+    ],
+    "limitation_pt": null,
+    "started_at": "2026-11-15T01:03:40Z",
+    "finished_at": "2026-11-15T01:03:40Z",
+    "duration_ms": 14
+   },
+   {
+    "key": "REPORT",
+    "label_pt": "Preparando o relatório de análise",
+    "state": "DONE",
+    "summary_pt": "Resumo da análise pronto.",
+    "technical": [
+     "documento: DOC-3df76042e5be"
+    ],
+    "limitation_pt": null,
+    "started_at": "2026-11-15T01:03:40Z",
+    "finished_at": "2026-11-15T01:03:40Z",
+    "duration_ms": 62
+   }
+  ]
+ },
+ "dataset_version": "sha256:29674b79fa2080f91d26684af9532610263e7a57c60358d866ada9907610df75"
+}

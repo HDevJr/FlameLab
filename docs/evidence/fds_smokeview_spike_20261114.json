@@ -1,0 +1,24 @@
+{
+ "kind": "MANUAL_SPIKE",
+ "date": "2026-11-14",
+ "purpose": "TESTE DE INTEGRACAO - caso oficial do FDS; nao e reproducao de experimento NASA",
+ "case": "Examples/Fires/simple_test.fds (FDS 6.11.1, distribuido com o instalador)",
+ "fds_input_sha256": "e64834c1f96f3e4cf26f9a05d2bdcff7a5cd01c7ee92e768240c67c91d3505ba",
+ "fds_revision": "FDS-6.11.1-0-gff928db-release",
+ "smokeview_revision": "SMV-6.11.2-0-g27cbe59-release",
+ "fds_command": "fds_openmp.exe simple_test.fds (OMP_NUM_THREADS=4)",
+ "fds_completed": "STOP: FDS completed successfully (CHID: simple_test)",
+ "fds_total_wall_clock_s": 306.412,
+ "simulated_time_s": 60.0,
+ "smokeview_script": "RENDERDIR\n frames\nLOAD3DSMOKE\n SOOT DENSITY\nLOAD3DSMOKE\n HRRPUV\nRENDERALL\n 10\n frame\nEXIT\n",
+ "smokeview_command": "smokeview.exe -runscript simple_test",
+ "smokeview_wall_s_approx": 5.5,
+ "frames_rendered": 100,
+ "first_frame_sha256": "a3cdc18d03973a26d4defaea4859b9813f701dab2956f7df2356aa96ce728a2b",
+ "mp4_sha256": "1564fe7adaea02cd3bb12a44a369d914de478ff6338c9a49e325a370d8609b08",
+ "mp4_probe": "h264 High, yuv420p, 640x480, 10 fps, 10.00 s (ffmpeg 9.0.2)",
+ "notes_pt": [
+  "RENDERALL nao sobrescreve quadros existentes (erro 'the render file exists' na 2a execucao no mesmo diretorio).",
+  "Smokeview funcionou com a sessao grafica do usuario; nao testado sem sessao/Linux."
+ ]
+}

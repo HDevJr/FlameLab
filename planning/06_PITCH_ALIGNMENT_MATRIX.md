@@ -19,9 +19,9 @@
 
 | # | Requisito | O que será demonstrado | Status inicial | Evidência necessária | Pode ser "pronto" quando | Captura/gráfico | Se incompleto, dizer | Slides |
 |---|---|---|---|---|---|---|---|---|
-| P-01 | M-1 Catálogo BASS-II | lista de ensaios da Tabela 5.1 com fonte | PLANEJADO | T-01, T-21, `curation_log` | G1 | S02 com lista | "Começamos pela investigação BASS-II; os dados estão em curadoria." | 04, 05 |
-| P-02 | M-2 Ficha M1 rastreável | clicar em 0,071 mm/s e ver Tabela 5.1/linha/página | PLANEJADO | T-01, T-24, T-19 | G1 | S03 com popover aberto | "Estamos conferindo cada valor no PDF original antes de exibi-lo." | 05, 06 |
-| P-03 | M-3 Lacunas | painel "O que não sabemos" | PLANEJADO | T-02 | G1 | GapsPanel | "Mapeamos as lacunas do DM; a tela está em construção." | 06 |
+| P-01 | M-1 Catálogo BASS-II | lista de ensaios da Tabela 5.1 com fonte | **EM_DESENVOLVIMENTO**: dataset com só M1 (backend); catálogo/UI não existem | T-01, T-21, `curation_log` | G1 | S02 com lista | "Começamos pela investigação BASS-II; os dados estão em curadoria." | 04, 05 |
+| P-02 | M-2 Ficha M1 rastreável | clicar em 0,071 mm/s e ver Tabela 5.1/linha/página | **BLOQUEADO (revisão humana)**: 9 registros com página/tabela/linha/coluna e trecho, verificação automática 10/10 MATCH, mas **0/9 conferidos**; UI não existe | T-01, T-24, T-19 | G1 | S03 com popover aberto | "Estamos conferindo cada valor no PDF original antes de exibi-lo." | 05, 06 |
+| P-03 | M-3 Lacunas | painel "O que não sabemos" | **Backend: IMPLEMENTADO_E_TESTADO** (12 lacunas de M1 com onde foram procuradas); UI PLANEJADO | T-02 | G1 | GapsPanel | "Mapeamos as lacunas do DM; a tela está em construção." | 06 |
 | P-04 | M-4/M-5 Busca + ranking explicável | "parecidos com M1" com critérios | PLANEJADO | T-13, T-14, T-25 | G2 | S02 com RankExplanation | "Ranking por critérios explícitos em desenvolvimento." | 05 |
 | P-05 | M-6 Assistente citado | pergunta sobre O₂ de M1 → resposta citada | **Backend: IMPLEMENTADO_NAO_VALIDADO** (14/11). Gemini real + verificador V1–V8 PASS **só com evidência sintética**. **Com dados BASS-II: BLOQUEADO** até a curadoria BL-02; UI S05 PLANEJADO | T-03, T-15, T-16, golden set | G2, com o modo dito em voz alta (LIVE ou CACHE) | S05 com citação | Sem LLM: "O assistente está implementado com verificação de citações; nesta demonstração ele opera sem IA ao vivo." **Só se o verificador e a UI estiverem PASS.** | 05, 06 |
 | P-06 | M-6 Abstenção | pergunta de Marte → "não há base" | **Backend: IMPLEMENTADO_NAO_VALIDADO** (14/11). Abstenção por extrapolação e por dado ausente funcionou no Gemini real com evidência sintética, incluindo 1 afirmação bloqueada (V8). Falta dataset real + UI | T-06 | G2 | S05 abstenção (até a UI existir: trecho do JSON de `docs/evidence/smoke_gemini_20261114T184309Z.json`, **rotulado "teste com evidência sintética"**) | "O verificador já bloqueia previsões sem base em testes; a tela está em construção." | 06 |
@@ -31,10 +31,10 @@
 | P-10 | M-10 Trilha completa ≤3 min | demo ao vivo ou vídeo | PLANEJADO | T-12 | G3/G4 | vídeo fallback | Usar o vídeo gravado, dizendo que é gravação. | 05 |
 | P-11 | S-1 Esquema do aparato | SVG rotulado conceitual | PLANEJADO | T-17 | G3 | SVG com badge | Omitir. | 04 |
 | P-12 | S-2 Mídia NASA | imagem/vídeo oficial com crédito | PLANEJADO / depende de D-04 | licença registrada | G3 | mídia + crédito | Omitir; **não substituir por imagem gerada sem rótulo**. | 02, 05 |
-| P-13 | S-5 Verificador do PDF | relatório MATCH da Tabela 5.1 | PLANEJADO | T-04, T-08 | G3 | trecho do relatório | **Não mencionar extração automática.** "Transcrição curada e conferida por duas pessoas." | 06 (opcional) |
+| P-13 | S-5 Verificador do PDF | relatório MATCH da Tabela 5.1 | **IMPLEMENTADO_E_TESTADO só para M1** (camada de texto, 10/10 MATCH) | T-04, T-08 | G3 | trecho do relatório | **Não mencionar extração automática.** "Transcrição curada e conferida por duas pessoas." | 06 (opcional) |
 | P-14 | Extrator do PDF completo | — | **EVOLUCAO_FUTURA** (protótipo anterior NOT_VERIFIED, ausente do repositório) | — | — | — | "A extração automática de documentos completos faz parte da evolução." | 09 |
 | P-15 | FDS no outro computador | caso básico rodou, temperatura no Smokeview | IMPLEMENTADO_E_TESTADO **em outro ambiente** (relato da equipe; precisa de captura/log) | print/log do outro computador | já, **se houver captura** | print Smokeview **rotulado "caso genérico de teste, não BASS-II"** | "Confirmamos que conseguimos operar o FDS num caso básico." | 07 |
-| P-16 | FDS no ambiente do projeto | — | **NOT_VERIFIED** → BLOQUEADO até a auditoria | T-00f, auditoria | após F00.A VERIFIED | — | Não mencionar como integrado. | 07 |
+| P-16 | FDS no ambiente do projeto | — | ~~NOT_VERIFIED~~ → **IMPLEMENTADO_E_TESTADO (14/11, caso de integração)**: FDS 6.11.1 concluiu um caso real nesta máquina e o pipeline gerou vídeo; ver §7 | T-00f, auditoria | após F00.A VERIFIED | — | Não mencionar como integrado. | 07 |
 | P-17 | X-1 Prontidão FDS (G1) | checklist de gates e lacunas de M1 | PLANEJADO (STRETCH) | gates G1 documentados | G1 científico PASS | S06 | "Mapeamos o que falta para tentar reproduzir M1 em FDS." | 07 |
 | P-18 | X-2 Escoamento frio | campo de velocidade em geometria aproximada | PLANEJADO (STRETCH) | T-28, G1+G3 | PASS + revisão CIÊNCIA | gráfico com badge "Simulação exploratória" | Omitir. | 07 |
 | P-19 | X-3 Reprodução de M1 | — | **BLOQUEADO** (G2 sem propriedades de PMMA; G4 sem comparação) | G2+G4 | não esperado no hackathon | — | "Ainda não reproduzimos M1. A seção 5.5 do relatório mostra que até a modelagem original teve discrepâncias; tratamos isso como pesquisa." | 07, 09 |
@@ -72,5 +72,62 @@
 | 14/11 | P-16 | — → NOT_VERIFIED | binários FDS6/SMV6 presentes nesta máquina; `fds -version` sem saída no Git Bash | planejamento |
 | 14/11 | P-14 | — → EVOLUCAO_FUTURA | protótipo ausente do repositório | planejamento |
 | 14/11 | P-05, P-06 | PLANEJADO → IMPLEMENTADO_NAO_VALIDADO (backend, evidência sintética) | `docs/evidence/BL-05_assistente_ia.md`; 66 testes PASS (simulado); smoke Gemini real PASS 3/3 (sintético) | BL-05 |
+| 14/11 | P-02 | PLANEJADO → BLOQUEADO (revisão humana) | `docs/curation/BASS2-M1_curation_report.md`; crosscheck 10/10 MATCH; 0/9 CONFERIDO_FONTE | BL-02 |
+| 14/11 | P-03 | PLANEJADO → backend IMPLEMENTADO_E_TESTADO | `data/gaps/BASS2-M1.json` (12 lacunas) | BL-02 |
+| 14/11 | P-05/P-06 | backend agora lê o dataset real; abstém-se com `PENDING_REVIEW` / `MISSING_DATA` (Gemini real) | `docs/evidence/smoke_real_dataset_20261114T191858Z.json` | BL-02 |
 
 > **Frase permitida a partir de 14/11 (P-05/P-06):** "Nosso assistente usa o Gemini, mas toda resposta passa por um verificador automático que bloqueia números sem evidência, mistura de ensaios e previsões fora dos dados. Já testamos isso com dados de teste." **Proibido:** dizer que a IA já responde sobre o BASS-II ou o M1, ou mostrar o JSON sintético como se fosse dado da NASA.
+
+## 6. Para o pitch: o que está verificado e o que está pendente (14/11, BL-02)
+| Informação | Situação | Pode ser dito? |
+|---|---|---|
+| O PDF usado é o NASA/TM-20210011385, com hash conferido | **VERIFICADO** (SHA-256 recalculado = registrado) | Sim: "trabalhamos sobre o arquivo original, com integridade verificada por hash" |
+| Tabela 5.1 = p. 57 impressa / p. 65 do PDF; M1 com os 8 campos do DM | Extraído e verificado **automaticamente** contra o texto do PDF; **não conferido por pessoa** | Só como "extraído, em revisão". Não diga "conferido" |
+| Valores de M1 (1 mm; 2,2 cm; 1 face; 9 cm/s; 0,071 mm/s; 6,4 min; 22,2 → 21,9 vol%) | EXTRAIDO_NAO_REVISADO | **Não apresentar como dado conferido.** Pode aparecer como "valor extraído da Tabela 5.1, aguardando revisão" |
+| Material PMMA | EXTRAIDO_NAO_REVISADO (texto §5.3/§5.1, não coluna da tabela) | Idem |
+| Experimento na ISS / MSG, em microgravidade | EXTRAIDO_NAO_REVISADO (§5.1) | Contexto geral ok, com a fonte |
+| 12 lacunas para reprodução no FDS (pressão, temperatura, duto, pirólise…) | Registradas, com onde foram procuradas | **Sim**: "mapeamos o que falta para reproduzir M1" |
+| A IA lê o dataset real e não inventa | Gemini real: pressão → "ausente"; propagação → "consta na fonte, aguarda revisão", sem número | Sim, descrevendo **exatamente** isso |
+| Divergência interna da fonte (largura "1 or 2 cm" no texto × 2,2 cm na tabela) | Registrada como ressalva | Opcional, como exemplo de rigor |
+
+> **Frase permitida (BL-02):** "Carregamos o relatório BASS-II original, verificamos sua integridade e estruturamos o ensaio M1 com página, tabela e coluna de cada valor. Antes de qualquer número ser usado, ele passa por revisão humana; enquanto isso não acontece, o assistente diz que o dado existe e está em revisão, sem citá-lo."
+> **Proibido até a revisão:** "dados conferidos", "valores validados", ou mostrar 0,071 mm/s como resposta da IA.
+
+## 7. Plataforma v2 (14/11, ADR-09): o que pode e o que não pode ser dito
+| Capacidade | Estado | Evidência | Pode ser dito? |
+|---|---|---|---|
+| Importar um artigo NASA em PDF e registrar hash/procedência | IMPLEMENTADO_E_TESTADO; 2 PDFs reais importados online | `docs/evidence/BL-12_plataforma_v2.md` | Sim: "importamos o relatório, calculamos o hash e o comparamos com o arquivo publicado no NTRS" |
+| Funciona para outro artigo NASA (não só BASS-II) | IMPLEMENTADO_E_TESTADO: um relatório de 1998 sobre líquidos capilares percorreu o fluxo; classificado `UNSUPPORTED_PHYSICS` para FDS | idem | Sim, **sem** dizer que qualquer artigo pode ser reproduzido |
+| IA extrai parâmetros | IMPLEMENTADO_NAO_VALIDADO: Gemini propõe, o código só aceita citação literal; **tudo fica “não revisado”** | idem | Sim: "a IA propõe, o código confere a citação, uma pessoa aprova". **Não**: “a IA extrai os parâmetros corretamente” |
+| Enriquecimento NTRS/PSI/TechPort | IMPLEMENTADO_E_TESTADO; BASS-II: NTRS confirmado, **PSI-25 candidato** (revisão humana), TechPort sem correspondência | idem | Sim, com “candidato”. **Não**: “o PSI-25 é confirmado”. **Não** citar TechPort 13543 como BASS-II |
+| Cenário derivado (alterar parâmetros) | PROTOTIPO, sobre o **caso de integração** | idem | Sim, rotulado “hipótese computacional” |
+| FDS → Smokeview → MP4 no navegador | IMPLEMENTADO_E_TESTADO (2 execuções reais, caso genérico) | `docs/evidence/` (vídeo, logs, hashes) | Sim: “renderizamos no servidor e exibimos o vídeo”. **Sempre** com o rótulo “teste de integração — não é o BASS-II” |
+| Reprodução numérica do BASS-II M1 | **BLOQUEADO** | `07` (G1/G2/G4, D-11, DIV-22) | **Não.** Dizer “ainda não reproduzimos M1; mapeamos o que falta” |
+| Telas S01–S07 | PROTOTIPO; compiladas e testadas, **não inspecionadas em navegador nesta sessão** | `frontend/` | “protótipo navegável”, não “interface final” |
+> **Proibido:** mostrar o vídeo do caso de integração como simulação do BASS-II; apresentar curva de HRR como resultado experimental; dizer que valores importados por IA são “conferidos”.
+
+### Registro de mudanças de status (plataforma v2)
+| Data | Item | De → Para | Evidência | Quem |
+|---|---|---|---|---|
+| 14/11 | P-16 | NOT_VERIFIED → IMPLEMENTADO_E_TESTADO (caso de integração) | FDS 6.11.1/Smokeview 6.11.2/FFmpeg 9.0.2 executados; runs reais | plataforma v2 |
+| 14/11 | P-17, P-18 | PLANEJADO → parcial: o worker existe; o caso científico (G1/G2) segue bloqueado | `planning/09` | plataforma v2 |
+
+## 8. Jornada v2.1 (15/11): o que mudou para o pitch
+| Capacidade | Estado | Pode ser dito? |
+|---|---|---|
+| Importação com etapas legíveis e tempos reais | IMPLEMENTADO_E_TESTADO (API e componentes); **tela não inspecionada por pessoa** | Sim: “o sistema mostra, etapa por etapa, o que está fazendo e quanto tempo levou” |
+| Cobertura do PDF explícita (páginas lidas e não lidas) | IMPLEMENTADO_E_TESTADO; medido em 2 documentos | Sim, **dizendo quando a leitura é parcial** (BASS-II completo bateu na cota antes da espera por cota; refazer a medição antes de afirmar cobertura total) |
+| Resumo “origem NASA ≠ números conferidos” | IMPLEMENTADO_E_TESTADO | Sim — é um dos pontos fortes de integridade científica |
+| Revisão humana na interface | IMPLEMENTADO_E_TESTADO (API/componente); **0/9 do M1 conferidos** | Sim: “qualquer valor só vira conferido com uma pessoa, uma conferência e hash do PDF”. **Não**: “os valores do M1 estão validados” |
+| Experimento NASA separado da demonstração FDS | IMPLEMENTADO_E_TESTADO | Sim; **sempre** chamar o vídeo de “demonstração do pipeline”, nunca de simulação do BASS-II |
+| Vídeo em tempo real com player completo | IMPLEMENTADO_E_TESTADO (execução real 10 s → 10,1 s de vídeo; player em jsdom) | Sim, como demonstração técnica |
+| Autenticação de revisores | NAO_INICIADO (R-22) | **Não** afirmar “revisão auditada por identidade verificada” |
+
+## 9. Revisão científica assistida (v2.2, 15/11)
+| Capacidade | Estado | Pode ser dito? |
+|---|---|---|
+| A IA lê, organiza evidências e pré-preenche a conferência; a pessoa confere o **significado** | IMPLEMENTADO_E_TESTADO (API/componente); **tela NOT_RUN** | Sim: “a IA organiza as evidências; o pesquisador verifica o sentido científico” |
+| O sistema distingue **número, unidade e página** e mostra qual divergiu | IMPLEMENTADO_E_TESTADO | Sim |
+| O sistema **não confirma só porque o número coincide**: sinaliza quando o trecho não sustenta o conceito (ex.: ciclo de 20 a 80 °C ≠ “temperatura inicial”) | IMPLEMENTADO_E_TESTADO (heurística limitada) | Sim, como exemplo; **não** dizer que detecta toda ambiguidade |
+| Correção da extração preservando o original e exigindo outra pessoa | IMPLEMENTADO_E_TESTADO | Sim |
+| Identidade do revisor verificada | NAO_INICIADO (R-22) | **Não** |

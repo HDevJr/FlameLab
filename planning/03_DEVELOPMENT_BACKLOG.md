@@ -32,20 +32,20 @@ Equipes pequenas combinam papéis. Uma combinação que funciona: {DADOS+CIÊNCI
 | BL-01.08 | Se o protótipo de extração for encontrado: copiar para `scripts/legacy_extractor/` + nota de origem, **sem integrar** | DADOS | 01.07 | 0,25 | arquivo + nota, ou registro "ABSENT" |
 
 ### BL-02 · P0 · Importar e conferir BASS-II Tabela 5.1 (F01 + F02a)
-| ID | Tarefa | Papel | Dep. | h | Aceite / teste |
+| ID | Tarefa | Papel | Dep. | h | Aceite / teste · status (14/11) |
 |---|---|---|---|---|---|
-| BL-02.01 | Modelos Pydantic + enums + invariantes ([04](04_SCIENTIFIC_DATA_CONTRACT.md)) | BACK | 01.02 | 1,5 | T-20 |
-| BL-02.02 | `units.py` (mm, cm, m, mm/s, cm/s, m/s, s, min, %, fração) | BACK | 02.01 | 0,5 | T-07 |
-| BL-02.03 | `DatasetStore` (carregar, validar, indexar, `dataset_version`) | BACK | 02.01 | 1 | T-20, servidor recusa dataset inválido |
-| BL-02.04 | `page_map.py` (página impressa ↔ índice PDF) | DADOS | 01.04 | 0,75 | página de "Table 5.1" identificada nos dois sistemas |
-| BL-02.05 | Ler a Tabela 5.1 e escolher os ensaios do MVP (D-01; recomendado M1 + ≥4 contrastantes, registrar o motivo de cada escolha) | DADOS+CIÊNCIA | 01.04 | 0,5 | lista justificada em `curation_log.md` |
-| BL-02.06 | Transcrever M1 (9 registros) + evidências literais + localização | DADOS | 02.01, 02.04 | 0,75 | registros `EXTRAIDO_NAO_REVISADO` carregam sem erro |
-| BL-02.07 | Conferência independente de M1 → `CONFERIDO_FONTE` | CIÊNCIA | 02.06 | 0,5 | T-01, T-03, T-19 |
-| BL-02.08 | Transcrever + conferir os demais ensaios | DADOS → CIÊNCIA | 02.05, 02.07 | 2 | T-21 (M1/M2 não se misturam), T-04 se M2 tiver duas velocidades |
-| BL-02.09 | Registrar a fonte de "Material = PMMA" e de "microgravidade/ISS" (metadado da investigação) | DADOS | 02.06 | 0,25 | evidência com seção/página |
-| BL-02.10 | `gaps.json` a partir do DM §08.2 + campos esperados não encontrados | CIÊNCIA | 02.06 | 0,5 | T-02 |
-| BL-02.11 | Metadados PSI-25 (`investigations.json`: DOI 10.60555/4qc4-de67, URL) | DADOS | 01.01 | 0,25 | carregado |
-| BL-02.12 | (SHOULD) `crosscheck_table51.py` com PyMuPDF; reaproveitar o protótipo se ele existir | BACK/DADOS | 02.04, 02.08 | 2 | T-04, T-08, relatório MATCH/MISMATCH |
+| BL-02.01 | Modelos Pydantic + enums + invariantes ([04](04_SCIENTIFIC_DATA_CONTRACT.md)) | BACK | 01.02 | 1,5 | T-20 | **IMPLEMENTADO_E_TESTADO**: `backend/app/dataset/models.py` (I-1–I-4, I-6, I-8–I-10 por registro) |
+| BL-02.02 | `units.py` (mm, cm, m, mm/s, cm/s, m/s, s, min, %, fração) | BACK | 02.01 | 0,5 | T-07 | **IMPLEMENTADO_E_TESTADO**: `backend/app/units.py` (+ alias `vol%` da Tabela 5.1) |
+| BL-02.03 | `DatasetStore` (carregar, validar, indexar, `dataset_version`) | BACK | 02.01 | 1 | T-20, servidor recusa dataset inválido | **IMPLEMENTADO_E_TESTADO**: `store.py` (I-5, I-7, referências, versões do documento); servidor não sobe com dataset inválido |
+| BL-02.04 | `page_map.py` (página impressa ↔ índice PDF) | DADOS | 01.04 | 0,75 | página de "Table 5.1" identificada nos dois sistemas | **PARCIAL**: capítulo 5 mapeado à mão (Tab. 5.1 = impressa 57 / PDF 65); `page_map.py` genérico não feito |
+| BL-02.05 | Ler a Tabela 5.1 e escolher os ensaios do MVP (D-01; recomendado M1 + ≥4 contrastantes, registrar o motivo de cada escolha) | DADOS+CIÊNCIA | 01.04 | 0,5 | lista justificada em `curation_log.md` | PLANEJADO (só M1 nesta etapa) |
+| BL-02.06 | Transcrever M1 (9 registros) + evidências literais + localização | DADOS | 02.01, 02.04 | 0,75 | registros `EXTRAIDO_NAO_REVISADO` carregam sem erro | **IMPLEMENTADO_E_TESTADO**: 9 registros + 11 evidências; extração preliminar assistida (não manual) |
+| BL-02.07 | Conferência independente de M1 → `CONFERIDO_FONTE` | CIÊNCIA | 02.06 | 0,5 | T-01, T-03, T-19 | **BLOQUEADO — aguarda pessoa da equipe**: 0/9 conferidos. Ferramenta pronta: `scripts/review_record.py` |
+| BL-02.08 | Transcrever + conferir os demais ensaios | DADOS → CIÊNCIA | 02.05, 02.07 | 2 | T-21 (M1/M2 não se misturam), T-04 se M2 tiver duas velocidades | PLANEJADO. Atenção: M2–M20 têm várias velocidades por ensaio ("20 and 15"), o que exige um modelo de segmentos (DIV-22) |
+| BL-02.09 | Registrar a fonte de "Material = PMMA" e de "microgravidade/ISS" (metadado da investigação) | DADOS | 02.06 | 0,25 | evidência com seção/página | **IMPLEMENTADO** (EXTRAIDO_NAO_REVISADO): material §5.3/§5.1; plataforma ISS/MSG §5.1 |
+| BL-02.10 | `gaps.json` a partir do DM §08.2 + campos esperados não encontrados | CIÊNCIA | 02.06 | 0,5 | T-02 | **IMPLEMENTADO_E_TESTADO**: 12 lacunas em `data/gaps/BASS2-M1.json` |
+| BL-02.11 | Metadados PSI-25 (`investigations.json`: DOI 10.60555/4qc4-de67, URL) | DADOS | 01.01 | 0,25 | carregado | **IMPLEMENTADO** (DOI/URL copiados do DM, não reconferidos no PSI) |
+| BL-02.12 | (SHOULD) `crosscheck_table51.py` com PyMuPDF; reaproveitar o protótipo se ele existir | BACK/DADOS | 02.04, 02.08 | 2 | T-04, T-08, relatório MATCH/MISMATCH | **IMPLEMENTADO_E_TESTADO para M1**: 10/10 MATCH; não generalizado para M2+ |
 
 ### BL-03 · P0 · Ficha M1 (F03 + F04)
 | ID | Tarefa | Papel | Dep. | h | Aceite / teste |
@@ -116,6 +116,60 @@ Equipes pequenas combinam papéis. Uma combinação que funciona: {DADOS+CIÊNCI
 | BL-09.02 | `fds_readiness/BASS2-M1.json` com gates G1–G5 e motivos | SIM | 09.01 | 0,5 | JSON valida |
 | BL-09.03 | S06 "Prontidão para simulação" (somente leitura) | FRONT | 09.02 | 1 | T-11 |
 | BL-09.04 | (só com dimensões com fonte) caso de escoamento frio revisado, executado manualmente, log guardado | SIM | 09.00, 09.01 | 2–3 | T-28, G3 |
+
+> **Atualização 14/11/2026 (ADR-09):** BL-09.00 e a regra “execução manual” foram **superadas**: o FDS/Smokeview/FFmpeg foram verificados nesta máquina e o worker isolado foi implementado e provado com um caso de integração. BL-09.01/.02 (leitura da §5.5 e gates do M1) **continuam abertos** e bloqueiam qualquer reprodução do BASS-II.
+
+### BL-12 · Plataforma v2 — importação, enriquecimento NASA, simulação e protótipo web (ADR-09)
+| ID | Tarefa | Estado |
+|---|---|---|
+| BL-12.01 | Clientes NTRS/DataCite(PSI)/TechPort + registro de operações | IMPLEMENTADO_E_TESTADO |
+| BL-12.02 | Comparador de fontes e relatório de enriquecimento (`SourceMatch`, `EnrichmentRecord`) | IMPLEMENTADO_E_TESTADO |
+| BL-12.03 | Importação de PDF (hash, identificação, procedência por hash NTRS) | IMPLEMENTADO_E_TESTADO |
+| BL-12.04 | Extração assistida por Gemini com citação literal verificada | IMPLEMENTADO_E_TESTADO (IA simulada) · 1 execução real |
+| BL-12.05 | Catálogo genérico (documentos/experimentos, curados e importados) | IMPLEMENTADO_E_TESTADO |
+| BL-12.06 | Compatibilidade de simulação (`COMPATIBLE/MISSING_PARAMETERS/UNSUPPORTED_PHYSICS/REQUIRES_REVIEW`) | IMPLEMENTADO_E_TESTADO |
+| BL-12.07 | FDS Case Builder + cenários derivados | IMPLEMENTADO_E_TESTADO (modelo de integração) |
+| BL-12.08 | Worker, fila e executor local FDS→Smokeview→FFmpeg | IMPLEMENTADO_E_TESTADO (simulado) · execução real registrada |
+| BL-12.09 | Telas S01–S07 | PROTOTIPO |
+| BL-12.10 | Modelo de **reprodução** de propagação de chama (gerador) | BLOQUEADO (G1/G2, revisão humana de M1, DIV-22) |
+| BL-12.11 | Contêiner/limite de memória, Linux/Xvfb, autenticação, fila durável | NAO_INICIADO |
+| BL-12.12 | Revisão de parâmetros importados na UI (promoção a `CONFERIDO_FONTE`) | NAO_INICIADO (hoje só por `scripts/review_record.py` no dataset curado) |
+
+### BL-13 · Jornada v2.1 — correções após o teste manual (ADR-09 §11)
+| ID | Tarefa | Estado |
+|---|---|---|
+| BL-13.01 | Etapas legíveis da importação com resumo, limitação, detalhes técnicos e **tempo real medido** | IMPLEMENTADO_E_TESTADO |
+| BL-13.02 | Leitura do PDF em lotes com cobertura de páginas explícita, tokens e espera por cota | IMPLEMENTADO_E_TESTADO (IA simulada) · medição real (DYLCO, BASS-II) |
+| BL-13.03 | Resumo consolidado da análise (procedência × revisão × enriquecimento) | IMPLEMENTADO_E_TESTADO (API) · PROTOTIPO (tela) |
+| BL-13.04 | Revisão humana na interface com a política única do script | IMPLEMENTADO_E_TESTADO (API e componente) · **tela não inspecionada em navegador** |
+| BL-13.05 | Separação **Experimentos NASA / Demonstração FDS**; cenário de hipótese do experimento | IMPLEMENTADO_E_TESTADO |
+| BL-13.06 | Tempos e progresso físico real da execução | IMPLEMENTADO_E_TESTADO · execução real medida |
+| BL-13.07 | Player (pausa, repetição, 0,25×–2×, linha do tempo, tela cheia) e vídeo em tempo real | IMPLEMENTADO_E_TESTADO (componente) · NOT_RUN visual |
+| BL-13.08 | Validação visual S01–S07 por pessoa da equipe | **NOT_RUN** (roteiro: `docs/manual_test_roteiro_S01-S07.md`) |
+| BL-13.09 | Autenticação/lista de revisores, ritmo entre lotes, OCR | NAO_INICIADO |
+
+### BL-14 · Correção do VALUE_MISMATCH e revisão científica assistida (ADR-09 §12)
+| ID | Tarefa | Estado |
+|---|---|---|
+| BL-14.01 | Causa raiz do `VALUE_MISMATCH` (reprodução com o registro real) | CONCLUÍDO (`docs/evidence/BL-14_…`) |
+| BL-14.02 | Parsing seguro (número × unidade) e comparação estruturada por campo; tabela de unidades v1.1 com °C/K | IMPLEMENTADO_E_TESTADO |
+| BL-14.03 | Diagnóstico por campo na API, na prévia e na trilha | IMPLEMENTADO_E_TESTADO |
+| BL-14.04 | Verificação semântica (intervalo, incremento, lista) com bloqueio de confirmação | IMPLEMENTADO_E_TESTADO (heurística) |
+| BL-14.05 | Ação “Corrigir extração” preservando o original | IMPLEMENTADO_E_TESTADO |
+| BL-14.06 | Painel de revisão assistida (A–D), nome amigável e contexto da página | IMPLEMENTADO_E_TESTADO (componente) · **visual NOT_RUN** |
+| BL-14.07 | Validação em navegador por pessoa da equipe | **NOT_RUN** |
+| BL-14.08 | Autenticação de revisores; ampliar regras semânticas; ΔT como grandeza | NAO_INICIADO |
+
+### BL-17.2 · Formulários científicos estruturados e resolução de lacunas (`docs/evidence/BL-17_2_formularios_estruturados.md`)
+| ID | Tarefa | Estado |
+|---|---|---|
+| BL-17.2.01 | Diagnóstico: causa raiz dos botões desabilitados e da descontinuidade revisão→preparação | CONCLUÍDO |
+| BL-17.2.02 | Contratos tipados por lacuna (grandeza, geometria, material, procedimento, medição) e unidades v1.2 | IMPLEMENTADO_E_TESTADO |
+| BL-17.2.03 | Três caminhos, rascunho exploratório não aprovado, pré-visualização determinística, edição com motivo/diff | IMPLEMENTADO_E_TESTADO |
+| BL-17.2.04 | Requisitos campo a campo na preparação, escada de maturidade e cinco estágios PMMA | IMPLEMENTADO_E_TESTADO |
+| BL-17.2.05 | Modo de teste isolado (`var/test_mode/`) e recusa de conteúdo de teste no modo científico | IMPLEMENTADO_E_TESTADO · navegador PASS (área descartável) |
+| BL-17.2.06 | Gerador PMMA, modelo de material revisado, comparação quantitativa | BLOQUEADO (modelo físico) |
+| BL-17.2.07 | Validação com pesquisador humano e leitor de tela | NOT_RUN |
 
 ### BL-10 · Stretch · Visualizar resultado FDS e comparar
 | ID | Tarefa | Papel | Dep. | h | Aceite / teste |

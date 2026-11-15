@@ -1,0 +1,187 @@
+{
+ "kind": "MEASUREMENT_ONLY",
+ "document": "BASS-II",
+ "model": "gemini-3.5-flash-lite",
+ "prompt_version": "ext-v2",
+ "pages_total": 144,
+ "pages_without_text": 7,
+ "chars_total": 343563,
+ "pdf_text_read_ms": 858,
+ "batches_planned": 12,
+ "max_batches_setting": 20,
+ "coverage": {
+  "mode": "AI_PARTIAL",
+  "processed_ranges": "1–7, 9–109, 111–117",
+  "not_processed_ranges": "118–121, 123–125, 127–141",
+  "without_text_ranges": "8, 110, 122, 126, 142–144",
+  "reasons_pt": [
+   "falha da IA em algum lote",
+   "execução interrompida (QUOTA)"
+  ]
+ },
+ "batches": [
+  {
+   "batch": 1,
+   "pages": "1–7, 9–13",
+   "chars": 32293,
+   "duration_ms": 4218,
+   "error": null,
+   "accepted": 14,
+   "rejected": 2,
+   "usage": {
+    "input_tokens": 7268,
+    "output_tokens": 1628,
+    "total_tokens": 8896
+   }
+  },
+  {
+   "batch": 2,
+   "pages": "14–25",
+   "chars": 26379,
+   "duration_ms": 4531,
+   "error": null,
+   "accepted": 11,
+   "rejected": 5,
+   "usage": {
+    "input_tokens": 7756,
+    "output_tokens": 1815,
+    "total_tokens": 9571
+   }
+  },
+  {
+   "batch": 3,
+   "pages": "26–37",
+   "chars": 29190,
+   "duration_ms": 4781,
+   "error": null,
+   "accepted": 10,
+   "rejected": 6,
+   "usage": {
+    "input_tokens": 8849,
+    "output_tokens": 2012,
+    "total_tokens": 10861
+   }
+  },
+  {
+   "batch": 4,
+   "pages": "38–49",
+   "chars": 30717,
+   "duration_ms": 2860,
+   "error": null,
+   "accepted": 7,
+   "rejected": 1,
+   "usage": {
+    "input_tokens": 8983,
+    "output_tokens": 1036,
+    "total_tokens": 10019
+   }
+  },
+  {
+   "batch": 5,
+   "pages": "50–61",
+   "chars": 27324,
+   "duration_ms": 2671,
+   "error": null,
+   "accepted": 1,
+   "rejected": 5,
+   "usage": {
+    "input_tokens": 8412,
+    "output_tokens": 899,
+    "total_tokens": 9311
+   }
+  },
+  {
+   "batch": 6,
+   "pages": "62–73",
+   "chars": 25498,
+   "duration_ms": 3000,
+   "error": null,
+   "accepted": 4,
+   "rejected": 1,
+   "usage": {
+    "input_tokens": 8307,
+    "output_tokens": 744,
+    "total_tokens": 9051
+   }
+  },
+  {
+   "batch": 7,
+   "pages": "74–85",
+   "chars": 26854,
+   "duration_ms": 3468,
+   "error": null,
+   "accepted": 8,
+   "rejected": 2,
+   "usage": {
+    "input_tokens": 7379,
+    "output_tokens": 1185,
+    "total_tokens": 8564
+   }
+  },
+  {
+   "batch": 8,
+   "pages": "86–97",
+   "chars": 23509,
+   "duration_ms": 3235,
+   "error": null,
+   "accepted": 5,
+   "rejected": 4,
+   "usage": {
+    "input_tokens": 6756,
+    "output_tokens": 1196,
+    "total_tokens": 7952
+   }
+  },
+  {
+   "batch": 9,
+   "pages": "98–109",
+   "chars": 28581,
+   "duration_ms": 3281,
+   "error": null,
+   "accepted": 11,
+   "rejected": 0,
+   "usage": {
+    "input_tokens": 9678,
+    "output_tokens": 1118,
+    "total_tokens": 10796
+   }
+  },
+  {
+   "batch": 10,
+   "pages": "111–117",
+   "chars": 36219,
+   "duration_ms": 1561,
+   "error": null,
+   "accepted": 0,
+   "rejected": 0,
+   "usage": {
+    "input_tokens": 21141,
+    "output_tokens": 192,
+    "total_tokens": 21333
+   }
+  },
+  {
+   "batch": 11,
+   "pages": "118–121, 123–125, 127–131",
+   "chars": 33454,
+   "duration_ms": 422,
+   "error": "QUOTA",
+   "accepted": 0,
+   "rejected": 0
+  }
+ ],
+ "total_extraction_ms": 34031,
+ "total_tokens_reported": 106354,
+ "experiments_found": 1,
+ "parameters_accepted": 63,
+ "proposals_rejected": 26,
+ "rejected_by_reason": {
+  "VALUE_NOT_IN_QUOTE": 10,
+  "QUOTE_NOT_LITERAL": 9,
+  "DUPLICATE_PARAMETER": 7
+ },
+ "experiment_labels": [
+  "BASS-II"
+ ],
+ "note": "Medição de viabilidade. As propostas NÃO foram gravadas e nenhuma foi conferida por humano."
+}

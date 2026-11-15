@@ -46,6 +46,13 @@ _CAUSAL = re.compile(
 )
 # "no" fica de fora de propósito: em PT é contração ("no experimento"), não negação.
 _NEGATION = re.compile(r"\b(não|nao|nenhum|nenhuma|nem|sem|not|cannot|impossível|impossivel)\b", re.IGNORECASE)
+# aplicados sobre texto sem acentos e em minúsculas (_fold)
+_ABSENCE = re.compile(
+    r"\b(ausente|ausentes|ausencia|nao (foi |foram )?informad[oa]s?|nao consta|nao constam|nao (esta|estao) disponive[il]s?|"
+    r"nao disponive[il]s?|indisponive[il]|nao ha (dado|dados|informacao|informacoes|valor|registro)|"
+    r"nao (foi |foram )?(reportad|relatad|medid)[oa]s?|missing|absent|not reported|not available)\b"
+)
+_PENDING = re.compile(r"\b(revis\w*|pendente\w*|retid[oa]s?|conferencia|conferid[oa]s?|aguard\w*)\b")
 _EVIDENCE_REF = re.compile(r"\b(?:REC|EV|PS|GAP)-[A-Za-z0-9_.\-]+")
 _GENERIC_TEST = re.compile(r"\b(?:[A-Z][A-Z0-9]*-)?M\d{1,3}\b")
 
@@ -60,6 +67,7 @@ class VerificationResult:
     approved: list[Claim] = field(default_factory=list)
     blocked: list[BlockedClaim] = field(default_factory=list)
     cited_gap: bool = False
+    cited_withheld: bool = False
 
 
 def _mention_matches(m: NumberMention, q: EvidenceQuantity) -> bool:
@@ -174,6 +182,24 @@ def verify_claim(
                 v.append("V5_VALUE_FOR_MISSING_DATA")
                 break
 
+    # ---- V5b: citar uma lacuna exige tratar DAQUELA lacuna (evita citação decorativa)
+    folded_text = _fold(text)
+    for gap in gaps_cited:
+        kws = [_fold(k) for k in gap.keywords if k]
+        if kws and not any(re.search(rf"\b{re.escape(k)}\b", folded_text) for k in kws):
+            v.append("V5_GAP_CITATION_MISMATCH")
+            break
+
+    # ---- V5c: registro pendente de revisão não pode ser descrito como ausente (DIV-20)
+    if _ABSENCE.search(folded_text) and not _PENDING.search(folded_text):
+        withheld = [i for i in cited if i.value_withheld] or [
+            i for i in retrieved.values()
+            if i.value_withheld and (not mentioned or i.test_uid in mentioned)
+            and any(re.search(rf"\b{re.escape(_fold(k))}\b", folded_text) for k in i.keywords)
+        ]
+        if withheld:
+            v.append("V5_PENDING_IS_NOT_ABSENT")
+
     # ---- V6: linguagem causal
     if _CAUSAL.search(text):
         if claim.type == ClaimType.HIPOTESE:
@@ -223,6 +249,8 @@ def verify_output(
             )
             if any(retrieved[e].kind == EvidenceKind.GAP for e in claim.evidence_ids):
                 result.cited_gap = True
+            if any(retrieved[e].value_withheld for e in claim.evidence_ids):
+                result.cited_withheld = True
     return result
 
 

@@ -8,6 +8,7 @@
 3. **IA no fim da cadeia, cercada por verificação determinística.** O LLM só recebe trechos já recuperados e só publica afirmações que passam no verificador.
 4. **Natureza epistêmica é um tipo, não um texto livre.** Todo dado e toda visualização carregam `nature` (OBSERVADO/CALCULADO/INFERIDO/CONCEITUAL), e a UI se recusa a renderizar sem ele.
 5. **FDS fica fora do servidor web.** Nenhuma rota executa o solver. Resultados de simulação entram como arquivos importados e revisados.
+   > **REVISADO em 14/11/2026 (ADR-09, [09](09_ADR_NASA_ENRICHMENT_FDS_SMOKEVIEW.md)):** o servidor web continua sem calcular, mas o FlameLab passa a ter um **worker isolado** que executa FDS/Smokeview/FFmpeg somente para arquivos gerados pelo `FDS Case Builder` a partir de parâmetros validados de modelos aprovados. A API nunca aceita FDS, caminho ou comando. O texto acima fica como registro da decisão original (ADR-01).
 6. **Nada além do necessário:** sem banco relacional, sem vetor-store, sem filas, sem autenticação (demo local).
 
 ## 2. Componentes
@@ -73,7 +74,7 @@ Convenções:
 | `POST /api/ask` | MUST | `{question, scope: {investigation_id?, test_uids?}, lang:"pt"}` | `AIAnswer` (ver [04 §3.9](04_SCIENTIFIC_DATA_CONTRACT.md)) | 200 sempre que o servidor estiver de pé; abstenção e indisponibilidade são **estados** da resposta, não erros HTTP |
 | `GET /api/simulation-readiness/{test_uid}` | STRETCH | — | `FdsReadiness` (gates G1–G5, status, motivos, lacunas) | 404 |
 | `GET /api/simulations/{run_id}` | STRETCH | — | `SimulationRun` importado (somente leitura) | 404 |
-| `POST /api/simulations` | **BLOQUEADO** | qualquer | **423 Locked** `{code:"SIMULATION_DISABLED", message:"Execução de FDS não é habilitada pela aplicação. Casos são revisados e executados manualmente; ver gates."}` | sempre 423 (T-11) |
+| `POST /api/simulations` | ~~BLOQUEADO~~ **SUBSTITUÍDO por ADR-09 (14/11):** aceita `{scenario_id}` e responde 202 (fila) ou `BLOCKED` com motivo; contratos novos em [09 §8](09_ADR_NASA_ENRICHMENT_FDS_SMOKEVIEW.md). *Texto original:* | qualquer | **423 Locked** `{code:"SIMULATION_DISABLED", message:"Execução de FDS não é habilitada pela aplicação. Casos são revisados e executados manualmente; ver gates."}` | sempre 423 (T-11) |
 
 ## 5. Dados científicos (resumo; contrato completo em [04](04_SCIENTIFIC_DATA_CONTRACT.md))
 Entidades: `Document`, `Investigation`, `Test`, `ParameterRecord`, `Evidence`, `Gap`, `Passage`, `AIAnswer`, `Scenario` (FUTURO), `SimulationRun` (STRETCH), `FdsReadiness` (STRETCH).
@@ -146,6 +147,7 @@ POST /api/ask
 - Proibido: interpolar, ajustar curvas ou animar chama em cima de dados OBSERVADOS sem rótulo próprio.
 
 ## 11. Integração opcional com FDS (STRETCH)
+> **REVISADO (ADR-09):** a condição de entrada foi satisfeita em 14/11 nesta máquina (FDS 6.11.1, Smokeview 6.11.2 e FFmpeg 9.0.2 executados; ver `docs/evidence/`). A execução manual descrita abaixo foi **substituída** pelo worker isolado; a regra “o LLM nunca escreve .fds” permanece. A reprodução científica do BASS-II M1 continua **BLOQUEADA**.
 - **Condição de entrada:** auditoria F00.A com o FDS `VERIFIED` em uma máquina com acesso ao repositório. O teste feito em outro computador não satisfaz essa condição.
 - Fluxo: `FdsReadiness` (documental) → caso `.fds` escrito/revisado por humano → execução **manual** fora da aplicação → `fds/runs/<run_id>/` (log, CSV, versão, sha256 do .fds) → `scripts/import_sim_run.py` valida e cria `SimulationRun` + registros `CALCULADO` → leitura pela API.
 - A aplicação nunca gera nem executa .fds. O LLM nunca escreve .fds na rota de execução.

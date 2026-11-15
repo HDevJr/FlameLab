@@ -1,0 +1,339 @@
+{
+ "data": [
+  {
+   "import_id": "IMP-3df76042e5be",
+   "filename": "NASA-TM-1998-207916.pdf",
+   "size_bytes": 1395530,
+   "sha256": "3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101",
+   "received_at": "2026-11-14T23:41:59Z",
+   "status": "DONE",
+   "steps": [
+    {
+     "key": "RECEIVE",
+     "label_pt": "Recebimento do arquivo",
+     "state": "DONE",
+     "detail_pt": "1395530 bytes recebidos.",
+     "at": "2026-11-14T23:41:59Z"
+    },
+    {
+     "key": "HASH",
+     "label_pt": "Cálculo do SHA-256",
+     "state": "DONE",
+     "detail_pt": "3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101",
+     "at": "2026-11-14T23:41:59Z"
+    },
+    {
+     "key": "PARSE",
+     "label_pt": "Leitura do PDF e identificação",
+     "state": "DONE",
+     "detail_pt": "32 páginas. Nenhum identificador forte no texto.",
+     "at": "2026-11-14T23:41:59Z"
+    },
+    {
+     "key": "NASA_LOOKUP",
+     "label_pt": "Consulta às fontes NASA",
+     "state": "DONE",
+     "detail_pt": "Correspondências: NTRS: 19980232607.",
+     "at": "2026-11-14T23:42:05Z"
+    },
+    {
+     "key": "PROVENANCE",
+     "label_pt": "Verificação de procedência NASA",
+     "state": "DONE",
+     "detail_pt": "Publicação NASA verificada (arquivo idêntico ao do NTRS)",
+     "at": "2026-11-14T23:42:08Z"
+    },
+    {
+     "key": "EXTRACT",
+     "label_pt": "Extração de parâmetros",
+     "state": "DONE",
+     "detail_pt": "1 experimento(s), 3 parâmetro(s) com citação literal conferida, 1 proposta(s) descartada(s). Tudo aguarda revisão humana.",
+     "at": "2026-11-14T23:42:10Z"
+    }
+   ],
+   "document": {
+    "document_id": "DOC-3df76042e5be",
+    "curated": false,
+    "title": "Dynamics of Liquids in Edges and Corners (DYLCO) IML-2 Experiment for the BDPU",
+    "page_count": 32,
+    "has_text_layer": true,
+    "year": 1998,
+    "identifiers": {
+     "report_numbers": [],
+     "ntrs_ids": [],
+     "dois": []
+    }
+   },
+   "nasa_provenance": {
+    "checked_at": "2026-11-14T23:42:05Z",
+    "ntrs_id": "19980232607",
+    "ntrs_url": "https://ntrs.nasa.gov/citations/19980232607",
+    "local_sha256": "3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101",
+    "state": "VERIFIED",
+    "label_pt": "Publicação NASA verificada (arquivo idêntico ao do NTRS)",
+    "reasons_pt": [
+     "Busca por título no NTRS: semelhança 1.0 com o registro 19980232607.",
+     "Sem identificador forte no artigo: a correspondência exige revisão humana.",
+     "SHA-256 do arquivo distribuído pelo NTRS (1395530 bytes): 3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101. É idêntico ao arquivo importado."
+    ],
+    "ntrs_file": "/api/citations/19980232607/downloads/19980232607.pdf",
+    "ntrs_sha256": "3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101",
+    "mode": "ONLINE"
+   },
+   "experiments": [
+    {
+     "experiment_id": "DOC-3df76042e5be-E1",
+     "label": "DYLCO BDPU IML-2 Experiment",
+     "description": "Investigation of the behavior of capillary surfaces and contact angle variation with temperature in rhombic test cells during the IML-2 mission (STS-65).",
+     "document_id": "DOC-3df76042e5be",
+     "origin": "IMPORTED",
+     "phenomena": [
+      "fluid_flow",
+      "heat_transfer",
+      "other"
+     ],
+     "parameters": [
+      {
+       "record_id": "DOC-3df76042e5be-E1.peak_temperature",
+       "parameter": "peak_temperature",
+       "label_pt": "peak temperature",
+       "role": "CONDICAO",
+       "nature": "OBSERVADO",
+       "status": "EXTRAIDO_NAO_REVISADO",
+       "original": {
+        "value": 95.0,
+        "unit": "°C",
+        "raw_text": "95"
+       },
+       "normalized": null,
+       "unit_known": false,
+       "evidence": [
+        {
+         "page_pdf": 5,
+         "page_printed": null,
+         "quote": "Though the originally planned peak temperature was 80 °C, the system temperature was further increased to 95 °C.",
+         "locator_pt": "p. 5 do PDF",
+         "literal_check": "PASS"
+        }
+       ],
+       "extraction": {
+        "method": "LLM",
+        "by": "gemini-3.5-flash-lite",
+        "at": "2026-11-14T23:42:08Z",
+        "prompt_version": "ext-v1"
+       },
+       "caveats_pt": [
+        "Proposto por IA; a citação foi conferida literalmente pelo código, mas o significado do valor exige revisão humana."
+       ]
+      },
+      {
+       "record_id": "DOC-3df76042e5be-E1.test_cell_material",
+       "parameter": "test_cell_material",
+       "label_pt": "test cell material",
+       "role": "METADADO",
+       "nature": "OBSERVADO",
+       "status": "EXTRAIDO_NAO_REVISADO",
+       "original": {
+        "value": "fused silica",
+        "unit": "",
+        "raw_text": "fused silica"
+       },
+       "normalized": null,
+       "unit_known": null,
+       "evidence": [
+        {
+         "page_pdf": 5,
+         "page_printed": null,
+         "quote": "Four cylindrical vessels of rhombic cross section were fabricated out of fused silica (quartz) for the test.",
+         "locator_pt": "p. 5 do PDF",
+         "literal_check": "PASS"
+        }
+       ],
+       "extraction": {
+        "method": "LLM",
+        "by": "gemini-3.5-flash-lite",
+        "at": "2026-11-14T23:42:08Z",
+        "prompt_version": "ext-v1"
+       },
+       "caveats_pt": [
+        "Proposto por IA; a citação foi conferida literalmente pelo código, mas o significado do valor exige revisão humana."
+       ]
+      },
+      {
+       "record_id": "DOC-3df76042e5be-E1.surface_modifier",
+       "parameter": "surface_modifier",
+       "label_pt": "surface modifier",
+       "role": "METADADO",
+       "nature": "OBSERVADO",
+       "status": "EXTRAIDO_NAO_REVISADO",
+       "original": {
+        "value": "FC-724",
+        "unit": "",
+        "raw_text": "FC-724"
+       },
+       "normalized": null,
+       "unit_known": null,
+       "evidence": [
+        {
+         "page_pdf": 5,
+         "page_printed": null,
+         "quote": "The interior surfaces of the test cells were coated with FC-724, a surface modifier supplied by the 3M Corporation.",
+         "locator_pt": "p. 5 do PDF",
+         "literal_check": "PASS"
+        }
+       ],
+       "extraction": {
+        "method": "LLM",
+        "by": "gemini-3.5-flash-lite",
+        "at": "2026-11-14T23:42:08Z",
+        "prompt_version": "ext-v1"
+       },
+       "caveats_pt": [
+        "Proposto por IA; a citação foi conferida literalmente pelo código, mas o significado do valor exige revisão humana."
+       ]
+      }
+     ],
+     "gaps": [
+      {
+       "gap_id": "GAP-DOC-3df76042e5be-E1-exact_fluid_volume",
+       "parameter": "exact_fluid_volume",
+       "label_pt": "exact fluid volume",
+       "explanation_pt": "The precise volume of test fluid injected into each test cell is not specified in the text.",
+       "origin": "SUGERIDA_POR_IA",
+       "purpose_blocked": []
+      },
+      {
+       "gap_id": "GAP-DOC-3df76042e5be-E1-cell_dimensions",
+       "parameter": "cell_dimensions",
+       "label_pt": "cell dimensions",
+       "explanation_pt": "The exact dihedral angles or lengths of the rhombic test cells are not explicitly stated numerically.",
+       "origin": "SUGERIDA_POR_IA",
+       "purpose_blocked": []
+      }
+     ]
+    }
+   ],
+   "extraction": {
+    "model": "gemini-3.5-flash-lite",
+    "pages_sent": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14
+    ],
+    "rejected": [
+     {
+      "experiment": "DYLCO BDPU IML-2 Experiment",
+      "name": "initial_temperature",
+      "value": "20",
+      "page": 5,
+      "reason": "QUOTE_NOT_LITERAL"
+     }
+    ],
+    "prompt_version": "ext-v1"
+   },
+   "warnings_pt": [
+    "A extração leu 14 de 32 páginas nesta versão."
+   ]
+  },
+  {
+   "import_id": "IMP-5ffa911fd9b6",
+   "filename": "NASA-TM-20210011385.pdf",
+   "size_bytes": 48972416,
+   "sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+   "received_at": "2026-11-14T23:42:00Z",
+   "status": "DONE",
+   "steps": [
+    {
+     "key": "RECEIVE",
+     "label_pt": "Recebimento do arquivo",
+     "state": "DONE",
+     "detail_pt": "48972416 bytes recebidos.",
+     "at": "2026-11-14T23:42:00Z"
+    },
+    {
+     "key": "HASH",
+     "label_pt": "Cálculo do SHA-256",
+     "state": "DONE",
+     "detail_pt": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+     "at": "2026-11-14T23:42:00Z"
+    },
+    {
+     "key": "PARSE",
+     "label_pt": "Leitura do PDF e identificação",
+     "state": "DONE",
+     "detail_pt": "144 páginas. Identificadores no texto: NASA/TM-20210011385, 20210011385.",
+     "at": "2026-11-14T23:42:00Z"
+    },
+    {
+     "key": "NASA_LOOKUP",
+     "label_pt": "Consulta às fontes NASA",
+     "state": "DONE",
+     "detail_pt": "Correspondências: NTRS: 20210011385; PSI: PSI-25.",
+     "at": "2026-11-14T23:42:05Z"
+    },
+    {
+     "key": "PROVENANCE",
+     "label_pt": "Verificação de procedência NASA",
+     "state": "DONE",
+     "detail_pt": "Publicação NASA verificada (arquivo idêntico ao do NTRS)",
+     "at": "2026-11-14T23:42:17Z"
+    },
+    {
+     "key": "EXTRACT",
+     "label_pt": "Extração de parâmetros",
+     "state": "SKIPPED",
+     "detail_pt": "Documento já presente no dataset curado; os registros existentes são usados.",
+     "at": "2026-11-14T23:42:17Z"
+    }
+   ],
+   "document": {
+    "document_id": "NASA-TM-20210011385",
+    "curated": true,
+    "title": "Burning and Suppression of Solids—II (BASS—II) Summary Report",
+    "page_count": 144,
+    "has_text_layer": true,
+    "year": 2021,
+    "identifiers": {
+     "report_numbers": [
+      "NASA/TM-20210011385"
+     ],
+     "ntrs_ids": [
+      "20210011385"
+     ],
+     "dois": []
+    }
+   },
+   "nasa_provenance": {
+    "checked_at": "2026-11-14T23:42:05Z",
+    "ntrs_id": "20210011385",
+    "ntrs_url": "https://ntrs.nasa.gov/citations/20210011385",
+    "local_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+    "state": "VERIFIED",
+    "label_pt": "Publicação NASA verificada (arquivo idêntico ao do NTRS)",
+    "reasons_pt": [
+     "O ID NTRS 20210011385 consta do artigo e existe no NTRS.",
+     "O título do registro é coerente com o do artigo (semelhança 1.0).",
+     "SHA-256 do arquivo distribuído pelo NTRS (48972416 bytes): 5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770. É idêntico ao arquivo importado."
+    ],
+    "ntrs_file": "/api/citations/20210011385/downloads/TM-20210011385.pdf",
+    "ntrs_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+    "mode": "ONLINE"
+   },
+   "experiments": [],
+   "extraction": null,
+   "warnings_pt": []
+  }
+ ],
+ "dataset_version": "sha256:29674b79fa2080f91d26684af9532610263e7a57c60358d866ada9907610df75"
+}

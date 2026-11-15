@@ -23,10 +23,16 @@ Desafio: [Flame in Freefall — NASA Space Apps 2026](https://www.spaceappschall
 
 ## Estado verificado
 
+- **Retomada da auditoria de integridade (15/11/2026):** código e testes estabilizados; dados e revisões anteriores preservados. O estado local tem 9 registros BASS-II conferidos com interpretação registrada e 14 DYLCO com revisão legada, dos quais 3 apresentam bloqueios. As descrições históricas abaixo sobre BASS-II pendente antecedem essas aprovações. Diagnóstico, política e validação: [BL-15 — continuidade da auditoria](docs/evidence/BL-15_integridade_continuidade.md). Nenhum achado foi promovido ou rebaixado automaticamente.
 - F00: **esqueleto** com endpoint de saúde (`/api/health`) e teste básico.
 - BL-05 (assistente de IA, só backend): `POST /api/ask` com adaptador Gemini, verificador determinístico V1–V8, abstenção e modos `live`/`cache`/`off`. **Testado com evidência sintética** (66 testes com provedor simulado + smoke test real do Gemini). Detalhes em [docs/evidence/BL-05_assistente_ia.md](docs/evidence/BL-05_assistente_ia.md).
-- **Ainda não há dataset BASS-II curado.** Por isso, em execução normal, `/api/ask` se abstém (`NO_ELIGIBLE_EVIDENCE`) e nunca responde com valores experimentais não conferidos. Não há busca, frontend nem integração com FDS.
-- Teste simples do FDS/Smokeview aconteceu em **outro computador**; a máquina atual ainda precisa de auditoria.
+- BL-02 (dataset científico): `data/` contém o ensaio **BASS-II M1** (9 registros, 11 evidências, 12 lacunas), validado pelo `DatasetStore` (invariantes I-1–I-10). O hash do PDF-fonte confere. **Os 9 registros estão `EXTRAIDO_NAO_REVISADO`: aguardam revisão humana.** Até lá, o assistente informa que o dado "consta na fonte e aguarda revisão" (`PENDING_REVIEW`) e não cita o valor. Detalhes em [docs/evidence/BL-02_dataset_cientifico.md](docs/evidence/BL-02_dataset_cientifico.md) e [docs/curation/BASS2-M1_curation_report.md](docs/curation/BASS2-M1_curation_report.md).
+- **Plataforma v2 (ADR-09, protótipo):** importação de artigos NASA em PDF (hash e procedência por comparação com o NTRS), extração assistida por IA com citação literal, enriquecimento NASA (NTRS, PSI via DataCite, TechPort), catálogo genérico, compatibilidade com o FDS, cenários derivados e worker FDS → Smokeview → MP4. Evidências em [docs/evidence/BL-12_plataforma_v2.md](docs/evidence/BL-12_plataforma_v2.md); decisões em [planning/09](planning/09_ADR_NASA_ENRICHMENT_FDS_SMOKEVIEW.md).
+- **FDS/Smokeview/FFmpeg: verificados nesta máquina** (FDS 6.11.1, Smokeview 6.11.2, FFmpeg 9.0.2), com um **caso de integração** genérico. **Não há reprodução do BASS-II M1**: depende de revisão humana, lacunas científicas e modelo aprovado.
+- **Jornada v2.1 (ADR-09 §11):** importação com etapas legíveis e tempos medidos, leitura do PDF em lotes com **cobertura de páginas** explícita, resumo consolidado (origem NASA ≠ números conferidos), **revisão humana pela interface** (mesma política do script), separação **Experimentos NASA / Demonstração FDS**, hipóteses sobre condições do experimento, vídeo em tempo real (1×) com player completo. Evidências: [docs/evidence/BL-13_jornada_v2_1.md](docs/evidence/BL-13_jornada_v2_1.md).
+- **Revisão científica assistida (ADR-09 §12):** a conferência compara **valor, unidade e página** separadamente (com conversão °C/K e Unicode), mostra qual campo divergiu, bloqueia interpretações que o trecho não sustenta e permite corrigir a extração preservando o original. Causa do `VALUE_MISMATCH` de 15/11 em [docs/evidence/BL-14_value_mismatch_revisao_assistida.md](docs/evidence/BL-14_value_mismatch_revisao_assistida.md).
+- Frontend: protótipo navegável (React + TypeScript + Vite) em `frontend/`. **Validação visual: NOT_RUN** — roteiro em [docs/manual_test_roteiro_S01-S07.md](docs/manual_test_roteiro_S01-S07.md); compila, tipa e passa nos testes de componentes (jsdom).
+- Busca textual/ranking e comparação lado a lado continuam não implementados.
 - Valores BASS-II/M1 citados no planejamento **não são apresentados como conferidos na fonte primária** até dupla revisão do PDF original.
 
 ## Executar localmente (Windows / PowerShell)
@@ -49,6 +55,15 @@ Em outro terminal, dentro da raiz:
 ```
 
 Verificação: abrir <http://127.0.0.1:8000/api/health>; resposta esperada `{"status":"ok","stage":"F00"}`. Isso atesta apenas a API mínima, não as integrações científicas.
+
+### Frontend (protótipo v2)
+```powershell
+cd frontend
+npm install
+npm run dev          # http://localhost:5173 (proxy de /api para 127.0.0.1:8000)
+npm run typecheck; npm test; npm run build
+```
+Variáveis úteis do backend: `FLAMELAB_NASA_MODE=online|fixture` (padrão `online`; `fixture` usa respostas gravadas, sem rede) e `FLAMELAB_VAR_DIR` (área de trabalho local; padrão `var/`, não versionada). O executor FDS usa `C:/Program Files/firemodels`; se ausente, simulações ficam `BLOCKED` com o motivo. Importações usam o Gemini quando `FLAMELAB_LLM_MODE=live` (um PDF = uma chamada real **por lote de páginas**; `FLAMELAB_EXTRACT_MAX_BATCHES`, padrão 8).
 
 ## Assistente científico (IA)
 
@@ -87,10 +102,22 @@ Responde `{"data": AIAnswer, "dataset_version": ..., "warnings": [...]}` (contra
 O smoke test grava o relatório em `docs/evidence/smoke_gemini_<UTC>.json`, sem credenciais. Sem chave, o resultado é `NOT_RUN`. Ele **não valida** conteúdo BASS-II.
 
 ### Limitações atuais
-- Não existe dataset curado (BL-02): o assistente não responde sobre experimentos NASA.
+- O dataset tem só o ensaio M1, ainda sem revisão humana: o assistente não afirma valores experimentais da NASA (ver "Dataset científico" abaixo).
 - Números só são aceitos quando vêm de fichas de registros `CONFERIDO_FONTE`. Trechos de documento sustentam apenas afirmações qualitativas.
 - O verificador não detecta números por extenso. Paráfrases causais e extrapolações fora da lista (Marte, Lua, gravidade parcial e outros corpos celestes) podem escapar das regras V6/V8.
 - O prompt v1 ainda não teve revisão científica. O golden set real depende da curadoria.
+
+## Dataset científico (BL-02)
+
+- Layout: `data/documents.json`, `data/investigations.json`, `data/tests/`, `data/parameters/`, `data/evidence/`, `data/gaps/`, cada um no envelope `{"contract_version": "1.0", "items": [...]}` (contrato em `planning/04`). Na inicialização, o servidor valida tudo e **não sobe** se o dataset for inválido.
+- O PDF-fonte fica em `sources/NASA-TM-20210011385.pdf` e **não é versionado**. Baixe-o em <https://ntrs.nasa.gov/citations/20210011385> e confira:
+  ```powershell
+  .\.venv\Scripts\python.exe scripts\verify_sources.py        # SHA-256 → MATCH esperado
+  .\.venv\Scripts\python.exe scripts\crosscheck_table51.py    # curadoria × texto do PDF (automático)
+  ```
+- **Revisão humana** (somente pessoa da equipe, diferente de quem extraiu): `scripts\review_record.py`. Ela exige o valor, a unidade e a página lidos no PDF e recusa qualquer divergência. Passo a passo em [docs/curation/BASS2-M1_curation_report.md](docs/curation/BASS2-M1_curation_report.md).
+- Registros não conferidos chegam ao assistente como **valor retido**: o modelo sabe que o dado existe e onde está, mas não recebe o número.
+- Smoke real sobre o dataset real (explícito): `.\.venv\Scripts\python.exe scripts\smoke_gemini_real_dataset.py`.
 
 ## Organização e colaboração
 
@@ -106,6 +133,8 @@ O smoke test grava o relatório em `docs/evidence/smoke_gemini_<UTC>.json`, sem 
 Ver [CONTRIBUTING.md](CONTRIBUTING.md) para branches, PRs, segurança e atualização do pitch.
 
 ## Fonte científica inicial
+
+Jornada de revisão guiada, contratos e roteiro de validação: [BL-17 — revisão de pendências](docs/evidence/BL-17_revisao_guiada.md).
 
 NASA/TM-20210011385 — [BASS-II Summary Report](https://ntrs.nasa.gov/citations/20210011385). A conferência na fonte primária é necessária antes de marcar parâmetros como revisados.
 

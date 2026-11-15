@@ -5,3 +5,7 @@ pymupdf>=1.25,<2
 # BL-05 — assistente científico (provedor Gemini; .env lido por caminho explícito)
 google-genai>=3.3,<4
 python-dotenv>=1.0,<2
+
+# Protótipo v2 (importação de PDF, vídeo)
+python-multipart>=0.0.20,<1
+imageio-ffmpeg>=0.6,<1

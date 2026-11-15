@@ -1,0 +1,131 @@
+{
+  "kind": "SMOKE_TEST_REAL_GEMINI_EVIDENCIA_SINTETICA",
+  "warning": "Evidência sintética (TEST-01). Não valida conteúdo científico BASS-II/NASA.",
+  "executed_at_utc": "2026-11-14T19:18:25.216416+00:00",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "key_present": true,
+  "cases": [
+    {
+      "case": "A_extracao",
+      "question": "Qual material foi utilizado e qual sua espessura?",
+      "status": "PASS",
+      "mode": "LIVE",
+      "abstained": false,
+      "abstain_reason": null,
+      "provider_error": null,
+      "extrapolation_flags": [],
+      "latency_ms": 1172,
+      "approved_claims": [
+        {
+          "type": "OBSERVACAO",
+          "text_pt": "No ensaio TEST-01, o material utilizado foi PMMA.",
+          "evidence_ids": [
+            "REC-TEST-01.material"
+          ],
+          "numbers": [],
+          "verification": "PASS"
+        },
+        {
+          "type": "OBSERVACAO",
+          "text_pt": "No ensaio TEST-01, a espessura da amostra foi de 1 mm.",
+          "evidence_ids": [
+            "REC-TEST-01.thickness"
+          ],
+          "numbers": [
+            {
+              "value": 1.0,
+              "unit": "mm"
+            }
+          ],
+          "verification": "PASS"
+        }
+      ],
+      "blocked_claims": []
+    },
+    {
+      "case": "B_abstencao",
+      "question": "Qual era a pressão do experimento?",
+      "status": "PASS",
+      "mode": "LIVE",
+      "abstained": true,
+      "abstain_reason": "MISSING_DATA",
+      "provider_error": null,
+      "extrapolation_flags": [],
+      "latency_ms": 1141,
+      "approved_claims": [
+        {
+          "type": "LIMITACAO",
+          "text_pt": "No ensaio TEST-01, a pressão está ausente e não foi informada nas evidências disponíveis.",
+          "evidence_ids": [
+            "GAP-TEST-01-pressure"
+          ],
+          "numbers": [],
+          "verification": "PASS"
+        }
+      ],
+      "blocked_claims": []
+    },
+    {
+      "case": "J_extrapolacao",
+      "question": "Qual seria a propagação da chama na atmosfera de Marte?",
+      "status": "PASS",
+      "mode": "LIVE",
+      "abstained": true,
+      "abstain_reason": "EXTRAPOLATION",
+      "provider_error": null,
+      "extrapolation_flags": [
+        "MARTE"
+      ],
+      "latency_ms": 1452,
+      "approved_claims": [
+        {
+          "type": "LIMITACAO",
+          "text_pt": "As evidencias do ensaio TEST-01 nao incluem condicoes de atmosfera de Marte, limitando previsoes numericas para esse cenario.",
+          "evidence_ids": [
+            "REC-TEST-01.material"
+          ],
+          "numbers": [],
+          "verification": "PASS"
+        },
+        {
+          "type": "LIMITACAO",
+          "text_pt": "No ensaio TEST-01, o parametro pressao esta ausente e nao foi informado no corpus curado.",
+          "evidence_ids": [
+            "GAP-TEST-01-pressure"
+          ],
+          "numbers": [],
+          "verification": "PASS"
+        }
+      ],
+      "blocked_claims": [
+        {
+          "type": "OBSERVACAO",
+          "text_pt": "No ensaio TEST-01, o material utilizado foi PMMA.",
+          "reason": "V8_EXTRAPOLATION_CLAIM_TYPE",
+          "reasons": [
+            "V8_EXTRAPOLATION_CLAIM_TYPE"
+          ]
+        },
+        {
+          "type": "OBSERVACAO",
+          "text_pt": "No ensaio TEST-01, a espessura da amostra foi de 1 mm.",
+          "reason": "V8_EXTRAPOLATION_CLAIM_TYPE",
+          "reasons": [
+            "V8_EXTRAPOLATION_CLAIM_TYPE"
+          ]
+        },
+        {
+          "type": "OBSERVACAO",
+          "text_pt": "No ensaio TEST-01, a velocidade do ar foi de 9 cm/s.",
+          "reason": "V8_EXTRAPOLATION_CLAIM_TYPE",
+          "reasons": [
+            "V8_EXTRAPOLATION_CLAIM_TYPE"
+          ]
+        }
+      ]
+    }
+  ],
+  "sdk_google_genai": "3.3.0",
+  "overall": "PASS"
+}

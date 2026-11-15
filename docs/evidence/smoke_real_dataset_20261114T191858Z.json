@@ -1,0 +1,69 @@
+{
+  "kind": "SMOKE_REAL_GEMINI_REAL_DATASET",
+  "executed_at_utc": "2026-11-14T19:18:58.715424+00:00",
+  "model": "gemini-3.5-flash-lite",
+  "dataset_version": "sha256:29674b79fa2080f91d26684af9532610263e7a57c60358d866ada9907610df75",
+  "record_statuses": [
+    "EXTRAIDO_NAO_REVISADO"
+  ],
+  "cases": [
+    {
+      "question": "Qual era a pressão no ensaio M1?",
+      "mode": "LIVE",
+      "abstained": true,
+      "abstain_reason": "MISSING_DATA",
+      "provider_error": null,
+      "latency_ms": 1281,
+      "retrieved_kinds": [
+        "GAP",
+        "RECORD_CARD"
+      ],
+      "approved_claims": [
+        {
+          "type": "LIMITACAO",
+          "text_pt": "A pressão no ensaio M1 está ausente no corpus curado e não é informada no capítulo 5 para o ensaio BASS2-M1.",
+          "evidence_ids": [
+            "GAP-BASS2-M1-ambient_pressure"
+          ],
+          "numbers": [],
+          "verification": "PASS"
+        }
+      ],
+      "blocked_claims": [],
+      "numbers_published": [],
+      "warnings": [
+        "9 registro(s) com valor retido: extraído(s) da fonte, aguardando revisão humana."
+      ]
+    },
+    {
+      "question": "Qual foi a velocidade de propagação da chama no ensaio M1?",
+      "mode": "LIVE",
+      "abstained": true,
+      "abstain_reason": "PENDING_REVIEW",
+      "provider_error": null,
+      "latency_ms": 1343,
+      "retrieved_kinds": [
+        "GAP",
+        "RECORD_CARD"
+      ],
+      "approved_claims": [
+        {
+          "type": "LIMITACAO",
+          "text_pt": "No ensaio BASS2-M1, a velocidade de propagação da chama possui o dado classificado como VALOR RETIDO, constando na fonte mas aguardando revisão humana, de modo que o valor não pode ser informado.",
+          "evidence_ids": [
+            "REC-BASS2-M1.flame_spread_rate"
+          ],
+          "numbers": [],
+          "verification": "PASS"
+        }
+      ],
+      "blocked_claims": [],
+      "numbers_published": [],
+      "warnings": [
+        "9 registro(s) com valor retido: extraído(s) da fonte, aguardando revisão humana."
+      ]
+    }
+  ],
+  "overall": "PASS",
+  "pass_criterion": "Antes da revisão humana: LIVE, abstenção e nenhum número publicado."
+}

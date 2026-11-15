@@ -1,0 +1,14 @@
+# pytest (backend) — 2026-11-14T23:48:13Z — provedor, transporte e executor SIMULADOS
+........................................................................ [ 42%]
+..............s......................................................... [ 85%]
+........................                                                 [100%]
+167 passed, 1 skipped in 7.41s
+
+# frontend: tsc + vitest + vite build
+tsc exit: 0
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+dist/index.html                   0.41 kB │ gzip:  0.29 kB
+dist/assets/index-CK9P-MJY.css    4.44 kB │ gzip:  1.46 kB
+dist/assets/index-C-JHhYeO.js   199.87 kB │ gzip: 64.02 kB
+✓ built in 1.66s

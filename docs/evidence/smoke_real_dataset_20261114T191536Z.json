@@ -1,0 +1,67 @@
+{
+  "kind": "SMOKE_REAL_GEMINI_REAL_DATASET",
+  "executed_at_utc": "2026-11-14T19:15:36.833665+00:00",
+  "model": "gemini-3.5-flash-lite",
+  "dataset_version": "sha256:29674b79fa2080f91d26684af9532610263e7a57c60358d866ada9907610df75",
+  "record_statuses": [
+    "EXTRAIDO_NAO_REVISADO"
+  ],
+  "cases": [
+    {
+      "question": "Qual era a pressão no ensaio M1?",
+      "mode": "LIVE",
+      "abstained": true,
+      "abstain_reason": "MISSING_DATA",
+      "provider_error": null,
+      "latency_ms": 1218,
+      "retrieved_kinds": [
+        "GAP"
+      ],
+      "approved_claims": [
+        {
+          "type": "LIMITACAO",
+          "text_pt": "A pressão no ensaio M1 está ausente e não foi informada no corpus curado para BASS2-M1.",
+          "evidence_ids": [
+            "GAP-BASS2-M1-ambient_pressure"
+          ],
+          "numbers": [],
+          "verification": "PASS"
+        }
+      ],
+      "blocked_claims": [],
+      "numbers_published": [],
+      "warnings": [
+        "9 registro(s) no escopo excluído(s) por estado não elegível (ex.: não conferido)."
+      ]
+    },
+    {
+      "question": "Qual foi a velocidade de propagação da chama no ensaio M1?",
+      "mode": "LIVE",
+      "abstained": true,
+      "abstain_reason": "MISSING_DATA",
+      "provider_error": null,
+      "latency_ms": 1046,
+      "retrieved_kinds": [
+        "GAP"
+      ],
+      "approved_claims": [
+        {
+          "type": "LIMITACAO",
+          "text_pt": "A velocidade de propagação da chama no ensaio M1 está ausente no relatório, pois nenhuma evidência do tipo RECORD_CARD fornece esse dado.",
+          "evidence_ids": [
+            "GAP-BASS2-M1-sample_length"
+          ],
+          "numbers": [],
+          "verification": "PASS"
+        }
+      ],
+      "blocked_claims": [],
+      "numbers_published": [],
+      "warnings": [
+        "9 registro(s) no escopo excluído(s) por estado não elegível (ex.: não conferido)."
+      ]
+    }
+  ],
+  "overall": "PASS",
+  "pass_criterion": "Antes da revisão humana: LIVE, abstenção e nenhum número publicado."
+}

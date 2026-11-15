@@ -116,6 +116,8 @@ def record_card(record: RecordInput) -> EvidenceItem:
         raise ValueError(f"registro {record.record_id}: estado/natureza/papel fora do contrato")
     if record.status == "AUSENTE":
         raise ValueError(f"registro {record.record_id}: AUSENTE deve ser representado como lacuna (GapInput)")
+    if record.status != "CONFERIDO_FONTE":
+        return _withheld_card(record)
     quantities: list[EvidenceQuantity] = []
     if record.original is None:
         value_text = "valor não informado"
@@ -151,6 +153,47 @@ def record_card(record: RecordInput) -> EvidenceItem:
         document_id=record.document_id,
         synthetic=record.synthetic,
     )
+
+
+def _withheld_card(record: RecordInput) -> EvidenceItem:
+    """Registro ainda não conferido: o modelo sabe que o dado EXISTE na fonte e onde está,
+    mas não recebe o valor, as ressalvas nem o trecho (que contêm números). Ver DIV-20."""
+    text = (
+        f"Ensaio {record.test_label} ({record.test_uid}) — {record.label_pt} "
+        f"[papel={record.role}; estado={record.status}]: VALOR RETIDO — o dado consta na fonte e foi extraído, "
+        f"mas aguarda revisão humana; não pode ser citado como valor nem descrito como ausente. "
+        f"{_locator_text(record)}."
+    )
+    return EvidenceItem(
+        evidence_id=f"REC-{record.record_id}",
+        kind=EvidenceKind.RECORD_CARD,
+        investigation_id=record.investigation_id,
+        test_uid=record.test_uid,
+        test_label=record.test_label,
+        parameter=record.parameter,
+        role=record.role,
+        nature=record.nature,
+        status=record.status,
+        text=text,
+        quantities=[],
+        keywords=_label_keywords(record.label_pt),
+        source_evidence_ids=record.evidence_ids,
+        locator=record.locator.model_dump(exclude_none=True) if record.locator else None,
+        document_id=record.document_id,
+        synthetic=record.synthetic,
+        value_withheld=True,
+    )
+
+
+def _label_keywords(label: str) -> list[str]:
+    """Rótulo sem parênteses, para detectar menções ao parâmetro (ex.: 'velocidade do ar')."""
+    import re
+
+    base = re.sub(r"\(.*?\)", "", label).strip().lower()
+    if not base:
+        return []
+    short = re.sub(r"\s+(da amostra|da chama|do ensaio|durante o ensaio)$", "", base)
+    return sorted({base, short})
 
 
 def gap_card(gap: GapInput) -> EvidenceItem:

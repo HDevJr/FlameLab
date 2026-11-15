@@ -150,6 +150,8 @@ O DM lista seis estados, e dois deles (`INFERIDO`, `CALCULADO`) descrevem **de o
   "possible_sources_pt": "<referências a investigar; não preencher com valores>"
 }
 ```
+> **Extensão aditiva (BL-02, DIV-19, pendente de aprovação):** `label_pt` (obrigatório) e `keywords` (lista), usados pela regra V5 do verificador.
+
 Lista inicial (DM §08.2): comprimento da amostra; posição/apoio metálico; dimensões efetivas do duto; pressão; temperatura; perfil espacial e temporal do fluxo; ponto do anemômetro; procedimento/duração/fonte de ignição; propriedades termoquímicas/pirólise do PMMA; incertezas de medição; método de cálculo do avanço da frente. **Na F01, cada item é verificado no PDF.** Se algum for encontrado, sai de Gap e vira ParameterRecord.
 
 ### 3.7 Passage (para recuperação)
@@ -203,6 +205,7 @@ Total: **9 registros = os "8 campos" do DM** (O₂ inicial e final contam como u
 > - `blocked_claims[]` ganha `type` e `reasons[]` (todas as violações); `retrieved[]` ganha `kind`, `test_uid`, `status`, `nature`, `text`, `locator`, `document_id`, `synthetic`.
 > - `abstain_reason`: NO_ELIGIBLE_EVIDENCE, INSUFFICIENT_EVIDENCE, MISSING_DATA, EXTRAPOLATION, MODEL_ABSTAINED, VERIFICATION_FAILED.
 > - IDs de evidência no assistente: fichas `REC-<record_id>`, lacunas `GAP-…`, trechos `PS-…`.
+> - **BL-02 (DIV-20):** `abstain_reason` ganha `PENDING_REVIEW`; `retrieved[]` ganha `value_withheld` (registro não conferido: existe na fonte, valor não liberado).
 
 ### 3.10 Comparison (saída)
 ```json
@@ -243,6 +246,18 @@ Regra: `AUSENTE` em qualquer lado → `differs=null`, `comparable=false`. **Nunc
 | contagem | adimensional | adimensional |
 Unidades fora da tabela → o registro é rejeitado no carregamento (não há conversão "aproximada").
 
+> **Extensão aditiva v1.1 (15/11/2026, DIV-33):** a tabela passou a incluir temperatura (°C, K, °F, com **deslocamento**: K = °C + 273,15), ângulo (°, rad), pressão (Pa…atm, psi), volume, massa, área, frequência, potência/fluxo de calor, µm/ms/h e ppm, além de normalização Unicode das grafias (`℃`, `º`, `˚`, `µ`, espaços finos). Nada que era aceito deixou de ser. **Igualdade física é decidida por dimensão + conversão; texto de unidade nunca decide.** Unidade fora da tabela continua sem conversão e a revisão a trata como `UNIT_UNSUPPORTED`. A diferença de temperatura (ΔT) **não** é uma unidade desta tabela.
+
+### 4.1 Diagnóstico de integridade v2.3 (15/11/2026)
+
+A classificação de apresentação é derivada, sem reescrever `original`, `normalized` ou `status`: `PHYSICAL` (unidade física suportada), `UNSUPPORTED` (unidade fora da tabela), `DIMENSIONLESS` (grandeza reconhecida como adimensional ou declaração explícita), `MISSING` (unidade ausente) e `NOT_APPLICABLE` (valor textual/sem valor). A normalização histórica `canonical_unit(None) = adimensional` não autoriza concluir que uma grandeza desconhecida é adimensional.
+
+Grandeza física reconhecida sem unidade gera bloqueio; dimensão desconhecida sem unidade gera atenção `UNIT_UNCLASSIFIED`. Identificadores numéricos geram ressalva própria. Uma condição de referência numérica precisa preservar o valor e a unidade associados ao parâmetro no trecho; equivalência física é aceita, preenchimento arbitrário ou apenas texto não elimina o bloqueio.
+
+`CONFERIDO_FONTE` histórico pode coexistir com achados atuais. `review_scope=FULL` indica confirmação explícita de interpretação; `LEGACY` indica ausência desse registro. A auditoria não promove nem rebaixa dados. Política de correção/reabertura e diagnóstico: [BL-15](../docs/evidence/BL-15_integridade_continuidade.md).
+
+Clientes antigos/servidores sem classificação: preservar `original.unit`, sinalizar a versão e manter a unidade como não classificada, sem inferir suporte. A negociação entre frontend e backend usa `/api/version` e capacidades; a versão da API/OpenAPI vem da mesma constante.
+
 ## 5. Versionamento
 - `contract_version: "1.0"` em cada arquivo JSON.
 - `dataset_version` = sha256 do JSON canônico (chaves ordenadas) de todos os arquivos em `data/`, exceto `ai_cache/`.
@@ -260,10 +275,13 @@ Unidades fora da tabela → o registro é rejeitado no carregamento (não há co
 - Seção: 5.3
 - Tabela: 5.1
 - Página impressa: 57
-- Página do PDF: PENDENTE
-- Revisor 1: PENDENTE
+- Página do PDF: 65 (impressa 57) — identificada na extração preliminar (BL-02, 14/11)
+- Material: texto da §5.3 (p. 56 / PDF 64) e §5.1 (p. 55 / PDF 63), não coluna da tabela
+- Extração preliminar: claude-code (camada de texto PyMuPDF), verificação cruzada 10/10 MATCH
+- Revisor 1: PENDENTE (pessoa da equipe; `scripts/review_record.py`)
 - Revisor 2: PENDENTE
-- Estado: EXTRAIDO_NAO_REVISADO
+- Estado: EXTRAIDO_NAO_REVISADO (9/9)
+- Relatório: `docs/curation/BASS2-M1_curation_report.md`
 
 ## Conferência
 - [ ] Identificação M1 correta

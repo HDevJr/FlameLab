@@ -1,0 +1,43 @@
+# pytest (backend) — 2026-11-15T01:54:17Z — IA, transporte NASA e executor SIMULADOS
+........................................................................ [ 97%]
+........                                                                 [100%]
+295 passed, 1 skipped in 10.59s
+      9 backend/tests/test_assistant_config_api.py
+     13 backend/tests/test_assistant_gemini_provider.py
+     10 backend/tests/test_assistant_numbers_units.py
+     15 backend/tests/test_assistant_service.py
+     19 backend/tests/test_assistant_verifier.py
+     14 backend/tests/test_dataset_adapter_review.py
+      9 backend/tests/test_dataset_real_bass2.py
+     24 backend/tests/test_dataset_store.py
+      1 backend/tests/test_generic_architecture.py
+      2 backend/tests/test_health.py
+     17 backend/tests/test_ingest.py
+     31 backend/tests/test_journey_v21.py
+     10 backend/tests/test_nasa_enrichment.py
+     20 backend/tests/test_review_api.py
+     77 backend/tests/test_review_v22.py
+     25 backend/tests/test_simulation.py
+
+# frontend: tsc + vitest (jsdom) + vite build
+tsc exit: 0
+ ✓ src/lib.test.ts (10 tests) 7ms
+ ✓ src/components.test.tsx (8 tests) 234ms
+ ✓ src/pages.test.tsx (8 tests) 273ms
+ ✓ src/review.test.tsx (18 tests) 1662ms
+   ✓ C. conferência assistida (sem redigitar) > destaca exatamente o campo que diverge (unidade ausente) e explica por quê 302ms
+   ✓ C. conferência assistida (sem redigitar) > o botão de confirmar só habilita com nome, declaração e prévia aceita 319ms
+ Test Files  4 passed (4)
+      Tests  44 passed (44)
+dist/assets/index-ChmE5odW.css    7.54 kB │ gzip:  2.28 kB
+dist/assets/index-DUtKgAil.js   242.51 kB │ gzip: 76.32 kB
+✓ built in 892ms
+
+# reprodução do caso original (registro real {20.0, °C}, p. 5)
+== O caso original, registro real {20.0, '°C'}, p. 5 ==
+A) valor '20.0 °C' + unidade vazia (o relato)    -> ACEITO           [value:MATCH | unit:MATCH | page:MATCH]
+B) valor '20.0' + unidade vazia                  -> UNIT_MISSING     [value:MATCH | unit:MISSING | page:MATCH]
+C) '20,0' + '°C'                                 -> ACEITO           [value:MATCH | unit:MATCH | page:MATCH]
+D) '20.0' + '℃'                                  -> ACEITO           [value:MATCH | unit:MATCH | page:MATCH]
+E) '293.15' + 'K'                                -> ACEITO           [value:MATCH | unit:CONVERTIBLE | page:MATCH]
+F) '20' + 'K'                                    -> VALUE_MISMATCH   [value:MISMATCH | unit:CONVERTIBLE | page:MATCH]

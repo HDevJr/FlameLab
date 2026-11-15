@@ -1,0 +1,31 @@
+# pytest (backend) — 2026-11-15T01:08:22Z — IA, transporte NASA e executor SIMULADOS
+..............s......................................................... [ 65%]
+........................................................................ [ 98%]
+...                                                                      [100%]
+218 passed, 1 skipped in 8.16s
+      9 backend/tests/test_assistant_config_api.py
+     13 backend/tests/test_assistant_gemini_provider.py
+     10 backend/tests/test_assistant_numbers_units.py
+     15 backend/tests/test_assistant_service.py
+     19 backend/tests/test_assistant_verifier.py
+     14 backend/tests/test_dataset_adapter_review.py
+      9 backend/tests/test_dataset_real_bass2.py
+     24 backend/tests/test_dataset_store.py
+      1 backend/tests/test_generic_architecture.py
+      2 backend/tests/test_health.py
+     17 backend/tests/test_ingest.py
+     31 backend/tests/test_journey_v21.py
+     10 backend/tests/test_nasa_enrichment.py
+     20 backend/tests/test_review_api.py
+     25 backend/tests/test_simulation.py
+
+# frontend: tsc + vitest (jsdom) + vite build
+tsc exit: 0
+ ✓ src/lib.test.ts (10 tests) 8ms
+ ✓ src/pages.test.tsx (8 tests) 257ms
+ ✓ src/components.test.tsx (13 tests) 444ms
+ Test Files  3 passed (3)
+      Tests  31 passed (31)
+dist/assets/index-rV6F3x-J.css    7.21 kB │ gzip:  2.19 kB
+dist/assets/index-B5c-Hfvi.js   230.35 kB │ gzip: 72.79 kB
+✓ built in 911ms

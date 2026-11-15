@@ -66,7 +66,7 @@ class AssistantService:
             RetrievedEvidence(
                 id=i.evidence_id, score=ctx.scores.get(i.evidence_id, 0.0), kind=i.kind, test_uid=i.test_uid,
                 status=i.status, nature=i.nature, text=i.text, locator=i.locator,
-                document_id=i.document_id, synthetic=i.synthetic,
+                document_id=i.document_id, synthetic=i.synthetic, value_withheld=i.value_withheld,
             )
             for i in ctx.items
         ]
@@ -105,6 +105,8 @@ class AssistantService:
         if not substantive:
             if flags:
                 reason = AbstainReason.EXTRAPOLATION
+            elif result.cited_withheld:
+                reason = AbstainReason.PENDING_REVIEW
             elif result.cited_gap:
                 reason = AbstainReason.MISSING_DATA
             elif output.abstain:

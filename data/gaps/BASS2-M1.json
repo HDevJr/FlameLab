@@ -1,0 +1,137 @@
+{
+  "contract_version": "1.0",
+  "items": [
+    {
+      "gap_id": "GAP-BASS2-M1-sample_length",
+      "test_uid": "BASS2-M1",
+      "parameter": "sample_length",
+      "label_pt": "Comprimento da amostra",
+      "keywords": ["comprimento da amostra", "comprimento", "sample length"],
+      "purpose_blocked": ["FDS_REPRODUCTION"],
+      "searched_in": ["NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)", "Tabela 5.1 (p. 57)"],
+      "explanation_pt": "A Tabela 5.1 não informa o comprimento da amostra de M1.",
+      "possible_sources_pt": "A §5.1 (p. 55) traz uma afirmação geral sobre o comprimento das amostras do conjunto, não específica de M1. Candidata a registro somente após revisão humana."
+    },
+    {
+      "gap_id": "GAP-BASS2-M1-sample_holder_substrate",
+      "test_uid": "BASS2-M1",
+      "parameter": "sample_holder_substrate",
+      "label_pt": "Suporte e substrato metálico da amostra",
+      "keywords": ["substrato", "apoio metálico", "suporte da amostra", "substrate", "sample holder"],
+      "purpose_blocked": ["FDS_REPRODUCTION"],
+      "searched_in": ["NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"],
+      "explanation_pt": "O texto da p. 58 menciona perda de calor para o substrato metálico em amostras de uma face e para o porta-amostra, sem material, dimensões ou posição.",
+      "possible_sources_pt": "Referências 7, 8, 10 e 11 do capítulo 5 (teses e artigos da SDSU) — a investigar."
+    },
+    {
+      "gap_id": "GAP-BASS2-M1-duct_geometry",
+      "test_uid": "BASS2-M1",
+      "parameter": "duct_geometry",
+      "label_pt": "Dimensões efetivas do duto",
+      "keywords": ["dimensões do duto", "geometria do duto", "seção do duto", "duct dimensions", "duct geometry"],
+      "purpose_blocked": ["FDS_REPRODUCTION"],
+      "searched_in": ["NASA-TM-20210011385 §5.3 (p. 56)", "§5.5 (p. 60–61)"],
+      "explanation_pt": "A §5.3 descreve um \"small flow duct\" sem dimensões; a §5.5 informa que o modelo histórico usou geometria \"approximate\" do duto.",
+      "possible_sources_pt": "Figuras 5.1 e 5.6 (imagens não analisadas nesta etapa) e Ref. 3/4 do capítulo 5."
+    },
+    {
+      "gap_id": "GAP-BASS2-M1-ambient_pressure",
+      "test_uid": "BASS2-M1",
+      "parameter": "ambient_pressure",
+      "label_pt": "Pressão",
+      "keywords": ["pressão", "pressao", "pressure"],
+      "purpose_blocked": ["FDS_REPRODUCTION"],
+      "searched_in": ["NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"],
+      "explanation_pt": "Nenhuma pressão é informada para M1 no capítulo 5.",
+      "possible_sources_pt": "Outros capítulos do relatório e dados do PSI-25 — a investigar."
+    },
+    {
+      "gap_id": "GAP-BASS2-M1-ambient_temperature",
+      "test_uid": "BASS2-M1",
+      "parameter": "ambient_temperature",
+      "label_pt": "Temperatura ambiente/inicial",
+      "keywords": ["temperatura", "temperature"],
+      "purpose_blocked": ["FDS_REPRODUCTION"],
+      "searched_in": ["NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"],
+      "explanation_pt": "Nenhuma temperatura do gás ou da amostra é informada para M1 no capítulo 5.",
+      "possible_sources_pt": "Outros capítulos do relatório e dados do PSI-25 — a investigar."
+    },
+    {
+      "gap_id": "GAP-BASS2-M1-inlet_flow_profile",
+      "test_uid": "BASS2-M1",
+      "parameter": "inlet_flow_profile",
+      "label_pt": "Perfil espacial e temporal do escoamento de entrada",
+      "keywords": ["perfil do escoamento", "perfil de velocidade", "perfil de entrada", "flow profile", "velocity profile"],
+      "purpose_blocked": ["FDS_REPRODUCTION"],
+      "searched_in": ["NASA-TM-20210011385 §5.3 (p. 56)", "§5.5 (p. 60)"],
+      "explanation_pt": "A §5.5 informa que o perfil foi medido em vários pontos e é \"quite irregular\", mas os valores não estão no relatório.",
+      "possible_sources_pt": "Dados brutos do anemômetro no PSI-25 — a investigar."
+    },
+    {
+      "gap_id": "GAP-BASS2-M1-anemometer_location",
+      "test_uid": "BASS2-M1",
+      "parameter": "anemometer_location",
+      "label_pt": "Posição de medição do anemômetro",
+      "keywords": ["posição do anemômetro", "posicao do anemometro", "ponto de medição", "anemometer location"],
+      "purpose_blocked": ["FDS_REPRODUCTION"],
+      "searched_in": ["NASA-TM-20210011385 §5.3 (p. 56)"],
+      "explanation_pt": "A §5.3 informa apenas que o anemômetro mede o ar que entra no duto; a posição exata não é dada.",
+      "possible_sources_pt": "Documentação do hardware BASS (Ref. 3 do capítulo 5) — a investigar."
+    },
+    {
+      "gap_id": "GAP-BASS2-M1-ignition_procedure",
+      "test_uid": "BASS2-M1",
+      "parameter": "ignition_procedure",
+      "label_pt": "Procedimento, duração e fonte de ignição",
+      "keywords": ["ignição", "ignicao", "ignitor", "ignition", "igniter"],
+      "purpose_blocked": ["FDS_REPRODUCTION"],
+      "searched_in": ["NASA-TM-20210011385 §5.3 (p. 56)", "§5.5 (p. 61)"],
+      "explanation_pt": "A §5.3 menciona o ignitor e a estabilização da chama, sem potência nem duração para M1. A duração de ignição citada na §5.5 refere-se ao MODELO numérico, não ao experimento.",
+      "possible_sources_pt": "Documentação do hardware BASS — a investigar."
+    },
+    {
+      "gap_id": "GAP-BASS2-M1-pmma_pyrolysis_properties",
+      "test_uid": "BASS2-M1",
+      "parameter": "pmma_pyrolysis_properties",
+      "label_pt": "Propriedades termoquímicas e de pirólise do PMMA",
+      "keywords": ["pirólise", "pirolise", "pyrolysis", "propriedades termoquímicas", "cinética química", "chemical kinetics", "propriedades do material"],
+      "purpose_blocked": ["FDS_REPRODUCTION"],
+      "searched_in": ["NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"],
+      "explanation_pt": "O capítulo 5 não lista propriedades do PMMA; os autores afirmam que precisam modificar a cinética química e as propriedades do material para melhorar o modelo (§5.1, §5.7).",
+      "possible_sources_pt": "Outros capítulos trazem propriedades usadas em análises de OUTRAS geometrias (amostras cilíndricas); não transferir para M1 sem revisão científica."
+    },
+    {
+      "gap_id": "GAP-BASS2-M1-o2_time_profile",
+      "test_uid": "BASS2-M1",
+      "parameter": "o2_time_profile",
+      "label_pt": "Perfil temporal do O₂ durante o ensaio",
+      "keywords": ["perfil temporal do oxigênio", "perfil temporal do o2", "perfil temporal do o₂", "oxigênio ao longo do tempo", "o2 ao longo do tempo"],
+      "purpose_blocked": ["FDS_REPRODUCTION"],
+      "searched_in": ["NASA-TM-20210011385 §5.4 (p. 60)"],
+      "explanation_pt": "A §5.4 informa que o O₂ só foi medido no início e no fim; o perfil intermediário é uma suposição linear dos autores, não uma medição.",
+      "possible_sources_pt": null
+    },
+    {
+      "gap_id": "GAP-BASS2-M1-measurement_uncertainty",
+      "test_uid": "BASS2-M1",
+      "parameter": "measurement_uncertainty",
+      "label_pt": "Incertezas de medição",
+      "keywords": ["incerteza", "incertezas", "uncertainty", "erro de medição"],
+      "purpose_blocked": ["FDS_REPRODUCTION", "QUANTITATIVE_COMPARISON"],
+      "searched_in": ["NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"],
+      "explanation_pt": "Não há incertezas declaradas para os valores de M1 na Tabela 5.1 nem no texto do capítulo 5.",
+      "possible_sources_pt": "Referências 9–11 do capítulo 5 — a investigar."
+    },
+    {
+      "gap_id": "GAP-BASS2-M1-flame_front_tracking_method",
+      "test_uid": "BASS2-M1",
+      "parameter": "flame_front_tracking_method",
+      "label_pt": "Método de cálculo do avanço da frente de chama",
+      "keywords": ["método de rastreamento", "metodo de rastreamento", "rastreamento da frente", "tracking method"],
+      "purpose_blocked": ["QUANTITATIVE_COMPARISON"],
+      "searched_in": ["NASA-TM-20210011385 §5.1 (p. 55)", "§5.3 (p. 56)"],
+      "explanation_pt": "Parcial: imagens e vídeos foram rastreados com software de rastreamento de imagens da NASA e os dados processados em planilha (§5.3); critério de frente, janela de ajuste e incerteza não são descritos.",
+      "possible_sources_pt": "Ref. 6 do capítulo 5 (software de rastreamento) e teses da SDSU — a investigar."
+    }
+  ]
+}

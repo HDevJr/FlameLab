@@ -1,0 +1,25 @@
+{
+  "contract_version": "1.0",
+  "items": [
+    {
+      "evidence_id": "EV-TM20210011385-S51-p55-platform",
+      "document_id": "NASA-TM-20210011385",
+      "test_uid": null,
+      "locator": {
+        "section": "5.1",
+        "table": null,
+        "figure": null,
+        "row_label": null,
+        "column_label": null,
+        "page_printed": 55,
+        "page_pdf_index": 63,
+        "bbox": null,
+        "precision": "PAGE"
+      },
+      "quote": "The samples were burned in a flow duct within the Microgravity Science Glovebox (MSG) on the International Space Station (ISS) to ensure true microgravity conditions.",
+      "quote_lang": "en",
+      "method": "ASSISTED_TEXT_LAYER",
+      "document_sha256_at_extraction": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
+    }
+  ]
+}
