@@ -330,12 +330,18 @@ class EnrichmentSession:
     def authors(self) -> list[str]:
         return self.meta.authors or (self.citation or {}).get("authors") or []
 
-    def sources(self) -> None:
+    def sources(self, on_phase=None) -> None:
         svc, title = self._svc, self.title
         tokens = title_tokens(title)
         self.related = svc._related(self._ntrs, title, self.citation, self.warnings) if title else []
+        if on_phase:
+            on_phase(1)
         self.psi_match, self.psi = svc._psi(self.meta, self._datacite, title, tokens, self.authors)
+        if on_phase:
+            on_phase(2)
         self.techport_match = svc._techport(self._techport, title, tokens)
+        if on_phase:
+            on_phase(3)
 
     def compare(self, parameters: list[dict[str, Any]] | None = None) -> EnrichmentReport:
         svc, meta = self._svc, self.meta

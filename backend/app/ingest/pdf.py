@@ -66,12 +66,17 @@ def _open(path: Path):
     return doc
 
 
-def page_texts(path: Path, first: int = 1, last: int | None = None) -> dict[int, str]:
+def page_texts(path: Path, first: int = 1, last: int | None = None, on_page=None) -> dict[int, str]:
     """Texto por página (1 = primeira página do visualizador)."""
     doc = _open(path)
     last = min(last or doc.page_count, doc.page_count)
     try:
-        return {i: doc[i - 1].get_text() for i in range(first, last + 1)}
+        out: dict[int, str] = {}
+        for i in range(first, last + 1):
+            out[i] = doc[i - 1].get_text()
+            if on_page:
+                on_page(i - first + 1, last - first + 1)
+        return out
     finally:
         doc.close()
 

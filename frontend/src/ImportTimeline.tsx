@@ -11,11 +11,16 @@ export function timeShares(durations: (number | null)[]): number[] {
   return durations.map((d) => (total > 0 && d ? d / total : 0));
 }
 
-/** Fração real de uma etapa em andamento: só a extração por IA informa (lotes concluídos/total). Demais: desconhecida (null). */
-export function stepFraction(step: Step, extract?: { completed: number; total: number } | null): number | null {
+export type SubProgress = Record<string, { done: number; total: number }> | null | undefined;
+type Extract = { completed: number; total: number } | null | undefined;
+
+/** Fração real de uma etapa em andamento: lotes de IA, bytes baixados, páginas lidas ou fontes consultadas, conforme o backend informou. Sem medida: null. */
+export function stepFraction(step: Step, extract?: Extract, sub?: SubProgress): number | null {
   if (step.state === "DONE" || step.state === "SKIPPED" || step.state === "FAILED") return 1;
   if (step.state === "PENDING") return 0;
-  return step.key === "EXTRACT" && extract && extract.total > 0 ? Math.min(1, extract.completed / extract.total) : null;
+  if (step.key === "EXTRACT" && extract && extract.total > 0) return Math.min(1, extract.completed / extract.total);
+  const p = sub?.[step.key];
+  return p && p.total > 0 ? Math.min(1, p.done / p.total) : null;
 }
 
 /** Círculo da etapa: enche até 100% quando há progresso medido; sem medida, gira como indicador de atividade (nunca finge porcentagem). */
@@ -28,7 +33,7 @@ function StepRing({ state, fraction }: { state: Step["state"]; fraction: number 
     <span className={`step-ring ${state.toLowerCase()} ${spinning ? "spin" : ""}`} role="img" aria-label={label}>
       <svg viewBox="0 0 34 34" aria-hidden>
         <circle cx="17" cy="17" r={r} className="track" />
-        {state !== "PENDING" && <circle cx="17" cy="17" r={r} className="arc" strokeDasharray={c} strokeDashoffset={c * (1 - (state === "RUNNING" ? f : 1))} transform="rotate(-90 17 17)" />}
+        <circle cx="17" cy="17" r={r} className="arc" strokeDasharray={c} strokeDashoffset={c * (1 - (state === "RUNNING" ? f : state === "PENDING" ? 0 : 1))} transform="rotate(-90 17 17)" />
       </svg>
       <span className="ic">{state === "DONE" ? "✔" : state === "FAILED" ? "✖" : state === "SKIPPED" ? "⤼" : state === "RUNNING" && fraction != null ? `${Math.round(fraction * 100)}` : ""}</span>
     </span>
@@ -39,11 +44,11 @@ function StepRing({ state, fraction }: { state: Step["state"]; fraction: number 
  * Progresso real do processamento: etapas encerradas (concluída, não executada ou falha) mais a fração dos lotes de IA já
  * concluídos na etapa em andamento. Nada é estimado por tempo; sem lotes informados, a etapa em andamento conta zero.
  */
-export function importProgress(steps: Step[], extract?: { completed: number; total: number } | null) {
+export function importProgress(steps: Step[], extract?: Extract, sub?: SubProgress) {
   const total = steps.length || 1;
   const closed = steps.filter((s) => s.state === "DONE" || s.state === "SKIPPED" || s.state === "FAILED").length;
   const running = steps.find((s) => s.state === "RUNNING");
-  const frac = running?.key === "EXTRACT" && extract && extract.total > 0 ? Math.min(1, extract.completed / extract.total) : 0;
+  const frac = running ? stepFraction(running, extract, sub) ?? 0 : 0;
   const ratio = Math.min(1, (closed + (running ? frac : 0)) / total);
   const failed = steps.some((s) => s.state === "FAILED");
   const finished = closed === steps.length && steps.length > 0;
@@ -64,12 +69,12 @@ function Ring({ percent, failed, finished }: { percent: number; failed: boolean;
 }
 
 /** Linha do tempo do processamento: ordem das etapas, estado, duração real e peso de cada etapa no total. */
-export function ImportTimeline({ steps, totalMs, extractProgress }: { steps: Step[]; totalMs: number | null; extractProgress?: { completed: number; total: number } | null }) {
+export function ImportTimeline({ steps, totalMs, extractProgress, stepProgress }: { steps: Step[]; totalMs: number | null; extractProgress?: Extract; stepProgress?: SubProgress }) {
   const running = steps.some((s) => s.state === "RUNNING");
   const now = useNow(running);
   const ms = steps.map((s) => (s.state === "RUNNING" ? elapsedMs(s.started_at, now) : s.duration_ms));
   const shares = timeShares(ms);
-  const prog = importProgress(steps, extractProgress);
+  const prog = importProgress(steps, extractProgress, stepProgress);
   const slowest = ms.reduce<number>((best, d, i) => ((d ?? 0) > (ms[best] ?? 0) ? i : best), 0);
   return (
     <section aria-label="Linha do tempo do processamento">
@@ -84,7 +89,7 @@ export function ImportTimeline({ steps, totalMs, extractProgress }: { steps: Ste
       <ol className="timeline-steps">
         {steps.map((s, i) => (
           <li key={s.key} className={s.state.toLowerCase()}>
-            <StepRing state={s.state} fraction={stepFraction(s, extractProgress)} />
+            <StepRing state={s.state} fraction={stepFraction(s, extractProgress, stepProgress)} />
             <div className="tl-body">
               <div className="row"><strong className="grow">{s.label_pt}</strong>
                 <small className="muted">{TEXT[s.state]}{ms[i] != null && s.state !== "PENDING" ? ` · ${formatDuration(ms[i]!)}` : ""}</small></div>

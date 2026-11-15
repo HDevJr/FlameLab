@@ -113,7 +113,7 @@ export default function Import() {
                 </>
               );
             })()}
-            <ImportTimeline steps={rec.steps} totalMs={rec.metrics.total_ms} extractProgress={rec.extract_progress} />
+            <ImportTimeline steps={rec.steps} totalMs={rec.metrics.total_ms} extractProgress={rec.extract_progress} stepProgress={rec.step_progress} />
             <details className="tech big" open={false}><summary>Detalhes técnicos das etapas</summary><StepList steps={rec.steps} /></details>
             {!done && rec.warnings_pt.map((w) => <div className="box warn" key={w}>{w}</div>)}
           </div>

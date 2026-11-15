@@ -8,6 +8,8 @@ IA são opcionais: se falharem, a etapa fica FAILED/SKIPPED e o artigo continua 
 
 from __future__ import annotations
 
+import inspect
+
 import os
 import re
 import threading
@@ -49,7 +51,7 @@ def max_batches_from_env() -> int:
         return extraction.DEFAULT_MAX_BATCHES
 
 
-def verify_provenance(transport: Transport, ntrs: SourceMatch | None, local_sha256: str) -> dict[str, Any]:
+def verify_provenance(transport: Transport, ntrs: SourceMatch | None, local_sha256: str, on_download=None) -> dict[str, Any]:
     """Procedência NASA: só é VERIFIED quando o arquivo é idêntico ao que o NTRS distribui.
     Texto ou aparência do PDF nunca bastam."""
     base = {"checked_at": utc_now(), "ntrs_id": None, "ntrs_url": None, "local_sha256": local_sha256}
@@ -66,7 +68,12 @@ def verify_provenance(transport: Transport, ntrs: SourceMatch | None, local_sha2
         return {**base, "state": "CANDIDATE", "label_pt": PROVENANCE_LABELS["CANDIDATE"],
                 "reasons_pt": reasons + ["O registro do NTRS não oferece arquivo para comparação."]}
     try:
-        remote, size = transport.stream_sha256("https://ntrs.nasa.gov" + link, 300.0, NTRS_FILE_MAX)
+        args = ("https://ntrs.nasa.gov" + link, 300.0, NTRS_FILE_MAX)
+        # transportes simulados dos testes podem não aceitar o callback de progresso
+        if on_download and "progress" in inspect.signature(transport.stream_sha256).parameters:
+            remote, size = transport.stream_sha256(*args, on_download)
+        else:
+            remote, size = transport.stream_sha256(*args)
     except SourceError as exc:
         return {**base, "state": "CANDIDATE", "label_pt": PROVENANCE_LABELS["CANDIDATE"],
                 "reasons_pt": reasons + [f"Não foi possível baixar o arquivo do NTRS para comparar ({exc.kind})."]}
@@ -138,6 +145,11 @@ class ImportService:
             if technical is not None:
                 step["technical"] = technical
             step["limitation_pt"] = limitation
+        self._save(record)
+
+    def _sub(self, record: dict[str, Any], key: str, done: float, total: float) -> None:
+        """Progresso REAL dentro de uma etapa (ex.: bytes baixados, páginas lidas, fontes consultadas)."""
+        record.setdefault("step_progress", {})[key] = {"done": done, "total": total}
         self._save(record)
 
     # ---------------------------------------------------------------- entrada
@@ -242,8 +254,15 @@ class ImportService:
         meta = self._catalog().document_meta(record["document"]["document_id"])
         transport = self._transport_factory()
         session = EnrichmentService(transport).session(meta)
+        self._sub(record, "ORIGIN", 0, 4)
         ntrs = session.origin()
-        prov = verify_provenance(transport, ntrs, record["sha256"])
+        self._sub(record, "ORIGIN", 1, 4)  # consulta ao NTRS concluída; o download e a comparação do hash valem 3 de 4
+
+        def on_download(read: int, total: int | None) -> None:
+            if total:
+                self._sub(record, "ORIGIN", 1 + 3 * min(1.0, read / total), 4)
+
+        prov = verify_provenance(transport, ntrs, record["sha256"], on_download)
         record["nasa_provenance"] = prov
         workspace.write_json(workspace.area("provenance") / f"{record['document']['document_id']}.json", prov)
         by_id = ntrs.match_type == MatchType.IDENTIFIER and ntrs.state in (MatchState.MATCH_CONFIRMED, MatchState.MATCH_CANDIDATE)
@@ -260,7 +279,8 @@ class ImportService:
     def _read(self, record: dict[str, Any]) -> dict[int, str] | None:
         self._step(record, "READ", "RUNNING", "Extraindo o texto de cada página…")
         doc = record["document"]
-        pages = page_texts(self._dir(record["import_id"]) / "source.pdf")
+        pages = page_texts(self._dir(record["import_id"]) / "source.pdf",
+                           on_page=lambda i, n: (i % 25 == 0 or i == n) and self._sub(record, "READ", i, n))
         with_text = sum(1 for t in pages.values() if t.strip())
         doc["pages_with_text"] = with_text
         if not doc["has_text_layer"] or with_text == 0:
@@ -343,7 +363,7 @@ class ImportService:
 
     def _sources(self, record: dict[str, Any], session) -> None:
         self._step(record, "SOURCES", "RUNNING", "Pesquisando documentos relacionados, o PSI e o TechPort…")
-        session.sources()
+        session.sources(on_phase=lambda i: self._sub(record, "SOURCES", i, 3))
         names = {"PSI": session.psi_match, "TechPort": session.techport_match}
         down = [n for n, m in names.items() if m.state == MatchState.SOURCE_UNAVAILABLE]
         parts = [f"{n}: {m.state.value}" + (f" ({m.source_record_id})" if m.source_record_id else "")

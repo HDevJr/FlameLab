@@ -42,3 +42,15 @@ describe("círculo de cada etapa", () => {
     expect(stepFraction(st("READ", "DONE"))).toBe(1); expect(stepFraction(st("SOURCES", "PENDING"))).toBe(0);
   });
 });
+
+describe("progresso real por etapa (bytes, páginas, fontes)", () => {
+  it("usa o progresso informado pelo backend para a etapa em andamento", () => {
+    expect(stepFraction(st("ORIGIN", "RUNNING"), null, { ORIGIN: { done: 2.5, total: 4 } })).toBeCloseTo(0.625);
+    expect(stepFraction(st("SOURCES", "RUNNING"), null, { SOURCES: { done: 1, total: 3 } })).toBeCloseTo(1 / 3);
+  });
+  it("sem progresso informado continua indeterminado", () => expect(stepFraction(st("COMPARE", "RUNNING"), null, {})).toBeNull());
+  it("o anel geral considera a fração da etapa em andamento", () => {
+    const steps = ALL.map((k, i) => st(k, i < 2 ? "DONE" : i === 2 ? "RUNNING" : "PENDING"));
+    expect(importProgress(steps, null, { ORIGIN: { done: 2, total: 4 } }).percent).toBe(31); // (2 + 0,5)/8
+  });
+});

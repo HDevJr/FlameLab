@@ -7,6 +7,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 import hashlib
 import json
 import time
@@ -35,7 +37,7 @@ class Transport(Protocol):
 
     def get(self, url: str, params: dict[str, str] | None, timeout: float) -> tuple[int, bytes]: ...
 
-    def stream_sha256(self, url: str, timeout: float, max_bytes: int) -> tuple[str, int]: ...
+    def stream_sha256(self, url: str, timeout: float, max_bytes: int, progress: "Callable[[int, int | None], None] | None" = None) -> tuple[str, int]: ...
 
 
 class _NoRedirectAway(urllib.request.HTTPRedirectHandler):
@@ -71,16 +73,19 @@ class UrllibTransport:
             raise SourceError("NETWORK") from None
 
 
-    def stream_sha256(self, url: str, timeout: float, max_bytes: int) -> tuple[str, int]:
-        """SHA-256 e tamanho de um arquivo remoto, sem guardá-lo em disco."""
+    def stream_sha256(self, url: str, timeout: float, max_bytes: int, progress=None) -> tuple[str, int]:
+        """SHA-256 e tamanho de um arquivo remoto, sem guardá-lo em disco. `progress(bytes_lidos, total|None)` é opcional."""
         if urllib.parse.urlsplit(url).scheme != "https" or urllib.parse.urlsplit(url).hostname not in ALLOWED_HOSTS:
             raise SourceError("HOST_NOT_ALLOWED")
         req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
         digest, size = hashlib.sha256(), 0
         try:
             with self._opener.open(req, timeout=timeout) as resp:
+                declared = int(resp.headers.get("Content-Length") or 0) or None
                 while chunk := resp.read(1024 * 1024):
                     size += len(chunk)
+                    if progress:
+                        progress(size, declared)
                     if size > max_bytes:
                         raise SourceError("TOO_LARGE", resp.status)
                     digest.update(chunk)
