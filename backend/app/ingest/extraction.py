@@ -289,13 +289,16 @@ def finalize(experiments: list[dict], document_id: str) -> list[dict]:
 
 
 QUOTA_RETRY_WAIT_S = 30.0
+TRANSIENT_KINDS = ("UNAVAILABLE", "TIMEOUT", "INVALID_RESPONSE", "NETWORK")
+TRANSIENT_RETRY_WAIT_S = 3.0
 
 
 def run_batched(provider: LLMProvider, pages: dict[int, str], document_id: str, at: str, *,
                 max_batches: int = DEFAULT_MAX_BATCHES, timeout: float = 60.0,
                 on_batch: Callable[[int, int, list[int]], None] | None = None,
                 on_wait: Callable[[int, float], None] | None = None,
-                quota_wait_s: float = QUOTA_RETRY_WAIT_S, sleep: Callable[[float], None] = time.sleep) -> dict:
+                quota_wait_s: float = QUOTA_RETRY_WAIT_S, retry_wait_s: float = TRANSIENT_RETRY_WAIT_S,
+                sleep: Callable[[float], None] = time.sleep) -> dict:
     """Extrai em lotes de páginas, em ordem. Devolve experimentos, descartes, cobertura e métricas.
     Referências de página são sempre as do PDF (cada <page n> é o número real)."""
     batches, empty = plan_batches(pages)
@@ -321,6 +324,11 @@ def run_batched(provider: LLMProvider, pages: dict[int, str], document_id: str, 
                 break
             except Exception as exc:  # noqa: BLE001 - ProviderError ou falha do SDK: o lote não conta como lido
                 kind = getattr(getattr(exc, "kind", None), "value", "ERROR")
+                if kind in TRANSIENT_KINDS and attempt == 1 and retry_wait_s >= 0:
+                    # Falha passageira do provedor (indisponível, tempo esgotado, resposta inválida): uma segunda tentativa do mesmo lote.
+                    sleep(retry_wait_s)
+                    entry["retried"] = True
+                    continue
                 if kind == "QUOTA" and attempt == 1 and quota_wait_s > 0:
                     # Limite de uso por minuto: espera e tenta o MESMO lote mais uma vez (o tempo é registrado).
                     if on_wait:
