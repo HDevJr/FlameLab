@@ -84,3 +84,43 @@ table.cmp { margin: 6px 0; } table.cmp tr.failed { background: var(--bad-bg); } 
 mark { background: #fde68a; color: #1c1917; padding: 0 2px; border-radius: 3px; } mark.q { background: transparent; outline: 1px solid var(--accent); }
 .context { font-size: 13px; line-height: 1.6; } .big { font-size: 22px; }
 .audit .detail { margin-left: 8px; }
+
+/* ---- integridade científica (v2.3) ---- */
+ol.readiness { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 8px; }
+ol.readiness li { border: 1px solid var(--line); border-left-width: 5px; border-radius: 8px; padding: 8px 12px; background: var(--card); }
+ol.readiness li.ok { border-left-color: var(--ok); } ol.readiness li.warn { border-left-color: var(--warn); } ol.readiness li.bad { border-left-color: var(--bad); } ol.readiness li.muted { border-left-color: var(--muted); }
+.ficha { display: grid; grid-template-columns: 150px 1fr; gap: 6px 12px; font-size: 14px; } .ficha dt { color: var(--muted); } .ficha dd { margin: 0; }
+.ficha .sep { grid-column: 1 / -1; border-top: 1px dashed var(--line); margin: 2px 0; }
+
+/* BL-17: space theme, compact readiness and one task per viewport. */
+:root { color-scheme: dark; --bg:#080f20; --fg:#e8eef9; --muted:#a5b5d1; --card:#111e35; --line:#2a3d5b; --accent:#ea713b; --mut-bg:#1b2b46;
+  --ok:#9aebc3; --ok-bg:#123c32; --warn:#ffdc97; --warn-bg:#40331d; --bad:#ffc0c2; --bad-bg:#482333; --info:#b2d5ff; --info-bg:#173553; }
+body { background:radial-gradient(ellipse at top right,#152747 0,transparent 55%),var(--bg); background-attachment:fixed; }
+.headline h2,.model-readiness h3 { margin-top:0; }
+ol.readiness { grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); }
+.guided-backdrop { position:fixed; inset:0; z-index:100; background:#030817dc; display:flex; align-items:center; justify-content:center; padding:24px; }
+.guided-modal { width:min(980px,100%); max-height:calc(100dvh - 48px); display:flex; flex-direction:column; border:1px solid #496991; border-radius:18px; background:var(--bg); box-shadow:0 24px 100px #000a; overflow:hidden; }
+.guided-header { padding:18px 24px 12px; background:var(--card); border-bottom:1px solid var(--line); }
+.guided-header h2 { margin:0; font-size:21px; }
+.guided-header small { letter-spacing:.12em; color:var(--muted); }
+.guided-header progress { display:block; width:100%; height:9px; accent-color:var(--accent); margin-top:12px; }
+.guided-header .detail { margin-bottom:0; }
+.guided-body { padding:8px 24px 24px; overflow:auto; overscroll-behavior:contain; min-height:0; }
+.guided-body h3 { color:var(--info); margin-top:24px; }
+.guided-body .task-title { margin:6px 0; font-size:26px; }
+.guided-body p { margin:8px 0 14px; }
+.guided-body .form { margin:14px 0; }
+.guided-modal input,.guided-modal select { font:inherit; border:1px solid var(--line); background:var(--card); color:var(--fg); border-radius:6px; padding:8px; width:100%; }
+.guided-modal button[aria-pressed=true] { border-color:var(--accent); background:var(--info-bg); }
+.guided-footer { flex-shrink:0; max-width:none; margin:0; padding:10px 24px 16px; background:var(--card); width:100%; }
+.guided-footer p { margin:0 0 8px; color:var(--info); }
+.evidence-card { padding:12px 16px; border-left:3px solid #7dbbf1; background:var(--card); border-radius:6px; margin:8px 0; }
+.evidence-card blockquote { font-size:13px; margin:8px 0; color:var(--muted); overflow-wrap:anywhere; }
+.decision-list { padding-left:20px; }.decision-list li { padding:8px 0; border-bottom:1px solid var(--line); }
+select { max-width:100%; font:inherit; padding:8px; background:var(--card); color:var(--fg); border:1px solid var(--line); border-radius:6px; }
+.top nav { flex-wrap:wrap; }
+.grid > *, .card { min-width:0; overflow-wrap:anywhere; }
+.experiment-summaries { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr)); gap:16px; }
+.readiness-action { margin-top:8px; }.readiness-action .btn,.readiness-action button { font-size:13px; padding:5px 10px; }
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible { outline:2px solid #8dc9ff; outline-offset:3px; }
+@media(max-width:640px) { .grid { grid-template-columns:1fr; }.guided-backdrop { padding:0; }.guided-modal { max-height:100dvh; height:100dvh; border-radius:0; border:0; }.guided-header,.guided-body,.guided-footer { padding-left:16px; padding-right:16px; }.guided-header h2 { font-size:18px; }.guided-body .task-title { font-size:22px; }.guided-footer .row { display:grid; grid-template-columns:1fr 1fr; gap:6px; }.guided-footer button { font-size:13px; padding:8px; } }

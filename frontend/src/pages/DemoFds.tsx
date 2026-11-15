@@ -32,6 +32,7 @@ export default function DemoFds() {
   return (
     <>
       <div className="row"><h1 className="grow">Demonstração FDS</h1><DataKind kind="TESTE" /></div>
+      <Link className="btn" to="/preparar-simulacao">Preparar caso rastreável em quatro etapas</Link>
       <div className="box warn">
         <strong>Isto não é um experimento NASA.</strong> Este é um caso genérico — um queimador de propano em uma sala — criado só para provar que o FlameLab consegue gerar, executar e renderizar um caso <Term k="fds">FDS</Term>. Os parâmetros abaixo <strong>não pertencem a nenhum artigo</strong> (nem ao BASS-II) e os resultados não têm relação com dados da NASA. Para trabalhar com um artigo, use <Link to="/">Experimentos NASA</Link>.
       </div>

@@ -59,6 +59,7 @@ export default function Result() {
           <h2>Parâmetros e alterações</h2>
           <table><tbody>{Object.entries(r.parameters).map(([k, v]) => { const c = r.changes.find((x) => x.name === k); return <tr key={k}><td>{k}</td><td>{c ? <><s className="muted">{c.from_value}</s> → <strong>{c.to_value}</strong> {c.unit} <Badge tone="warn">alterado</Badge></> : v}</td></tr>; })}</tbody></table>
           <h2>Dados experimentais de referência</h2>
+          <p>Comparação quantitativa não disponível para este perfil.</p>
           <p className="muted">O modelo desta execução é um teste de integração e não tem contrapartida experimental NASA. A comparação com valores observados só é válida para um modelo de reprodução aprovado.</p>
           <details className="tech big"><summary>Proveniência e artefatos (técnico)</summary>
             <dl className="kv">

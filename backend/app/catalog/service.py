@@ -16,7 +16,9 @@ import re
 from backend.app import units, workspace
 from backend.app.dataset.store import DatasetStore
 from backend.app.labels import friendly_label
-from backend.app.review_service import events_for
+from backend.app import gap_decisions
+from backend.app.integrity import assess
+from backend.app.review_service import events_for, review_scope
 from backend.app.semantic import semantic_flags
 from backend.app.nasa.models import DocumentMeta
 
@@ -138,8 +140,14 @@ class Catalog:
 
     @staticmethod
     def _summary(exp: dict[str, Any]) -> dict[str, Any]:
+        from backend.app.simulation.registry import FDS_PHENOMENA, FLAME_SPREAD
+        phenomena = exp.get("phenomena") or []
+        model_state = ("Fenômeno físico ainda precisa de classificação" if not phenomena else
+                       "Física não suportada pelo FDS" if not set(phenomena) & FDS_PHENOMENA else
+                       "Perfil físico aguarda implementação e aprovação" if not FLAME_SPREAD.implemented else
+                       "Avaliar os requisitos do perfil físico")
         return {"experiment_id": exp["experiment_id"], "label": exp["label"],
-                "phenomena": exp.get("phenomena") or [], "review": exp.get("review") or _review(exp)}
+                "phenomena": phenomena, "review": exp.get("review") or _review(exp), "model_state_pt": model_state}
 
     def experiment(self, experiment_id: str) -> dict[str, Any] | None:
         test = self._store.tests.get(experiment_id)
@@ -149,6 +157,7 @@ class Catalog:
             for exp in imp.get("experiments") or []:
                 if exp["experiment_id"] == experiment_id:
                     exp = {**exp, "parameters": [_decorate(_with_events(p), imported=True) for p in exp["parameters"]]}
+                    exp["gaps"] = [_decorate_gap(g, exp["parameters"]) for g in exp.get("gaps") or []]
                     return {**exp, "review": _review(exp), "document_title": imp["document"].get("title"),
                             "document_sha256": imp["sha256"]}
         return None
@@ -194,7 +203,8 @@ class Catalog:
             params[-1] = _decorate(params[-1], imported=False)
         gaps = [{"gap_id": g.gap_id, "parameter": g.parameter, "label_pt": g.label_pt,
                  "explanation_pt": g.explanation_pt, "purpose_blocked": list(g.purpose_blocked),
-                 "searched_in": list(g.searched_in), "origin": "CURADORIA"} for g in store.gaps_for(test_uid)]
+                 "searched_in": list(g.searched_in), "possible_sources_pt": g.possible_sources_pt,
+                 "origin": "CURADORIA"} for g in store.gaps_for(test_uid)]
         doc = store.documents.get(document_id) if document_id else None
         exp = {
             "experiment_id": test_uid, "label": test.label, "origin": "CURATED",
@@ -203,6 +213,7 @@ class Catalog:
             "material_family": test.material_family, "description": test.selection_reason,
             "parameters": params, "gaps": gaps, "dataset_version": store.dataset_version,
         }
+        exp["gaps"] = [_decorate_gap(g, exp["parameters"]) for g in exp["gaps"]]
         exp["review"] = _review(exp)
         return exp
 
@@ -252,7 +263,8 @@ class Catalog:
 
 
 def _decorate(p: dict[str, Any], imported: bool) -> dict[str, Any]:
-    """Campos de apresentação: nome técnico × amigável, unidade separada do valor e sinalizações semânticas."""
+    """Campos de apresentação e de integridade: nome técnico × amigável, unidade SEPARADA do valor (com estado),
+    integridade da extração, escopo da revisão e sinalizações semânticas."""
     p = dict(p)
     p["technical_name"] = p.get("technical_name") or p["parameter"]
     if imported:
@@ -261,19 +273,29 @@ def _decorate(p: dict[str, Any], imported: bool) -> dict[str, Any]:
     else:
         p["label_source"] = "CURADORIA"
     orig = p.get("original") or {}
-    unit = orig.get("unit")
-    canon = units.canonical_unit(unit) if unit is not None else "adimensional"
-    has_unit = canon not in (None, "adimensional")
-    dim = units.dimension_of(canon) if has_unit else None
-    p["unit_info"] = {"raw": unit, "canonical": canon if has_unit else None,
-                      "display": units.display_unit(canon) if has_unit else None,
-                      "dimension_pt": units.DIMENSION_PT.get(dim) if dim else None,
-                      "supported": canon is not None, "has_unit": has_unit}
     quotes = [e["quote"] for e in p.get("evidence") or [] if e.get("quote")]
+    method = (p.get("extraction") or {}).get("method")
+    res = assess(parameter=p["parameter"], role=p["role"], original=orig, quotes=quotes, method=method,
+                 condition=p.get("condition"), review=p.get("review"))
+    p["unit_info"] = res["unit_info"]
+    p["integrity"] = {"status": res["status"], "findings": res["findings"], "pdf_value": res["pdf_value"],
+                      "unit_source": res.get("unit_source"), "condition_candidates": res["condition_candidates"]}
+    p["review_scope"] = review_scope(p.get("review"), p.get("events") or [])
     p["semantic_flags"] = semantic_flags(parameter=p["parameter"], label=p.get("label_pt"), value=orig.get("value"),
-                                         unit=unit, quotes=quotes, method=(p.get("extraction") or {}).get("method"),
+                                         unit=orig.get("unit"), quotes=quotes, method=method,
                                          label_source=p.get("label_source"))
     return p
+
+
+def _decorate_gap(g: dict[str, Any], params: list[dict[str, Any]]) -> dict[str, Any]:
+    """Relações com parâmetros (mesma grandeza, escopo a confirmar) e decisão humana registrada."""
+    g = dict(g)
+    g["related_parameters"] = gap_decisions.relations(g, params)
+    g["decision"] = gap_decisions.latest(g["gap_id"])
+    d = (g["decision"] or {}).get("decision")
+    g["coverage_state"] = ({"COVERED": "COBERTA", "PARTIAL": "PARCIALMENTE_COBERTA", "DISTINCT": "DISTINTA"}.get(d)
+                           or ("POSSIVEL_SOBREPOSICAO" if g["related_parameters"] else "ABERTA"))
+    return g
 
 
 def _with_events(p: dict[str, Any]) -> dict[str, Any]:

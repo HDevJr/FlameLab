@@ -81,7 +81,7 @@ def test_hash_mismatch_omits_records(tmp_path):
 def _review(tmp_path, **kw):
     data = write_dataset(tmp_path)
     args = dict(record_id="SYN-T1.airflow_velocity", reviewer="Pessoa Revisora", observed_value="9",
-                observed_unit="cm/s", observed_page_pdf=1, data_dir=data, sources_root=tmp_path)
+                observed_unit="cm/s", observed_page_pdf=1, data_dir=data, sources_root=tmp_path, interpretation_confirmed=True)
     args.update(kw)
     return data, args
 

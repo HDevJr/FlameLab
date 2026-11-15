@@ -23,6 +23,7 @@ Desafio: [Flame in Freefall — NASA Space Apps 2026](https://www.spaceappschall
 
 ## Estado verificado
 
+- **Retomada da auditoria de integridade (15/11/2026):** código e testes estabilizados; dados e revisões anteriores preservados. O estado local tem 9 registros BASS-II conferidos com interpretação registrada e 14 DYLCO com revisão legada, dos quais 3 apresentam bloqueios. As descrições históricas abaixo sobre BASS-II pendente antecedem essas aprovações. Diagnóstico, política e validação: [BL-15 — continuidade da auditoria](docs/evidence/BL-15_integridade_continuidade.md). Nenhum achado foi promovido ou rebaixado automaticamente.
 - F00: **esqueleto** com endpoint de saúde (`/api/health`) e teste básico.
 - BL-05 (assistente de IA, só backend): `POST /api/ask` com adaptador Gemini, verificador determinístico V1–V8, abstenção e modos `live`/`cache`/`off`. **Testado com evidência sintética** (66 testes com provedor simulado + smoke test real do Gemini). Detalhes em [docs/evidence/BL-05_assistente_ia.md](docs/evidence/BL-05_assistente_ia.md).
 - BL-02 (dataset científico): `data/` contém o ensaio **BASS-II M1** (9 registros, 11 evidências, 12 lacunas), validado pelo `DatasetStore` (invariantes I-1–I-10). O hash do PDF-fonte confere. **Os 9 registros estão `EXTRAIDO_NAO_REVISADO`: aguardam revisão humana.** Até lá, o assistente informa que o dado "consta na fonte e aguarda revisão" (`PENDING_REVIEW`) e não cita o valor. Detalhes em [docs/evidence/BL-02_dataset_cientifico.md](docs/evidence/BL-02_dataset_cientifico.md) e [docs/curation/BASS2-M1_curation_report.md](docs/curation/BASS2-M1_curation_report.md).
@@ -132,6 +133,8 @@ O smoke test grava o relatório em `docs/evidence/smoke_gemini_<UTC>.json`, sem 
 Ver [CONTRIBUTING.md](CONTRIBUTING.md) para branches, PRs, segurança e atualização do pitch.
 
 ## Fonte científica inicial
+
+Jornada de revisão guiada, contratos e roteiro de validação: [BL-17 — revisão de pendências](docs/evidence/BL-17_revisao_guiada.md).
 
 NASA/TM-20210011385 — [BASS-II Summary Report](https://ntrs.nasa.gov/citations/20210011385). A conferência na fonte primária é necessária antes de marcar parâmetros como revisados.
 

@@ -15,7 +15,7 @@ from backend.app import workspace
 from backend.app.nasa.provenance.log import utc_now
 from backend.app.simulation.case_builder import CaseValidationError, build_case, validate_values
 from backend.app import units
-from backend.app.simulation.compatibility import assess, is_editable, range_rule
+from backend.app.simulation.compatibility import assess, is_editable, range_rule, with_readiness
 from backend.app.simulation.executor import ExecutionError, Executor
 from backend.app.simulation.models import (
     TERMINAL, ParameterChange, RunState, Scenario, SimulationRun,
@@ -74,7 +74,8 @@ class SimulationService:
         exp = self._catalog_src().experiment(experiment_id)
         if exp is None:
             return None
-        return assess(exp, self._executor.available()[0])
+        ok = self._executor.available()[0]
+        return with_readiness(exp, assess(exp, ok), ok)
 
     # ---------------------------------------------------------------- cenários
     @staticmethod
@@ -161,7 +162,8 @@ class SimulationService:
             raise CaseValidationError(errors)
         if not out:
             raise CaseValidationError(["nenhuma alteração: informe ao menos um valor diferente do original"])
-        compat = assess(exp, self._executor.available()[0])
+        ok = self._executor.available()[0]
+        compat = with_readiness(exp, assess(exp, ok), ok)
         reasons = [] if compat["actions"]["simulate"] else list(compat["reasons_pt"])
         sid = "SCN-" + secrets.token_hex(5)
         label = re.sub(r"[^\w .,()\-–—]", "", title or "")[:80].strip()
@@ -230,9 +232,13 @@ class SimulationService:
         sc = self.get_scenario(scenario_id)
         if sc is None:
             raise KeyError("SCENARIO_NOT_FOUND")
+        if sc.get("case_id"):
+            from backend.app.simulation.bridge import build
+            build(sc["case_id"], sc["case_version"])
         model = MODELS[sc["model_id"]]
         run_id = "RUN-" + time.strftime("%Y%m%d%H%M%S", time.gmtime()) + "-" + secrets.token_hex(2)
         run = SimulationRun(
+            case_id=sc.get("case_id"), case_version=sc.get("case_version"),
             run_id=run_id, scenario_id=scenario_id, model_id=model.model_id, purpose=model.purpose,
             label_pt=model.label_pt, state=RunState.QUEUED, demo=self._executor.demo, scope=sc.get("scope", "DEMO"),
             parameters=sc["values"], changes=[ParameterChange(**c) for c in sc["changes"]],
@@ -281,9 +287,17 @@ class SimulationService:
         self._transition(run, RunState.VALIDATING)
         chid = "fl_" + run_id.split("-", 1)[1].replace("-", "")
         try:
-            text, sha = build_case(model, sc["values"], chid)
-        except CaseValidationError as exc:
-            run.failure_reason = "Validação falhou: " + "; ".join(exc.errors)
+            manifest = None
+            if run.case_id:
+                from backend.app.simulation.bridge import build
+                text, sha, manifest = build(run.case_id, run.case_version)
+                chid = "case_" + manifest["computational_id"]
+                run.parameters = manifest["content"]["values"]
+                sc["values"] = run.parameters
+            else:
+                text, sha = build_case(model, sc["values"], chid)
+        except (CaseValidationError, ValueError, KeyError) as exc:
+            run.failure_reason = "Validação falhou: " + str(exc)
             self._transition(run, RunState.BLOCKED)
             return
         run.fds_sha256 = sha
@@ -292,6 +306,14 @@ class SimulationService:
         run.timings_ms["preparation"] = int((time.monotonic() - t_start) * 1000)
         self._save(run)
         run_dir = self._run_dir(run_id)
+        if manifest:
+            import hashlib
+            from backend.app.simulation.models import RenderedArtifact
+            workspace.write_json(run_dir / "manifest.json", manifest)
+            raw = (run_dir / "manifest.json").read_bytes()
+            provenance = RenderedArtifact(kind="MANIFEST_JSON", name="manifest.json", sha256=hashlib.sha256(raw).hexdigest(), size_bytes=len(raw))
+            run.artifacts.append(provenance)
+            self._save(run)
         try:
             result = self._executor.run(run_dir, chid, text, sc["values"]["t_end"], self._timeout,
                                         lambda s: self._transition(run, s))
@@ -301,6 +323,9 @@ class SimulationService:
             self._transition(run, exc.state)
             return
         run.artifacts, run.results, run.log_tail = result.artifacts, result.results, result.log_tail[-LOG_LIMIT:]
+        if manifest:
+            run.artifacts.append(provenance)
+            run.results["comparison"] = manifest["comparison"]
         run.timings_ms.update(result.timings_ms)
         run.timings_ms["total"] = int((time.monotonic() - t_start) * 1000)
         self._transition(run, RunState.COMPLETED)

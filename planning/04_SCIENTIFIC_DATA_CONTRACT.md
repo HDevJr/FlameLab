@@ -248,6 +248,16 @@ Unidades fora da tabela → o registro é rejeitado no carregamento (não há co
 
 > **Extensão aditiva v1.1 (15/11/2026, DIV-33):** a tabela passou a incluir temperatura (°C, K, °F, com **deslocamento**: K = °C + 273,15), ângulo (°, rad), pressão (Pa…atm, psi), volume, massa, área, frequência, potência/fluxo de calor, µm/ms/h e ppm, além de normalização Unicode das grafias (`℃`, `º`, `˚`, `µ`, espaços finos). Nada que era aceito deixou de ser. **Igualdade física é decidida por dimensão + conversão; texto de unidade nunca decide.** Unidade fora da tabela continua sem conversão e a revisão a trata como `UNIT_UNSUPPORTED`. A diferença de temperatura (ΔT) **não** é uma unidade desta tabela.
 
+### 4.1 Diagnóstico de integridade v2.3 (15/11/2026)
+
+A classificação de apresentação é derivada, sem reescrever `original`, `normalized` ou `status`: `PHYSICAL` (unidade física suportada), `UNSUPPORTED` (unidade fora da tabela), `DIMENSIONLESS` (grandeza reconhecida como adimensional ou declaração explícita), `MISSING` (unidade ausente) e `NOT_APPLICABLE` (valor textual/sem valor). A normalização histórica `canonical_unit(None) = adimensional` não autoriza concluir que uma grandeza desconhecida é adimensional.
+
+Grandeza física reconhecida sem unidade gera bloqueio; dimensão desconhecida sem unidade gera atenção `UNIT_UNCLASSIFIED`. Identificadores numéricos geram ressalva própria. Uma condição de referência numérica precisa preservar o valor e a unidade associados ao parâmetro no trecho; equivalência física é aceita, preenchimento arbitrário ou apenas texto não elimina o bloqueio.
+
+`CONFERIDO_FONTE` histórico pode coexistir com achados atuais. `review_scope=FULL` indica confirmação explícita de interpretação; `LEGACY` indica ausência desse registro. A auditoria não promove nem rebaixa dados. Política de correção/reabertura e diagnóstico: [BL-15](../docs/evidence/BL-15_integridade_continuidade.md).
+
+Clientes antigos/servidores sem classificação: preservar `original.unit`, sinalizar a versão e manter a unidade como não classificada, sem inferir suporte. A negociação entre frontend e backend usa `/api/version` e capacidades; a versão da API/OpenAPI vem da mesma constante.
+
 ## 5. Versionamento
 - `contract_version: "1.0"` em cada arquivo JSON.
 - `dataset_version` = sha256 do JSON canônico (chaves ordenadas) de todos os arquivos em `data/`, exceto `ai_cache/`.

@@ -20,14 +20,16 @@ export default function Library() {
           <div className="card" key={d.document_id}>
             <div className="row"><Badge tone="info">{d.origin === "CURATED" ? "Dataset curado" : "Importado"}</Badge><Provenance p={d.nasa_provenance} /></div>
             <h3>{d.title}</h3>
-            <small className="muted">{d.document_id} · {fmtBytes(d.size_bytes)}</small>
+            <small className="muted">{fmtBytes(d.size_bytes)}</small>
             <h3>Experimentos ({d.experiments.length})</h3>
             {d.experiments.length === 0 && <p className="muted">Nenhum experimento extraído. O artigo continua disponível para análise e enriquecimento.</p>}
             {d.experiments.map((e) => (
               <div className="row" key={e.experiment_id}>
-                <Link to={`/experimentos/${e.experiment_id}`}><strong>{e.label}</strong></Link>
+                <Link to={`/documentos/${d.document_id}/analise`}><strong>{e.label}</strong></Link>
                 <DataKind kind={e.review.reviewed === e.review.total && e.review.total > 0 ? "REAL" : "REVISAO"} />
-                <small className="muted">{e.review.reviewed}/{e.review.total} <Term k="conferido">conferidos</Term> · {e.review.gaps} <Term k="lacuna">lacunas</Term></small>
+                <small className="muted">{e.review.reviewed}/{e.review.total} <Term k="conferido">conferidos</Term> · {e.review.gaps} pendências acionáveis</small>
+                <small>Modelo: {e.model_state_pt ?? "consultar prontidão no resumo"}.</small>
+                <Link className="btn" to={`/documentos/${d.document_id}/analise`}>{e.review.gaps ? "Resolver pendências":"Ver próxima ação"}</Link>
               </div>
             ))}
             <div className="row" style={{ marginTop: 10 }}>

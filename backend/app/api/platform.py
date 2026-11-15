@@ -253,7 +253,7 @@ def get_analysis(document_id: str) -> dict:
 
 # ------------------------------------------------------------------ revisão humana
 class ReviewRequest(BaseModel):
-    action: Literal["CONFIRM", "CORRECT", "DOUBT", "DIVERGENCE"]
+    action: Literal["CONFIRM", "CORRECT", "REOPEN", "DOUBT", "DIVERGENCE"]
     reviewer: str = Field(max_length=80)
     observed_value: str | None = Field(default=None, max_length=120)
     observed_unit: str | None = Field(default=None, max_length=30)
@@ -264,6 +264,11 @@ class ReviewRequest(BaseModel):
     corrected_label_pt: str | None = Field(default=None, max_length=80)
     corrected_value: str | None = Field(default=None, max_length=120)
     corrected_unit: str | None = Field(default=None, max_length=30)
+    corrected_condition_text: str | None = Field(default=None, max_length=120)
+    corrected_condition_value: str | None = Field(default=None, max_length=60)
+    corrected_condition_unit: str | None = Field(default=None, max_length=30)
+    interpretation_confirmed: bool = False  # o trecho sustenta o SIGNIFICADO atribuído (número conferido não basta)
+    unit_verified_in_pdf: bool = False  # a unidade não é legível no texto; foi vista no PDF
 
 
 class PreviewRequest(BaseModel):
@@ -271,6 +276,7 @@ class PreviewRequest(BaseModel):
     observed_value: str | None = Field(default=None, max_length=120)
     observed_unit: str | None = Field(default=None, max_length=30)
     observed_page_pdf: int | None = Field(default=None, ge=1, le=100000)
+    unit_verified_in_pdf: bool = False
 
 
 @router.post("/records/{record_id}/review/preview")
@@ -278,7 +284,7 @@ def review_preview(record_id: str, req: PreviewRequest) -> dict:
     """Mesma lógica de normalização e comparação da revisão, SEM gravar nem auditar. O backend é a autoridade."""
     try:
         return _wrap(Services.review().preview(record_id, req.reviewer, req.observed_value, req.observed_unit,
-                                               req.observed_page_pdf))
+                                               req.observed_page_pdf, req.unit_verified_in_pdf))
     except workspace.InvalidId:
         raise _err(422, "INVALID_ID", "Identificador inválido.") from None
     except ReviewRejected as exc:
@@ -303,12 +309,43 @@ def review_record(record_id: str, req: ReviewRequest) -> dict:
         result = Services.review().submit(
             record_id, req.action, req.reviewer, req.observed_value, req.observed_unit, req.observed_page_pdf,
             req.notes, req.checked_pdf, req.prefilled_unchanged, req.corrected_label_pt, req.corrected_value,
-            req.corrected_unit)
+            req.corrected_unit, req.interpretation_confirmed, req.unit_verified_in_pdf, req.corrected_condition_text,
+            req.corrected_condition_value, req.corrected_condition_unit)
     except workspace.InvalidId:
         raise _err(422, "INVALID_ID", "Identificador inválido.") from None
     except ReviewRejected as exc:
         raise _err(404 if exc.code == "RECORD_NOT_FOUND" else 422, exc.code, str(exc), exc.details) from None
     return _wrap(result)
+
+
+class GapDecisionRequest(BaseModel):
+    decision: Literal["COVERED", "PARTIAL", "DISTINCT"]
+    reviewer: str = Field(max_length=80)
+    notes: str = Field(min_length=3, max_length=500)
+    record_id: str | None = Field(default=None, max_length=120)
+
+
+@router.post("/gaps/{gap_id}/decision", status_code=201)
+def gap_decision(gap_id: str, req: GapDecisionRequest) -> dict:
+    """Reconciliação humana entre uma lacuna e um parâmetro: cobre / cobre em parte / são conceitos distintos.
+    Grava revisor, data e motivo; NÃO apaga a lacuna nem altera o parâmetro."""
+    from backend.app import gap_decisions
+
+    try:
+        gap_id = workspace.safe_id(gap_id)
+    except workspace.InvalidId:
+        raise _err(422, "INVALID_ID", "Identificador inválido.") from None
+    if not req.reviewer.strip() or req.reviewer.strip().lower().startswith(("claude", "gemini", "llm", "ia ", "ai ")):
+        raise _err(422, "REVIEWER_NOT_HUMAN", "A decisão deve ser registrada por uma pessoa da equipe.")
+    return _wrap(gap_decisions.record_decision(gap_id, req.decision, req.reviewer, req.notes, req.record_id))
+
+
+@router.get("/audit/integrity")
+def audit_integrity() -> dict:
+    """Relatório de inconsistências de integridade em TODOS os registros (somente leitura; nada é alterado)."""
+    from backend.app.audit_report import build_integrity_report
+
+    return _wrap(build_integrity_report(Services.catalog()))
 
 
 @router.get("/records/{record_id}/events")
@@ -354,7 +391,10 @@ class ScenarioRequest(BaseModel):
 
 
 class RunRequest(BaseModel):
-    scenario_id: str = Field(max_length=40)
+    model_config = {"extra": "forbid"}
+    scenario_id: str | None = Field(default=None, max_length=40)
+    case_id: str | None = Field(default=None, max_length=40)
+    case_version: int = Field(default=1, ge=1)
 
 
 @router.get("/simulation/status")
@@ -393,9 +433,16 @@ def get_scenario(scenario_id: str) -> dict:
 def submit_simulation(req: RunRequest) -> dict:
     """Enfileira um cenário APROVADO. O servidor gera o .fds; o cliente nunca envia FDS."""
     try:
+        if bool(req.case_id) == bool(req.scenario_id):
+            raise _err(422, "ONE_RUN_TARGET_REQUIRED", "Informe um caso ou um cenário.")
+        if req.case_id:
+            from backend.app.api.cases import submit_case, invoke
+            return invoke(lambda: submit_case(req.case_id, req.case_version).model_dump(mode="json"))
         run = Services.sim().submit(workspace.safe_id(req.scenario_id))
     except workspace.InvalidId:
         raise _err(422, "INVALID_ID", "Identificador inválido.") from None
+    except ValueError as exc:
+        raise _err(422, "CASE_INVALID", str(exc)) from None
     except KeyError:
         raise _err(404, "SCENARIO_NOT_FOUND", "Cenário não encontrado.") from None
     return _wrap(run.model_dump(mode="json"))

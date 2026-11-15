@@ -35,20 +35,24 @@ def test_editable_conditions_exclude_observed_results_and_metadata(client):
     assert {"thickness", "width", "airflow_velocity", "o2_initial"} <= names
     assert not names & {"flame_spread_rate", "burn_duration", "o2_final", "material"}
     one = next(e for e in c["editable"] if e["parameter"] == "airflow_velocity")
-    assert one["unit"] == "cm/s" and one["value"] == 9 and one["status"] == "EXTRAIDO_NAO_REVISADO"
+    assert one["unit"] == "cm/s" and one["value"] == 9
+    assert one["status"] == Services.store().records[f"{M1}.airflow_velocity"].status
     assert one["rule_pt"] and one["source_pt"]
 
 
 def test_hypothesis_scenario_preserves_original_and_is_not_executable(client):
+    original = client.get(f"/api/experiments/{M1}").json()["data"]["parameters"]
+    base_status = next(p["status"] for p in original if p["parameter"] == "airflow_velocity")
     r = exp_scenario(client, changes=[{"parameter": "airflow_velocity", "value": 12}], hypothesis="Fluxo maior")
     assert r.status_code == 201
     sc = r.json()["data"]
     assert sc["scope"] == "EXPERIMENT" and sc["kind"] == "DERIVED" and sc["experiment_id"] == M1
     assert sc["status"] == "HIPOTESE_COMPUTACIONAL" and sc["hypothesis_pt"] == "Fluxo maior"
     ch = sc["changes"][0]
-    assert (ch["from_value"], ch["to_value"], ch["unit"], ch["base_status"]) == (9.0, 12.0, "cm/s", "EXTRAIDO_NAO_REVISADO")
+    assert (ch["from_value"], ch["to_value"], ch["unit"], ch["base_status"]) == (9.0, 12.0, "cm/s", base_status)
     assert sc["executable"] is False and sc["blocked_reasons_pt"]
     exp = client.get(f"/api/experiments/{M1}").json()["data"]
+    assert exp["parameters"] == original
     assert next(p for p in exp["parameters"] if p["parameter"] == "airflow_velocity")["original"]["value"] == 9
     run = client.post("/api/simulations", json={"scenario_id": sc["scenario_id"]}).json()["data"]
     assert run["state"] == "BLOCKED" and run["failure_reason"]  # nada é simulado em silêncio
@@ -211,9 +215,10 @@ def test_analysis_summary_for_imported_document(client, tmp_path):
 
 
 def test_analysis_summary_for_reference_document(client):
+    reviewed = sum(r.status in ("CONFERIDO_FONTE", "APROVADO_MODELO") for r in Services.store().records_for(M1))
     a = client.get("/api/documents/NASA-TM-20210011385/analysis").json()["data"]
     assert a["coverage"]["mode"] == "CURATED" and "dataset curado" in a["coverage"]["summary_pt"]
-    assert a["totals"]["parameters"] == 9 and a["totals"]["reviewed"] == 0 and a["totals"]["gaps"] == 12
+    assert a["totals"]["parameters"] == 9 and a["totals"]["reviewed"] == reviewed and a["totals"]["gaps"] == 12
     assert a["experiments"][0]["fds"]["status"] == "MISSING_PARAMETERS" and a["experiments"][0]["fds"]["can_simulate"] is False
     assert not any("promov" in s for s in a["conclusions_pt"])
     assert client.get("/api/documents/DOC-nao-existe/analysis").status_code == 404

@@ -67,6 +67,8 @@ class ParameterChange(BaseModel):
 
 
 class Scenario(BaseModel):
+    case_id: str | None = None
+    case_version: int | None = None
     scenario_id: str
     kind: Literal["BASE", "DERIVED"]
     model_id: str | None = None  # cenário executável (modelo de simulação)
@@ -84,7 +86,7 @@ class Scenario(BaseModel):
 
 
 class RenderedArtifact(BaseModel):
-    kind: Literal["VIDEO_MP4", "FRAME_PNG", "CSV", "LOG", "FDS_INPUT", "SMV_SCRIPT"]
+    kind: Literal["VIDEO_MP4", "FRAME_PNG", "CSV", "LOG", "FDS_INPUT", "SMV_SCRIPT", "MANIFEST_JSON"]
     name: str
     sha256: str
     size_bytes: int
@@ -92,6 +94,8 @@ class RenderedArtifact(BaseModel):
 
 
 class SimulationRun(BaseModel):
+    case_id: str | None = None
+    case_version: int | None = None
     run_id: str
     scenario_id: str
     model_id: str

@@ -35,9 +35,10 @@ export function Layout({ children }: { children: ReactNode }) {
           <NavLink to="/importar">Importar artigo</NavLink>
           <NavLink to="/demonstracao-fds">Demonstração FDS</NavLink>
           <NavLink to="/execucoes">Execuções</NavLink>
+          <NavLink to="/auditoria">Auditoria</NavLink>
         </nav>
       </header>
-      <main>{children}</main>
+      <main><StaleBackendBanner />{children}</main>
       <footer>
         FlameLab não é produto oficial nem endossado pela NASA ou pelo NIST. Valores marcados “não revisado” não são
         dados conferidos. Simulações exibidas aqui são hipóteses computacionais, não resultados experimentais.
@@ -116,4 +117,51 @@ export function StepList({ steps }: { steps: Step[] }) {
       })}
     </ol>
   );
+}
+
+// ---------------------------------------------------------------- v2.3: unidade, prontidão e versão do servidor
+import { api, type Parameter, type Readiness } from "./api";
+import { READINESS_STATUS, REQUIRED_CAPABILITIES, unitView } from "./lib";
+
+/** Unidade com leitura própria para cada estado (nunca "—" para tudo). */
+export function UnitCell({ p }: { p: Parameter }) {
+  const u = unitView(p);
+  return <span title={u.title}><Badge tone={u.tone}>{u.text}</Badge></span>;
+}
+
+/** Cinco dimensões independentes: integridade · revisão · cobertura · compatibilidade FDS · prontidão para execução. */
+export function ReadinessPanel({ readiness, experimentId, onResolve }: { readiness: Readiness | undefined; experimentId?:string; onResolve?:()=>void }) {
+  if (!readiness) return <p className="muted">Avaliando prontidão…</p>;
+  return (
+    <ol className="readiness" aria-label="Prontidão em cinco dimensões">
+      {readiness.dimensions.map((d, i) => (
+        <li key={d.key} className={d.tone}>
+          <div className="row"><strong>{i + 1}. {d.label_pt}</strong><Badge tone={d.tone}>{READINESS_STATUS[d.status] ?? d.status}</Badge></div>
+          <div className="detail">{d.summary_pt}</div>
+          {d.items.length > 0 && <details className="tech"><summary>Detalhes ({d.items.length})</summary><ul>{d.items.map((t, k) => <li key={k}>{t}</li>)}</ul></details>}
+          {experimentId && (d.tone!=="ok" || d.key==="execution_readiness") && <div className="readiness-action">
+            {d.key==="coverage" && onResolve ? <button onClick={onResolve}>Resolver pendências</button>:
+             ["scientific_review","extraction_integrity"].includes(d.key) ? <a className="btn" href="#parametros">Revisar parâmetros</a>:
+             <Link className="btn" to={`/experimentos/${experimentId}/preparar`}>{d.key==="execution_readiness" && readiness.can_simulate ? "Preparar execução":"Entender requisitos do modelo"}</Link>}
+          </div>}
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+/** Avisa quando o backend em execução é anterior às telas (ex.: não envia a unidade classificada). */
+export function StaleBackendBanner() {
+  const [problem, setProblem] = useState<string | null>(null);
+  useEffect(() => {
+    let alive = true;
+    api.version().then((v) => {
+      if (!alive) return;
+      if (v === null) setProblem("Não foi possível confirmar a versão do servidor (rota /api/version ausente ou servidor fora do ar).");
+      else { const missing = REQUIRED_CAPABILITIES.filter((c) => !v.capabilities.includes(c)); setProblem(missing.length ? `Servidor desatualizado: faltam recursos (${missing.join(", ")}).` : null); }
+    });
+    return () => { alive = false; };
+  }, []);
+  if (!problem) return null;
+  return <div className="box bad" role="alert"><strong>{problem}</strong> Reinicie o backend para carregar a versão atual: as telas podem exibir dados incompletos (por exemplo, unidades) até lá.</div>;
 }

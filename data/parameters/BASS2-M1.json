@@ -10,7 +10,7 @@
       "label_source": null,
       "role": "METADADO",
       "nature": "OBSERVADO",
-      "status": "EXTRAIDO_NAO_REVISADO",
+      "status": "CONFERIDO_FONTE",
       "original": {
         "value": "PMMA (polimetilmetacrilato; \"clear cast\")",
         "unit": null,
@@ -28,10 +28,10 @@
         "at": "2026-11-14T19:10:00Z"
       },
       "review": {
-        "reviewer": null,
-        "reviewed_at": null,
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:52:36Z",
         "notes": null,
-        "checked_document_sha256": null
+        "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
       },
       "model_review": null,
       "rationale": null,
@@ -49,7 +49,7 @@
       "label_source": "Thickness, mm",
       "role": "CONDICAO",
       "nature": "OBSERVADO",
-      "status": "EXTRAIDO_NAO_REVISADO",
+      "status": "CONFERIDO_FONTE",
       "original": {
         "value": 1,
         "unit": "mm",
@@ -69,10 +69,10 @@
         "at": "2026-11-14T19:10:00Z"
       },
       "review": {
-        "reviewer": null,
-        "reviewed_at": null,
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:51:26Z",
         "notes": null,
-        "checked_document_sha256": null
+        "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
       },
       "model_review": null,
       "rationale": null,
@@ -88,7 +88,7 @@
       "label_source": "Width, cm",
       "role": "CONDICAO",
       "nature": "OBSERVADO",
-      "status": "EXTRAIDO_NAO_REVISADO",
+      "status": "CONFERIDO_FONTE",
       "original": {
         "value": 2.2,
         "unit": "cm",
@@ -108,10 +108,10 @@
         "at": "2026-11-14T19:10:00Z"
       },
       "review": {
-        "reviewer": null,
-        "reviewed_at": null,
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:51:36Z",
         "notes": null,
-        "checked_document_sha256": null
+        "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
       },
       "model_review": null,
       "rationale": null,
@@ -129,7 +129,7 @@
       "label_source": "One or two sides burning",
       "role": "CONDICAO",
       "nature": "OBSERVADO",
-      "status": "EXTRAIDO_NAO_REVISADO",
+      "status": "CONFERIDO_FONTE",
       "original": {
         "value": 1,
         "unit": null,
@@ -149,10 +149,10 @@
         "at": "2026-11-14T19:10:00Z"
       },
       "review": {
-        "reviewer": null,
-        "reviewed_at": null,
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:51:49Z",
         "notes": null,
-        "checked_document_sha256": null
+        "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
       },
       "model_review": null,
       "rationale": null,
@@ -170,7 +170,7 @@
       "label_source": "Velocity, cm/s",
       "role": "CONDICAO",
       "nature": "OBSERVADO",
-      "status": "EXTRAIDO_NAO_REVISADO",
+      "status": "CONFERIDO_FONTE",
       "original": {
         "value": 9,
         "unit": "cm/s",
@@ -194,10 +194,10 @@
         "at": "2026-11-14T19:10:00Z"
       },
       "review": {
-        "reviewer": null,
-        "reviewed_at": null,
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:51:58Z",
         "notes": null,
-        "checked_document_sha256": null
+        "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
       },
       "model_review": null,
       "rationale": null,
@@ -215,7 +215,7 @@
       "label_source": "Spread rate, mm/s",
       "role": "OBSERVAVEL",
       "nature": "OBSERVADO",
-      "status": "EXTRAIDO_NAO_REVISADO",
+      "status": "CONFERIDO_FONTE",
       "original": {
         "value": 0.071,
         "unit": "mm/s",
@@ -235,10 +235,10 @@
         "at": "2026-11-14T19:10:00Z"
       },
       "review": {
-        "reviewer": null,
-        "reviewed_at": null,
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:52:12Z",
         "notes": null,
-        "checked_document_sha256": null
+        "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
       },
       "model_review": null,
       "rationale": null,
@@ -257,7 +257,7 @@
       "label_source": "Burn time, min",
       "role": "OBSERVAVEL",
       "nature": "OBSERVADO",
-      "status": "EXTRAIDO_NAO_REVISADO",
+      "status": "CONFERIDO_FONTE",
       "original": {
         "value": 6.4,
         "unit": "min",
@@ -277,10 +277,10 @@
         "at": "2026-11-14T19:10:00Z"
       },
       "review": {
-        "reviewer": null,
-        "reviewed_at": null,
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:52:19Z",
         "notes": null,
-        "checked_document_sha256": null
+        "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
       },
       "model_review": null,
       "rationale": null,
@@ -298,7 +298,7 @@
       "label_source": "Initial O2, vol%",
       "role": "CONDICAO",
       "nature": "OBSERVADO",
-      "status": "EXTRAIDO_NAO_REVISADO",
+      "status": "CONFERIDO_FONTE",
       "original": {
         "value": 22.2,
         "unit": "vol%",
@@ -318,10 +318,10 @@
         "at": "2026-11-14T19:10:00Z"
       },
       "review": {
-        "reviewer": null,
-        "reviewed_at": null,
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:52:04Z",
         "notes": null,
-        "checked_document_sha256": null
+        "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
       },
       "model_review": null,
       "rationale": null,
@@ -340,7 +340,7 @@
       "label_source": "Final O2, vol%",
       "role": "OBSERVAVEL",
       "nature": "OBSERVADO",
-      "status": "EXTRAIDO_NAO_REVISADO",
+      "status": "CONFERIDO_FONTE",
       "original": {
         "value": 21.9,
         "unit": "vol%",
@@ -360,10 +360,10 @@
         "at": "2026-11-14T19:10:00Z"
       },
       "review": {
-        "reviewer": null,
-        "reviewed_at": null,
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:52:28Z",
         "notes": null,
-        "checked_document_sha256": null
+        "checked_document_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770"
       },
       "model_review": null,
       "rationale": null,

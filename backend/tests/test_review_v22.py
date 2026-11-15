@@ -249,7 +249,7 @@ def _import_initial_temperature(client, tmp_path, label_pt=None):
 
 
 BODY = {"action": "CONFIRM", "reviewer": "Ana Souza", "observed_value": "20", "observed_unit": DEG_C,
-        "observed_page_pdf": 1, "checked_pdf": True}
+        "observed_page_pdf": 1, "checked_pdf": True, "interpretation_confirmed": True}
 
 
 def test_api_refusal_carries_field_by_field_diagnosis(client, tmp_path):

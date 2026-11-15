@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from backend.app.api.assistant import get_dataset_store, router as assistant_router
 from backend.app.api.errors import install_error_handlers
 from backend.app.api.platform import router as platform_router
+from backend.app.version import APP_VERSION, CAPABILITIES
 
 
 @asynccontextmanager
@@ -16,10 +17,20 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="FlameLab API", version="0.3.0-proto", lifespan=lifespan)
+app = FastAPI(title="FlameLab API", version=APP_VERSION, lifespan=lifespan)
 install_error_handlers(app)
 app.include_router(assistant_router)
 app.include_router(platform_router)
+from backend.app.api.cases import router as cases_router
+app.include_router(cases_router)
+from backend.app.api.guided_review import router as guided_review_router
+app.include_router(guided_review_router)
+
+
+@app.get("/api/version", tags=["system"])
+def version() -> dict:
+    """Versão e capacidades: permite ao frontend avisar quando o backend em execução está desatualizado."""
+    return {"app_version": APP_VERSION, "capabilities": CAPABILITIES}
 
 
 @app.get("/api/health", tags=["system"])

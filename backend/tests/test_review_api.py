@@ -12,7 +12,7 @@ from backend.tests.test_ingest import FakeProvider, fetch, make_pdf, upload
 
 REC = "SYN-T1.airflow_velocity"
 GOOD = {"action": "CONFIRM", "reviewer": "Pessoa Revisora", "observed_value": "9", "observed_unit": "cm/s",
-        "observed_page_pdf": 1, "checked_pdf": True, "notes": "conferido"}
+        "observed_page_pdf": 1, "checked_pdf": True, "notes": "conferido", "interpretation_confirmed": True}
 
 
 @pytest.fixture
@@ -116,7 +116,7 @@ def _imported(client, tmp_path, unit="degrees C"):
 
 
 IMP = {"action": "CONFIRM", "reviewer": "Ana Souza", "observed_value": "25", "observed_unit": "degrees C",
-       "observed_page_pdf": 1, "checked_pdf": True}
+       "observed_page_pdf": 1, "checked_pdf": True, "interpretation_confirmed": True}
 
 
 def test_imported_parameter_review_uses_the_same_policy(client, tmp_path):

@@ -13,7 +13,7 @@ const QUOTE = "The temperature was then cycled from 20 to 80 °C in increments o
 const param = (o: Partial<Parameter> = {}): Parameter => ({
   record_id: "DOC-1-E1.initial_temperature", parameter: "initial_temperature", technical_name: "initial_temperature", label_pt: "Temperatura inicial",
   label_source: "GLOSSARIO", role: "CONDICAO", nature: "OBSERVADO", status: "EXTRAIDO_NAO_REVISADO", original: { value: 20, unit: DEG }, normalized: { value: 293.15, unit: "K" },
-  unit_info: { raw: DEG, canonical: "degC", display: DEG, dimension_pt: "temperatura", supported: true, has_unit: true },
+  unit_info: { raw: DEG, canonical: "degC", display: DEG, dimension: "temperature", dimension_pt: "temperatura", supported: true, has_unit: true, state: "PHYSICAL" },
   evidence: [{ page_pdf: 5, page_printed: null, quote: QUOTE, locator_pt: "p. 5 do PDF", literal_check: "PASS" }],
   caveats_pt: [], extraction: { method: "LLM", by: "gemini-3.5-flash-lite" }, events: [],
   semantic_flags: [{ code: "INITIAL_FROM_RANGE", severity: "BLOCKING", title_pt: "O trecho não afirma um valor inicial", detail_pt: "O número 20 aparece como início do intervalo 20 a 80.", terms: ["20", "from", "to"] }],
@@ -40,7 +40,10 @@ function open(p: Parameter = param(), preview: ReviewPreview = prev()) {
 }
 const field = (name: string) => screen.getByLabelText(name) as HTMLInputElement;
 const name = (v = "Ana Souza") => fireEvent.change(screen.getByLabelText("Seu nome"), { target: { value: v } });
-const declare = () => fireEvent.click(screen.getByLabelText(/Verifiquei a evidência/));
+const declare = () => {
+  fireEvent.click(screen.getByLabelText(/Verifiquei a evidência/));
+  fireEvent.click(screen.getByLabelText(/Confirmo que o trecho/));
+};
 
 describe("A. extração encontrada", () => {
   it("mostra nome amigável e técnico, valor e unidade separados, tipo e estado", () => {
@@ -48,10 +51,10 @@ describe("A. extração encontrada", () => {
     expect(screen.getByRole("heading", { name: "Temperatura inicial" })).toBeTruthy();
     expect(screen.getByText("initial_temperature")).toBeTruthy();
     expect(screen.getByText(/nome traduzido pelo glossário/)).toBeTruthy();
-    const kv = document.querySelector("dl.kv") as HTMLElement;
+    const kv = screen.getByLabelText("Ficha científica do parâmetro");
     expect(within(kv).getByText("20")).toBeTruthy();
     expect(within(kv).getByText(DEG)).toBeTruthy();
-    expect(within(kv).getByText("(temperatura)")).toBeTruthy();
+    expect(within(kv).getByText("temperatura")).toBeTruthy();
     expect(within(kv).getByText("Extraído · não revisado")).toBeTruthy();
   });
 });
@@ -104,7 +107,10 @@ describe("C. conferência assistida (sem redigitar)", () => {
     await waitFor(() => expect(screen.getAllByText("Confere").length).toBe(3));
     expect(btn().disabled).toBe(true);
     name(); expect(btn().disabled).toBe(true);
-    declare(); await waitFor(() => expect(btn().disabled).toBe(false));
+    fireEvent.click(screen.getByLabelText(/Verifiquei a evidência/));
+    expect(btn().disabled).toBe(true);
+    fireEvent.click(screen.getByLabelText(/Confirmo que o trecho/));
+    await waitFor(() => expect(btn().disabled).toBe(false));
   });
   it("ambiguidade científica bloqueia a confirmação mesmo com o número conferido", async () => {
     open(param(), prev({ blocking_flags: param().semantic_flags!, accepted: false }));
@@ -120,7 +126,7 @@ describe("C. conferência assistida (sem redigitar)", () => {
     await waitFor(() => expect((screen.getByRole("button", { name: "Confirmar interpretação" }) as HTMLButtonElement).disabled).toBe(false));
     fireEvent.click(screen.getByRole("button", { name: "Confirmar interpretação" }));
     await waitFor(() => expect(screen.getByRole("status").textContent).toContain("Conferência registrada"));
-    expect(review).toHaveBeenCalledWith("DOC-1-E1.initial_temperature", expect.objectContaining({ action: "CONFIRM", reviewer: "Ana Souza", observed_value: "20", observed_unit: DEG, observed_page_pdf: 5, checked_pdf: true, prefilled_unchanged: true }));
+    expect(review).toHaveBeenCalledWith("DOC-1-E1.initial_temperature", expect.objectContaining({ action: "CONFIRM", reviewer: "Ana Souza", observed_value: "20", observed_unit: DEG, observed_page_pdf: 5, checked_pdf: true, interpretation_confirmed: true, prefilled_unchanged: true }));
   });
   it("alterar um campo marca que os valores foram editados pelo revisor", async () => {
     open(param({ semantic_flags: [] }));
@@ -192,7 +198,7 @@ describe("D. ações: corrigir, dúvida, divergência", () => {
     const done = param({ status: "CONFERIDO_FONTE", review: { reviewer: "Ana", reviewed_at: "2026-11-15T00:00:00Z", notes: null, checked_document_sha256: "a".repeat(64) } });
     open(done);
     expect(screen.queryByRole("button", { name: "Confirmar interpretação" })).toBeNull();
-    expect(screen.getByText(/há ambiguidade científica sinalizada/)).toBeTruthy();
+    expect(screen.getByText(/há inconsistência ou ambiguidade sinalizada/)).toBeTruthy();
     expect(screen.getByRole("button", { name: /Corrigir extração \(reabre a conferência\)/ })).toBeTruthy();
   });
   it("a trilha mostra o campo que falhou em tentativas recusadas", () => {

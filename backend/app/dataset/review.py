@@ -17,7 +17,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from backend.app.dataset.store import DEFAULT_DATA_DIR, REPO_ROOT, DatasetStore
+from backend.app.integrity import assess
 from backend.app.quantities import compare_fields
+from backend.app.semantic import blocking, semantic_flags
 
 
 class ReviewRejected(Exception):
@@ -72,6 +74,35 @@ def check_review(
     return reviewer
 
 
+def scientific_gate(*, parameter: str, label: str | None, label_source: str | None, role: str, original: dict | None,
+                    quotes: list[str], method: str | None, condition: dict | None, interpretation_confirmed: bool,
+                    unit_verified_in_pdf: bool = False, comparisons: list | None = None) -> None:
+    """Portão CIENTÍFICO da confirmação (depois de valor/unidade/página): integridade da grandeza, da unidade
+    e da condição; ambiguidade semântica; e confirmação EXPLÍCITA da interpretação. Confirmar o número
+    nunca valida, sozinho, o significado do parâmetro."""
+    info = assess(parameter=parameter, role=role, original=original, quotes=quotes, method=method, condition=condition,
+                  review={"components": {"unit_verified_in_pdf": unit_verified_in_pdf}})
+    base = {"accepted": False, "code": "REVIEW_MISMATCH", "comparisons": comparisons or []}
+    blocked = [f for f in info["findings"] if f["severity"] == "BLOCKING"]
+    if blocked:
+        raise ReviewRejected(
+            "integridade da extração inconsistente: " + "; ".join(f["title_pt"] for f in blocked) +
+            ". Corrija a extração (ou, para unidade ilegível no texto, confirme-a no PDF).", "INTEGRITY_INCONSISTENT",
+            {**base, "reason_code": "INTEGRITY_INCONSISTENT", "integrity_findings": blocked})
+    flags = blocking(semantic_flags(parameter=parameter, label=label, value=(original or {}).get("value"),
+                                    unit=(original or {}).get("unit"), quotes=quotes, method=method, label_source=label_source))
+    if flags:
+        raise ReviewRejected(
+            "interpretação científica inconclusiva: " + "; ".join(f["title_pt"] for f in flags) +
+            ". Corrija a extração ou mantenha o valor pendente.", "SEMANTIC_AMBIGUITY",
+            {**base, "reason_code": "SEMANTIC_AMBIGUITY", "semantic_flags": flags})
+    if not interpretation_confirmed:
+        raise ReviewRejected(
+            "confirme também a INTERPRETAÇÃO: o trecho sustenta o significado atribuído ao parâmetro? "
+            "A conferência do número e da unidade não valida o significado sozinha.", "INTERPRETATION_NOT_CONFIRMED",
+            {**base, "reason_code": "INTERPRETATION_NOT_CONFIRMED"})
+
+
 def apply_review(
     record_id: str,
     reviewer: str,
@@ -82,6 +113,8 @@ def apply_review(
     data_dir: Path = DEFAULT_DATA_DIR,
     sources_root: Path = REPO_ROOT,
     now: datetime | None = None,
+    interpretation_confirmed: bool = False,
+    unit_verified_in_pdf: bool = False,
 ) -> ReviewResult:
     store = DatasetStore.load(data_dir, sources_root)
     rec = store.records.get(record_id)
@@ -102,6 +135,11 @@ def apply_review(
         original_unit=rec.original.unit if rec.original else None,
         evidence_pages={e.locator.page_pdf_index for e in evs}, observed_value=observed_value,
         observed_unit=observed_unit, observed_page_pdf=observed_page_pdf, hash_problem=hash_problem)
+    scientific_gate(
+        parameter=rec.parameter, label=rec.label_pt, label_source="CURADORIA", role=rec.role,
+        original={"value": rec.original.value, "unit": rec.original.unit} if rec.original else None,
+        quotes=[e.quote for e in evs if e.quote], method=rec.extraction.method if rec.extraction else None,
+        condition=None, interpretation_confirmed=interpretation_confirmed, unit_verified_in_pdf=unit_verified_in_pdf)
 
     stamp = (now or datetime.now(timezone.utc)).strftime("%Y-%m-%dT%H:%M:%SZ")
     path = next(p for p in sorted((Path(data_dir) / "parameters").glob("*.json"))

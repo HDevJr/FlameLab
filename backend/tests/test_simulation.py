@@ -184,7 +184,7 @@ def test_interrupted_runs_are_failed_on_restart(client):
 def test_api_never_accepts_fds_text_or_paths(client):
     use(FakeExecutor())
     r = client.post("/api/simulations", json={"scenario_id": "SCN-x", "fds": "&HEAD CHID='x' /"})
-    assert r.status_code == 404  # campo extra é ignorado; o cenário não existe
+    assert r.status_code == 422  # entradas arbitrárias são recusadas antes da resolução
     for bad in ("../x", "a/b", "..", "a b"):
         assert client.post("/api/simulations", json={"scenario_id": bad}).status_code == 422
     r = client.post("/api/scenarios", json={"model_id": MODEL, "values": {"fds_text": 1}})

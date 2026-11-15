@@ -13,6 +13,7 @@ from backend.app.simulation.models import Compatibility
 from backend.app.simulation.registry import FDS_PHENOMENA, MODELS
 
 APPROVED = frozenset({"CONFERIDO_FONTE", "APROVADO_MODELO"})
+ALIASES = {"material_pyrolysis_properties": "pmma_pyrolysis_properties"}
 
 
 def is_editable(p: dict[str, Any]) -> bool:
@@ -50,7 +51,7 @@ def editable_entry(p: dict[str, Any]) -> dict[str, Any]:
 
 def assess(experiment: dict[str, Any], executor_available: bool) -> dict[str, Any]:
     phenomena = set(experiment.get("phenomena") or [])
-    params = {p["parameter"]: p for p in experiment.get("parameters") or []}
+    params = {ALIASES.get(p["parameter"], p["parameter"]): p for p in experiment.get("parameters") or []}
     gaps = experiment.get("gaps") or []
     observables = [
         {"parameter": p["parameter"], "label_pt": p["label_pt"], "status": p["status"]}
@@ -86,11 +87,16 @@ def assess(experiment: dict[str, Any], executor_available: bool) -> dict[str, An
                 "reasons_pt": ["Nenhum modelo de reprodução cobre estes fenômenos."] + base["reasons_pt"]}
 
     base["model_id"] = model.model_id
-    missing = [name for name in model.required_inputs if name not in params]
-    blocking_gaps = [g["parameter"] for g in gaps if "FDS_REPRODUCTION" in (g.get("purpose_blocked") or [])]
+    required_inputs = [ALIASES.get(name, name) for name in model.required_inputs]
+    missing = [name for name in required_inputs if name not in params]
+    blocking_gaps = [ALIASES.get(g["parameter"], g["parameter"]) for g in gaps
+                     if ALIASES.get(g["parameter"], g["parameter"]) in required_inputs]
     missing = sorted(set(missing) | set(blocking_gaps))
-    unreviewed = sorted(name for name in model.required_inputs if name in params
-                        and params[name]["status"] not in APPROVED)
+    # "Revisado" exige: conferido, integridade OK e revisão que cobriu a INTERPRETAÇÃO (não só número e unidade).
+    unreviewed = sorted(name for name in required_inputs if name in params and (
+        params[name]["status"] not in APPROVED
+        or (params[name].get("integrity") or {}).get("status") == "INCONSISTENT"
+        or (params[name].get("review_scope") not in (None, "FULL"))))
     reasons = []
     if missing:
         reasons.append(f"Faltam {len(missing)} informações necessárias ao modelo (lacunas registradas).")
@@ -106,3 +112,13 @@ def assess(experiment: dict[str, Any], executor_available: bool) -> dict[str, An
     base["actions"]["simulate"] = status == Compatibility.COMPATIBLE
     return {**base, "status": status.value, "missing": missing, "unreviewed": unreviewed,
             "reasons_pt": reasons + base["reasons_pt"]}
+
+
+def with_readiness(experiment: dict[str, Any], compat: dict[str, Any], executor_available: bool) -> dict[str, Any]:
+    """Acrescenta as CINCO dimensões de prontidão e só mantém `simulate` se a prontidão para execução estiver satisfeita."""
+    from backend.app.readiness import build
+
+    r = build(experiment, compat, executor_available)
+    compat = {**compat, "readiness": r}
+    compat["actions"] = {**compat["actions"], "simulate": bool(compat["actions"]["simulate"] and r["can_simulate"])}
+    return compat

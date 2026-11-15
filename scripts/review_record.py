@@ -30,6 +30,10 @@ def main() -> int:
     ap.add_argument("--observed-unit", default=None)
     ap.add_argument("--page-pdf", type=int, required=True)
     ap.add_argument("--notes", default=None)
+    ap.add_argument("--confirm-interpretation", action="store_true",
+                    help="confirma que o trecho SUSTENTA o significado atribuído ao parâmetro (não basta o número conferir)")
+    ap.add_argument("--unit-verified-in-pdf", action="store_true",
+                    help="a unidade não é legível na camada de texto; declaro que a vi no PDF")
     ap.add_argument("--i-checked-the-pdf", action="store_true",
                     help="declaração obrigatória de que o valor foi lido no PDF original")
     args = ap.parse_args()
@@ -38,7 +42,8 @@ def main() -> int:
         return 2
     try:
         res = apply_review(args.record, args.reviewer, args.observed_value, args.observed_unit,
-                           args.page_pdf, args.notes)
+                           args.page_pdf, args.notes, interpretation_confirmed=args.confirm_interpretation,
+                           unit_verified_in_pdf=args.unit_verified_in_pdf)
     except ReviewRejected as exc:
         print(f"RECUSADO: {exc}")
         return 1

@@ -1,5 +1,5 @@
 // Funções puras de apresentação (testadas em lib.test.ts).
-import type { Parameter } from "./api";
+import type { Parameter, Readiness } from "./api";
 
 export const STATUS_LABEL: Record<string, { text: string; tone: "ok" | "warn" | "bad" | "info" | "muted" }> = {
   CONFERIDO_FONTE: { text: "Conferido na fonte", tone: "ok" },
@@ -187,3 +187,62 @@ export function highlightSegments(text: string, terms: string[]): { text: string
 
 /** Valor extraído como texto de campo (sem unidade): 20.0 → "20". */
 export const valueText = (v: number | string | null | undefined): string => (v == null ? "" : typeof v === "number" ? String(Number.isInteger(v) ? v : Number(v.toPrecision(12))) : v);
+
+// ---------------------------------------------------------------- unidade: leituras DISTINTAS (nunca "—" para tudo)
+export type UnitView = { text: string; tone: "ok" | "warn" | "bad" | "info" | "muted"; kind: "PHYSICAL" | "UNSUPPORTED" | "DIMENSIONLESS" | "MISSING" | "NOT_APPLICABLE" | "UNKNOWN"; title: string; legacy: boolean };
+
+const NO_UNIT = new Set(["", "none", "n/a", "na", "-", "—", "dimensionless", "adimensional"]);
+
+/** Como exibir a unidade de um parâmetro. Distingue grandeza física com unidade, unidade não suportada, adimensional,
+ *  unidade AUSENTE (problema) e valor textual (não se aplica). Se o servidor não enviou `unit_info` (versão antiga),
+ *  mostra a unidade BRUTA do registro em vez de esconder — a unidade nunca pode sumir da tela. */
+export function unitView(p: Parameter): UnitView {
+  const raw = p.original?.unit ?? null;
+  const textual = typeof p.original?.value === "string";
+  const info = p.unit_info;
+  if (info?.state) {
+    switch (info.state) {
+      case "PHYSICAL": return { text: info.display ?? raw ?? "", tone: "ok", kind: "PHYSICAL", title: `grandeza: ${info.dimension_pt ?? "—"}`, legacy: false };
+      case "UNSUPPORTED": return { text: `${raw ?? ""} (não suportada)`, tone: "warn", kind: "UNSUPPORTED", title: "unidade fora da tabela de unidades", legacy: false };
+      case "DIMENSIONLESS": return { text: "sem unidade (adimensional)", tone: "muted", kind: "DIMENSIONLESS", title: "grandeza adimensional", legacy: false };
+      case "MISSING": return { text: info.expected_dimension_pt ? `unidade ausente (esperado: ${info.expected_dimension_pt})` : "unidade ausente (grandeza não classificada)", tone: "bad", kind: "MISSING", title: "unidade não registrada; isso não implica grandeza adimensional", legacy: false };
+      default: return { text: "n/a (valor textual)", tone: "muted", kind: "NOT_APPLICABLE", title: "valor textual: unidade não se aplica", legacy: false };
+    }
+  }
+  // sem unit_info: servidor desatualizado — nunca esconder a unidade bruta
+  if (raw && !NO_UNIT.has(raw.trim().toLowerCase())) return { text: raw, tone: "info", kind: "UNKNOWN", title: "unidade bruta do registro (o servidor não classificou)", legacy: true };
+  if (textual) return { text: "n/a (valor textual)", tone: "muted", kind: "NOT_APPLICABLE", title: "valor textual", legacy: true };
+  if (raw && ["dimensionless", "adimensional"].includes(raw.trim().toLowerCase())) return { text: "sem unidade (adimensional declarado)", tone: "muted", kind: "DIMENSIONLESS", title: "declaração do registro; classificação do servidor indisponível", legacy: true };
+  return { text: "unidade ausente (não classificada)", tone: "warn", kind: "UNKNOWN", title: "o servidor não permite distinguir unidade ausente de grandeza adimensional", legacy: true };
+}
+
+export const isStaleBackend = (params: Parameter[]) => params.length > 0 && params.some((p) => p.unit_info === undefined);
+export const REQUIRED_CAPABILITIES = ["unit_info", "integrity", "readiness", "review_scope", "review_preview", "reopen", "gap_decisions", "audit_integrity", "record_context", "condition", "scientific_cases", "guided_review"];
+
+/** Estado da revisão de um parâmetro, sem confundir número conferido com interpretação conferida. */
+export function reviewStateView(p: Parameter): { text: string; tone: "ok" | "warn" | "bad" | "info" | "muted" } {
+  if (p.status === "EXTRAIDO_NAO_REVISADO") return { text: "Extraído · não revisado", tone: "warn" };
+  if (p.status !== "CONFERIDO_FONTE" && p.status !== "APROVADO_MODELO") return STATUS_LABEL[p.status] ?? { text: p.status, tone: "muted" };
+  if (p.integrity?.status === "INCONSISTENT" || p.semantic_flags?.some((f) => f.severity === "BLOCKING")) return { text: "Conferido, mas com inconsistência de integridade", tone: "bad" };
+  if (p.review_scope !== "FULL") return { text: "Conferido (número/unidade) — interpretação NÃO confirmada", tone: "warn" };
+  return { text: "Conferido (número, unidade e interpretação)", tone: "ok" };
+}
+
+export const READINESS_STATUS: Record<string, string> = {
+  OK: "OK", ATENCAO: "Atenção", INCONSISTENTE: "Inconsistente", SEM_PARAMETROS: "Sem parâmetros", NAO_INICIADA: "Não iniciada", PARCIAL: "Parcial",
+  COMPLETA: "Completa", COMPLETA_COM_RESSALVAS: "Completa, com ressalvas", SEM_MODELO: "Sem modelo", INCOMPLETA: "Incompleta",
+  COMPATIBLE: "Compatível", MISSING_PARAMETERS: "Faltam parâmetros", UNSUPPORTED_PHYSICS: "Física não suportada", REQUIRES_REVIEW: "Requer revisão",
+  NAO_AVALIADA: "Não avaliada", BLOQUEADA: "Bloqueada", PRONTA: "Pronta",
+};
+export const readinessDim = (r: Readiness | undefined, key: string) => r?.dimensions.find((d) => d.key === key);
+
+export const COVERAGE_STATE: Record<string, { text: string; tone: "ok" | "warn" | "bad" | "info" | "muted" }> = {
+  ABERTA: { text: "Aberta", tone: "bad" }, POSSIVEL_SOBREPOSICAO: { text: "Possível sobreposição — decisão pendente", tone: "warn" },
+  PARCIALMENTE_COBERTA: { text: "Parcialmente coberta", tone: "info" }, COBERTA: { text: "Coberta", tone: "ok" }, DISTINTA: { text: "Conceito distinto (permanece aberta)", tone: "muted" },
+};
+
+export const INTEGRITY_ERRORS: Record<string, string> = {
+  INTEGRITY_INCONSISTENT: "A grandeza, a unidade ou a condição não estão sustentadas pela fonte. Corrija a extração (ou, para unidade ilegível, confirme-a no PDF).",
+  INTERPRETATION_NOT_CONFIRMED: "Confirme também a interpretação: conferir o número e a unidade não valida, sozinho, o significado do parâmetro.",
+};
+Object.assign(REVIEW_ERRORS, INTEGRITY_ERRORS);

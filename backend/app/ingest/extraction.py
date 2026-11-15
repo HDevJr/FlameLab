@@ -18,7 +18,7 @@ from backend.app import units
 from backend.app.assistant.provider import LLMProvider
 from backend.app.labels import friendly_label
 
-EXTRACTION_PROMPT_VERSION = "ext-v3"
+EXTRACTION_PROMPT_VERSION = "ext-v4"
 BATCH_MAX_PAGES = 12
 BATCH_MAX_CHARS = 40_000
 DEFAULT_MAX_BATCHES = 8
@@ -30,6 +30,14 @@ PHENOMENA = [
 Role = Literal["CONDICAO", "OBSERVAVEL", "METADADO"]
 
 
+class ProposedCondition(BaseModel):
+    """Condição de referência a que o valor está associado, EXATAMENTE como no trecho (ex.: "AT 20 °C")."""
+
+    text: str = Field(max_length=80)
+    value: str | None = Field(default=None, max_length=40)
+    unit: str | None = Field(default=None, max_length=30)
+
+
 class ProposedParameter(BaseModel):
     name: str = Field(max_length=80)
     label_pt: str | None = Field(default=None, max_length=80)
@@ -38,6 +46,7 @@ class ProposedParameter(BaseModel):
     unit: str | None = Field(default=None, max_length=30)
     page: int
     quote: str = Field(max_length=400)
+    condition: ProposedCondition | None = None
 
 
 class ProposedGap(BaseModel):
@@ -72,6 +81,8 @@ class ExtractionOutput(BaseModel):
                             "name": string, "label_pt": string,
                             "role": {"type": "string", "enum": ["CONDICAO", "OBSERVAVEL", "METADADO"]},
                             "value": string, "unit": string, "page": {"type": "integer"}, "quote": string,
+                            "condition": {"type": "object", "properties": {"text": string, "value": string, "unit": string},
+                                          "required": ["text"]},
                         },
                         "required": ["name", "role", "value", "page", "quote"],
                     }},
@@ -94,6 +105,11 @@ Regras:
 3. Para cada parâmetro: nome curto em inglês (snake_case), "label_pt" (nome curto em português, fiel ao
    que o trecho DIZ: não escreva "inicial", "final" ou "máximo" se o texto não afirmar isso), valor exatamente como escrito, unidade
    como escrita, número da página e uma citação LITERAL curta (até 300 caracteres) que contenha o valor.
+3b. UNIDADE: copie a unidade exatamente como aparece ao lado do número no trecho ("°C", "°", "mm/s"). Se o trecho
+   NÃO mostra a unidade (por exemplo, só um símbolo ilegível como "*"), deixe "unit" VAZIO: não infira nem complete.
+   Um intervalo "from 20 to 80 °C" compartilha a unidade; cada número desse intervalo pode usá-la.
+3c. CONDIÇÃO: se o valor vale para uma condição de referência citada no trecho ("70 ° AT 20 °C"), preencha "condition"
+   com a frase literal ("AT 20 °C"), o valor e a unidade da condição. Não invente condição que o trecho não cita.
 4. role: CONDICAO = condição de entrada do experimento; OBSERVAVEL = resultado medido/observado;
    METADADO = identificação (material, equipamento, missão).
 5. Em "missing", liste informações que um pesquisador precisaria para reproduzir o experimento e que
@@ -102,6 +118,7 @@ Regras:
 7. O artigo é lido em lotes de páginas: devolva apenas o que aparece NAS PÁGINAS DESTE LOTE. A página de cada
    parâmetro é o número do <page n="..."> em que a citação aparece.
 Responda somente JSON."""
+
 
 
 def _norm(text: str) -> str:
@@ -177,7 +194,18 @@ def validate(output: ExtractionOutput, pages: dict[int, str], document_id: str, 
             number = _number(p.value)
             canon = units.canonical_unit(p.unit) if p.unit else None
             q = units.normalize(number, p.unit) if (number is not None and p.unit and canon) else None
+            cond = None
+            if p.condition is not None:
+                ctext, cvalue = _norm(p.condition.text), _norm(p.condition.value or "")
+                if len(ctext) >= 3 and ctext in quote and (not cvalue or cvalue in ctext):
+                    cnum = _number(p.condition.value or "")
+                    cond = {"text": p.condition.text.strip(), "value": cnum, "unit": (p.condition.unit or "").strip() or None,
+                            "source": "IA", "literal_check": "PASS"}
+                else:
+                    rejected.append({"experiment": exp.label, "name": p.name + " (condição)", "value": p.condition.text,
+                                     "page": p.page, "reason": "CONDITION_NOT_LITERAL"})
             params.append({
+                "condition": cond,
                 "record_id": f"{exp_id}.{slug}", "parameter": slug,
                 "label_pt": (p.label_pt or "").strip() or friendly_label(slug), "technical_name": p.name,
                 "label_source": "IA" if (p.label_pt or "").strip() else "GLOSSARIO", "role": p.role, "nature": "OBSERVADO",

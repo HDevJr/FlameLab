@@ -1,0 +1,1298 @@
+{
+  "generated_at": "2026-11-15T03:10:18Z",
+  "read_only": true,
+  "summary": {
+    "records": 23,
+    "confirmed": 23,
+    "by_classification": {
+      "INCONSISTENT_CONFIRMED": 3,
+      "LEGACY_REVIEW": 11,
+      "OK": 9
+    },
+    "confirmed_with_blocking_inconsistency": 3,
+    "confirmed_without_interpretation_confirmation": 14
+  },
+  "records": [
+    {
+      "record_id": "DOC-3df76042e5be-E1.contact_angle_accuracy",
+      "document_id": "DOC-3df76042e5be",
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "parameter": "contact_angle_accuracy",
+      "label_pt": "Precisão de ângulo de contato",
+      "role": "METADADO",
+      "status": "CONFERIDO_FONTE",
+      "value": 2.0,
+      "unit_raw": "deg",
+      "unit_state": "PHYSICAL",
+      "unit_source": "SYMBOL_UNREADABLE",
+      "page": 15,
+      "quote": "ALL CONTACT ANGLE MEASUREMENTS ARE ACCURATE TO +2* WITH REPEATABILITY GIVING UNCERTAINTIES OF +3 °.",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T01:52:43Z",
+        "scope": "LEGACY",
+        "components": null
+      },
+      "classification": "INCONSISTENT_CONFIRMED",
+      "integrity_findings": [
+        {
+          "code": "UNIT_SYMBOL_UNREADABLE",
+          "severity": "BLOCKING",
+          "field": "unit",
+          "title_pt": "A unidade não é legível na camada de texto",
+          "detail_pt": "Depois do número aparece um símbolo ilegível (por exemplo “*”) no lugar da unidade; a IA assumiu °. É preciso ver o PDF e confirmar a unidade explicitamente.",
+          "terms": [
+            "*"
+          ]
+        }
+      ],
+      "semantic_flags": [
+        {
+          "code": "MULTIPLE_VALUES_IN_QUOTE",
+          "severity": "INFO",
+          "title_pt": "O trecho cita outros valores",
+          "detail_pt": "O trecho também menciona 3 °. Confirme que 2 é o valor do parâmetro e não de outra condição.",
+          "terms": [
+            "2",
+            "3"
+          ]
+        }
+      ],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 1,
+        "approved": 1
+      },
+      "proposals": [
+        {
+          "finding": "UNIT_SYMBOL_UNREADABLE",
+          "action": "REOPEN_THEN_CONFIRM",
+          "proposal_pt": "Abrir o PDF na página, ver a unidade, reabrir e reconfirmar marcando “vi a unidade no PDF”."
+        }
+      ]
+    },
+    {
+      "record_id": "DOC-3df76042e5be-E1.equilibrium_contact_angle",
+      "document_id": "DOC-3df76042e5be",
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "parameter": "equilibrium_contact_angle",
+      "label_pt": "Ângulo de contato de equilíbrio",
+      "role": "CONDICAO",
+      "status": "CONFERIDO_FONTE",
+      "value": 70.0,
+      "unit_raw": "deg",
+      "unit_state": "PHYSICAL",
+      "unit_source": "QUOTE",
+      "page": 15,
+      "quote": "EQUILIBRIUM CONTACT ANGLES ARE 70 ° AT 20 °C AND 65 ° AT 100 °C",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T01:38:36Z",
+        "scope": "LEGACY",
+        "components": null
+      },
+      "classification": "INCONSISTENT_CONFIRMED",
+      "integrity_findings": [
+        {
+          "code": "CONDITION_NOT_RECORDED",
+          "severity": "BLOCKING",
+          "field": "condition",
+          "title_pt": "O valor depende de uma condição que não foi registrada",
+          "detail_pt": "O trecho associa o valor a “AT 20 °C”. Sem registrar a condição, o parâmetro pode ser lido como valor geral. Use “Corrigir extração” para registrar a condição.",
+          "terms": [
+            "AT 20 °C"
+          ]
+        }
+      ],
+      "semantic_flags": [
+        {
+          "code": "MULTIPLE_VALUES_IN_QUOTE",
+          "severity": "INFO",
+          "title_pt": "O trecho cita outros valores",
+          "detail_pt": "O trecho também menciona 20 °C, 65 °, 100 °C. Confirme que 70 é o valor do parâmetro e não de outra condição.",
+          "terms": [
+            "70",
+            "20",
+            "65",
+            "100"
+          ]
+        }
+      ],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 5,
+        "approved": 1
+      },
+      "proposals": [
+        {
+          "finding": "CONDITION_NOT_RECORDED",
+          "action": "CORRECT",
+          "proposal_pt": "Corrigir a extração registrando a condição associada (ex.: “a 20 °C”); a conferência é reaberta."
+        }
+      ]
+    },
+    {
+      "record_id": "DOC-3df76042e5be-E1.initial_temperature",
+      "document_id": "DOC-3df76042e5be",
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "parameter": "initial_temperature",
+      "label_pt": "Temperatura inicial",
+      "role": "CONDICAO",
+      "status": "CONFERIDO_FONTE",
+      "value": 20.0,
+      "unit_raw": "°C",
+      "unit_state": "PHYSICAL",
+      "unit_source": "QUOTE",
+      "page": 5,
+      "quote": "During the flight the cells were partially filled via four independent fill ports. The temperature was then cycled from 20 to 80 °C in increments of 20 °C",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T01:33:21Z",
+        "scope": "LEGACY",
+        "components": null
+      },
+      "classification": "INCONSISTENT_CONFIRMED",
+      "integrity_findings": [],
+      "semantic_flags": [
+        {
+          "code": "INITIAL_FROM_RANGE",
+          "severity": "BLOCKING",
+          "title_pt": "O trecho não afirma um valor inicial",
+          "detail_pt": "O número 20 aparece como início do intervalo 20 a 80, não como condição inicial declarada pela fonte. Um ciclo ou variação que começa em um valor não prova que o experimento partiu dele.",
+          "terms": [
+            "20",
+            "from",
+            "to",
+            "cycled"
+          ]
+        },
+        {
+          "code": "VALUE_ALSO_INCREMENT",
+          "severity": "INFO",
+          "title_pt": "O mesmo número também aparece como incremento",
+          "detail_pt": "20 aparece como extremidade de intervalo e como incremento (diferença) no mesmo trecho; confirme a qual dos dois o parâmetro se refere.",
+          "terms": [
+            "20",
+            "increments"
+          ]
+        },
+        {
+          "code": "MULTIPLE_VALUES_IN_QUOTE",
+          "severity": "INFO",
+          "title_pt": "O trecho cita outros valores",
+          "detail_pt": "O trecho também menciona 80 °C. Confirme que 20 é o valor do parâmetro e não de outra condição.",
+          "terms": [
+            "20",
+            "80"
+          ]
+        }
+      ],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 5,
+        "approved": 1
+      },
+      "proposals": [
+        {
+          "finding": "INITIAL_FROM_RANGE",
+          "action": "CORRECT_OR_REOPEN",
+          "proposal_pt": "Corrigir a extração para refletir o que o trecho diz (ex.: “Temperatura mínima do ciclo”) ou reabrir e manter pendente."
+        }
+      ]
+    },
+    {
+      "record_id": "DOC-3df76042e5be-E1.cell_material",
+      "document_id": "DOC-3df76042e5be",
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "parameter": "cell_material",
+      "label_pt": "Material de célula",
+      "role": "METADADO",
+      "status": "CONFERIDO_FONTE",
+      "value": "fused silica (quartz)",
+      "unit_raw": "none",
+      "unit_state": "NOT_APPLICABLE",
+      "unit_source": null,
+      "page": 5,
+      "quote": "Four cylindrical vessels of rhombic cross section were fabricated out of fused silica (quartz) for the test.",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T01:42:43Z",
+        "scope": "LEGACY",
+        "components": null
+      },
+      "classification": "LEGACY_REVIEW",
+      "integrity_findings": [],
+      "semantic_flags": [],
+      "audit_anomalies": [
+        {
+          "code": "PARTIAL_TEXT_CONFIRMATION",
+          "at": "2026-11-15T01:42:43Z",
+          "detail_pt": "Foi confirmado apenas o trecho “quartz” de “fused silica (quartz)” (a regra antiga aceitava substring)."
+        }
+      ],
+      "attempts": {
+        "refused": 0,
+        "approved": 1
+      },
+      "proposals": [
+        {
+          "finding": "REVIEW_LEGACY",
+          "action": "REOPEN_THEN_CONFIRM",
+          "proposal_pt": "A revisão comparou número, unidade e página, mas NÃO confirmou a interpretação. Reabrir e reconfirmar marcando a confirmação da interpretação."
+        }
+      ]
+    },
+    {
+      "record_id": "DOC-3df76042e5be-E1.dihedral_angle",
+      "document_id": "DOC-3df76042e5be",
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "parameter": "dihedral_angle",
+      "label_pt": "Ângulo diedral",
+      "role": "CONDICAO",
+      "status": "CONFERIDO_FONTE",
+      "value": 65.0,
+      "unit_raw": "deg",
+      "unit_state": "PHYSICAL",
+      "unit_source": "QUOTE",
+      "page": 18,
+      "quote": "(a) Filling of the right-hand cells with dihedral angles 2a = 65 ° (left) and 2_ = 60 ° (right).",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T01:39:22Z",
+        "scope": "LEGACY",
+        "components": null
+      },
+      "classification": "LEGACY_REVIEW",
+      "integrity_findings": [],
+      "semantic_flags": [
+        {
+          "code": "MULTIPLE_VALUES_IN_QUOTE",
+          "severity": "INFO",
+          "title_pt": "O trecho cita outros valores",
+          "detail_pt": "O trecho também menciona 60 °. Confirme que 65 é o valor do parâmetro e não de outra condição.",
+          "terms": [
+            "65",
+            "60"
+          ]
+        }
+      ],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 1,
+        "approved": 1
+      },
+      "proposals": [
+        {
+          "finding": "REVIEW_LEGACY",
+          "action": "REOPEN_THEN_CONFIRM",
+          "proposal_pt": "A revisão comparou número, unidade e página, mas NÃO confirmou a interpretação. Reabrir e reconfirmar marcando a confirmação da interpretação."
+        }
+      ]
+    },
+    {
+      "record_id": "DOC-3df76042e5be-E1.fluid",
+      "document_id": "DOC-3df76042e5be",
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "parameter": "fluid",
+      "label_pt": "Fluido",
+      "role": "METADADO",
+      "status": "CONFERIDO_FONTE",
+      "value": "Cargille fluid 30350",
+      "unit_raw": "",
+      "unit_state": "NOT_APPLICABLE",
+      "unit_source": null,
+      "page": 15,
+      "quote": "TABLE 1.--RELEVANT THERMOPHYSICAL PROPERTIES FOR CARGILLE FLUID 30350",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T01:42:58Z",
+        "scope": "LEGACY",
+        "components": null
+      },
+      "classification": "LEGACY_REVIEW",
+      "integrity_findings": [],
+      "semantic_flags": [],
+      "audit_anomalies": [
+        {
+          "code": "PARTIAL_TEXT_CONFIRMATION",
+          "at": "2026-11-15T01:42:58Z",
+          "detail_pt": "Foi confirmado apenas o trecho “30350” de “Cargille fluid 30350” (a regra antiga aceitava substring)."
+        }
+      ],
+      "attempts": {
+        "refused": 0,
+        "approved": 1
+      },
+      "proposals": [
+        {
+          "finding": "REVIEW_LEGACY",
+          "action": "REOPEN_THEN_CONFIRM",
+          "proposal_pt": "A revisão comparou número, unidade e página, mas NÃO confirmou a interpretação. Reabrir e reconfirmar marcando a confirmação da interpretação."
+        }
+      ]
+    },
+    {
+      "record_id": "DOC-3df76042e5be-E1.peak_temperature_achieved",
+      "document_id": "DOC-3df76042e5be",
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "parameter": "peak_temperature_achieved",
+      "label_pt": "Temperatura de pico alcançada",
+      "role": "CONDICAO",
+      "status": "CONFERIDO_FONTE",
+      "value": 95.0,
+      "unit_raw": "°C",
+      "unit_state": "PHYSICAL",
+      "unit_source": "QUOTE",
+      "page": 5,
+      "quote": "Though the originally planned peak temperature was 80 °C, the system temperature was further increased to 95 °C.",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T01:34:29Z",
+        "scope": "LEGACY",
+        "components": null
+      },
+      "classification": "LEGACY_REVIEW",
+      "integrity_findings": [],
+      "semantic_flags": [
+        {
+          "code": "MULTIPLE_VALUES_IN_QUOTE",
+          "severity": "INFO",
+          "title_pt": "O trecho cita outros valores",
+          "detail_pt": "O trecho também menciona 80 °C. Confirme que 95 é o valor do parâmetro e não de outra condição.",
+          "terms": [
+            "95",
+            "80"
+          ]
+        }
+      ],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 1,
+        "approved": 1
+      },
+      "proposals": [
+        {
+          "finding": "REVIEW_LEGACY",
+          "action": "REOPEN_THEN_CONFIRM",
+          "proposal_pt": "A revisão comparou número, unidade e página, mas NÃO confirmou a interpretação. Reabrir e reconfirmar marcando a confirmação da interpretação."
+        }
+      ]
+    },
+    {
+      "record_id": "DOC-3df76042e5be-E1.peak_temperature_planned",
+      "document_id": "DOC-3df76042e5be",
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "parameter": "peak_temperature_planned",
+      "label_pt": "Temperatura de pico planejada",
+      "role": "CONDICAO",
+      "status": "CONFERIDO_FONTE",
+      "value": 80.0,
+      "unit_raw": "°C",
+      "unit_state": "PHYSICAL",
+      "unit_source": "QUOTE",
+      "page": 5,
+      "quote": "Though the originally planned peak temperature was 80 °C, the system temperature was further increased to 95 °C.",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T01:34:04Z",
+        "scope": "LEGACY",
+        "components": null
+      },
+      "classification": "LEGACY_REVIEW",
+      "integrity_findings": [],
+      "semantic_flags": [
+        {
+          "code": "MULTIPLE_VALUES_IN_QUOTE",
+          "severity": "INFO",
+          "title_pt": "O trecho cita outros valores",
+          "detail_pt": "O trecho também menciona 95 °C. Confirme que 80 é o valor do parâmetro e não de outra condição.",
+          "terms": [
+            "80",
+            "95"
+          ]
+        }
+      ],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 1,
+        "approved": 1
+      },
+      "proposals": [
+        {
+          "finding": "REVIEW_LEGACY",
+          "action": "REOPEN_THEN_CONFIRM",
+          "proposal_pt": "A revisão comparou número, unidade e página, mas NÃO confirmou a interpretação. Reabrir e reconfirmar marcando a confirmação da interpretação."
+        }
+      ]
+    },
+    {
+      "record_id": "DOC-3df76042e5be-E1.report_date",
+      "document_id": "DOC-3df76042e5be",
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "parameter": "report_date",
+      "label_pt": "Data de relatório",
+      "role": "METADADO",
+      "status": "CONFERIDO_FONTE",
+      "value": "August 1998",
+      "unit_raw": "",
+      "unit_state": "NOT_APPLICABLE",
+      "unit_source": null,
+      "page": 32,
+      "quote": "August 1998",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T01:53:01Z",
+        "scope": "LEGACY",
+        "components": null
+      },
+      "classification": "LEGACY_REVIEW",
+      "integrity_findings": [],
+      "semantic_flags": [],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 0,
+        "approved": 1
+      },
+      "proposals": [
+        {
+          "finding": "REVIEW_LEGACY",
+          "action": "REOPEN_THEN_CONFIRM",
+          "proposal_pt": "A revisão comparou número, unidade e página, mas NÃO confirmou a interpretação. Reabrir e reconfirmar marcando a confirmação da interpretação."
+        }
+      ]
+    },
+    {
+      "record_id": "DOC-3df76042e5be-E1.solid_material",
+      "document_id": "DOC-3df76042e5be",
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "parameter": "solid_material",
+      "label_pt": "Material de sólido",
+      "role": "METADADO",
+      "status": "CONFERIDO_FONTE",
+      "value": "fused silica",
+      "unit_raw": "",
+      "unit_state": "NOT_APPLICABLE",
+      "unit_source": null,
+      "page": 15,
+      "quote": "FUSED SILICA INDEX OF REFRACTION MATCHED N = 1.4587 AT 25 °C",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T01:52:07Z",
+        "scope": "LEGACY",
+        "components": null
+      },
+      "classification": "LEGACY_REVIEW",
+      "integrity_findings": [],
+      "semantic_flags": [],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 15,
+        "approved": 1
+      },
+      "proposals": [
+        {
+          "finding": "REVIEW_LEGACY",
+          "action": "REOPEN_THEN_CONFIRM",
+          "proposal_pt": "A revisão comparou número, unidade e página, mas NÃO confirmou a interpretação. Reabrir e reconfirmar marcando a confirmação da interpretação."
+        }
+      ]
+    },
+    {
+      "record_id": "DOC-3df76042e5be-E1.surface_modifier",
+      "document_id": "DOC-3df76042e5be",
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "parameter": "surface_modifier",
+      "label_pt": "Modificador de superfície",
+      "role": "METADADO",
+      "status": "CONFERIDO_FONTE",
+      "value": "FC-724",
+      "unit_raw": "none",
+      "unit_state": "NOT_APPLICABLE",
+      "unit_source": null,
+      "page": 5,
+      "quote": "The interior surfaces of the test cells were coated with FC-724, a surface modifier supplied by the 3M Corporation.",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T01:42:22Z",
+        "scope": "LEGACY",
+        "components": null
+      },
+      "classification": "LEGACY_REVIEW",
+      "integrity_findings": [],
+      "semantic_flags": [],
+      "audit_anomalies": [
+        {
+          "code": "UNIT_SUBMITTED_FOR_TEXT_VALUE",
+          "at": "2026-11-15T01:42:22Z",
+          "detail_pt": "Na aprovação foi submetida a unidade “deg” para um valor textual; a unidade não se aplica e não foi validada (regra antiga ignorava unidade em texto)."
+        }
+      ],
+      "attempts": {
+        "refused": 2,
+        "approved": 1
+      },
+      "proposals": [
+        {
+          "finding": "REVIEW_LEGACY",
+          "action": "REOPEN_THEN_CONFIRM",
+          "proposal_pt": "A revisão comparou número, unidade e página, mas NÃO confirmou a interpretação. Reabrir e reconfirmar marcando a confirmação da interpretação."
+        }
+      ]
+    },
+    {
+      "record_id": "DOC-3df76042e5be-E1.temperature",
+      "document_id": "DOC-3df76042e5be",
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "parameter": "temperature",
+      "label_pt": "Temperatura",
+      "role": "CONDICAO",
+      "status": "CONFERIDO_FONTE",
+      "value": 40.0,
+      "unit_raw": "degC",
+      "unit_state": "PHYSICAL",
+      "unit_source": "QUOTE",
+      "page": 18,
+      "quote": "(b) During heating up to 40, 60, 80, 90 and even 95 °C.",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T01:40:07Z",
+        "scope": "LEGACY",
+        "components": null
+      },
+      "classification": "LEGACY_REVIEW",
+      "integrity_findings": [],
+      "semantic_flags": [
+        {
+          "code": "VALUE_FROM_LIST",
+          "severity": "INFO",
+          "title_pt": "O número é um dos elementos de uma lista",
+          "detail_pt": "40 é um entre vários valores listados (40, 60, 80, 90, 95); confirme que o parâmetro se refere a este elemento e não ao conjunto.",
+          "terms": [
+            "40",
+            "60",
+            "80",
+            "90",
+            "95"
+          ]
+        },
+        {
+          "code": "MULTIPLE_VALUES_IN_QUOTE",
+          "severity": "INFO",
+          "title_pt": "O trecho cita outros valores",
+          "detail_pt": "O trecho também menciona 95 °C. Confirme que 40 é o valor do parâmetro e não de outra condição.",
+          "terms": [
+            "40",
+            "95"
+          ]
+        }
+      ],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 1,
+        "approved": 1
+      },
+      "proposals": [
+        {
+          "finding": "REVIEW_LEGACY",
+          "action": "REOPEN_THEN_CONFIRM",
+          "proposal_pt": "A revisão comparou número, unidade e página, mas NÃO confirmou a interpretação. Reabrir e reconfirmar marcando a confirmação da interpretação."
+        }
+      ]
+    },
+    {
+      "record_id": "DOC-3df76042e5be-E1.test_fluid_code",
+      "document_id": "DOC-3df76042e5be",
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "parameter": "test_fluid_code",
+      "label_pt": "Código de fluido de ensaio",
+      "role": "METADADO",
+      "status": "CONFERIDO_FONTE",
+      "value": 50350.0,
+      "unit_raw": "none",
+      "unit_state": "DIMENSIONLESS",
+      "unit_source": null,
+      "page": 5,
+      "quote": "The test fluid was a fused silica index of refraction matched liquid (code 50350) provided by Cargille Laboratories.",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T01:40:57Z",
+        "scope": "LEGACY",
+        "components": null
+      },
+      "classification": "LEGACY_REVIEW",
+      "integrity_findings": [
+        {
+          "code": "IDENTIFIER_AS_NUMBER",
+          "severity": "ATTENTION",
+          "field": "value",
+          "title_pt": "Identificador guardado como número",
+          "detail_pt": "Códigos e identificadores devem ser textos; como número podem perder zeros à esquerda e não têm unidade.",
+          "terms": []
+        }
+      ],
+      "semantic_flags": [],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 1,
+        "approved": 1
+      },
+      "proposals": [
+        {
+          "finding": "REVIEW_LEGACY",
+          "action": "REOPEN_THEN_CONFIRM",
+          "proposal_pt": "A revisão comparou número, unidade e página, mas NÃO confirmou a interpretação. Reabrir e reconfirmar marcando a confirmação da interpretação."
+        }
+      ]
+    },
+    {
+      "record_id": "DOC-3df76042e5be-E1.uncoated_cells_contact_angle",
+      "document_id": "DOC-3df76042e5be",
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "parameter": "uncoated_cells_contact_angle",
+      "label_pt": "Ângulo de contato de células sem revestimento",
+      "role": "CONDICAO",
+      "status": "CONFERIDO_FONTE",
+      "value": 19.0,
+      "unit_raw": "°",
+      "unit_state": "PHYSICAL",
+      "unit_source": "QUOTE",
+      "page": 5,
+      "quote": "The uncoated cells show a contact angle of approximately 19 ° with the liquid used.",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T01:36:42Z",
+        "scope": "LEGACY",
+        "components": null
+      },
+      "classification": "LEGACY_REVIEW",
+      "integrity_findings": [],
+      "semantic_flags": [
+        {
+          "code": "APPROXIMATE_VALUE",
+          "severity": "INFO",
+          "title_pt": "O texto indica valor aproximado",
+          "detail_pt": "O trecho usa um termo como “aproximadamente”: o valor não é exato.",
+          "terms": [
+            "approximately",
+            "about"
+          ]
+        }
+      ],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 6,
+        "approved": 1
+      },
+      "proposals": [
+        {
+          "finding": "REVIEW_LEGACY",
+          "action": "REOPEN_THEN_CONFIRM",
+          "proposal_pt": "A revisão comparou número, unidade e página, mas NÃO confirmou a interpretação. Reabrir e reconfirmar marcando a confirmação da interpretação."
+        }
+      ]
+    },
+    {
+      "record_id": "BASS2-M1.airflow_velocity",
+      "document_id": "NASA-TM-20210011385",
+      "experiment_id": "BASS2-M1",
+      "parameter": "airflow_velocity",
+      "label_pt": "Velocidade do ar (escoamento oposto)",
+      "role": "CONDICAO",
+      "status": "CONFERIDO_FONTE",
+      "value": 9.0,
+      "unit_raw": "cm/s",
+      "unit_state": "PHYSICAL",
+      "unit_source": "NOT_CHECKED",
+      "page": 65,
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Velocity, cm/s: 9",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:51:58+00:00",
+        "scope": "FULL",
+        "components": null
+      },
+      "classification": "OK",
+      "integrity_findings": [],
+      "semantic_flags": [],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 0,
+        "approved": 1
+      },
+      "proposals": []
+    },
+    {
+      "record_id": "BASS2-M1.burn_duration",
+      "document_id": "NASA-TM-20210011385",
+      "experiment_id": "BASS2-M1",
+      "parameter": "burn_duration",
+      "label_pt": "Tempo de queima",
+      "role": "OBSERVAVEL",
+      "status": "CONFERIDO_FONTE",
+      "value": 6.4,
+      "unit_raw": "min",
+      "unit_state": "PHYSICAL",
+      "unit_source": "NOT_CHECKED",
+      "page": 65,
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Burn time, min: 6.4",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:52:19+00:00",
+        "scope": "FULL",
+        "components": null
+      },
+      "classification": "OK",
+      "integrity_findings": [],
+      "semantic_flags": [],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 0,
+        "approved": 1
+      },
+      "proposals": []
+    },
+    {
+      "record_id": "BASS2-M1.burning_faces",
+      "document_id": "NASA-TM-20210011385",
+      "experiment_id": "BASS2-M1",
+      "parameter": "burning_faces",
+      "label_pt": "Faces em combustão",
+      "role": "CONDICAO",
+      "status": "CONFERIDO_FONTE",
+      "value": 1.0,
+      "unit_raw": null,
+      "unit_state": "DIMENSIONLESS",
+      "unit_source": null,
+      "page": 65,
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | One or two sides burning: 1",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:51:49+00:00",
+        "scope": "FULL",
+        "components": null
+      },
+      "classification": "OK",
+      "integrity_findings": [],
+      "semantic_flags": [],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 0,
+        "approved": 1
+      },
+      "proposals": []
+    },
+    {
+      "record_id": "BASS2-M1.flame_spread_rate",
+      "document_id": "NASA-TM-20210011385",
+      "experiment_id": "BASS2-M1",
+      "parameter": "flame_spread_rate",
+      "label_pt": "Velocidade de propagação da chama",
+      "role": "OBSERVAVEL",
+      "status": "CONFERIDO_FONTE",
+      "value": 0.071,
+      "unit_raw": "mm/s",
+      "unit_state": "PHYSICAL",
+      "unit_source": "NOT_CHECKED",
+      "page": 65,
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Spread rate, mm/s: 0.071",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:52:12+00:00",
+        "scope": "FULL",
+        "components": null
+      },
+      "classification": "OK",
+      "integrity_findings": [],
+      "semantic_flags": [],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 0,
+        "approved": 1
+      },
+      "proposals": []
+    },
+    {
+      "record_id": "BASS2-M1.material",
+      "document_id": "NASA-TM-20210011385",
+      "experiment_id": "BASS2-M1",
+      "parameter": "material",
+      "label_pt": "Material",
+      "role": "METADADO",
+      "status": "CONFERIDO_FONTE",
+      "value": "PMMA (polimetilmetacrilato; \"clear cast\")",
+      "unit_raw": null,
+      "unit_state": "NOT_APPLICABLE",
+      "unit_source": null,
+      "page": 64,
+      "quote": "A total of 20 PMMA flat samples were burnt during the BASS-II experimentation (Table 5.1).",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:52:36+00:00",
+        "scope": "FULL",
+        "components": null
+      },
+      "classification": "OK",
+      "integrity_findings": [],
+      "semantic_flags": [],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 0,
+        "approved": 1
+      },
+      "proposals": []
+    },
+    {
+      "record_id": "BASS2-M1.o2_final",
+      "document_id": "NASA-TM-20210011385",
+      "experiment_id": "BASS2-M1",
+      "parameter": "o2_final",
+      "label_pt": "Concentração final de O₂",
+      "role": "OBSERVAVEL",
+      "status": "CONFERIDO_FONTE",
+      "value": 21.9,
+      "unit_raw": "vol%",
+      "unit_state": "PHYSICAL",
+      "unit_source": "NOT_CHECKED",
+      "page": 65,
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Final O2, vol%: 21.9",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:52:28+00:00",
+        "scope": "FULL",
+        "components": null
+      },
+      "classification": "OK",
+      "integrity_findings": [],
+      "semantic_flags": [],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 0,
+        "approved": 1
+      },
+      "proposals": []
+    },
+    {
+      "record_id": "BASS2-M1.o2_initial",
+      "document_id": "NASA-TM-20210011385",
+      "experiment_id": "BASS2-M1",
+      "parameter": "o2_initial",
+      "label_pt": "Concentração inicial de O₂",
+      "role": "CONDICAO",
+      "status": "CONFERIDO_FONTE",
+      "value": 22.2,
+      "unit_raw": "vol%",
+      "unit_state": "PHYSICAL",
+      "unit_source": "NOT_CHECKED",
+      "page": 65,
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Initial O2, vol%: 22.2",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:52:04+00:00",
+        "scope": "FULL",
+        "components": null
+      },
+      "classification": "OK",
+      "integrity_findings": [],
+      "semantic_flags": [],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 0,
+        "approved": 1
+      },
+      "proposals": []
+    },
+    {
+      "record_id": "BASS2-M1.thickness",
+      "document_id": "NASA-TM-20210011385",
+      "experiment_id": "BASS2-M1",
+      "parameter": "thickness",
+      "label_pt": "Espessura da amostra",
+      "role": "CONDICAO",
+      "status": "CONFERIDO_FONTE",
+      "value": 1.0,
+      "unit_raw": "mm",
+      "unit_state": "PHYSICAL",
+      "unit_source": "NOT_CHECKED",
+      "page": 65,
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Thickness, mm: 1",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:51:26+00:00",
+        "scope": "FULL",
+        "components": null
+      },
+      "classification": "OK",
+      "integrity_findings": [],
+      "semantic_flags": [],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 0,
+        "approved": 1
+      },
+      "proposals": []
+    },
+    {
+      "record_id": "BASS2-M1.width",
+      "document_id": "NASA-TM-20210011385",
+      "experiment_id": "BASS2-M1",
+      "parameter": "width",
+      "label_pt": "Largura da amostra",
+      "role": "CONDICAO",
+      "status": "CONFERIDO_FONTE",
+      "value": 2.2,
+      "unit_raw": "cm",
+      "unit_state": "PHYSICAL",
+      "unit_source": "NOT_CHECKED",
+      "page": 65,
+      "quote": "TABLE 5.1. TWENTY BURNING AND SUPPRESSION OF SOLIDS-II (BASS-II) TESTS | Test no. M1 | Width, cm: 2.2",
+      "review": {
+        "reviewer": "Junior",
+        "reviewed_at": "2026-11-15T02:51:36+00:00",
+        "scope": "FULL",
+        "components": null
+      },
+      "classification": "OK",
+      "integrity_findings": [],
+      "semantic_flags": [],
+      "audit_anomalies": [],
+      "attempts": {
+        "refused": 0,
+        "approved": 1
+      },
+      "proposals": []
+    }
+  ],
+  "note_pt": "Nenhum registro foi alterado. A correção é uma ação humana explícita (Corrigir extração ou Reabrir revisão), que preserva o original e fica na trilha de auditoria.",
+  "runtime_check": {
+    "version": {
+      "app_version": "0.4.0-integrity",
+      "capabilities": [
+        "unit_info",
+        "integrity",
+        "review_preview",
+        "review_scope",
+        "reopen",
+        "gap_decisions",
+        "readiness",
+        "audit_integrity",
+        "record_context",
+        "condition"
+      ]
+    },
+    "openapi_version": "0.4.0-integrity",
+    "method": "FastAPI TestClient; local files; no external providers or executors"
+  },
+  "source_checks": [
+    {
+      "document_id": "NASA-TM-20210011385",
+      "expected_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+      "actual_sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+      "status": "MATCH"
+    },
+    {
+      "document_id": "DOC-3df76042e5be",
+      "expected_sha256": "3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101",
+      "actual_sha256": "3df76042e5be81972a703552973431e217d6bd7ed55a31d04fa1056e75dcc101",
+      "status": "MATCH"
+    }
+  ],
+  "gaps": [
+    {
+      "experiment_id": "BASS2-M1",
+      "gap_id": "GAP-BASS2-M1-sample_length",
+      "parameter": "sample_length",
+      "label_pt": "Comprimento da amostra",
+      "explanation_pt": "A Tabela 5.1 não informa o comprimento da amostra de M1.",
+      "purpose_blocked": [
+        "FDS_REPRODUCTION"
+      ],
+      "searched_in": [
+        "NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)",
+        "Tabela 5.1 (p. 57)"
+      ],
+      "origin": "CURADORIA",
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "BASS2-M1",
+      "gap_id": "GAP-BASS2-M1-sample_holder_substrate",
+      "parameter": "sample_holder_substrate",
+      "label_pt": "Suporte e substrato metálico da amostra",
+      "explanation_pt": "O texto da p. 58 menciona perda de calor para o substrato metálico em amostras de uma face e para o porta-amostra, sem material, dimensões ou posição.",
+      "purpose_blocked": [
+        "FDS_REPRODUCTION"
+      ],
+      "searched_in": [
+        "NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"
+      ],
+      "origin": "CURADORIA",
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "BASS2-M1",
+      "gap_id": "GAP-BASS2-M1-duct_geometry",
+      "parameter": "duct_geometry",
+      "label_pt": "Dimensões efetivas do duto",
+      "explanation_pt": "A §5.3 descreve um \"small flow duct\" sem dimensões; a §5.5 informa que o modelo histórico usou geometria \"approximate\" do duto.",
+      "purpose_blocked": [
+        "FDS_REPRODUCTION"
+      ],
+      "searched_in": [
+        "NASA-TM-20210011385 §5.3 (p. 56)",
+        "§5.5 (p. 60–61)"
+      ],
+      "origin": "CURADORIA",
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "BASS2-M1",
+      "gap_id": "GAP-BASS2-M1-ambient_pressure",
+      "parameter": "ambient_pressure",
+      "label_pt": "Pressão",
+      "explanation_pt": "Nenhuma pressão é informada para M1 no capítulo 5.",
+      "purpose_blocked": [
+        "FDS_REPRODUCTION"
+      ],
+      "searched_in": [
+        "NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"
+      ],
+      "origin": "CURADORIA",
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "BASS2-M1",
+      "gap_id": "GAP-BASS2-M1-ambient_temperature",
+      "parameter": "ambient_temperature",
+      "label_pt": "Temperatura ambiente/inicial",
+      "explanation_pt": "Nenhuma temperatura do gás ou da amostra é informada para M1 no capítulo 5.",
+      "purpose_blocked": [
+        "FDS_REPRODUCTION"
+      ],
+      "searched_in": [
+        "NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"
+      ],
+      "origin": "CURADORIA",
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "BASS2-M1",
+      "gap_id": "GAP-BASS2-M1-inlet_flow_profile",
+      "parameter": "inlet_flow_profile",
+      "label_pt": "Perfil espacial e temporal do escoamento de entrada",
+      "explanation_pt": "A §5.5 informa que o perfil foi medido em vários pontos e é \"quite irregular\", mas os valores não estão no relatório.",
+      "purpose_blocked": [
+        "FDS_REPRODUCTION"
+      ],
+      "searched_in": [
+        "NASA-TM-20210011385 §5.3 (p. 56)",
+        "§5.5 (p. 60)"
+      ],
+      "origin": "CURADORIA",
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "BASS2-M1",
+      "gap_id": "GAP-BASS2-M1-anemometer_location",
+      "parameter": "anemometer_location",
+      "label_pt": "Posição de medição do anemômetro",
+      "explanation_pt": "A §5.3 informa apenas que o anemômetro mede o ar que entra no duto; a posição exata não é dada.",
+      "purpose_blocked": [
+        "FDS_REPRODUCTION"
+      ],
+      "searched_in": [
+        "NASA-TM-20210011385 §5.3 (p. 56)"
+      ],
+      "origin": "CURADORIA",
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "BASS2-M1",
+      "gap_id": "GAP-BASS2-M1-ignition_procedure",
+      "parameter": "ignition_procedure",
+      "label_pt": "Procedimento, duração e fonte de ignição",
+      "explanation_pt": "A §5.3 menciona o ignitor e a estabilização da chama, sem potência nem duração para M1. A duração de ignição citada na §5.5 refere-se ao MODELO numérico, não ao experimento.",
+      "purpose_blocked": [
+        "FDS_REPRODUCTION"
+      ],
+      "searched_in": [
+        "NASA-TM-20210011385 §5.3 (p. 56)",
+        "§5.5 (p. 61)"
+      ],
+      "origin": "CURADORIA",
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "BASS2-M1",
+      "gap_id": "GAP-BASS2-M1-pmma_pyrolysis_properties",
+      "parameter": "pmma_pyrolysis_properties",
+      "label_pt": "Propriedades termoquímicas e de pirólise do PMMA",
+      "explanation_pt": "O capítulo 5 não lista propriedades do PMMA; os autores afirmam que precisam modificar a cinética química e as propriedades do material para melhorar o modelo (§5.1, §5.7).",
+      "purpose_blocked": [
+        "FDS_REPRODUCTION"
+      ],
+      "searched_in": [
+        "NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"
+      ],
+      "origin": "CURADORIA",
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "BASS2-M1",
+      "gap_id": "GAP-BASS2-M1-o2_time_profile",
+      "parameter": "o2_time_profile",
+      "label_pt": "Perfil temporal do O₂ durante o ensaio",
+      "explanation_pt": "A §5.4 informa que o O₂ só foi medido no início e no fim; o perfil intermediário é uma suposição linear dos autores, não uma medição.",
+      "purpose_blocked": [
+        "FDS_REPRODUCTION"
+      ],
+      "searched_in": [
+        "NASA-TM-20210011385 §5.4 (p. 60)"
+      ],
+      "origin": "CURADORIA",
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "BASS2-M1",
+      "gap_id": "GAP-BASS2-M1-measurement_uncertainty",
+      "parameter": "measurement_uncertainty",
+      "label_pt": "Incertezas de medição",
+      "explanation_pt": "Não há incertezas declaradas para os valores de M1 na Tabela 5.1 nem no texto do capítulo 5.",
+      "purpose_blocked": [
+        "FDS_REPRODUCTION",
+        "QUANTITATIVE_COMPARISON"
+      ],
+      "searched_in": [
+        "NASA-TM-20210011385 §5.1–§5.7 (p. 55–63; PDF 63–71)"
+      ],
+      "origin": "CURADORIA",
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "BASS2-M1",
+      "gap_id": "GAP-BASS2-M1-flame_front_tracking_method",
+      "parameter": "flame_front_tracking_method",
+      "label_pt": "Método de cálculo do avanço da frente de chama",
+      "explanation_pt": "Parcial: imagens e vídeos foram rastreados com software de rastreamento de imagens da NASA e os dados processados em planilha (§5.3); critério de frente, janela de ajuste e incerteza não são descritos.",
+      "purpose_blocked": [
+        "QUANTITATIVE_COMPARISON"
+      ],
+      "searched_in": [
+        "NASA-TM-20210011385 §5.1 (p. 55)",
+        "§5.3 (p. 56)"
+      ],
+      "origin": "CURADORIA",
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "gap_id": "GAP-DOC-3df76042e5be-E1-exact_fluid_volume",
+      "parameter": "exact_fluid_volume",
+      "label_pt": "exact fluid volume",
+      "explanation_pt": "The exact volume of liquid injected into each test cell is not specified in the text. (procurada apenas nas páginas lidas pela IA)",
+      "origin": "SUGERIDA_POR_IA",
+      "purpose_blocked": [],
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "gap_id": "GAP-DOC-3df76042e5be-E1-cell_dihedral_angle",
+      "parameter": "cell_dihedral_angle",
+      "label_pt": "cell dihedral angle",
+      "explanation_pt": "The specific vertex half-angle or dihedral angle of the rhombic test cells is not explicitly quantified in numbers within the text. (procurada apenas nas páginas lidas pela IA)",
+      "origin": "SUGERIDA_POR_IA",
+      "purpose_blocked": [],
+      "related_parameters": [
+        {
+          "record_id": "DOC-3df76042e5be-E1.dihedral_angle",
+          "label_pt": "Ângulo diedral",
+          "value": 65.0,
+          "unit": "deg",
+          "page": 18,
+          "quote": "(a) Filling of the right-hand cells with dihedral angles 2a = 65 ° (left) and 2_ = 60 ° (right).",
+          "scope_differs": true,
+          "relation": "SAME_QUANTITY_SCOPE_TO_CONFIRM",
+          "explanation_pt": "Mesma grandeza (“angle dihedral”). A lacuna cita um escopo (“cell dihedral angle”) e o parâmetro “dihedral angle” traz um valor pontual (p. 18). Verifique se o valor cobre TODOS os objetos a que a lacuna se refere; se cobrir só parte, a cobertura é parcial e a lacuna continua aberta."
+        }
+      ],
+      "decision": null,
+      "coverage_state": "POSSIVEL_SOBREPOSICAO"
+    },
+    {
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "gap_id": "GAP-DOC-3df76042e5be-E1-vessel_initial_fill_volume",
+      "parameter": "vessel_initial_fill_volume",
+      "label_pt": "vessel initial fill volume",
+      "explanation_pt": "The initial volume or fill level of the test cells is not explicitly stated in the provided text. (procurada apenas nas páginas lidas pela IA)",
+      "origin": "SUGERIDA_POR_IA",
+      "purpose_blocked": [],
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "gap_id": "GAP-DOC-3df76042e5be-E1-gravitational_acceleration_level",
+      "parameter": "gravitational_acceleration_level",
+      "label_pt": "gravitational acceleration level",
+      "explanation_pt": "The exact residual g-level aboard the IML-2 flight for the DYLCO experiment is not specified in these pages. (procurada apenas nas páginas lidas pela IA)",
+      "origin": "SUGERIDA_POR_IA",
+      "purpose_blocked": [],
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "gap_id": "GAP-DOC-3df76042e5be-E1-test_fluid_name",
+      "parameter": "test_fluid_name",
+      "label_pt": "test fluid name",
+      "explanation_pt": "The exact chemical name or designation of the test fluid is not mentioned in these pages. (procurada apenas nas páginas lidas pela IA)",
+      "origin": "SUGERIDA_POR_IA",
+      "purpose_blocked": [],
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    },
+    {
+      "experiment_id": "DOC-3df76042e5be-E1",
+      "gap_id": "GAP-DOC-3df76042e5be-E1-container_dimensions",
+      "parameter": "container_dimensions",
+      "label_pt": "container dimensions",
+      "explanation_pt": "Specific numerical dimensions of the containers/wedges tested are not provided. (procurada apenas nas páginas lidas pela IA)",
+      "origin": "SUGERIDA_POR_IA",
+      "purpose_blocked": [],
+      "related_parameters": [],
+      "decision": null,
+      "coverage_state": "ABERTA"
+    }
+  ],
+  "audit_events_sha256": "c05b4c125449e156aeb8a5e4a6e2e505f34d83e822b4803a0abf7c9206e939c6",
+  "dataset_version": "sha256:165bbebf4c8e12a7e33e8629e30327a0cf8bde502e8f23f02e0af26d630ecaeb",
+  "review_policy": "Diagnostic only. No status, value, unit, qualifier or gap decision was changed. Corrections and confirmations require explicit human review."
+}

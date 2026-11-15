@@ -199,13 +199,16 @@ def test_catalog_lists_reference_and_imported_documents_side_by_side(client, tmp
 
 
 def test_reference_experiment_detail_keeps_review_state(client):
+    expected = {r.record_id: r.status for r in Services.store().records_for("BASS2-M1")}
+    reviewed = sum(s in ("CONFERIDO_FONTE", "APROVADO_MODELO") for s in expected.values())
     exp = client.get("/api/experiments/BASS2-M1").json()["data"]
-    assert exp["review"]["total"] == 9 and exp["review"]["reviewed"] == 0 and exp["review"]["gaps"] == 12
-    assert all(p["status"] == "EXTRAIDO_NAO_REVISADO" for p in exp["parameters"])
+    assert exp["review"]["total"] == 9 and exp["review"]["reviewed"] == reviewed and exp["review"]["gaps"] == 12
+    assert {p["record_id"]: p["status"] for p in exp["parameters"]} == expected
     assert client.get("/api/experiments/NAO-EXISTE").status_code == 404
 
 
 def test_enrichment_endpoint_on_reference_document_and_404_for_unknown(client):
+    before = client.get("/api/experiments/BASS2-M1").json()["data"]["parameters"]
     r = client.post("/api/documents/NASA-TM-20210011385/enrichment")
     assert r.status_code == 200
     data = r.json()["data"]
@@ -213,8 +216,8 @@ def test_enrichment_endpoint_on_reference_document_and_404_for_unknown(client):
     assert {m["source"]: m["state"] for m in data["matches"]}["NTRS"] == "MATCH_CONFIRMED"
     assert client.get("/api/documents/NASA-TM-20210011385/enrichment").status_code == 200
     assert client.post("/api/documents/DOC-nao-existe/enrichment").status_code == 404
-    assert all(p["status"] == "EXTRAIDO_NAO_REVISADO"
-               for p in client.get("/api/experiments/BASS2-M1").json()["data"]["parameters"])
+    after = client.get("/api/experiments/BASS2-M1").json()["data"]["parameters"]
+    assert after == before  # enriquecimento nunca promove nem rebaixa a curadoria existente
 
 
 def test_literal_check_tolerates_line_end_hyphenation_but_not_paraphrase():

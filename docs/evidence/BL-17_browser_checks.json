@@ -1,0 +1,63 @@
+{
+  "checks": [
+    {
+      "check": "Importação real do PDF local sem Gemini, preservando nove conferidos",
+      "result": "PASS"
+    },
+    {
+      "check": "Resumo: nove conferidos e bloqueio físico antes de iniciar",
+      "result": "PASS"
+    },
+    {
+      "check": "Uma pendência principal com cinco explicações",
+      "result": "PASS"
+    },
+    {
+      "check": "Proposta registrada sem resolução automática",
+      "result": "PASS"
+    },
+    {
+      "check": "Resposta preservada ao retornar",
+      "result": "PASS"
+    },
+    {
+      "check": "Retomada do servidor após recarregar a página",
+      "result": "PASS"
+    },
+    {
+      "check": "Modal móvel sem transbordamento horizontal",
+      "result": "PASS"
+    },
+    {
+      "check": "Navegação móvel permanece visível",
+      "result": "PASS"
+    },
+    {
+      "check": "Resumo das decisões mantém PMMA bloqueado",
+      "result": "PASS"
+    },
+    {
+      "check": "Preparação consome decisões sem quatro etapas nem novo formulário",
+      "result": "PASS"
+    },
+    {
+      "check": "M1 nunca oferece executar propano como seu modelo",
+      "result": "PASS"
+    },
+    {
+      "check": "Cinco dimensões compactas com ação para cada bloqueio",
+      "result": "PASS"
+    },
+    {
+      "check": "Ação de cobertura abre diretamente a revisão guiada",
+      "result": "PASS"
+    },
+    {
+      "check": "Sem exceção JavaScript no navegador",
+      "result": "PASS"
+    }
+  ],
+  "javascript_errors": [],
+  "workspace": "tmp/bl17-browser-workspace-* (isolated)",
+  "scientific_validity": "SYNTHETIC_UI_TEST_ONLY"
+}
