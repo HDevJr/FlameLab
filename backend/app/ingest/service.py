@@ -1,19 +1,23 @@
-"""Importação de artigos em PDF: recebe, calcula o hash, identifica, consulta fontes NASA,
-verifica a procedência e (se a IA estiver ligada) propõe parâmetros para revisão.
+"""Importação de artigos em PDF: recebe, identifica, verifica a origem NASA, lê, extrai (em lotes),
+pesquisa fontes complementares, compara e prepara o relatório de análise.
 
-Cada etapa grava seu estado real em `var/imports/<id>/import.json`. A consulta NASA e a IA
-são opcionais: se falharem, a etapa fica FAILED/SKIPPED e o artigo continua disponível.
+Cada etapa grava seu estado REAL em `var/imports/<id>/import.json`, com resumo legível, detalhes
+técnicos, limitação (se houver) e tempo medido. Não há percentuais inventados. A consulta NASA e a
+IA são opcionais: se falharem, a etapa fica FAILED/SKIPPED e o artigo continua disponível.
 """
 
 from __future__ import annotations
 
+import os
 import re
 import threading
+import time
 from pathlib import Path
 from typing import Any, BinaryIO, Callable
 
 from backend.app import workspace
-from backend.app.assistant.provider import LLMProvider, ProviderError
+from backend.app.analysis import build_analysis, coverage_summary
+from backend.app.assistant.provider import LLMProvider
 from backend.app.catalog.service import PROVENANCE_LABELS, Catalog
 from backend.app.dataset.store import DatasetStore
 from backend.app.ingest import extraction
@@ -22,24 +26,32 @@ from backend.app.ingest.pdf import (
 )
 from backend.app.nasa.clients.http import SourceError, Transport
 from backend.app.nasa.enrichment.service import EnrichmentService
-from backend.app.nasa.models import EnrichmentReport, MatchState
+from backend.app.nasa.models import MatchState, SourceMatch
 from backend.app.nasa.provenance.log import utc_now
 
 STEPS = [
-    ("RECEIVE", "Recebimento do arquivo"),
-    ("HASH", "Cálculo do SHA-256"),
-    ("PARSE", "Leitura do PDF e identificação"),
-    ("NASA_LOOKUP", "Consulta às fontes NASA"),
-    ("PROVENANCE", "Verificação de procedência NASA"),
-    ("EXTRACT", "Extração de parâmetros"),
+    ("RECEIVE", "Arquivo recebido"),
+    ("IDENTIFY", "Identificando o documento"),
+    ("ORIGIN", "Verificando a origem NASA"),
+    ("READ", "Lendo o PDF"),
+    ("EXTRACT", "Extraindo experimentos e parâmetros"),
+    ("SOURCES", "Pesquisando fontes complementares NASA"),
+    ("COMPARE", "Comparando informações"),
+    ("REPORT", "Preparando o relatório de análise"),
 ]
 NTRS_FILE_MAX = 200 * 1024 * 1024
 
 
-def verify_provenance(transport: Transport, report: EnrichmentReport | None, local_sha256: str) -> dict[str, Any]:
+def max_batches_from_env() -> int:
+    try:
+        return max(1, min(40, int(os.environ.get("FLAMELAB_EXTRACT_MAX_BATCHES", extraction.DEFAULT_MAX_BATCHES))))
+    except ValueError:
+        return extraction.DEFAULT_MAX_BATCHES
+
+
+def verify_provenance(transport: Transport, ntrs: SourceMatch | None, local_sha256: str) -> dict[str, Any]:
     """Procedência NASA: só é VERIFIED quando o arquivo é idêntico ao que o NTRS distribui.
     Texto ou aparência do PDF nunca bastam."""
-    ntrs = next((m for m in (report.matches if report else []) if m.source == "NTRS"), None)
     base = {"checked_at": utc_now(), "ntrs_id": None, "ntrs_url": None, "local_sha256": local_sha256}
     if ntrs is None or ntrs.state not in (MatchState.MATCH_CONFIRMED, MatchState.MATCH_CANDIDATE):
         reason = ("O NTRS não respondeu." if ntrs and ntrs.state == MatchState.SOURCE_UNAVAILABLE
@@ -69,13 +81,19 @@ def verify_provenance(transport: Transport, report: EnrichmentReport | None, loc
 
 
 class ImportService:
-    def __init__(self, store: DatasetStore, transport_factory: Callable[[], Transport],
-                 provider: LLMProvider | None, run_async: bool = True):
-        self._store = store
+    def __init__(self, store: "DatasetStore | Callable[[], DatasetStore]", transport_factory: Callable[[], Transport],
+                 provider: LLMProvider | None, run_async: bool = True,
+                 compat: Callable[[str], dict | None] | None = None, max_batches: int | None = None,
+                 quota_wait_s: float = extraction.QUOTA_RETRY_WAIT_S):
+        self._store_src = store if callable(store) else (lambda: store)
         self._transport_factory = transport_factory
         self._provider = provider
         self._async = run_async
+        self._compat = compat or (lambda _id: None)
+        self._max_batches = max_batches if max_batches is not None else max_batches_from_env()
+        self._quota_wait_s = quota_wait_s
         self._lock = threading.Lock()
+        self._t0: dict[tuple[str, str], float] = {}
 
     # ---------------------------------------------------------------- armazenamento
     @staticmethod
@@ -93,10 +111,33 @@ class ImportService:
         with self._lock:
             workspace.write_json(self._dir(record["import_id"]) / "import.json", record)
 
-    def _step(self, record: dict[str, Any], key: str, state: str, detail: str | None = None) -> None:
+    def _step(self, record: dict[str, Any], key: str, state: str, summary: str | None = None,
+              technical: list[str] | None = None, limitation: str | None = None,
+              duration_ms: int | None = None) -> None:
+        """Atualiza uma etapa. O tempo é medido entre RUNNING e o estado final (ou informado)."""
         for step in record["steps"]:
-            if step["key"] == key:
-                step.update(state=state, detail_pt=detail, at=utc_now())
+            if step["key"] != key:
+                continue
+            tk = (record["import_id"], key)
+            if state == "RUNNING":
+                if step["state"] != "RUNNING":  # atualizações de resumo não reiniciam o cronômetro
+                    self._t0[tk] = time.monotonic()
+                    step["started_at"] = utc_now()
+                    step["finished_at"] = None
+                    step["duration_ms"] = None
+            elif state in ("DONE", "FAILED", "SKIPPED"):
+                t0 = self._t0.pop(tk, None)
+                if duration_ms is None and t0 is not None:
+                    duration_ms = int((time.monotonic() - t0) * 1000)
+                step["finished_at"] = utc_now()
+                step["duration_ms"] = duration_ms if duration_ms is not None else step.get("duration_ms") or 0
+                step["started_at"] = step.get("started_at") or step["finished_at"]
+            step["state"] = state
+            if summary is not None:
+                step["summary_pt"] = summary
+            if technical is not None:
+                step["technical"] = technical
+            step["limitation_pt"] = limitation
         self._save(record)
 
     # ---------------------------------------------------------------- entrada
@@ -120,11 +161,15 @@ class ImportService:
             raise error
 
     def create(self, filename: str, stream: BinaryIO) -> dict[str, Any]:
+        t_start = time.monotonic()
         tmp = workspace.area("incoming") / f"{threading.get_ident()}-{utc_now().replace(':', '')}.part"
         try:
             self._write_upload(stream, tmp)
+            receive_ms = int((time.monotonic() - t_start) * 1000)
+            t1 = time.monotonic()
             sha = sha256_bytes_file(tmp)
             info = inspect_pdf(tmp)
+            identify_ms = int((time.monotonic() - t1) * 1000)
             size = tmp.stat().st_size
         except PdfRejected:
             tmp.unlink(missing_ok=True)
@@ -134,105 +179,200 @@ class ImportService:
         folder.mkdir(parents=True, exist_ok=True)
         tmp.replace(folder / "source.pdf")
 
-        curated = next((d for d in self._store.documents.values() if d.sha256 == sha), None)
+        store = self._store_src()
+        curated = next((d for d in store.documents.values() if d.sha256 == sha), None)
         document_id = curated.document_id if curated else "DOC-" + sha[:12]
         display = re.sub(r"[^\w .()\-]", "_", Path(filename or "arquivo.pdf").name)[:120]
         record = {
             "import_id": import_id, "filename": display, "size_bytes": size, "sha256": sha,
             "received_at": utc_now(), "status": "PROCESSING",
-            "steps": [{"key": k, "label_pt": label, "state": "PENDING", "detail_pt": None, "at": None}
+            "steps": [{"key": k, "label_pt": label, "state": "PENDING", "summary_pt": None, "technical": [],
+                       "limitation_pt": None, "started_at": None, "finished_at": None, "duration_ms": None}
                       for k, label in STEPS],
             "document": {
                 "document_id": document_id, "curated": curated is not None,
                 "title": curated.title if curated else info.title, "page_count": info.page_count,
                 "has_text_layer": info.has_text_layer, "year": info.year,
-                "identifiers": {"report_numbers": info.report_numbers, "ntrs_ids": info.ntrs_ids,
-                                "dois": info.dois},
+                "identifiers": {"report_numbers": info.report_numbers, "ntrs_ids": info.ntrs_ids, "dois": info.dois},
             },
-            "nasa_provenance": None, "experiments": [], "extraction": None, "warnings_pt": [],
+            "nasa_provenance": None, "experiments": [], "extraction": None, "coverage": None,
+            "warnings_pt": [], "metrics": {"started_at": utc_now(), "total_ms": None},
         }
-        self._step(record, "RECEIVE", "DONE", f"{size} bytes recebidos.")
-        self._step(record, "HASH", "DONE", sha)
+        self._step(record, "RECEIVE", "DONE", f"Arquivo recebido: {display} ({size / 1e6:.1f} MB).",
+                   [f"nome: {display}", f"tamanho: {size} bytes", f"limite de upload: {MAX_UPLOAD_BYTES} bytes"],
+                   duration_ms=receive_ms)
         found = info.report_numbers + info.ntrs_ids + info.dois
-        self._step(record, "PARSE", "DONE",
-                   f"{info.page_count} páginas. " + (f"Identificadores no texto: {', '.join(found)}."
-                                                     if found else "Nenhum identificador forte no texto."))
+        title = record["document"]["title"]
+        self._step(record, "IDENTIFY", "DONE",
+                   (f"Título: {title}. " if title else "Título não identificado. ")
+                   + (f"Identificadores no texto: {', '.join(found)}." if found else "Nenhum identificador NASA no texto."),
+                   [f"SHA-256: {sha}", f"{info.page_count} páginas", f"camada de texto: {'sim' if info.has_text_layer else 'não'}",
+                    f"identificadores: {', '.join(found) or 'nenhum'}",
+                    "O SHA-256 é a impressão digital do arquivo: dois arquivos iguais têm o mesmo valor."],
+                   duration_ms=identify_ms)
         if self._async:
-            threading.Thread(target=self._pipeline, args=(record,), daemon=True).start()
+            threading.Thread(target=self._pipeline, args=(record, t_start), daemon=True).start()
         else:
-            self._pipeline(record)
+            self._pipeline(record, t_start)
         return record
 
-    # ---------------------------------------------------------------- etapas opcionais
-    def _pipeline(self, record: dict[str, Any]) -> None:
+    # ---------------------------------------------------------------- pipeline
+    def _pipeline(self, record: dict[str, Any], t_start: float) -> None:
         try:
-            report = self._nasa_lookup(record)
-            self._provenance(record, report)
-            self._extract(record)
+            session = self._origin(record)
+            pages = self._read(record)
+            self._extract(record, pages)
+            self._sources(record, session)
+            report = self._compare(record, session)
+            self._report(record, report)
             record["status"] = "DONE"
-        except Exception:  # noqa: BLE001 — falha inesperada fica registrada, sem derrubar o servidor
+        except Exception:  # noqa: BLE001 - falha inesperada fica registrada, sem derrubar o servidor
             record["status"] = "FAILED"
             record["warnings_pt"].append("Falha inesperada no processamento; consulte os logs do servidor.")
+        record["metrics"]["total_ms"] = int((time.monotonic() - t_start) * 1000)
+        record["metrics"]["finished_at"] = utc_now()
+        record["metrics"]["per_step_ms"] = {s["key"]: s["duration_ms"] for s in record["steps"]}
         self._save(record)
 
-    def _nasa_lookup(self, record: dict[str, Any]) -> EnrichmentReport | None:
-        self._step(record, "NASA_LOOKUP", "RUNNING")
-        catalog = Catalog(self._store)
-        document_id = record["document"]["document_id"]
-        meta = catalog.document_meta(document_id)
-        report = EnrichmentService(self._transport_factory()).enrich(meta, catalog.flat_parameters(document_id))
-        workspace.write_json(workspace.area("enrichment") / f"{document_id}.json", report.model_dump(mode="json"))
-        down = [m.source for m in report.matches if m.state == MatchState.SOURCE_UNAVAILABLE]
-        found = [f"{m.source}: {m.source_record_id}" for m in report.matches
-                 if m.state in (MatchState.MATCH_CONFIRMED, MatchState.MATCH_CANDIDATE)]
-        if down and len(down) == len(report.matches):
-            self._step(record, "NASA_LOOKUP", "FAILED",
-                       "Fontes NASA indisponíveis. Você pode prosseguir com os dados do artigo.")
-        else:
-            detail = ("Correspondências: " + "; ".join(found) + ".") if found else "Nenhuma correspondência encontrada."
-            if down:
-                detail += f" Indisponíveis: {', '.join(down)}."
-            self._step(record, "NASA_LOOKUP", "DONE", detail)
-        ntrs = next((m for m in report.matches if m.source == "NTRS"), None)
-        if ntrs and ntrs.title and not record["document"]["curated"] and not record["document"]["title"]:
+    def _catalog(self) -> Catalog:
+        return Catalog(self._store_src)
+
+    def _origin(self, record: dict[str, Any]):
+        self._step(record, "ORIGIN", "RUNNING", "Consultando o NTRS e comparando o arquivo com o publicado…")
+        meta = self._catalog().document_meta(record["document"]["document_id"])
+        transport = self._transport_factory()
+        session = EnrichmentService(transport).session(meta)
+        ntrs = session.origin()
+        prov = verify_provenance(transport, ntrs, record["sha256"])
+        record["nasa_provenance"] = prov
+        workspace.write_json(workspace.area("provenance") / f"{record['document']['document_id']}.json", prov)
+        if ntrs.title and not record["document"]["curated"] and not record["document"]["title"]:
             record["document"]["title"] = ntrs.title
-        return report
+        state = "FAILED" if prov["state"] == "MISMATCH" else "DONE"
+        limitation = None if prov["state"] == "VERIFIED" else (
+            "A origem NASA NÃO foi verificada; o documento não é tratado como publicação NASA validada.")
+        self._step(record, "ORIGIN", state, prov["label_pt"], prov["reasons_pt"], limitation)
+        return session
 
-    def _provenance(self, record: dict[str, Any], report: EnrichmentReport | None) -> None:
-        self._step(record, "PROVENANCE", "RUNNING")
-        result = verify_provenance(self._transport_factory(), report, record["sha256"])
-        record["nasa_provenance"] = result
-        workspace.write_json(workspace.area("provenance") / f"{record['document']['document_id']}.json", result)
-        self._step(record, "PROVENANCE", "DONE" if result["state"] == "VERIFIED" else "FAILED"
-                   if result["state"] == "MISMATCH" else "DONE", result["label_pt"])
-
-    def _extract(self, record: dict[str, Any]) -> None:
+    def _read(self, record: dict[str, Any]) -> dict[int, str] | None:
+        self._step(record, "READ", "RUNNING", "Extraindo o texto de cada página…")
         doc = record["document"]
+        pages = page_texts(self._dir(record["import_id"]) / "source.pdf")
+        with_text = sum(1 for t in pages.values() if t.strip())
+        doc["pages_with_text"] = with_text
+        if not doc["has_text_layer"] or with_text == 0:
+            self._step(record, "READ", "DONE", f"{len(pages)} páginas; nenhuma com texto selecionável.",
+                       [f"{len(pages)} páginas, {with_text} com texto"],
+                       "O PDF não tem camada de texto (OCR não é feito nesta versão): nada pode ser extraído.")
+            return None
+        empty = len(pages) - with_text
+        self._step(record, "READ", "DONE", f"{len(pages)} páginas lidas; {with_text} com texto."
+                   + (f" {empty} sem texto (figuras ou imagens)." if empty else ""),
+                   [f"{len(pages)} páginas, {with_text} com texto, {sum(len(t) for t in pages.values())} caracteres"],
+                   None if not empty else f"{empty} página(s) sem texto não podem ser lidas (sem OCR).")
+        return pages
+
+    def _extract(self, record: dict[str, Any], pages: dict[int, str] | None) -> None:
+        doc = record["document"]
+        total = doc["page_count"]
         if doc["curated"]:
+            record["coverage"] = None
             self._step(record, "EXTRACT", "SKIPPED",
-                       "Documento já presente no dataset curado; os registros existentes são usados.")
+                       "Este documento já está no dataset curado; os registros da equipe são usados.",
+                       ["Nenhuma chamada à IA foi feita para este documento."])
             return
-        if not doc["has_text_layer"]:
-            self._step(record, "EXTRACT", "SKIPPED", "O PDF não tem camada de texto (OCR não é feito nesta versão).")
+        if pages is None:
+            record["coverage"] = self._none_coverage(total, "o PDF não tem camada de texto")
+            self._step(record, "EXTRACT", "SKIPPED", "Sem texto para ler.", None, "Nada foi extraído.")
             return
         if self._provider is None:
+            record["coverage"] = self._none_coverage(total, "IA desligada ou não configurada")
             self._step(record, "EXTRACT", "SKIPPED",
-                       "IA desligada ou não configurada. O artigo fica disponível sem parâmetros extraídos.")
+                       "IA desligada ou não configurada. O artigo fica disponível sem parâmetros extraídos.", None,
+                       "Nenhuma página foi lida por IA.")
             return
-        self._step(record, "EXTRACT", "RUNNING")
-        pages = page_texts(self._dir(record["import_id"]) / "source.pdf", 1, extraction.MAX_PAGES_SENT)
-        try:
-            result = extraction.run_extraction(self._provider, pages, doc["document_id"], utc_now())
-        except ProviderError as exc:
-            self._step(record, "EXTRACT", "FAILED", f"A IA não respondeu ({exc.kind.value}). Nenhum valor foi criado.")
-            return
+        self._step(record, "EXTRACT", "RUNNING", "Preparando os lotes de páginas…")
+
+        def on_batch(i: int, n: int, numbers: list[int]) -> None:
+            self._step(record, "EXTRACT", "RUNNING",
+                       f"Lote {i} de {n}: IA lendo as páginas {extraction.ranges(numbers)}…")
+
+        def on_wait(i: int, seconds: float) -> None:
+            self._step(record, "EXTRACT", "RUNNING",
+                       f"Lote {i}: limite de uso da IA atingido; aguardando {seconds:.0f} s antes de tentar de novo…")
+
+        result = extraction.run_batched(self._provider, pages, doc["document_id"], utc_now(),
+                                        max_batches=self._max_batches, on_batch=on_batch, on_wait=on_wait,
+                                        quota_wait_s=self._quota_wait_s)
+        cov = result["coverage"]
+        cov["summary_pt"] = coverage_summary(cov)
+        record["coverage"] = cov
         record["experiments"] = result["experiments"]
-        record["extraction"] = {k: result[k] for k in ("model", "pages_sent", "rejected", "prompt_version")
-                                if k in result}
+        record["extraction"] = {k: result[k] for k in ("model", "rejected", "prompt_version", "batches",
+                                                         "batches_planned_total")}
         accepted = sum(len(e["parameters"]) for e in result["experiments"])
-        if doc["page_count"] > len(result["pages_sent"]):
-            record["warnings_pt"].append(
-                f"A extração leu {len(result['pages_sent'])} de {doc['page_count']} páginas nesta versão.")
-        self._step(record, "EXTRACT", "DONE",
-                   f"{len(result['experiments'])} experimento(s), {accepted} parâmetro(s) com citação literal "
-                   f"conferida, {len(result['rejected'])} proposta(s) descartada(s). Tudo aguarda revisão humana.")
+        technical = [f"modelo: {result['model']}", f"prompt: {result['prompt_version']}",
+                     f"lotes: {len(result['batches'])} executado(s) de {result['batches_planned_total']} planejado(s)"]
+        for b in result["batches"]:
+            tok = (b.get("usage") or {}).get("total_tokens")
+            technical.append(
+                f"lote {b['batch']}: páginas {b['pages']}, {b['chars']} caracteres, {b['duration_ms']} ms, "
+                f"{b['accepted']} aceito(s), {b['rejected']} descartado(s)"
+                + (f", {tok} tokens" if tok else "") + (f", esperou {b['waited_s']:.0f} s (limite de uso)" if b.get("waited_s") else "")
+                + (f", ERRO {b['error']}" if b.get("error") else ""))
+        technical.append(f"descartes: {len(result['rejected'])} (citação não literal, valor fora da citação ou página inválida)")
+        limitation = cov["summary_pt"] if cov["mode"] != "AI_FULL" else None
+        state = "FAILED" if cov["mode"] == "NONE" else "DONE"
+        self._step(record, "EXTRACT", state,
+                   f"{len(result['experiments'])} experimento(s) e {accepted} parâmetro(s) com citação literal "
+                   f"conferida pelo código; {len(result['rejected'])} proposta(s) descartada(s). {cov['summary_pt']} "
+                   "Tudo aguarda revisão humana.", technical, limitation)
+        if cov["mode"] == "AI_PARTIAL":
+            record["warnings_pt"].append(cov["summary_pt"])
+
+    @staticmethod
+    def _none_coverage(total: int, why: str) -> dict[str, Any]:
+        return {"mode": "NONE", "total_pages": total, "pages_processed": [], "processed_ranges": "",
+                "pages_not_processed": [], "not_processed_ranges": "", "pages_without_text": [],
+                "without_text_ranges": "", "reasons_pt": [why], "batches": [],
+                "summary_pt": f"A IA não leu nenhuma página ({why})."}
+
+    def _sources(self, record: dict[str, Any], session) -> None:
+        self._step(record, "SOURCES", "RUNNING", "Pesquisando documentos relacionados, o PSI e o TechPort…")
+        session.sources()
+        names = {"PSI": session.psi_match, "TechPort": session.techport_match}
+        down = [n for n, m in names.items() if m.state == MatchState.SOURCE_UNAVAILABLE]
+        parts = [f"{n}: {m.state.value}" + (f" ({m.source_record_id})" if m.source_record_id else "")
+                 for n, m in names.items()]
+        summary = "; ".join(parts) + f"; {len(session.related)} documento(s) possivelmente relacionado(s)."
+        technical = [r for m in names.values() for r in m.reasons_pt] + [f"{len(session.log.operations)} chamada(s) de API"]
+        if len(down) == len(names):
+            self._step(record, "SOURCES", "FAILED", "Fontes NASA indisponíveis.", technical,
+                       "Você pode prosseguir com os dados do artigo; a consulta pode ser repetida.")
+        else:
+            self._step(record, "SOURCES", "DONE", summary, technical,
+                       f"Indisponíveis: {', '.join(down)}." if down else None)
+
+    def _compare(self, record: dict[str, Any], session):
+        self._step(record, "COMPARE", "RUNNING", "Comparando metadados e parâmetros entre as fontes…")
+        catalog = self._catalog()
+        report = session.compare(catalog.flat_parameters(record["document"]["document_id"]))
+        workspace.write_json(workspace.area("enrichment") / f"{record['document']['document_id']}.json",
+                             report.model_dump(mode="json"))
+        conflicts = [r for r in report.records if r.state == MatchState.CONFLICT]
+        compared = [r for r in report.records if r.scope == "DOCUMENT_METADATA"]
+        self._step(record, "COMPARE", "DONE",
+                   f"{len(compared)} campo(s) de metadados comparado(s); {len(conflicts)} divergência(s). "
+                   "Os valores do artigo não foram alterados nem promovidos.",
+                   [f"{r.label_pt}: {r.divergence_pt}" for r in conflicts] or ["sem divergências de metadados"],
+                   None)
+        return report
+
+    def _report(self, record: dict[str, Any], _report) -> None:
+        self._step(record, "REPORT", "RUNNING", "Consolidando o resumo da análise…")
+        self._save(record)  # o resumo lê o registro do disco
+        analysis = build_analysis(self._catalog(), record["document"]["document_id"], self._compat)
+        if analysis is not None:
+            workspace.write_json(workspace.area("analysis") / f"{record['document']['document_id']}.json", analysis)
+        self._step(record, "REPORT", "DONE", "Resumo da análise pronto.",
+                   [f"documento: {record['document']['document_id']}"])

@@ -1,7 +1,8 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { ApiError } from "./api";
-import type { Provenance } from "./api";
+import type { Provenance as ProvenanceT, Step } from "./api";
+import { GLOSSARY, elapsedMs, formatDuration } from "./lib";
 
 export type Tone = "ok" | "warn" | "bad" | "info" | "muted";
 
@@ -9,10 +10,17 @@ export function Badge({ tone = "muted", children, title }: { tone?: Tone; childr
   return <span className={`badge ${tone}`} title={title}>{children}</span>;
 }
 
+/** Termo técnico com explicação em linguagem simples (abre ao clicar ou passar o mouse). */
+export function Term({ k, children }: { k: keyof typeof GLOSSARY | string; children: ReactNode }) {
+  const text = GLOSSARY[k];
+  if (!text) return <>{children}</>;
+  return <abbr className="term" title={text} tabIndex={0}>{children}<span className="q" aria-label={`O que é: ${text}`}>?</span></abbr>;
+}
+
 /** Distingue dados reais, em revisão, de teste e demonstrativos (exigência do protótipo). */
 export function DataKind({ kind }: { kind: "REAL" | "REVISAO" | "TESTE" | "DEMO" }) {
   const map = {
-    REAL: ["ok", "Dado real"], REVISAO: ["warn", "Em revisão"], TESTE: ["info", "Teste de integração"], DEMO: ["bad", "Demonstrativo"],
+    REAL: ["ok", "Dado conferido"], REVISAO: ["warn", "Em revisão"], TESTE: ["info", "Teste de integração"], DEMO: ["bad", "Executor simulado (teste)"],
   } as const;
   return <Badge tone={map[kind][0]}>{map[kind][1]}</Badge>;
 }
@@ -22,9 +30,10 @@ export function Layout({ children }: { children: ReactNode }) {
     <>
       <header className="top">
         <Link to="/" className="brand">🔥 FlameLab <small>protótipo navegável</small></Link>
-        <nav>
-          <NavLink to="/" end>Biblioteca</NavLink>
+        <nav aria-label="Navegação principal">
+          <NavLink to="/" end>Experimentos NASA</NavLink>
           <NavLink to="/importar">Importar artigo</NavLink>
+          <NavLink to="/demonstracao-fds">Demonstração FDS</NavLink>
           <NavLink to="/execucoes">Execuções</NavLink>
         </nav>
       </header>
@@ -64,22 +73,47 @@ export function ErrorBox({ error }: { error: { message: string; code?: string } 
   return <div className="box bad" role="alert"><strong>Não foi possível concluir.</strong> {error.message}{error.code ? <small> ({error.code})</small> : null}</div>;
 }
 
-export function Provenance({ p }: { p: Provenance }) {
+export function Provenance({ p }: { p: ProvenanceT }) {
   const tone = p.state === "VERIFIED" ? "ok" : p.state === "MISMATCH" ? "bad" : p.state === "CANDIDATE" ? "warn" : "muted";
   return <Badge tone={tone} title={p.reasons_pt.join(" ")}>{p.label_pt}</Badge>;
 }
 
-export function Steps({ steps }: { steps: { key: string; label: string; state: string; detail?: string | null }[] }) {
-  const icon: Record<string, string> = { DONE: "✔", RUNNING: "⏳", FAILED: "✖", SKIPPED: "⤼", PENDING: "○" };
+/** Relógio que reavalia a cada segundo enquanto `active` (para tempo decorrido real, sem percentual inventado). */
+export function useNow(active: boolean): number {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!active) return;
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, [active]);
+  return now;
+}
+
+const ICON: Record<string, string> = { DONE: "✔", RUNNING: "⏳", FAILED: "✖", SKIPPED: "⤼", PENDING: "○" };
+const STATE_TEXT: Record<string, string> = { DONE: "concluída", RUNNING: "em andamento", FAILED: "falhou", SKIPPED: "não executada", PENDING: "pendente" };
+
+/** Etapas do processamento: estado real, resumo, limitação e detalhes técnicos expansíveis. */
+export function StepList({ steps }: { steps: Step[] }) {
+  const running = steps.some((s) => s.state === "RUNNING");
+  const now = useNow(running);
   return (
     <ol className="steps">
-      {steps.map((s) => (
-        <li key={s.key} className={s.state.toLowerCase()}>
-          <span className="ico">{icon[s.state] ?? "○"}</span>
-          <div><strong>{s.label}</strong> <small className="muted">{s.state === "SKIPPED" ? "não executada" : s.state === "PENDING" ? "pendente" : s.state === "RUNNING" ? "em andamento" : s.state === "FAILED" ? "falhou" : "concluída"}</small>
-            {s.detail ? <div className="detail">{s.detail}</div> : null}</div>
-        </li>
-      ))}
+      {steps.map((s) => {
+        const time = s.state === "RUNNING" ? elapsedMs(s.started_at, now) : s.duration_ms;
+        return (
+          <li key={s.key} className={s.state.toLowerCase()}>
+            <span className="ico" aria-hidden>{ICON[s.state] ?? "○"}</span>
+            <div className="grow">
+              <div><strong>{s.label_pt}</strong> <small className="muted">{STATE_TEXT[s.state]}{time != null && s.state !== "PENDING" ? ` · ${formatDuration(time)}` : ""}</small></div>
+              {s.summary_pt && s.state !== "PENDING" && <div className="detail">{s.summary_pt}</div>}
+              {s.limitation_pt && <div className="limit">⚠ {s.limitation_pt}</div>}
+              {s.technical.length > 0 && s.state !== "PENDING" && (
+                <details className="tech"><summary>Detalhes técnicos</summary><ul>{s.technical.map((t, i) => <li key={i}>{t}</li>)}</ul></details>
+              )}
+            </div>
+          </li>
+        );
+      })}
     </ol>
   );
 }

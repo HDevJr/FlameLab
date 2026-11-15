@@ -8,18 +8,22 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Literal
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from backend.app import workspace
-from backend.app.api.assistant import get_dataset_store
+from backend.app.analysis import build_analysis
+from backend.app.api.assistant import get_assistant_service, get_dataset_store
 from backend.app.assistant.config import load_settings
 from backend.app.assistant.service import build_provider
 from backend.app.catalog.service import Catalog
+from backend.app.dataset.review import ReviewRejected
+from backend.app.dataset.store import DEFAULT_DATA_DIR, DatasetStore
 from backend.app.ingest.pdf import PdfRejected
+from backend.app.review_service import ReviewService, events_for
 from backend.app.ingest.service import ImportService
 from backend.app.nasa.clients.fixtures import FixtureTransport
 from backend.app.nasa.clients.http import Transport, UrllibTransport
@@ -41,15 +45,37 @@ class Services:
     executor: Executor | None = None
     provider: Any = "unset"
     run_async: bool = True
+    quota_wait_s: float | None = None  # testes usam 0 (sem espera real)
+    # Testes de revisão usam um dataset sintético em diretório temporário (nunca o data/ real).
+    dataset_dirs: tuple[Path, Path] | None = None
+    curation_log_dir: Path | None = None
+    _store_cache: Any = None
     _catalog: Catalog | None = None
     _imports: ImportService | None = None
     _sim: SimulationService | None = None
+    _review: ReviewService | None = None
 
     @classmethod
     def reset(cls) -> None:
         if cls._sim:
             cls._sim.stop()
-        cls._catalog = cls._imports = cls._sim = None
+        cls._store_cache = cls._catalog = cls._imports = cls._sim = cls._review = None
+
+    @classmethod
+    def store(cls):
+        if cls.dataset_dirs:
+            if cls._store_cache is None:
+                cls._store_cache = DatasetStore.load(*cls.dataset_dirs)
+            return cls._store_cache
+        return get_dataset_store()
+
+    @classmethod
+    def reload_dataset(cls) -> None:
+        """Depois de uma revisão curada o servidor relê e revalida o dataset (fail-fast)."""
+        cls._store_cache = None
+        get_dataset_store.cache_clear()
+        get_assistant_service.cache_clear()
+        cls.store()
 
     @classmethod
     def transport(cls) -> Transport:
@@ -61,7 +87,7 @@ class Services:
     @classmethod
     def catalog(cls) -> Catalog:
         if cls._catalog is None:
-            cls._catalog = Catalog(get_dataset_store())
+            cls._catalog = Catalog(cls.store)
         return cls._catalog
 
     @classmethod
@@ -73,15 +99,24 @@ class Services:
     @classmethod
     def imports(cls) -> ImportService:
         if cls._imports is None:
-            cls._imports = ImportService(get_dataset_store(), cls.transport, cls.llm(), run_async=cls.run_async)
+            cls._imports = ImportService(cls.store, cls.transport, cls.llm(), run_async=cls.run_async,
+                                         compat=lambda eid: cls.sim().compatibility(eid),
+                                         **({} if cls.quota_wait_s is None else {"quota_wait_s": cls.quota_wait_s}))
         return cls._imports
 
     @classmethod
     def sim(cls) -> SimulationService:
         if cls._sim is None:
             executor = cls.executor or LocalFdsExecutor()
-            cls._sim = SimulationService(executor, cls.catalog())
+            cls._sim = SimulationService(executor, cls.catalog)
         return cls._sim
+
+    @classmethod
+    def review(cls) -> ReviewService:
+        if cls._review is None:
+            dirs = cls.dataset_dirs or (DEFAULT_DATA_DIR, REPO_ROOT)
+            cls._review = ReviewService(cls.store, cls.reload_dataset, dirs[0], dirs[1], cls.curation_log_dir)
+        return cls._review
 
 
 def _err(status: int, code: str, message: str) -> HTTPException:
@@ -89,7 +124,7 @@ def _err(status: int, code: str, message: str) -> HTTPException:
 
 
 def _wrap(data: Any, **extra: Any) -> dict[str, Any]:
-    return {"data": data, "dataset_version": get_dataset_store().dataset_version, **extra}
+    return {"data": data, "dataset_version": Services.store().dataset_version, **extra}
 
 
 # ------------------------------------------------------------------ catálogo
@@ -200,7 +235,78 @@ def get_document_file(document_id: str):
                         headers={"Content-Disposition": "inline; filename=documento.pdf"})
 
 
+@router.get("/documents/{document_id}/analysis")
+def get_analysis(document_id: str) -> dict:
+    """Resumo consolidado: procedência × revisão × enriquecimento, cobertura de leitura e prontidão FDS."""
+    try:
+        data = build_analysis(Services.catalog(), workspace.safe_id(document_id),
+                              lambda eid: Services.sim().compatibility(eid))
+    except workspace.InvalidId:
+        raise _err(422, "INVALID_ID", "Identificador inválido.") from None
+    if data is None:
+        raise _err(404, "DOCUMENT_NOT_FOUND", "Documento não encontrado.")
+    return _wrap(data)
+
+
+# ------------------------------------------------------------------ revisão humana
+class ReviewRequest(BaseModel):
+    action: Literal["CONFIRM", "DOUBT", "DIVERGENCE"]
+    reviewer: str = Field(max_length=80)
+    observed_value: str | None = Field(default=None, max_length=120)
+    observed_unit: str | None = Field(default=None, max_length=30)
+    observed_page_pdf: int | None = Field(default=None, ge=1, le=100000)
+    notes: str | None = Field(default=None, max_length=1000)
+    checked_pdf: bool = False
+
+
+@router.post("/records/{record_id}/review")
+def review_record(record_id: str, req: ReviewRequest) -> dict:
+    """Mesma política do `scripts/review_record.py`. A identidade do revisor é declarada, não autenticada."""
+    try:
+        result = Services.review().submit(record_id, req.action, req.reviewer, req.observed_value,
+                                          req.observed_unit, req.observed_page_pdf, req.notes, req.checked_pdf)
+    except workspace.InvalidId:
+        raise _err(422, "INVALID_ID", "Identificador inválido.") from None
+    except ReviewRejected as exc:
+        raise _err(404 if exc.code == "RECORD_NOT_FOUND" else 422, exc.code, str(exc)) from None
+    return _wrap(result)
+
+
+@router.get("/records/{record_id}/events")
+def record_events(record_id: str) -> dict:
+    try:
+        return _wrap(events_for(workspace.safe_id(record_id)))
+    except workspace.InvalidId:
+        raise _err(422, "INVALID_ID", "Identificador inválido.") from None
+
+
 # ------------------------------------------------------------------ simulação
+class ExperimentChange(BaseModel):
+    parameter: str = Field(max_length=80)
+    value: float
+
+
+class ExperimentScenarioRequest(BaseModel):
+    changes: list[ExperimentChange] = Field(min_length=1, max_length=20)
+    title: str | None = Field(default=None, max_length=80)
+    hypothesis: str | None = Field(default=None, max_length=500)
+
+
+@router.post("/experiments/{experiment_id}/scenarios", status_code=201)
+def create_experiment_scenario(experiment_id: str, req: ExperimentScenarioRequest) -> dict:
+    """Cenário derivado de HIPÓTESE sobre as condições do experimento. O original não é alterado."""
+    try:
+        sc = Services.sim().create_experiment_scenario(
+            workspace.safe_id(experiment_id), [c.model_dump() for c in req.changes], req.title, req.hypothesis)
+    except workspace.InvalidId:
+        raise _err(422, "INVALID_ID", "Identificador inválido.") from None
+    except CaseValidationError as exc:
+        raise _err(422, "SCENARIO_INVALID", "; ".join(exc.errors)) from None
+    except KeyError:
+        raise _err(404, "EXPERIMENT_NOT_FOUND", "Experimento não encontrado.") from None
+    return _wrap(sc.model_dump(mode="json"))
+
+
 class ScenarioRequest(BaseModel):
     model_id: str = Field(max_length=80)
     values: dict[str, float] = Field(default_factory=dict)

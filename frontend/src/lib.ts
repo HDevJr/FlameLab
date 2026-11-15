@@ -70,3 +70,79 @@ export function pathPoints(points: [number, number][], w: number, h: number, xma
   if (!points.length || xmax <= 0 || ymax <= 0) return "";
   return points.map(([x, y], i) => `${i ? "L" : "M"}${((x / xmax) * w).toFixed(1)},${(h - (y / ymax) * h).toFixed(1)}`).join(" ");
 }
+
+// ---------------------------------------------------------------- explicações em linguagem simples
+export const GLOSSARY: Record<string, string> = {
+  sha256: "Impressão digital do arquivo: dois arquivos idênticos têm o mesmo SHA-256. Serve para saber se o PDF é exatamente o publicado.",
+  procedencia: "Resposta a “este arquivo é a publicação da NASA?”. Só é verificada quando o SHA-256 é igual ao do arquivo distribuído pelo NTRS.",
+  revisao: "Conferência feita por uma pessoa, que abre o PDF e confirma valor, unidade e página. É diferente da procedência.",
+  nao_revisado: "Valor lido do PDF (por IA ou por transcrição) que ainda não foi conferido por uma pessoa. Não deve ser citado como dado da fonte.",
+  conferido: "Valor conferido por uma pessoa diferente de quem extraiu, no PDF original cujo hash foi verificado.",
+  ntrs: "NASA Technical Reports Server: repositório oficial de relatórios técnicos da NASA.",
+  psi: "NASA Physical Sciences Informatics: repositório de investigações e dados de ciências físicas em microgravidade.",
+  techport: "Portfólio de projetos de tecnologia da NASA. Um projeto não é o mesmo que um experimento.",
+  candidato: "Há semelhança de título e autores, mas nenhum identificador comum prova que são o mesmo trabalho. Precisa de revisão humana.",
+  enriquecimento: "Busca de informações complementares em outras fontes NASA. Contextualiza o trabalho; nunca valida nem substitui os números do artigo.",
+  lacuna: "Informação necessária (por exemplo, para simular) que não foi encontrada na fonte. Nunca é preenchida com um valor inventado.",
+  condicao: "Condição de entrada do experimento (por exemplo, a espessura da amostra).",
+  observavel: "Resultado medido no experimento. Serve de referência de comparação; nunca é entrada de uma simulação.",
+  cobertura: "Quais páginas do PDF a IA realmente leu. Páginas não lidas podem conter experimentos e parâmetros ainda não encontrados.",
+  hipotese: "Cenário que altera um valor para ver o que aconteceria. É uma hipótese computacional, não um dado experimental.",
+  fds: "Fire Dynamics Simulator: programa do NIST que simula incêndios e escoamento de fumaça.",
+  smokeview: "Programa que desenha os resultados do FDS. Aqui ele gera os quadros do vídeo.",
+  demo_fds: "Caso genérico (um queimador em uma sala) que só prova que o pipeline FDS → Smokeview → vídeo funciona. Não pertence a nenhum artigo.",
+};
+
+export const REVIEW_ERRORS: Record<string, string> = {
+  VALUE_MISMATCH: "O valor ou a unidade que você leu não confere com o registro. Nada foi aprovado. Se o PDF realmente mostra outro valor, use “Registrar divergência”.",
+  VALUE_UNREADABLE: "Não foi possível interpretar o valor informado. Digite apenas o número (ou o texto, para materiais).",
+  PAGE_MISMATCH: "A página informada não corresponde à evidência deste registro.",
+  REVIEWER_NOT_INDEPENDENT: "O revisor precisa ser uma pessoa diferente de quem extraiu o valor.",
+  REVIEWER_NOT_HUMAN: "A revisão deve ser feita por uma pessoa da equipe, não por uma IA.",
+  REVIEWER_REQUIRED: "Informe o nome de quem está revisando.",
+  DECLARATION_REQUIRED: "Marque que você conferiu o PDF original.",
+  OBSERVED_REQUIRED: "Informe o valor, a unidade e a página que você leu no PDF.",
+  NOTES_REQUIRED: "Descreva o motivo no campo de observações.",
+  DOCUMENT_HASH: "O arquivo PDF guardado não tem o hash registrado. A revisão foi bloqueada para proteger a integridade.",
+  EVIDENCE_INSUFFICIENT: "Este parâmetro não tem evidência suficiente (página e citação literal) para ser aprovado.",
+  WRONG_STATE: "Este registro já foi conferido; não pode ser aprovado de novo.",
+};
+
+export const reviewErrorMessage = (code: string, fallback: string) => REVIEW_ERRORS[code] ?? fallback;
+
+// ---------------------------------------------------------------- tempos
+export function formatDuration(ms: number | null | undefined): string {
+  if (ms == null) return "—";
+  if (ms < 1000) return `${Math.round(ms)} ms`;
+  const s = ms / 1000;
+  if (s < 60) return `${s.toFixed(1).replace(".", ",")} s`;
+  const m = Math.floor(s / 60);
+  return `${m} min ${String(Math.round(s - m * 60)).padStart(2, "0")} s`;
+}
+
+export function elapsedMs(startIso: string | null | undefined, nowMs: number): number | null {
+  if (!startIso) return null;
+  const t = Date.parse(startIso);
+  return Number.isNaN(t) ? null : Math.max(0, nowMs - t);
+}
+
+export function formatClock(seconds: number): string {
+  if (!Number.isFinite(seconds) || seconds < 0) return "0:00.0";
+  const m = Math.floor(seconds / 60);
+  return `${m}:${(seconds - m * 60).toFixed(1).padStart(4, "0")}`;
+}
+
+/** Tempo físico simulado correspondente a um instante do vídeo (quadros em intervalos iguais de tempo simulado). */
+export function simulatedTimeAt(videoTime: number, videoDuration: number, simulatedTotal: number | null | undefined): number | null {
+  if (!simulatedTotal || !videoDuration || videoDuration <= 0) return null;
+  return Math.min(simulatedTotal, Math.max(0, (videoTime / videoDuration) * simulatedTotal));
+}
+
+/** Segundos simulados por segundo de vídeo (1 = tempo real; >1 = vídeo mais rápido que o fenômeno). */
+export function playbackRatio(videoDuration: number | null | undefined, simulatedTotal: number | null | undefined): number | null {
+  if (!videoDuration || !simulatedTotal) return null;
+  return simulatedTotal / videoDuration;
+}
+
+export const SPEEDS = [0.25, 0.5, 1, 2] as const;
+export const speedLabel = (s: number) => `${String(s).replace(".", ",")}×`;

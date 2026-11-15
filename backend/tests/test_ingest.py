@@ -69,7 +69,7 @@ def test_import_flow_provenance_not_verified_without_file_comparison(client, tmp
     assert resp.status_code == 202
     rec = fetch(client, resp)
     steps = {s["key"]: s["state"] for s in rec["steps"]}
-    assert steps["HASH"] == "DONE" and steps["NASA_LOOKUP"] == "DONE"
+    assert steps["IDENTIFY"] == "DONE" and steps["ORIGIN"] == "DONE" and steps["SOURCES"] == "DONE"
     # o NTRS foi encontrado por título, mas não há arquivo gravado para comparar: nunca VERIFIED
     assert rec["nasa_provenance"]["state"] == "CANDIDATE"
     assert steps["EXTRACT"] == "SKIPPED"  # IA desligada: não inventa parâmetros
@@ -113,7 +113,8 @@ def test_all_nasa_sources_down_import_still_completes(client, tmp_path):
         FIX, fail_hosts=frozenset({"ntrs.nasa.gov", "api.datacite.org", "techport.nasa.gov"}))
     rec = fetch(client, upload(client, make_pdf(tmp_path / "a.pdf")))
     assert rec["status"] == "DONE"
-    assert {s["key"]: s["state"] for s in rec["steps"]}["NASA_LOOKUP"] == "FAILED"
+    states = {s["key"]: s["state"] for s in rec["steps"]}
+    assert states["SOURCES"] == "FAILED" and states["ORIGIN"] == "DONE"
     assert rec["nasa_provenance"]["state"] == "PENDING"
 
 

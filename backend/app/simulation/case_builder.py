@@ -51,6 +51,16 @@ _TEMPLATES = {
 }
 
 
+FRAMES_PER_SIMULATED_SECOND = 10  # = quadros por segundo do vídeo: reprodução em tempo real (1x)
+MAX_FRAMES = 600
+
+
+def frame_count(t_end: float) -> int:
+    """Número de saídas (DUMP NFRAMES): uma a cada 0,1 s simulado. O vídeo usa 10 quadros/s,
+    então 1 s de vídeo = 1 s de tempo físico calculado. Nenhum quadro é interpolado."""
+    return int(max(20, min(MAX_FRAMES, round(t_end * FRAMES_PER_SIMULATED_SECOND))))
+
+
 def _fmt(value: float) -> str:
     text = f"{value:.6g}"
     return text if any(c in text for c in ".e") else text + "."
@@ -83,6 +93,6 @@ def build_case(model: SimulationModel, values: dict[str, float], chid: str) -> t
     v = validate_values(model, values)
     text = _TEMPLATES[model.model_id].format(
         chid=chid, t_end=_fmt(v["t_end"]), soot_yield=_fmt(v["soot_yield"]), hrrpua=_fmt(v["hrrpua"]),
-        nframes=int(max(10, min(200, v["t_end"] * 5))),
+        nframes=frame_count(v["t_end"]),
     )
     return text, hashlib.sha256(text.encode("utf-8")).hexdigest()

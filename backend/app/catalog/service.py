@@ -9,8 +9,11 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from typing import Callable
+
 from backend.app import workspace
 from backend.app.dataset.store import DatasetStore
+from backend.app.review_service import events_for
 from backend.app.nasa.models import DocumentMeta
 
 PROVENANCE_LABELS = {
@@ -27,8 +30,12 @@ def _ntrs_id_from_url(url: str | None) -> str | None:
 
 
 class Catalog:
-    def __init__(self, store: DatasetStore):
-        self._store = store
+    def __init__(self, store: "DatasetStore | Callable[[], DatasetStore]"):
+        self._store_src = store if callable(store) else (lambda: store)
+
+    @property
+    def _store(self) -> DatasetStore:
+        return self._store_src()
 
     # ---------------------------------------------------------------- importados
     def _imports(self) -> list[dict[str, Any]]:
@@ -39,7 +46,7 @@ class Catalog:
                 out.append(data)
         return out
 
-    def _import_for_document(self, document_id: str) -> dict[str, Any] | None:
+    def import_for_document(self, document_id: str) -> dict[str, Any] | None:
         return next((i for i in self._imports() if i["document"]["document_id"] == document_id), None)
 
     # ---------------------------------------------------------------- documentos
@@ -60,7 +67,7 @@ class Catalog:
         out = []
         for doc in self._store.documents.values():
             check = self._store.source_checks.get(doc.document_id)
-            imp = self._import_for_document(doc.document_id)
+            imp = self.import_for_document(doc.document_id)
             out.append({
                 "document_id": doc.document_id, "title": doc.title, "origin": "CURATED", "kind": doc.kind,
                 "url": doc.url, "sha256": doc.sha256, "size_bytes": doc.size_bytes,
@@ -93,7 +100,7 @@ class Catalog:
         if doc:
             return DocumentMeta(document_id=doc.document_id, title=doc.title, doi=doc.doi,
                                 ntrs_id=_ntrs_id_from_url(doc.url))
-        imp = self._import_for_document(document_id)
+        imp = self.import_for_document(document_id)
         if not imp:
             return None
         d = imp["document"]
@@ -111,7 +118,7 @@ class Catalog:
         if doc and doc.local_path:
             path = (REPO_ROOT / doc.local_path).resolve()
             return path if path.is_relative_to(REPO_ROOT.resolve()) and path.is_file() else None
-        imp = self._import_for_document(document_id)
+        imp = self.import_for_document(document_id)
         if imp:
             path = workspace.area("imports") / workspace.safe_id(imp["import_id"]) / "source.pdf"
             return path if path.is_file() else None
@@ -137,7 +144,9 @@ class Catalog:
         for imp in self._imports():
             for exp in imp.get("experiments") or []:
                 if exp["experiment_id"] == experiment_id:
-                    return {**exp, "review": _review(exp), "document_title": imp["document"].get("title")}
+                    exp = {**exp, "parameters": [_with_events(p) for p in exp["parameters"]]}
+                    return {**exp, "review": _review(exp), "document_title": imp["document"].get("title"),
+                            "document_sha256": imp["sha256"]}
         return None
 
     def experiments_for(self, document_id: str) -> list[dict[str, Any]]:
@@ -172,6 +181,11 @@ class Catalog:
                 "evidence": evidence, "caveats_pt": list(r.caveats_pt),
                 "extraction": {"method": r.extraction.method, "by": r.extraction.by} if r.extraction else None,
                 "reviewer": r.review.reviewer if r.review else None,
+                "review": ({"reviewer": r.review.reviewer, "reviewed_at": r.review.reviewed_at.isoformat()
+                            if r.review.reviewed_at else None, "notes": r.review.notes,
+                            "checked_document_sha256": r.review.checked_document_sha256}
+                           if r.review and r.review.reviewer else None),
+                "events": events_for(r.record_id),
             })
         gaps = [{"gap_id": g.gap_id, "parameter": g.parameter, "label_pt": g.label_pt,
                  "explanation_pt": g.explanation_pt, "purpose_blocked": list(g.purpose_blocked),
@@ -197,6 +211,10 @@ class Catalog:
                             "label_pt": p["label_pt"], "status": p["status"], "source": "artigo",
                             "value": f"{value} {orig.get('unit')}" if orig.get("unit") else value})
         return out
+
+
+def _with_events(p: dict[str, Any]) -> dict[str, Any]:
+    return {**p, "events": events_for(p["record_id"]), "reviewer": (p.get("review") or {}).get("reviewer")}
 
 
 def _review(exp: dict[str, Any]) -> dict[str, int]:

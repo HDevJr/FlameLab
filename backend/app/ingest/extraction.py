@@ -9,16 +9,18 @@ O que não passa é descartado e listado em `rejected`. Tudo o que passa entra c
 from __future__ import annotations
 
 import re
-from typing import Literal
+import time
+from typing import Callable, Literal
 
 from pydantic import BaseModel, Field
 
 from backend.app import units
 from backend.app.assistant.provider import LLMProvider
 
-EXTRACTION_PROMPT_VERSION = "ext-v1"
-MAX_PAGES_SENT = 14
-MAX_CHARS_SENT = 48_000
+EXTRACTION_PROMPT_VERSION = "ext-v2"
+BATCH_MAX_PAGES = 12
+BATCH_MAX_CHARS = 40_000
+DEFAULT_MAX_BATCHES = 8
 
 PHENOMENA = [
     "combustion", "flame_spread", "fire", "pyrolysis", "smoke_transport",
@@ -93,6 +95,8 @@ Regras:
 5. Em "missing", liste informações que um pesquisador precisaria para reproduzir o experimento e que
    NÃO aparecem nas páginas fornecidas. Não invente valores para elas.
 6. Se nada puder ser extraído com citação literal, devolva listas vazias.
+7. O artigo é lido em lotes de páginas: devolva apenas o que aparece NAS PÁGINAS DESTE LOTE. A página de cada
+   parâmetro é o número do <page n="..."> em que a citação aparece.
 Responda somente JSON."""
 
 
@@ -109,18 +113,36 @@ def _slug(name: str) -> str:
     return (slug if slug and slug[0].isalpha() else "p_" + slug)[:60] or "parameter"
 
 
-def build_user_prompt(pages: dict[int, str]) -> tuple[str, list[int]]:
-    parts, used, total = [], [], 0
-    for n in sorted(pages)[:MAX_PAGES_SENT]:
-        text = pages[n].strip()
-        if not text:
+def plan_batches(pages: dict[int, str], max_pages: int = BATCH_MAX_PAGES,
+                 max_chars: int = BATCH_MAX_CHARS) -> tuple[list[list[int]], list[int]]:
+    """Divide as páginas COM texto, em ordem, em lotes limitados por páginas e caracteres.
+    Devolve (lotes, páginas sem texto). Uma página maior que o limite é truncada no envio."""
+    batches: list[list[int]] = []
+    empty = [n for n in sorted(pages) if not pages[n].strip()]
+    current: list[int] = []
+    chars = 0
+    for n in sorted(pages):
+        size = min(len(pages[n].strip()), max_chars)
+        if size == 0:
             continue
-        if total + len(text) > MAX_CHARS_SENT:
-            break
-        parts.append(f'<page n="{n}">\n{text}\n</page>')
-        used.append(n)
-        total += len(text)
-    return "\n".join(parts), used
+        if current and (len(current) >= max_pages or chars + size > max_chars):
+            batches.append(current)
+            current, chars = [], 0
+        current.append(n)
+        chars += size
+    if current:
+        batches.append(current)
+    return batches, empty
+
+
+def build_user_prompt(pages: dict[int, str], numbers: list[int], batch_no: int = 1, batch_total: int = 1,
+                      known_labels: list[str] | None = None) -> str:
+    parts = [f'<page n="{n}">\n{pages[n].strip()[:BATCH_MAX_CHARS]}\n</page>' for n in numbers]
+    head = f"Lote {batch_no} de {batch_total} (páginas do PDF {numbers[0]}–{numbers[-1]})."
+    if known_labels:
+        head += (" Experimentos já identificados em lotes anteriores (se o texto continuar descrevendo um deles, "
+                 "reutilize o rótulo EXATO): " + "; ".join(known_labels) + ".")
+    return head + "\n" + "\n".join(parts)
 
 
 def validate(output: ExtractionOutput, pages: dict[int, str], document_id: str, model: str,
@@ -178,17 +200,144 @@ def validate(output: ExtractionOutput, pages: dict[int, str], document_id: str, 
     return experiments, rejected
 
 
+def ranges(pages: list[int]) -> str:
+    """[1,2,3,7,8] -> "1–3, 7–8"."""
+    out, start, prev = [], None, None
+    for n in sorted(pages):
+        if start is None:
+            start = prev = n
+        elif n == prev + 1:
+            prev = n
+        else:
+            out.append((start, prev))
+            start = prev = n
+    if start is not None:
+        out.append((start, prev))
+    return ", ".join(f"{a}" if a == b else f"{a}–{b}" for a, b in out)
+
+
 def _number(text: str) -> float | None:
     t = text.strip().replace(",", ".")
     return float(t) if re.fullmatch(r"[-+]?\d+(\.\d+)?([eE][-+]?\d+)?", t) else None
 
 
-def run_extraction(provider: LLMProvider, pages: dict[int, str], document_id: str, at: str,
-                   timeout: float = 60.0) -> dict:
-    user, used = build_user_prompt(pages)
-    if not used:
-        return {"experiments": [], "rejected": [], "pages_sent": [], "model": provider.model}
-    output = provider.generate_json(SYSTEM, user, ExtractionOutput, timeout)
-    experiments, rejected = validate(output, {n: pages[n] for n in used}, document_id, provider.model, at)
-    return {"experiments": experiments, "rejected": rejected, "pages_sent": used, "model": provider.model,
-            "prompt_version": EXTRACTION_PROMPT_VERSION}
+def _label_key(label: str) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", label.lower()).strip()
+
+
+def merge_batch(acc: list[dict], new: list[dict]) -> None:
+    """Funde os experimentos de um lote nos já acumulados (mesmo rótulo normalizado = mesmo experimento).
+    Parâmetros repetidos (mesmo slug) ficam com a primeira ocorrência."""
+    for exp in new:
+        match = next((e for e in acc if _label_key(e["label"]) == _label_key(exp["label"])), None)
+        if match is None:
+            acc.append(exp)
+            continue
+        have = {p["parameter"] for p in match["parameters"]}
+        match["parameters"] += [p for p in exp["parameters"] if p["parameter"] not in have]
+        match["phenomena"] = sorted(set(match["phenomena"]) | set(exp["phenomena"]))
+        gap_have = {g["parameter"] for g in match["gaps"]}
+        match["gaps"] += [g for g in exp["gaps"] if g["parameter"] not in gap_have]
+
+
+def finalize(experiments: list[dict], document_id: str) -> list[dict]:
+    """Atribui os identificadores definitivos depois da fusão e remove lacunas contraditórias."""
+    for idx, exp in enumerate(experiments, start=1):
+        exp_id = f"{document_id}-E{idx}"
+        exp["experiment_id"] = exp_id
+        got = {p["parameter"] for p in exp["parameters"]}
+        for p in exp["parameters"]:
+            p["record_id"] = f"{exp_id}.{p['parameter']}"
+        exp["gaps"] = [g for g in exp["gaps"] if g["parameter"] not in got]
+        for g in exp["gaps"]:
+            g["gap_id"] = f"GAP-{exp_id}-{g['parameter']}"
+            g["explanation_pt"] = (g["explanation_pt"] + " (procurada apenas nas páginas lidas pela IA)").strip()
+    return experiments
+
+
+QUOTA_RETRY_WAIT_S = 30.0
+
+
+def run_batched(provider: LLMProvider, pages: dict[int, str], document_id: str, at: str, *,
+                max_batches: int = DEFAULT_MAX_BATCHES, timeout: float = 60.0,
+                on_batch: Callable[[int, int, list[int]], None] | None = None,
+                on_wait: Callable[[int, float], None] | None = None,
+                quota_wait_s: float = QUOTA_RETRY_WAIT_S, sleep: Callable[[float], None] = time.sleep) -> dict:
+    """Extrai em lotes de páginas, em ordem. Devolve experimentos, descartes, cobertura e métricas.
+    Referências de página são sempre as do PDF (cada <page n> é o número real)."""
+    batches, empty = plan_batches(pages)
+    selected = batches[:max_batches]
+    skipped_by_cap = [n for b in batches[max_batches:] for n in b]
+    acc: list[dict] = []
+    rejected: list[dict] = []
+    metrics: list[dict] = []
+    processed: list[int] = []
+    aborted = None
+    for i, numbers in enumerate(selected, start=1):
+        if on_batch:
+            on_batch(i, len(selected), numbers)
+        user = build_user_prompt(pages, numbers, i, len(selected), [e["label"] for e in acc])
+        t0 = time.monotonic()
+        entry: dict = {"batch": i, "pages": ranges(numbers), "page_list": numbers,
+                       "chars": sum(min(len(pages[n].strip()), BATCH_MAX_CHARS) for n in numbers)}
+        output = None
+        waited = 0.0
+        for attempt in (1, 2):
+            try:
+                output = provider.generate_json(SYSTEM, user, ExtractionOutput, timeout)
+                break
+            except Exception as exc:  # noqa: BLE001 - ProviderError ou falha do SDK: o lote não conta como lido
+                kind = getattr(getattr(exc, "kind", None), "value", "ERROR")
+                if kind == "QUOTA" and attempt == 1 and quota_wait_s > 0:
+                    # Limite de uso por minuto: espera e tenta o MESMO lote mais uma vez (o tempo é registrado).
+                    if on_wait:
+                        on_wait(i, quota_wait_s)
+                    sleep(quota_wait_s)
+                    waited += quota_wait_s
+                    continue
+                entry.update(duration_ms=int((time.monotonic() - t0) * 1000), error=kind, accepted=0, rejected=0,
+                             waited_s=waited or None)
+                metrics.append(entry)
+                if kind in ("AUTH", "QUOTA", "CONFIG", "BAD_REQUEST"):
+                    aborted = kind
+                break
+        if output is None:
+            if aborted:
+                break
+            continue
+        exps, rej = validate(output, {n: pages[n] for n in numbers}, document_id, provider.model, at)
+        merge_batch(acc, exps)
+        rejected += rej
+        processed += numbers
+        usage_fn = getattr(provider, "last_usage", None)
+        usage = usage_fn() if callable(usage_fn) else None
+        entry.update(duration_ms=int((time.monotonic() - t0) * 1000), error=None, waited_s=waited or None,
+                     accepted=sum(len(e["parameters"]) for e in exps), rejected=len(rej), usage=usage)
+        metrics.append(entry)
+    experiments = finalize(acc, document_id)
+    failed = [n for m in metrics if m.get("error") for n in m["page_list"]]
+    unreached = {n for b in selected[len(metrics):] for n in b} if aborted else set()
+    not_processed = sorted(set(skipped_by_cap) | set(failed) | unreached)
+    total = len(pages)
+    mode = "NONE" if not processed else "AI_FULL" if len(processed) + len(empty) == total else "AI_PARTIAL"
+    reasons = []
+    if skipped_by_cap:
+        reasons.append(f"limite de {max_batches} lotes por documento nesta versão")
+    if failed:
+        reasons.append("falha da IA em algum lote")
+    if aborted:
+        reasons.append(f"execução interrompida ({aborted})")
+    return {
+        "experiments": experiments, "rejected": rejected, "model": provider.model,
+        "prompt_version": EXTRACTION_PROMPT_VERSION,
+        "coverage": {
+            "mode": mode, "total_pages": total, "pages_processed": sorted(processed),
+            "processed_ranges": ranges(processed), "pages_without_text": empty,
+            "without_text_ranges": ranges(empty), "pages_not_processed": not_processed,
+            "not_processed_ranges": ranges(not_processed), "reasons_pt": reasons,
+            "limits": {"max_batches": max_batches, "batch_max_pages": BATCH_MAX_PAGES,
+                       "batch_max_chars": BATCH_MAX_CHARS},
+        },
+        "batches": [{k: v for k, v in m.items() if k != "page_list"} for m in metrics],
+        "batches_planned_total": len(batches),
+    }

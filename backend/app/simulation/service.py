@@ -9,17 +9,20 @@ import secrets
 import threading
 import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from backend.app import workspace
 from backend.app.nasa.provenance.log import utc_now
 from backend.app.simulation.case_builder import CaseValidationError, build_case, validate_values
-from backend.app.simulation.compatibility import assess
+from backend.app import units
+from backend.app.simulation.compatibility import assess, is_editable, range_rule
 from backend.app.simulation.executor import ExecutionError, Executor
 from backend.app.simulation.models import (
     TERMINAL, ParameterChange, RunState, Scenario, SimulationRun,
 )
 from backend.app.simulation.registry import MODELS
+
+_FDS_LOG_TIME = re.compile(r"Simulation Time:\s*([\d.]+)\s*s")
 
 LIMITS = {"wall_clock_s": 900, "max_frames": 300, "threads": 4, "max_t_end_s": 60,
           "note_pt": "Limite de tempo por execução; processo isolado em diretório próprio."}
@@ -29,7 +32,8 @@ LOG_LIMIT = 40
 class SimulationService:
     def __init__(self, executor: Executor, catalog, start_worker: bool = True, timeout_s: float = LIMITS["wall_clock_s"]):
         self._executor = executor
-        self._catalog = catalog
+        self._catalog_src = catalog if callable(catalog) else (lambda: catalog)
+        self._queued_at: dict[str, float] = {}
         self._timeout = timeout_s
         self._queue: "queue.Queue[str]" = queue.Queue()
         self._lock = threading.Lock()
@@ -67,7 +71,7 @@ class SimulationService:
         return [m.model_dump(mode="json") for m in MODELS.values()]
 
     def compatibility(self, experiment_id: str) -> dict[str, Any] | None:
-        exp = self._catalog.experiment(experiment_id)
+        exp = self._catalog_src().experiment(experiment_id)
         if exp is None:
             return None
         return assess(exp, self._executor.available()[0])
@@ -82,8 +86,14 @@ class SimulationService:
         model = MODELS.get(model_id)
         if model is None:
             raise KeyError("MODEL_NOT_FOUND")
-        if experiment_id is not None and self._catalog.experiment(experiment_id) is None:
-            raise KeyError("EXPERIMENT_NOT_FOUND")
+        if experiment_id is not None:
+            if self._catalog_src().experiment(experiment_id) is None:
+                raise KeyError("EXPERIMENT_NOT_FOUND")
+            if model.purpose == "INTEGRATION_TEST":
+                # O caso genérico é independente de qualquer artigo: nunca é associado a um experimento.
+                raise CaseValidationError([
+                    "o caso de integração é uma demonstração técnica independente e não pode ser "
+                    "vinculado a um experimento NASA"])
         reasons: list[str] = []
         if not model.implemented:
             reasons.append("O modelo ainda não tem gerador de caso aprovado.")
@@ -95,12 +105,74 @@ class SimulationService:
         label = re.sub(r"[^\w .,()\-–—]", "", title or "")[:80].strip()
         scenario = Scenario(
             scenario_id=sid, kind="DERIVED" if changes else "BASE", model_id=model_id,
-            experiment_id=experiment_id,
+            experiment_id=experiment_id, scope="EXPERIMENT" if experiment_id else "DEMO",
             title_pt=label or ("Cenário derivado" if changes else "Caso-base"),
             changes=changes, values=clean, executable=model.implemented and not reasons,
             blocked_reasons_pt=reasons, created_at=utc_now(),
             note_pt=("Hipótese computacional derivada do caso-base; não é dado experimental. "
                      if changes else "Caso-base do modelo, sem alterações. ") + model.label_pt,
+        )
+        workspace.write_json(self._sdir() / f"{sid}.json", scenario.model_dump(mode="json"))
+        return scenario
+
+    def create_experiment_scenario(self, experiment_id: str, changes: list[dict[str, Any]],
+                                   title: str | None, hypothesis: str | None) -> Scenario:
+        """Cenário derivado de HIPÓTESE sobre as condições de um experimento (valor original preservado).
+        Só altera condições numéricas com unidade conhecida; resultados observados nunca são entradas.
+        É executável apenas se o experimento tiver modelo compatível; caso contrário, o motivo é gravado."""
+        exp = self._catalog_src().experiment(experiment_id)
+        if exp is None:
+            raise KeyError("EXPERIMENT_NOT_FOUND")
+        params = {p["parameter"]: p for p in exp["parameters"]}
+        out: list[ParameterChange] = []
+        errors: list[str] = []
+        seen: set[str] = set()
+        for ch in changes:
+            name = ch.get("parameter")
+            p = params.get(name)
+            if p is None:
+                errors.append(f"parâmetro inexistente: {name}")
+                continue
+            if name in seen:
+                errors.append(f"{name}: alterado mais de uma vez")
+                continue
+            seen.add(name)
+            if p["role"] == "OBSERVAVEL":
+                errors.append(f"{p['label_pt']}: é um resultado observado, não uma condição de entrada")
+                continue
+            if not is_editable(p):
+                errors.append(f"{p['label_pt']}: não é uma condição numérica com unidade conhecida")
+                continue
+            value = ch.get("value")
+            if isinstance(value, bool) or not isinstance(value, (int, float)) or value != value or abs(value) == float("inf"):
+                errors.append(f"{p['label_pt']}: valor numérico inválido")
+                continue
+            unit = p["original"].get("unit")
+            rule, lo, hi = range_rule(unit)
+            if (lo is not None and value <= lo) or (lo is None and value < 0) or (hi is not None and value > hi):
+                errors.append(f"{p['label_pt']}: {value} {unit or ''} fora da faixa ({rule})")
+                continue
+            orig = float(p["original"]["value"])
+            if value == orig:
+                continue  # sem alteração real
+            out.append(ParameterChange(name=name, from_value=orig, to_value=float(value), unit=unit or "",
+                                       label_pt=p["label_pt"], base_status=p["status"]))
+        if errors:
+            raise CaseValidationError(errors)
+        if not out:
+            raise CaseValidationError(["nenhuma alteração: informe ao menos um valor diferente do original"])
+        compat = assess(exp, self._executor.available()[0])
+        reasons = [] if compat["actions"]["simulate"] else list(compat["reasons_pt"])
+        sid = "SCN-" + secrets.token_hex(5)
+        label = re.sub(r"[^\w .,()\-–—]", "", title or "")[:80].strip()
+        hyp = re.sub(r"\s+", " ", hypothesis or "").strip()[:500] or None
+        scenario = Scenario(
+            scenario_id=sid, kind="DERIVED", model_id=compat.get("model_id"), experiment_id=experiment_id,
+            scope="EXPERIMENT", hypothesis_pt=hyp, title_pt=label or f"Hipótese sobre {exp['label']}",
+            changes=out, values={c.name: c.to_value for c in out}, executable=compat["actions"]["simulate"],
+            blocked_reasons_pt=reasons, created_at=utc_now(),
+            note_pt=("Hipótese computacional sobre o experimento; o experimento original não foi alterado. "
+                     "Não é dado experimental."),
         )
         workspace.write_json(self._sdir() / f"{sid}.json", scenario.model_dump(mode="json"))
         return scenario
@@ -124,7 +196,31 @@ class SimulationService:
         return [i for i in items if i]
 
     def get_run(self, run_id: str) -> dict[str, Any] | None:
-        return workspace.read_json(workspace.area("runs") / workspace.safe_id(run_id) / "run.json")
+        run = workspace.read_json(workspace.area("runs") / workspace.safe_id(run_id) / "run.json")
+        if run is not None:
+            run["progress"] = self._progress(run)
+        return run
+
+    def _progress(self, run: dict[str, Any]) -> dict[str, Any] | None:
+        """Progresso REAL do cálculo: o tempo físico que o FDS informa em seu log. Não é estimativa de
+        tempo restante (o custo por passo varia). Só existe enquanto o FDS executa."""
+        if run.get("state") != RunState.RUNNING_FDS.value:
+            return None
+        log = self._run_dir(run["run_id"]) / "fds.log"
+        try:
+            size = log.stat().st_size
+            with log.open("rb") as fh:
+                fh.seek(max(0, size - 4096))
+                tail = fh.read().decode("utf-8", errors="replace")
+        except OSError:
+            return None
+        found = _FDS_LOG_TIME.findall(tail)
+        t_end = (run.get("parameters") or {}).get("t_end")
+        if not found or not t_end:
+            return None
+        sim = float(found[-1])
+        return {"simulated_time_s": sim, "t_end_s": t_end, "fraction": round(min(sim / t_end, 1.0), 4),
+                "source": "log do FDS (Simulation Time)"}
 
     def _save(self, run: SimulationRun) -> None:
         with self._lock:
@@ -138,7 +234,7 @@ class SimulationService:
         run_id = "RUN-" + time.strftime("%Y%m%d%H%M%S", time.gmtime()) + "-" + secrets.token_hex(2)
         run = SimulationRun(
             run_id=run_id, scenario_id=scenario_id, model_id=model.model_id, purpose=model.purpose,
-            label_pt=model.label_pt, state=RunState.QUEUED, demo=self._executor.demo,
+            label_pt=model.label_pt, state=RunState.QUEUED, demo=self._executor.demo, scope=sc.get("scope", "DEMO"),
             parameters=sc["values"], changes=[ParameterChange(**c) for c in sc["changes"]],
             timestamps={"QUEUED": utc_now()}, limits=LIMITS,
         )
@@ -150,6 +246,7 @@ class SimulationService:
             run.state, run.failure_reason = RunState.BLOCKED, f"Executor indisponível ({why})."
         self._save(run)
         if run.state == RunState.QUEUED:
+            self._queued_at[run_id] = time.monotonic()
             self._queue.put(run_id)
         return run
 
@@ -174,7 +271,11 @@ class SimulationService:
 
     def _execute(self, run_id: str) -> None:
         data = self.get_run(run_id)
+        data.pop("progress", None)
         run = SimulationRun(**data)
+        t_start = time.monotonic()
+        queued = self._queued_at.pop(run_id, None)
+        run.timings_ms["queue_wait"] = int((t_start - queued) * 1000) if queued else None
         sc = self.get_scenario(run.scenario_id)
         model = MODELS[run.model_id]
         self._transition(run, RunState.VALIDATING)
@@ -188,6 +289,7 @@ class SimulationService:
         run.fds_sha256 = sha
         v = self._executor.versions()
         run.fds_version, run.smokeview_version, run.ffmpeg_version = v.fds, v.smokeview, v.ffmpeg
+        run.timings_ms["preparation"] = int((time.monotonic() - t_start) * 1000)
         self._save(run)
         run_dir = self._run_dir(run_id)
         try:
@@ -195,9 +297,12 @@ class SimulationService:
                                         lambda s: self._transition(run, s))
         except ExecutionError as exc:
             run.failure_reason = exc.reason
+            run.timings_ms["total"] = int((time.monotonic() - t_start) * 1000)
             self._transition(run, exc.state)
             return
         run.artifacts, run.results, run.log_tail = result.artifacts, result.results, result.log_tail[-LOG_LIMIT:]
+        run.timings_ms.update(result.timings_ms)
+        run.timings_ms["total"] = int((time.monotonic() - t_start) * 1000)
         self._transition(run, RunState.COMPLETED)
 
     def artifact_path(self, run_id: str, name: str) -> Path | None:

@@ -41,51 +41,14 @@ class EnrichmentService:
         self._timeout = timeout
 
     def enrich(self, meta: DocumentMeta, parameters: list[dict[str, Any]] | None = None) -> EnrichmentReport:
-        log = OperationLog()
-        ntrs = NtrsClient(self._transport, log, self._timeout)
-        datacite = DataCiteClient(self._transport, log, self._timeout)
-        techport = TechPortClient(self._transport, log, self._timeout)
-        warnings: list[str] = []
-        records: list[EnrichmentRecord] = []
+        session = self.session(meta)
+        session.origin()
+        session.sources()
+        return session.compare(parameters)
 
-        ntrs_match, citation = self._ntrs(meta, ntrs)
-        title = meta.title or (citation or {}).get("title")
-        authors = meta.authors or (citation or {}).get("authors") or []
-        authors_source = "artigo" if meta.authors else ("NTRS" if citation else None)
-        doc_tokens = title_tokens(title)
+    def session(self, meta: DocumentMeta) -> "EnrichmentSession":
+        return EnrichmentSession(self, meta)
 
-        related = self._related(ntrs, title, citation, warnings) if title else []
-        psi_match, psi = self._psi(meta, datacite, title, doc_tokens, authors)
-        techport_match = self._techport(techport, title, doc_tokens)
-        matches = [ntrs_match, psi_match, techport_match]
-
-        if citation:
-            records += self._metadata_records(meta, citation)
-        if psi:
-            records += self._psi_records(psi, authors, authors_source)
-        for p in parameters or []:
-            records.append(EnrichmentRecord(
-                field=p["parameter"], label_pt=p.get("label_pt") or p["parameter"],
-                scope="EXPERIMENT_PARAMETER", experiment_id=p.get("experiment_id"),
-                original_value=p.get("value"), original_source=p.get("source"),
-                state=MatchState.NOT_FOUND, review_status=p.get("status") or "NAO_REVISADO",
-                divergence_pt=None,
-                curation_decision="PENDENTE",
-            ))
-        if parameters:
-            warnings.append(
-                "Nenhuma fonte consultada expõe valores por ensaio em API documentada; os parâmetros "
-                "do artigo não puderam ser confrontados com medições de outra fonte."
-            )
-        for m in matches:
-            if m.state == MatchState.SOURCE_UNAVAILABLE:
-                warnings.append(f"{m.source} indisponível; você pode prosseguir com os dados do artigo.")
-
-        return EnrichmentReport(
-            document_id=meta.document_id, generated_at=utc_now(), mode=self._transport.mode,
-            document=meta, matches=matches, records=records, related_documents=related,
-            operations=log.operations, warnings_pt=warnings, promoted_records=0,
-        )
 
     # ---------- NTRS ----------
     def _ntrs(self, meta: DocumentMeta, ntrs: NtrsClient) -> tuple[SourceMatch, dict[str, Any] | None]:
@@ -313,3 +276,74 @@ def _ntrs_meta(c: dict[str, Any]) -> dict[str, Any]:
 def _psi_meta(d: dict[str, Any]) -> dict[str, Any]:
     return {k: d[k] for k in ("doi", "publisher", "subtitles", "creators", "publication_year",
                               "resource_type", "rights", "related_identifiers", "version")}
+
+
+class EnrichmentSession:
+    """Enriquecimento em três fases reais, para que cada uma tenha estado e tempo próprios:
+    `origin()` (NTRS), `sources()` (documentos relacionados, PSI, TechPort) e `compare()` (campos)."""
+
+    def __init__(self, svc: EnrichmentService, meta: DocumentMeta):
+        self._svc, self.meta = svc, meta
+        self.log = OperationLog()
+        t = svc._transport
+        self._ntrs = NtrsClient(t, self.log, svc._timeout)
+        self._datacite = DataCiteClient(t, self.log, svc._timeout)
+        self._techport = TechPortClient(t, self.log, svc._timeout)
+        self.warnings: list[str] = []
+        self.ntrs_match: SourceMatch | None = None
+        self.citation: dict[str, Any] | None = None
+        self.psi_match = self.techport_match = None
+        self.psi: dict[str, Any] | None = None
+        self.related: list[dict[str, Any]] = []
+
+    def origin(self) -> SourceMatch:
+        self.ntrs_match, self.citation = self._svc._ntrs(self.meta, self._ntrs)
+        return self.ntrs_match
+
+    @property
+    def title(self) -> str | None:
+        return self.meta.title or (self.citation or {}).get("title")
+
+    @property
+    def authors(self) -> list[str]:
+        return self.meta.authors or (self.citation or {}).get("authors") or []
+
+    def sources(self) -> None:
+        svc, title = self._svc, self.title
+        tokens = title_tokens(title)
+        self.related = svc._related(self._ntrs, title, self.citation, self.warnings) if title else []
+        self.psi_match, self.psi = svc._psi(self.meta, self._datacite, title, tokens, self.authors)
+        self.techport_match = svc._techport(self._techport, title, tokens)
+
+    def compare(self, parameters: list[dict[str, Any]] | None = None) -> EnrichmentReport:
+        svc, meta = self._svc, self.meta
+        assert self.ntrs_match is not None and self.psi_match is not None and self.techport_match is not None
+        authors_source = "artigo" if meta.authors else ("NTRS" if self.citation else None)
+        records: list[EnrichmentRecord] = []
+        warnings = list(self.warnings)
+        matches = [self.ntrs_match, self.psi_match, self.techport_match]
+        if self.citation:
+            records += svc._metadata_records(meta, self.citation)
+        if self.psi:
+            records += svc._psi_records(self.psi, self.authors, authors_source)
+        for p in parameters or []:
+            records.append(EnrichmentRecord(
+                field=p["parameter"], label_pt=p.get("label_pt") or p["parameter"],
+                scope="EXPERIMENT_PARAMETER", experiment_id=p.get("experiment_id"),
+                original_value=p.get("value"), original_source=p.get("source"),
+                state=MatchState.NOT_FOUND, review_status=p.get("status") or "NAO_REVISADO",
+                divergence_pt=None, curation_decision="PENDENTE",
+            ))
+        if parameters:
+            warnings.append(
+                "Nenhuma fonte consultada expõe valores por ensaio em API documentada; os parâmetros "
+                "do artigo não puderam ser confrontados com medições de outra fonte."
+            )
+        for m in matches:
+            if m.state == MatchState.SOURCE_UNAVAILABLE:
+                warnings.append(f"{m.source} indisponível; você pode prosseguir com os dados do artigo.")
+        return EnrichmentReport(
+            document_id=meta.document_id, generated_at=utc_now(), mode=svc._transport.mode,
+            document=meta, matches=matches, records=records, related_documents=self.related,
+            operations=self.log.operations, warnings_pt=warnings, promoted_records=0,
+        )

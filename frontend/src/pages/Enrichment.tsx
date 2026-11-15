@@ -21,7 +21,7 @@ export default function Enrichment() {
 
   return (
     <>
-      <div className="crumbs"><Link to="/">Biblioteca</Link> › Fontes NASA</div>
+      <div className="crumbs"><Link to="/">Experimentos NASA</Link> › <Link to={`/documentos/${id}/analise`}>Resumo da análise</Link> › Fontes NASA</div>
       <Async state={doc}>{(d) => (
         <>
           <h1>{d.title}</h1>
@@ -34,6 +34,7 @@ export default function Enrichment() {
       {!report && !saved.loading && <div className="box info">O enriquecimento ainda não foi executado para este documento. Você pode prosseguir sem ele.</div>}
       {report && (
         <>
+          <div className="box warn"><strong>Enriquecimento não é validação.</strong> Estas fontes contextualizam o trabalho (autores, palavras-chave, investigação relacionada). Elas <strong>não confirmam nem corrigem os números</strong> do artigo: isso só acontece pela revisão humana em cada parâmetro.</div>
           <div className="box info">Executado em {report.generated_at} · modo <strong>{report.mode === "ONLINE" ? "online (APIs NASA)" : report.mode === "FIXTURE" ? "fixture (respostas gravadas)" : report.mode}</strong> · registros promovidos a “conferido”: <strong>{report.promoted_records}</strong></div>
           {report.warnings_pt.map((w) => <div className="box warn" key={w}>{w}</div>)}
           <h2>Fontes localizadas</h2>

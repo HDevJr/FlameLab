@@ -8,10 +8,40 @@ from __future__ import annotations
 
 from typing import Any
 
+from backend.app import units
 from backend.app.simulation.models import Compatibility
 from backend.app.simulation.registry import FDS_PHENOMENA, MODELS
 
 APPROVED = frozenset({"CONFERIDO_FONTE", "APROVADO_MODELO"})
+
+
+def is_editable(p: dict[str, Any]) -> bool:
+    """Condição de entrada numérica com unidade conhecida (para poder validar faixas).
+    Resultados observados e metadados nunca são editáveis."""
+    o = p.get("original") or {}
+    return (p["role"] == "CONDICAO" and isinstance(o.get("value"), (int, float))
+            and not isinstance(o.get("value"), bool) and units.canonical_unit(o.get("unit")) is not None)
+
+
+def range_rule(unit: str | None) -> tuple[str, float | None, float | None]:
+    """Regra física genérica por dimensão. Devolve (texto, mínimo exclusivo, máximo inclusivo) na unidade dada."""
+    q = units.normalize(1.0, unit)
+    dim = q.dimension if q else None
+    if dim in ("length", "velocity", "time"):
+        return "maior que zero", 0.0, None
+    if dim == "fraction":
+        top = 100.0 if units.canonical_unit(unit) == "%" else 1.0
+        return f"entre 0 (exclusivo) e {top:g}", 0.0, top
+    return "maior ou igual a zero", None, None
+
+
+def editable_entry(p: dict[str, Any]) -> dict[str, Any]:
+    o = p["original"]
+    rule, _, _ = range_rule(o.get("unit"))
+    return {"parameter": p["parameter"], "label_pt": p["label_pt"], "value": o["value"], "unit": o.get("unit"),
+            "status": p["status"], "rule_pt": rule,
+            "source_pt": "; ".join(e.get("locator_pt") or "" for e in p.get("evidence") or [] if e.get("locator_pt"))
+            or None}
 
 
 def assess(experiment: dict[str, Any], executor_available: bool) -> dict[str, Any]:
@@ -22,12 +52,12 @@ def assess(experiment: dict[str, Any], executor_available: bool) -> dict[str, An
         {"parameter": p["parameter"], "label_pt": p["label_pt"], "status": p["status"]}
         for p in params.values() if p["role"] == "OBSERVAVEL"
     ]
-    editable = [p["parameter"] for p in params.values()
-                if p["role"] == "CONDICAO" and isinstance((p.get("original") or {}).get("value"), (int, float))]
+    editable_detail = [editable_entry(p) for p in params.values() if is_editable(p)]
+    editable = [e["parameter"] for e in editable_detail]
     base = {
         "experiment_id": experiment["experiment_id"], "engine": "FDS", "model_id": None,
         "missing": [], "unreviewed": [], "reasons_pt": [], "reference_observables": observables,
-        "editable_conditions": editable, "executor_available": executor_available,
+        "editable_conditions": editable, "editable": editable_detail, "executor_available": executor_available,
         "actions": {"analyze": True, "prepare": bool(params), "alter": bool(editable), "simulate": False},
     }
     if observables:

@@ -20,8 +20,9 @@ from typing import Callable, Protocol
 from backend.app.simulation.models import RenderedArtifact, RunState
 
 FDS_ROOT_CANDIDATES = [Path(r"C:\Program Files\firemodels")]
-SMV_FRAME_STEP = 2
-MAX_FRAMES = 300
+SMV_FRAME_STEP = 1  # todos os quadros calculados são renderizados (sem saltos)
+MAX_FRAMES = 700
+VIDEO_FPS = 10
 
 
 class ExecutionError(Exception):
@@ -43,6 +44,7 @@ class ExecutionResult:
     results: dict = field(default_factory=dict)
     log_tail: list[str] = field(default_factory=list)
     versions: ToolVersions = field(default_factory=ToolVersions)
+    timings_ms: dict[str, int] = field(default_factory=dict)
 
 
 Progress = Callable[[RunState], None]
@@ -156,10 +158,13 @@ class LocalFdsExecutor:
         fds_file.write_text(fds_text, encoding="utf-8")
         result.artifacts.append(_artifact("FDS_INPUT", fds_file))
 
+        ms = lambda t0: int((time.monotonic() - t0) * 1000)  # noqa: E731
         # 1) FDS
+        t0 = time.monotonic()
         progress(RunState.RUNNING_FDS)
         log = run_dir / "fds.log"
         self._run([str(self._fds), fds_file.name], run_dir, log, deadline, "FDS")
+        result.timings_ms["fds"] = ms(t0)
         out_file = run_dir / f"{chid}.out"
         out_text = out_file.read_text(errors="replace") if out_file.exists() else ""
         if "STOP: FDS completed successfully" not in out_text:
@@ -171,6 +176,7 @@ class LocalFdsExecutor:
         result.log_tail = [l for l in out_text.splitlines() if l.strip()][-6:]
 
         # 2) resultados numéricos
+        t0 = time.monotonic()
         progress(RunState.PROCESSING_RESULTS)
         for csv in sorted(run_dir.glob(f"{chid}_hrr.csv")) + sorted(run_dir.glob(f"{chid}_devc.csv")):
             result.artifacts.append(_artifact("CSV", csv))
@@ -183,7 +189,9 @@ class LocalFdsExecutor:
         smv_log = run_dir / "fds.log"
         result.artifacts.append(_artifact("LOG", smv_log))
 
+        result.timings_ms["processing"] = ms(t0)
         # 3) Smokeview → quadros
+        t0 = time.monotonic()
         progress(RunState.RENDERING)
         frames_dir = run_dir / "frames"
         frames_dir.mkdir(exist_ok=True)
@@ -192,6 +200,7 @@ class LocalFdsExecutor:
                        f"RENDERALL\n {SMV_FRAME_STEP}\n frame\nEXIT\n", encoding="ascii")
         result.artifacts.append(_artifact("SMV_SCRIPT", ssf))
         self._run([str(self._smv), "-runscript", chid], run_dir, run_dir / "smokeview.log", deadline, "Smokeview")
+        result.timings_ms["smokeview"] = ms(t0)
         frames = sorted(frames_dir.glob("frame_*.png"))[:MAX_FRAMES]
         if not frames:
             raise ExecutionError(RunState.FAILED, "O Smokeview não produziu quadros; nenhum vídeo foi gerado.")
@@ -205,7 +214,8 @@ class LocalFdsExecutor:
                                           note="quadro representativo"))
 
         # 4) FFmpeg → MP4
-        fps = 10
+        t0 = time.monotonic()
+        fps = VIDEO_FPS
         mp4 = run_dir / "result.mp4"
         self._run([str(self._ffmpeg), "-y", "-loglevel", "error", "-framerate", str(fps), "-i",
                    "frames/frame_%04d.png", "-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2", "-c:v", "libx264",
@@ -213,10 +223,15 @@ class LocalFdsExecutor:
                   run_dir, run_dir / "ffmpeg.log", deadline, "FFmpeg")
         if not mp4.is_file() or mp4.stat().st_size < 1000:
             raise ExecutionError(RunState.FAILED, "O FFmpeg não produziu um vídeo válido.")
+        result.timings_ms["mp4_encoding"] = ms(t0)
+        # Os quadros são as saídas do FDS em intervalos iguais (DUMP NFRAMES); o primeiro é t = 0.
+        frame_dt = t_end / max(1, len(frames) - 1) if len(frames) > 1 else None
         result.artifacts.append(_artifact(
             "VIDEO_MP4", mp4, frames=len(frames), fps=fps, duration_s=round(len(frames) / fps, 2),
-            codec="h264/yuv420p", frame_step=SMV_FRAME_STEP,
-            simulated_time_s=t_end, source="Smokeview RENDERALL sobre SOOT DENSITY e HRRPUV"))
+            codec="h264/yuv420p", frame_step=SMV_FRAME_STEP, simulated_time_s=t_end,
+            frame_dt_s=round(frame_dt, 4) if frame_dt else None,
+            video_seconds_per_simulated_second=round((len(frames) / fps) / t_end, 3) if t_end else None,
+            source="Smokeview RENDERALL sobre SOOT DENSITY e HRRPUV"))
         return result
 
     def _run(self, args: list[str], cwd: Path, log_path: Path, deadline: float, label: str) -> None:

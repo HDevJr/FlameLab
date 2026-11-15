@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import logging
+import threading
 import time
 from typing import Any, Callable, TypeVar
 
@@ -77,6 +78,7 @@ class GeminiProvider:
             # retry_options=None → SDK não repete; o controle de tentativas é deste adaptador.
             client = genai.Client(api_key=api_key, http_options=types.HttpOptions(retry_options=None))
         self._client = client
+        self._local = threading.local()
 
     def _call_once(self, system: str, user: str, schema: type[T], timeout: float) -> T:
         from google.genai import types
@@ -91,6 +93,11 @@ class GeminiProvider:
             http_options=types.HttpOptions(timeout=int(timeout * 1000)),
         )
         response = self._client.models.generate_content(model=self.model, contents=user, config=config)
+        meta = getattr(response, "usage_metadata", None)
+        self._local.usage = None if meta is None else {
+            "input_tokens": getattr(meta, "prompt_token_count", None),
+            "output_tokens": getattr(meta, "candidates_token_count", None),
+            "total_tokens": getattr(meta, "total_token_count", None)}
         text = getattr(response, "text", None)
         if not text:
             raise ProviderError(ProviderErrorKind.INVALID_RESPONSE)
@@ -98,6 +105,10 @@ class GeminiProvider:
             return schema.model_validate(json.loads(text))
         except (json.JSONDecodeError, ValidationError, TypeError):
             raise ProviderError(ProviderErrorKind.INVALID_RESPONSE) from None
+
+    def last_usage(self) -> dict | None:
+        """Tokens da última chamada desta thread (informado pelo SDK; não é custo em dinheiro)."""
+        return getattr(self._local, "usage", None)
 
     def generate_json(self, system: str, user: str, schema: type[T], timeout: float) -> T:
         start = self._monotonic()

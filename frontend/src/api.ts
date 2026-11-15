@@ -2,13 +2,20 @@
 
 export type Evidence = {
   evidence_id?: string; document_id?: string; page_pdf: number | null; page_printed: number | null;
-  column_label?: string | null; quote: string | null; locator_pt: string;
+  column_label?: string | null; quote: string | null; locator_pt: string; literal_check?: string;
+};
+export type ReviewEvent = {
+  at: string; action: "CONFIRM" | "DOUBT" | "DIVERGENCE"; outcome: "APPROVED" | "REFUSED" | "RECORDED";
+  reviewer: string; notes: string | null; observed_value: string | null; observed_unit: string | null;
+  observed_page_pdf: number | null; code?: string; message?: string;
 };
 export type Parameter = {
   record_id: string; parameter: string; label_pt: string; role: "CONDICAO" | "OBSERVAVEL" | "METADADO";
   nature: string; status: string; original: { value: number | string | null; unit: string | null; raw_text?: string } | null;
   normalized: { value: number; unit: string } | null; evidence: Evidence[]; caveats_pt: string[];
   extraction?: { method: string; by: string } | null; reviewer?: string | null;
+  review?: { reviewer: string; reviewed_at: string | null; notes: string | null; checked_document_sha256: string | null } | null;
+  events?: ReviewEvent[];
 };
 export type Gap = { gap_id: string; parameter: string; label_pt: string; explanation_pt: string; purpose_blocked: string[]; origin: string };
 export type Review = { total: number; reviewed: number; pending: number; gaps: number };
@@ -22,12 +29,36 @@ export type DocumentItem = {
   document_id: string; title: string; origin: "CURATED" | "IMPORTED"; url: string | null; sha256: string | null;
   size_bytes: number | null; nasa_provenance: Provenance; import_id: string | null; experiments: ExperimentSummary[];
 };
-export type Step = { key: string; label_pt: string; state: "PENDING" | "RUNNING" | "DONE" | "FAILED" | "SKIPPED"; detail_pt: string | null };
+export type Step = {
+  key: string; label_pt: string; state: "PENDING" | "RUNNING" | "DONE" | "FAILED" | "SKIPPED";
+  summary_pt: string | null; technical: string[]; limitation_pt: string | null;
+  started_at: string | null; finished_at: string | null; duration_ms: number | null;
+};
+export type Batch = { batch: number; pages: string; chars: number; duration_ms: number; accepted: number; rejected: number; error: string | null; usage?: { total_tokens?: number | null } | null };
+export type Coverage = {
+  mode: "CURATED" | "AI_FULL" | "AI_PARTIAL" | "NONE"; total_pages: number | null; processed_ranges: string;
+  not_processed_ranges: string; without_text_ranges: string; reasons_pt: string[]; summary_pt: string;
+  pages_processed: number[]; batches?: Batch[]; limits?: { max_batches: number };
+};
 export type ImportRecord = {
   import_id: string; filename: string; sha256: string; size_bytes: number; status: string; steps: Step[];
   document: { document_id: string; title: string | null; page_count: number; identifiers: Record<string, string[]> };
-  nasa_provenance: Provenance | null; experiments: Experiment[]; warnings_pt: string[];
-  extraction: { model: string; rejected: { name: string; reason: string }[] } | null;
+  nasa_provenance: Provenance | null; experiments: Experiment[]; warnings_pt: string[]; coverage: Coverage | null;
+  extraction: { model: string; rejected: { name: string; reason: string }[]; batches: Batch[]; batches_planned_total: number } | null;
+  metrics: { total_ms: number | null; per_step_ms?: Record<string, number | null> };
+};
+export type Analysis = {
+  generated_at: string;
+  document: { document_id: string; title: string; origin: string; import_id: string | null; sha256: string | null; pages: number | null; url: string | null };
+  provenance: Provenance; coverage: Coverage;
+  experiments: { experiment_id: string; label: string; phenomena: string[]; parameters: number; reviewed: number; pending: number; gaps: number;
+    fds: { status: string | null; label_pt: string; reasons_pt: string[]; can_simulate: boolean } }[];
+  totals: { experiments: number; parameters: number; reviewed: number; pending: number; gaps: number };
+  sources: { source: string; state: string; state_pt: string; record_id: string | null; url: string | null; title: string | null }[];
+  divergences: { field: string; label_pt: string; divergence_pt: string | null; complementary_source: string | null }[];
+  enrichment: { available: boolean; mode: string | null; generated_at: string | null; warnings_pt: string[]; related_count: number };
+  conclusions_pt: string[]; not_validated_pt: string[];
+  metrics: ImportRecord["metrics"] | null; steps: Step[] | null;
 };
 export type Match = {
   source: string; state: string; match_type: string; source_record_id: string | null; source_url: string | null;
@@ -45,28 +76,33 @@ export type Enrichment = {
   operations: { source: string; url: string; mode: string; http_status: number | null; ok: boolean; error: string | null }[];
   warnings_pt: string[]; promoted_records: number;
 };
+export type EditableCondition = { parameter: string; label_pt: string; value: number; unit: string | null; status: string; rule_pt: string; source_pt: string | null };
 export type Compatibility = {
   experiment_id: string; status: "COMPATIBLE" | "MISSING_PARAMETERS" | "UNSUPPORTED_PHYSICS" | "REQUIRES_REVIEW";
-  reasons_pt: string[]; missing: string[]; unreviewed: string[]; editable_conditions: string[];
+  reasons_pt: string[]; missing: string[]; unreviewed: string[]; editable_conditions: string[]; editable: EditableCondition[];
   reference_observables: { parameter: string; label_pt: string; status: string }[];
   actions: { analyze: boolean; prepare: boolean; alter: boolean; simulate: boolean }; executor_available: boolean;
 };
 export type ModelParam = { name: string; label_pt: string; group: string; unit: string; default: number; min: number; max: number; step: number | null; help_pt: string | null };
 export type SimModel = { model_id: string; title_pt: string; purpose: string; label_pt: string; description_pt: string; implemented: boolean; parameters: ModelParam[]; required_inputs: string[]; template_source: { origin: string } | null };
-export type Change = { name: string; from_value: number; to_value: number; unit: string };
+export type Change = { name: string; from_value: number; to_value: number; unit: string; label_pt?: string | null; base_status?: string | null };
 export type Scenario = {
-  scenario_id: string; kind: "BASE" | "DERIVED"; model_id: string; experiment_id: string | null; title_pt: string;
-  changes: Change[]; values: Record<string, number>; executable: boolean; blocked_reasons_pt: string[]; note_pt: string; status: string;
+  scenario_id: string; kind: "BASE" | "DERIVED"; model_id: string | null; experiment_id: string | null; scope: "EXPERIMENT" | "DEMO";
+  title_pt: string; hypothesis_pt: string | null; changes: Change[]; values: Record<string, number>; executable: boolean;
+  blocked_reasons_pt: string[]; note_pt: string; status: string;
 };
 export type Artifact = { kind: string; name: string; sha256: string; size_bytes: number; meta: Record<string, unknown> };
 export type Run = {
-  run_id: string; scenario_id: string; model_id: string; purpose: string; label_pt: string; state: string; demo: boolean;
+  run_id: string; scenario_id: string; model_id: string; purpose: string; label_pt: string; state: string; demo: boolean; scope: "EXPERIMENT" | "DEMO";
   fds_sha256: string | null; fds_version: string | null; smokeview_version: string | null; ffmpeg_version: string | null;
   parameters: Record<string, number>; changes: Change[]; timestamps: Record<string, string>; failure_reason: string | null;
-  artifacts: Artifact[]; results: { fds_wall_clock_s?: number; frame_count?: number; hrr_series?: { points: [number, number][]; y_unit: string; x_unit: string };
-    devc_series?: { series: Record<string, [number, number][]>; unit: Record<string, string> } }; log_tail: string[];
+  artifacts: Artifact[]; timings_ms: Record<string, number | null>;
+  progress: { simulated_time_s: number; t_end_s: number; fraction: number; source: string } | null;
+  results: { fds_wall_clock_s?: number; frame_count?: number; hrr_series?: { points: [number, number][]; y_unit: string; x_unit: string } };
+  log_tail: string[];
 };
 export type SimStatus = { executor: string; available: boolean; detail: string; demo: boolean; versions: { fds: string | null; smokeview: string | null; ffmpeg: string | null } | null; limits: Record<string, unknown> };
+export type ReviewResult = { outcome: "APPROVED" | "RECORDED"; status: string; event: ReviewEvent; reviewed_at?: string };
 
 export class ApiError extends Error {
   constructor(public status: number, public code: string, message: string) { super(message); }
@@ -89,18 +125,27 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
 
 const json = (method: string, data: unknown): RequestInit => ({ method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
 
+export type ReviewBody = {
+  action: "CONFIRM" | "DOUBT" | "DIVERGENCE"; reviewer: string; observed_value?: string | null; observed_unit?: string | null;
+  observed_page_pdf?: number | null; notes?: string | null; checked_pdf?: boolean;
+};
+
 export const api = {
   documents: () => call<DocumentItem[]>("/api/documents"),
   document: (id: string) => call<DocumentItem>(`/api/documents/${id}`),
+  analysis: (id: string) => call<Analysis>(`/api/documents/${id}/analysis`),
   experiment: (id: string) => call<Experiment>(`/api/experiments/${id}`),
   compatibility: (id: string) => call<Compatibility>(`/api/experiments/${id}/compatibility`),
   enrichment: (id: string) => call<Enrichment>(`/api/documents/${id}/enrichment`),
   runEnrichment: (id: string) => call<Enrichment>(`/api/documents/${id}/enrichment`, { method: "POST" }),
   upload: (file: File) => { const f = new FormData(); f.append("file", file); return call<ImportRecord>("/api/imports", { method: "POST", body: f }); },
   importRecord: (id: string) => call<ImportRecord>(`/api/imports/${id}`),
+  review: (recordId: string, body: ReviewBody) => call<ReviewResult>(`/api/records/${recordId}/review`, json("POST", body)),
   simStatus: () => call<SimStatus>("/api/simulation/status"),
   models: () => call<SimModel[]>("/api/simulation/models"),
-  createScenario: (d: { model_id: string; values: Record<string, number>; title?: string; experiment_id?: string }) => call<Scenario>("/api/scenarios", json("POST", d)),
+  createScenario: (d: { model_id: string; values: Record<string, number>; title?: string }) => call<Scenario>("/api/scenarios", json("POST", d)),
+  createExperimentScenario: (experimentId: string, d: { changes: { parameter: string; value: number }[]; title?: string; hypothesis?: string }) =>
+    call<Scenario>(`/api/experiments/${experimentId}/scenarios`, json("POST", d)),
   scenario: (id: string) => call<Scenario>(`/api/scenarios/${id}`),
   submit: (scenario_id: string) => call<Run>("/api/simulations", json("POST", { scenario_id })),
   runs: () => call<Run[]>("/api/simulations"),
@@ -108,3 +153,5 @@ export const api = {
 };
 
 export const artifactUrl = (runId: string, name: string) => `/api/simulations/${runId}/artifacts/${name}`;
+export const documentFileUrl = (documentId: string, page?: number | null) =>
+  `/api/documents/${documentId}/file${page ? `#page=${page}` : ""}`;

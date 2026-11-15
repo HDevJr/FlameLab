@@ -39,7 +39,7 @@ def test_case_builder_is_deterministic_and_complete():
     a, sha_a = build_case(INTEGRATION, {"hrrpua": 1000, "soot_yield": 0.01, "t_end": 10}, "fl_x")
     b, sha_b = build_case(INTEGRATION, {"t_end": 10}, "fl_x")  # o resto vem dos padrões
     assert a == b and sha_a == sha_b
-    assert "HRRPUA=1000." in a and "T_END=10." in a and "&TAIL /" in a
+    assert "HRRPUA=1000." in a and "T_END=10." in a and "&TAIL /" in a and "NFRAMES=100" in a
     assert "not a NASA experiment reproduction" in a
 
 
@@ -111,12 +111,12 @@ def test_fire_physics_with_gaps_never_becomes_compatible(client, tmp_path):
 def test_base_and_derived_scenarios_preserve_the_base(client):
     use(FakeExecutor())
     base = new_scenario(client).json()["data"]
-    derived = new_scenario(client, {"hrrpua": 500, "t_end": 5}, experiment_id="BASS2-M1").json()["data"]
+    derived = new_scenario(client, {"hrrpua": 500, "t_end": 5}).json()["data"]
     assert base["kind"] == "BASE" and base["changes"] == []
     assert derived["kind"] == "DERIVED" and derived["status"] == "HIPOTESE_COMPUTACIONAL"
     assert {c["name"]: (c["from_value"], c["to_value"]) for c in derived["changes"]} == {
         "hrrpua": (1000.0, 500.0), "t_end": (10.0, 5.0)}
-    assert derived["experiment_id"] == "BASS2-M1" and "não é dado experimental" in derived["note_pt"]
+    assert derived["experiment_id"] is None and derived["scope"] == "DEMO" and "não é dado experimental" in derived["note_pt"]
     assert client.get(f"/api/scenarios/{base['scenario_id']}").json()["data"]["values"]["hrrpua"] == 1000.0
 
 

@@ -2,6 +2,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "./components";
+import AnalysisPage from "./pages/Analysis";
+import DemoFds from "./pages/DemoFds";
 import Enrichment from "./pages/Enrichment";
 import Import from "./pages/Import";
 import Library from "./pages/Library";
@@ -18,13 +20,15 @@ createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route path="/" element={<Library />} />
           <Route path="/importar" element={<Import />} />
+          <Route path="/documentos/:id/analise" element={<AnalysisPage />} />
           <Route path="/documentos/:id/enriquecimento" element={<Enrichment />} />
           <Route path="/experimentos/:id" element={<Review />} />
           <Route path="/experimentos/:id/alterar" element={<Scenario />} />
+          <Route path="/demonstracao-fds" element={<DemoFds />} />
           <Route path="/simulacao/:scenarioId" element={<RunPage />} />
           <Route path="/execucoes" element={<RunList />} />
           <Route path="/execucoes/:runId" element={<Result />} />
-          <Route path="*" element={<p>Página não encontrada. <a href="/">Voltar à biblioteca</a></p>} />
+          <Route path="*" element={<p>Página não encontrada. <a href="/">Voltar</a></p>} />
         </Routes>
       </Layout>
     </BrowserRouter>

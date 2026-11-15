@@ -62,6 +62,8 @@ class ParameterChange(BaseModel):
     from_value: float
     to_value: float
     unit: str
+    label_pt: str | None = None
+    base_status: str | None = None  # estado de revisão do valor original no momento da alteração
 
 
 class Scenario(BaseModel):
@@ -69,6 +71,8 @@ class Scenario(BaseModel):
     kind: Literal["BASE", "DERIVED"]
     model_id: str | None = None  # cenário executável (modelo de simulação)
     experiment_id: str | None = None  # cenário de hipótese sobre um experimento
+    scope: Literal["EXPERIMENT", "DEMO"] = "DEMO"
+    hypothesis_pt: str | None = None
     title_pt: str
     changes: list[ParameterChange] = Field(default_factory=list)
     values: dict[str, float] = Field(default_factory=dict)
@@ -95,6 +99,7 @@ class SimulationRun(BaseModel):
     label_pt: str
     state: RunState
     demo: bool = False  # True somente em execuções do executor simulado (testes)
+    scope: Literal["EXPERIMENT", "DEMO"] = "DEMO"
     fds_sha256: str | None = None
     fds_version: str | None = None
     smokeview_version: str | None = None
@@ -107,3 +112,4 @@ class SimulationRun(BaseModel):
     artifacts: list[RenderedArtifact] = Field(default_factory=list)
     results: dict[str, Any] = Field(default_factory=dict)
     limits: dict[str, Any] = Field(default_factory=dict)
+    timings_ms: dict[str, int | None] = Field(default_factory=dict)

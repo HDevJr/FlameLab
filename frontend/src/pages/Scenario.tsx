@@ -1,84 +1,84 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ApiError, api, type SimModel } from "../api";
-import { Async, Badge, DataKind, ErrorBox, useLoad } from "../components";
-import { formatValue, validateChange } from "../lib";
+import { ApiError, api } from "../api";
+import { Async, Badge, ErrorBox, Term, useLoad } from "../components";
+import { STATUS_LABEL, formatValue } from "../lib";
 
-/** S05 — Alteração de parâmetros. O formulário é gerado a partir do modelo; só aparecem campos editáveis. */
+/** S05 — Alteração de parâmetros DO EXPERIMENTO (hipótese). Só condições de entrada elegíveis; nunca resultados observados. */
 export default function Scenario() {
   const { id = "" } = useParams();
   const nav = useNavigate();
   const exp = useLoad(() => api.experiment(id), [id]);
-  const models = useLoad(api.models, []);
-  const [picked, setPicked] = useState<Record<string, string>>({}); // nome → texto digitado (presente = alterar)
+  const compat = useLoad(() => api.compatibility(id), [id]);
+  const [picked, setPicked] = useState<Record<string, string>>({});
+  const [hypothesis, setHypothesis] = useState("");
   const [err, setErr] = useState<ApiError | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const model: SimModel | undefined = useMemo(() => models.data?.find((m) => m.implemented), [models.data]);
+  const invalid = useMemo(() => Object.entries(picked).some(([, v]) => v.trim() === "" || !Number.isFinite(Number(v))), [picked]);
 
-  const errors = useMemo(() => {
-    const out: Record<string, string | null> = {};
-    for (const p of model?.parameters ?? []) if (p.name in picked) out[p.name] = validateChange(Number(picked[p.name]), p.min, p.max, p.unit);
-    return out;
-  }, [picked, model]);
-  const hasErrors = Object.values(errors).some(Boolean);
-
-  async function save(changed: boolean) {
-    if (!model) return;
+  async function save() {
     setBusy(true); setErr(null);
     try {
-      const values = changed ? Object.fromEntries(Object.entries(picked).map(([k, v]) => [k, Number(v)])) : {};
-      const sc = await api.createScenario({ model_id: model.model_id, values, experiment_id: id, title: changed ? "Cenário derivado" : "Caso-base" });
+      const sc = await api.createExperimentScenario(id, {
+        changes: Object.entries(picked).map(([parameter, v]) => ({ parameter, value: Number(v) })),
+        hypothesis: hypothesis || undefined, title: "Hipótese sobre " + (exp.data?.label ?? id),
+      });
       nav(`/simulacao/${sc.scenario_id}`);
     } catch (e) { setErr(e as ApiError); setBusy(false); }
   }
 
   return (
-    <Async state={exp}>{(e) => (
-      <>
-        <div className="crumbs"><Link to="/">Biblioteca</Link> › <Link to={`/experimentos/${id}`}>{e.label}</Link> › Alterar parâmetros</div>
-        <h1>Alterar parâmetros</h1>
-        <div className="card">
-          <h3>Caso-base: {e.label}</h3>
-          <p className="detail">Valores do experimento (somente leitura; o original nunca é alterado):</p>
-          <table><tbody>{e.parameters.filter((p) => p.role === "CONDICAO").map((p) => <tr key={p.record_id}><td>{p.label_pt}</td><td>{formatValue(p)}</td></tr>)}</tbody></table>
-        </div>
-        <div className="box warn">
-          Este experimento ainda não tem um modelo de reprodução FDS (lacunas científicas e gerador não implementado). Os campos abaixo pertencem ao <strong>caso de integração do pipeline</strong> — um queimador genérico — e não representam o experimento acima.
-        </div>
-        <Async state={models}>{() => !model ? <p className="muted">Nenhum modelo executável disponível.</p> : (
-          <>
-            <div className="row"><h2 className="grow">{model.title_pt}</h2><DataKind kind="TESTE" /></div>
-            <p className="muted">{model.description_pt}</p>
-            <p className="detail">Origem do caso-base: {model.template_source?.origin}</p>
-            <h3>Selecione o que deseja modificar</h3>
-            {model.parameters.map((p) => {
-              const on = p.name in picked;
-              return (
-                <div className="card" key={p.name}>
-                  <label className="row"><input type="checkbox" checked={on} onChange={(ev) => setPicked((s) => { const n = { ...s }; if (ev.target.checked) n[p.name] = String(p.default); else delete n[p.name]; return n; })} />
-                    <strong>{p.label_pt}</strong> <Badge tone={p.group === "HIPOTESE" ? "warn" : "muted"}>{p.group === "HIPOTESE" ? "hipótese" : p.group === "NUMERICO" ? "numérico" : "contorno"}</Badge></label>
-                  {p.help_pt && <p className="detail">{p.help_pt} Faixa permitida: {p.min} a {p.max} {p.unit}.</p>}
-                  {on && (
-                    <div className="compare">
-                      <div><small className="muted">Original</small><div><strong>{p.default} {p.unit}</strong></div></div><div>→</div>
-                      <div><small className="muted">Novo</small><div className="row"><input type="number" step={p.step ?? "any"} value={picked[p.name]} onChange={(ev) => setPicked((s) => ({ ...s, [p.name]: ev.target.value }))} /> {p.unit}
-                        <button onClick={() => setPicked((s) => ({ ...s, [p.name]: String(p.default) }))}>Restaurar</button></div>
-                        {errors[p.name] && <div className="detail" style={{ color: "var(--bad)" }}>{errors[p.name]}</div>}</div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-            {err && <ErrorBox error={err} />}
-            <div className="row">
-              <button className="primary" disabled={busy || hasErrors || Object.keys(picked).length === 0} onClick={() => save(true)}>Salvar cenário derivado</button>
-              <button disabled={busy} onClick={() => save(false)}>Usar o caso-base sem alterações</button>
-            </div>
-            <p className="detail">Um cenário derivado é uma <strong>hipótese computacional</strong>. Apenas as alterações são registradas; o caso-base é preservado.</p>
-          </>
-        )}</Async>
-      </>
-    )}</Async>
+    <Async state={exp}>{(e) => {
+      const c = compat.data;
+      const editable = c?.editable ?? [];
+      const observed = e.parameters.filter((p) => p.role === "OBSERVAVEL");
+      return (
+        <>
+          <div className="crumbs"><Link to="/">Experimentos NASA</Link> › <Link to={`/experimentos/${id}`}>{e.label}</Link> › Alterar parâmetros</div>
+          <h1>Alterar parâmetros de {e.label}</h1>
+          <p className="muted">Crie um cenário derivado: uma <Term k="hipotese">hipótese computacional</Term> sobre as condições deste experimento. O experimento original e seus valores <strong>não são alterados</strong>; somente as diferenças são registradas.</p>
+          {c && !c.actions.simulate && <div className="box warn"><strong>Este experimento ainda não pode ser simulado no FDS.</strong> {c.reasons_pt.slice(0, 2).join(" ")} O cenário será salvo como hipótese, mas não será executado. Nenhuma simulação genérica será usada no lugar. {c.missing.length > 0 && <>Faltam: {c.missing.join(", ")}.</>}</div>}
+
+          {editable.length === 0 ? (
+            <div className="box bad">Este experimento não tem condições numéricas com unidade conhecida que possam ser alteradas. {c?.reasons_pt[0]}</div>
+          ) : (
+            <>
+              <h2>Condições que podem ser alteradas</h2>
+              <p className="muted">Marque o que deseja alterar. Cada campo mostra de onde vem o valor original, a unidade e a regra de validação.</p>
+              {editable.map((p) => {
+                const on = p.parameter in picked;
+                const s = STATUS_LABEL[p.status] ?? { text: p.status, tone: "muted" as const };
+                return (
+                  <div className="card" key={p.parameter}>
+                    <label className="row"><input type="checkbox" checked={on} onChange={(ev) => setPicked((st) => { const n = { ...st }; if (ev.target.checked) n[p.parameter] = String(p.value); else delete n[p.parameter]; return n; })} />
+                      <strong>{p.label_pt}</strong> <Badge tone={s.tone}>{s.text}</Badge></label>
+                    <p className="detail">Origem: {p.source_pt ?? "não informada"} · unidade: <strong>{p.unit}</strong> · regra: deve ser {p.rule_pt}.</p>
+                    {on && (
+                      <div className="compare">
+                        <div><small className="muted">Original (preservado)</small><div><strong>{p.value} {p.unit}</strong></div></div><div>→</div>
+                        <div><small className="muted">Novo valor ({p.unit})</small>
+                          <div className="row"><input type="number" step="any" value={picked[p.parameter]} onChange={(ev) => setPicked((st) => ({ ...st, [p.parameter]: ev.target.value }))} aria-label={`Novo valor de ${p.label_pt}`} />
+                            <button onClick={() => setPicked((st) => ({ ...st, [p.parameter]: String(p.value) }))}>Restaurar</button></div></div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+              <label className="wide">Hipótese (opcional)<br /><textarea rows={2} value={hypothesis} onChange={(ev) => setHypothesis(ev.target.value)} placeholder="O que você quer investigar com esta alteração?" /></label>
+              {err && <ErrorBox error={err} />}
+              <div className="row" style={{ marginTop: 10 }}>
+                <button className="primary" disabled={busy || invalid || Object.keys(picked).length === 0} onClick={save}>Salvar cenário derivado</button>
+                <Link className="btn" to={`/experimentos/${id}`}>Cancelar</Link>
+              </div>
+            </>
+          )}
+
+          <h2>Não editáveis</h2>
+          <p className="detail"><Term k="observavel">Resultados observados</Term> são referência de comparação e nunca entradas de uma simulação; metadados e valores sem unidade conhecida também não são editáveis.</p>
+          <table><tbody>{observed.map((p) => <tr key={p.record_id}><td>{p.label_pt}</td><td>{formatValue(p)}</td><td><Badge tone="muted">resultado observado</Badge></td></tr>)}</tbody></table>
+        </>
+      );
+    }}</Async>
   );
 }
