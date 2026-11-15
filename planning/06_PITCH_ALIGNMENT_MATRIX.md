@@ -122,3 +122,12 @@
 | Experimento NASA separado da demonstração FDS | IMPLEMENTADO_E_TESTADO | Sim; **sempre** chamar o vídeo de “demonstração do pipeline”, nunca de simulação do BASS-II |
 | Vídeo em tempo real com player completo | IMPLEMENTADO_E_TESTADO (execução real 10 s → 10,1 s de vídeo; player em jsdom) | Sim, como demonstração técnica |
 | Autenticação de revisores | NAO_INICIADO (R-22) | **Não** afirmar “revisão auditada por identidade verificada” |
+
+## 9. Revisão científica assistida (v2.2, 15/11)
+| Capacidade | Estado | Pode ser dito? |
+|---|---|---|
+| A IA lê, organiza evidências e pré-preenche a conferência; a pessoa confere o **significado** | IMPLEMENTADO_E_TESTADO (API/componente); **tela NOT_RUN** | Sim: “a IA organiza as evidências; o pesquisador verifica o sentido científico” |
+| O sistema distingue **número, unidade e página** e mostra qual divergiu | IMPLEMENTADO_E_TESTADO | Sim |
+| O sistema **não confirma só porque o número coincide**: sinaliza quando o trecho não sustenta o conceito (ex.: ciclo de 20 a 80 °C ≠ “temperatura inicial”) | IMPLEMENTADO_E_TESTADO (heurística limitada) | Sim, como exemplo; **não** dizer que detecta toda ambiguidade |
+| Correção da extração preservando o original e exigindo outra pessoa | IMPLEMENTADO_E_TESTADO | Sim |
+| Identidade do revisor verificada | NAO_INICIADO (R-22) | **Não** |

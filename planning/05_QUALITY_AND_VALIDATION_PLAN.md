@@ -107,5 +107,12 @@ Gates G0-env e G3 (execução) passam a **possível/verificado para o caso de in
 | Frontend | `lib.test.ts`, `components.test.tsx`, `pages.test.tsx` (31): player, painel de revisão, etapas, menu, estados longos de execução, separação artigo × demonstração, vídeo persistente | jsdom | PASS |
 | Validação visual S01–S07 | roteiro `docs/manual_test_roteiro_S01-S07.md` | **pessoa da equipe** | **NOT_RUN** |
 
+### 6.3 Atualização v2.2 (15/11/2026)
+| Área | Testes | Natureza | Resultado |
+|---|---|---|---|
+| Comparação número × unidade × página; Unicode; °C/K/°F; ambiguidades; semântica; rótulos; API (diagnóstico, prévia, correção, auditoria, contexto) | `test_review_v22.py` (77) | dataset/PDF sintético com o **trecho real** do caso relatado | PASS |
+| Painel de revisão (A–D), recusas com tabela por campo, correção, dúvida/divergência | `review.test.tsx` (18) | jsdom | PASS |
+| Inspeção do painel em navegador | roteiro §5 | **pessoa da equipe** | **NOT_RUN** |
+
 ## 7. Revisão de interface
 Checklist (M): toda tela tem rodapé com `dataset_version` e aviso de independência; todo número tem unidade; o estado não é comunicado só por cor (chip com texto); contraste mínimo AA nos chips e badges; termos em PT com o original em EN na primeira menção; largura mínima de 1280 px na máquina de demo e sem quebra em 1024 px.

@@ -246,6 +246,8 @@ Regra: `AUSENTE` em qualquer lado → `differs=null`, `comparable=false`. **Nunc
 | contagem | adimensional | adimensional |
 Unidades fora da tabela → o registro é rejeitado no carregamento (não há conversão "aproximada").
 
+> **Extensão aditiva v1.1 (15/11/2026, DIV-33):** a tabela passou a incluir temperatura (°C, K, °F, com **deslocamento**: K = °C + 273,15), ângulo (°, rad), pressão (Pa…atm, psi), volume, massa, área, frequência, potência/fluxo de calor, µm/ms/h e ppm, além de normalização Unicode das grafias (`℃`, `º`, `˚`, `µ`, espaços finos). Nada que era aceito deixou de ser. **Igualdade física é decidida por dimensão + conversão; texto de unidade nunca decide.** Unidade fora da tabela continua sem conversão e a revisão a trata como `UNIT_UNSUPPORTED`. A diferença de temperatura (ΔT) **não** é uma unidade desta tabela.
+
 ## 5. Versionamento
 - `contract_version: "1.0"` em cada arquivo JSON.
 - `dataset_version` = sha256 do JSON canônico (chaves ordenadas) de todos os arquivos em `data/`, exceto `ai_cache/`.

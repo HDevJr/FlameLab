@@ -29,6 +29,8 @@
 | R-22 | **Identidade do revisor não autenticada** (nome digitado na interface); a “independência” só compara o nome com o do extrator e bloqueia nomes de IA | Alta | Alto | revisão por quem não é a pessoa designada | Trilha de auditoria completa (nome, data, hash, valores lidos); política de revisão do projeto (D-11/D-16) | Autenticação e papéis em produção |
 | R-23 | **Limite de uso (429) do Gemini** em documentos longos: o BASS-II completo (144 pág.) chegou a ~106 mil tokens em 34 s e bateu na cota no 11º lote | Média | Médio | cobertura parcial exibida | Espera + nova tentativa do mesmo lote; cobertura sempre declarada; limite de lotes | Ritmo entre lotes; modelo/plano com cota maior |
 | R-24 | Usuário aprova valores de M1 “para testar” e altera o dataset versionado | Média | Alto | `git diff data/` | Roteiro manual manda testar com o artigo **importado**; toda aprovação vai para o log | Ambiente separado para testes |
+| R-25 | **Pré-preenchimento da conferência** (a pessoa pode clicar “Confirmar” sem reler o PDF) | Média | Alto | taxa de `prefilled_unchanged` alta na auditoria | Declaração obrigatória, comparação por campo, bloqueio semântico, registro `prefilled_unchanged`, independência (quem corrige não confirma) | Voltar aos campos vazios para itens de alto risco |
+| R-26 | **Heurísticas semânticas** com falsos negativos (outras ambiguidades) ou bloqueios discutíveis | Média | Médio | casos novos na revisão humana | Sinalização explicável (termos destacados), saída por “Corrigir extração” + outra pessoa, regras testadas | Ampliar regras; revisão por especialista do domínio |
 
 ## 2. Divergências documento × prompt × realidade
 | ID | Divergência | Consequência | Recomendação |
@@ -64,6 +66,9 @@
 | DIV-30 | Política de unidade fora da tabela v1 (ex.: °C) na revisão | Com a regra antiga, esses parâmetros nunca poderiam ser conferidos | Regra estrita: valor igual **e** mesmo texto de unidade; unidade conhecida continua comparada em SI |
 | DIV-31 | Vídeo da v2 tinha ~3,8× a velocidade física (13 quadros para 5 s) | O usuário não conseguia observar a evolução | Quadros a cada 0,1 s simulado, todos renderizados, 10 fps (1×); ver ADR-09.7 |
 | DIV-32 | Extração lia só 14 páginas (limite da v2) | Cobertura parcial não estava clara | Lotes + cobertura explícita; ADR-09.5 |
+| DIV-33 | Tabela de unidades v1 sem temperatura/ângulo/pressão; grafias Unicode não normalizadas | A revisão recusava valores iguais (`20.0 °C`) e só aceitava unidades "desconhecidas" por **comparação de texto** | Tabela v1.1 aditiva (04 §4), deslocamento para °C/K/°F, normalização Unicode; texto de unidade nunca decide igualdade |
+| DIV-34 | Recusa genérica `VALUE_MISMATCH` sem dizer qual campo falhou | A mensagem exibia "20.0 °C" × "20.0 °C" quando a unidade recebida era vazia | Contrato de erro estruturado (`details.comparisons` por campo), códigos específicos, prévia no servidor; `VALUE_MISMATCH` só para divergência numérica real |
+| DIV-35 | Política de revisão "digite o que leu" (campos vazios) × pedido de simplificar o fluxo | Redigitar cada valor é lento e propenso a erro; pré-preencher reduz a leitura independente | **Decisão do usuário:** pré-preencher + declaração + auditoria (`prefilled_unchanged`); riscos em R-25; o servidor continua autoridade |
 | DIV-18 | Schema JSON gerado pelo Pydantic | rejeitado com HTTP 400 por `gemini-3.5-flash-lite` (evidência: `docs/evidence/smoke_gemini_20261114T184138Z.json`) | **Implementado:** schema do provedor declarado à mão (`LLM_OUTPUT_PROVIDER_SCHEMA`); validação estrita mantida no Pydantic |
 
 ## 3. Decisões pendentes
@@ -80,6 +85,8 @@
 | D-09 | O PDF entra no git? | sim / só hash | *14/11: **só hash** (49 MB; `sources/*.pdf` ignorado; termos NTRS a confirmar). Hash conferido em `docs/evidence/source_hash_check_*`* | BL-01.04 | — |
 | D-11 | **Quem faz a revisão humana de M1** (BL-02.07) | pessoa da equipe ≠ extrator | Escolher 1 revisor agora; ~15 min com `scripts/review_record.py`. Bloqueia P-02 e o teste de resposta real | **imediato** | P-02, P-05 |
 | D-10 | Idioma das respostas da IA | PT / PT+citação EN | PT com o trecho citado em EN | BL-05.05 | — |
+| D-19 | O que fazer com registros **já conferidos** que agora têm bloqueio semântico (ex.: `initial_temperature = 20 °C` do artigo importado) | manter / reabrir automaticamente / decisão humana | **Decisão humana**: o painel avisa e oferece “Corrigir extração” (reabre a conferência); nada é alterado automaticamente | imediato (revisor) | consistência dos dados importados |
+| D-20 | Aceitar “C” sozinho como °C e ampliar a tabela de unidades | aceitar / exigir “°C” / ampliar sob demanda | Exigir grafia inequívoca; ampliar a tabela quando surgir unidade nova (aditivo) | produção | confirmações bloqueadas por `UNIT_UNSUPPORTED` |
 | D-16 | **Quem pode revisar e como se evita a auto-aprovação** (identidade não autenticada, R-22) | lista de revisores autorizados no repositório / autenticação / manter o nome declarado + auditoria | Por ora, auditoria + política de equipe (revisor ≠ extrator); lista de nomes autorizados na produção | antes de usar a revisão fora da equipe | confiança nas aprovações |
 | D-17 | Limite de lotes por documento e ritmo entre chamadas (R-23) | 8 / todos / configurável por documento | Padrão 8; configurável (`FLAMELAB_EXTRACT_MAX_BATCHES`); aceitar leitura parcial declarada | produção | documentos longos |
 | D-18 | Quadros por segundo simulado do vídeo (hoje 10/s, 1×) | 10 / 20 / 30 | Manter 10; aumentar só se o custo de saída justificar | produção | fluidez do vídeo |

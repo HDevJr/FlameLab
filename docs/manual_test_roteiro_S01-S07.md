@@ -42,21 +42,28 @@
 | 4.2 | Ver “Operações de API executadas” | Cada chamada com fonte, modo (online/fixture) e HTTP | |
 | 4.3 | Verificar que nenhum valor do artigo mudou | Voltar à ficha: estados continuam “Extraído · não revisado” | |
 
-## 5. S04 — Revisão dos parâmetros (`/experimentos/<id>`)
+## 5. S04 — Revisão dos parâmetros (`/experimentos/<id>`) — painel de revisão assistida (v2.2)
 | # | Ação | Esperado | Resultado |
 |---|---|---|---|
-| 5.1 | Abrir o experimento **importado** | Tabelas *Condições experimentais · Resultados observados · Metadados* e *Campos ausentes* | |
-| 5.2 | Clicar “Ver origem e revisar” numa linha | Abre o painel: valor e unidade, experimento, documento, **página e trecho literal**, botão “Abrir o PDF na página N”, dados complementares NASA e trilha de auditoria | |
-| 5.3 | Clicar “Abrir o PDF na página N” | O PDF abre na página indicada | |
-| 5.4 | Verificar os campos “Valor lido”, “Unidade”, “Página” | Começam **vazios** (de propósito) | |
-| 5.5 | Preencher **valor errado** + nome + “Conferi o PDF” → Confirmar | Mensagem “…Nada foi aprovado…”; o estado **não muda**; a tentativa aparece na trilha como *recusada* | |
-| 5.6 | Preencher com o **mesmo nome do extrator** (o nome do modelo mostrado em “Extraído por”) | Recusa: revisor precisa ser diferente | |
-| 5.7 | Preencher com “Gemini” ou “Claude” | Recusa: revisão por pessoa | |
-| 5.8 | Preencher corretamente (valor, unidade, página lidos no PDF) e confirmar | “Conferência registrada”; estado → **Conferido na fonte**; trilha mostra revisor, data e hash | |
-| 5.9 | Em outro parâmetro: observações + “Manter pendente (dúvida)” | Continua pendente; dúvida na trilha | |
-| 5.10 | Em outro: valor lido diferente + observações + “Registrar divergência” | Continua pendente; **o valor extraído não é alterado**; divergência na trilha | |
-| 5.11 | Tentar confirmar de novo um já conferido | O painel não oferece confirmação; se forçar pela API, recusa “WRONG_STATE” | |
-| 5.12 | Ver o cartão “Simulação deste experimento” | Selo de prontidão e **motivos**; “Iniciar simulação deste experimento” **desabilitado** quando não há modelo; aviso de que nenhuma simulação genérica é criada no lugar | |
+| 5.1 | Abrir o experimento **importado** | Tabelas *Condições · Resultados observados · Metadados*; cada linha mostra **nome em português + nome técnico**, **valor e unidade em colunas separadas**; linhas com ambiguidade mostram “⚠ ambiguidade científica” | |
+| 5.2 | Clicar “Ver origem e revisar” numa linha | Painel com **1. Extração encontrada** (nome amigável/técnico, valor, unidade com a grandeza, tipo, estado), **2. Evidência** (trecho com **números e termos destacados**, “Ver contexto da página”, link para a página), **3. Conferência**, **4. Ação**, e a trilha | |
+| 5.3 | “Abrir o PDF na página N” | O PDF abre na página indicada | |
+| 5.4 | Ver os campos **Valor / Unidade / Página** | Já **preenchidos** com o que a IA extraiu (sem redigitar); coluna “Correspondência” mostra **Confere** por campo | |
+| 5.5 | Apagar a **unidade** | A linha “Unidade” fica **vermelha** (“Falta”), o valor e a página continuam “Confere”; o botão Confirmar desabilita e a mensagem diz **“corrija a unidade”** | |
+| 5.6 | Digitar `20,0` / `20.0` / `20` no valor | Todos “Confere” (equivalência numérica) | |
+| 5.7 | Trocar a unidade por `K` (ou `℃`, `° C`) | `K`: “Confere após conversão” (ou “Diverge” se o número não bate após converter); `℃` e `° C` equivalem a °C | |
+| 5.8 | Digitar uma unidade de outra grandeza (ex.: `°` num valor de temperatura, ou `mm`) | “Incompatível” com a explicação das grandezas | |
+| 5.9 | Digitar `1,234` ou `20 a 80` no valor | “Ambíguo” — o sistema não adivinha | |
+| 5.10 | Num parâmetro com **aviso vermelho de ambiguidade científica** (ex.: *Temperatura inicial = 20 °C*, trecho “cycled from 20 to 80 °C”) | O número, a unidade e a página aparecem “Confere”, **mas o botão Confirmar continua desabilitado** com “há ambiguidade científica” | |
+| 5.11 | Nesse mesmo parâmetro: “Corrigir extração” → mudar o nome (ex.: “Temperatura mínima do ciclo”) + motivo → Salvar | Mensagem de que a **extração original foi preservada**; o aviso vermelho some; o valor segue pendente | |
+| 5.12 | Tentar confirmar com **o seu nome igual ao de quem corrigiu** (ou igual ao nome do modelo mostrado em “Extraído por”) | Recusado: o revisor precisa ser diferente | |
+| 5.13 | Com **outro nome**, marcar “Verifiquei a evidência no PDF original” e **Confirmar interpretação** | Estado → **Conferido na fonte**; a trilha mostra revisor, data, hash e “campos mantidos como extraídos” | |
+| 5.14 | Em outro parâmetro pendente: digite um valor **diferente** do extraído, escreva o motivo e use “Registrar divergência” | Divergência registrada **sem alterar o dado** (o valor extraído continua o mesmo); a trilha mostra o valor informado e o motivo. O botão Confirmar fica desabilitado enquanto o valor diverge | |
+| 5.15 | “Marcar dúvida” sem observações | Botão desabilitado; com observações, registra e mantém pendente | |
+| 5.16 | Abrir um parâmetro **já conferido** | Não há botão de confirmar; há aviso (se houver ambiguidade) e “Corrigir extração (reabre a conferência)” | |
+| 5.17 | Ver o cartão “Simulação deste experimento” | Selo de prontidão e motivos; “Iniciar simulação deste experimento” desabilitado sem modelo | |
+
+> **Atenção:** o parâmetro *Temperatura inicial* do artigo de teste (DYLCO) já está **conferido** nos dados locais do revisor e agora aparece com a sinalização vermelha. **Não** o altere durante o teste sem decidir (D-19); para exercitar 5.10–5.13 importe o PDF de novo em uma instalação limpa (`FLAMELAB_VAR_DIR` diferente) ou use outro parâmetro.
 
 ## 6. S05 — Alterar parâmetros do experimento (`/experimentos/<id>/alterar`)
 | # | Ação | Esperado | Resultado |

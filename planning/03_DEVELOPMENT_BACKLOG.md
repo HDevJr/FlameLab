@@ -148,6 +148,18 @@ Equipes pequenas combinam papéis. Uma combinação que funciona: {DADOS+CIÊNCI
 | BL-13.08 | Validação visual S01–S07 por pessoa da equipe | **NOT_RUN** (roteiro: `docs/manual_test_roteiro_S01-S07.md`) |
 | BL-13.09 | Autenticação/lista de revisores, ritmo entre lotes, OCR | NAO_INICIADO |
 
+### BL-14 · Correção do VALUE_MISMATCH e revisão científica assistida (ADR-09 §12)
+| ID | Tarefa | Estado |
+|---|---|---|
+| BL-14.01 | Causa raiz do `VALUE_MISMATCH` (reprodução com o registro real) | CONCLUÍDO (`docs/evidence/BL-14_…`) |
+| BL-14.02 | Parsing seguro (número × unidade) e comparação estruturada por campo; tabela de unidades v1.1 com °C/K | IMPLEMENTADO_E_TESTADO |
+| BL-14.03 | Diagnóstico por campo na API, na prévia e na trilha | IMPLEMENTADO_E_TESTADO |
+| BL-14.04 | Verificação semântica (intervalo, incremento, lista) com bloqueio de confirmação | IMPLEMENTADO_E_TESTADO (heurística) |
+| BL-14.05 | Ação “Corrigir extração” preservando o original | IMPLEMENTADO_E_TESTADO |
+| BL-14.06 | Painel de revisão assistida (A–D), nome amigável e contexto da página | IMPLEMENTADO_E_TESTADO (componente) · **visual NOT_RUN** |
+| BL-14.07 | Validação em navegador por pessoa da equipe | **NOT_RUN** |
+| BL-14.08 | Autenticação de revisores; ampliar regras semânticas; ΔT como grandeza | NAO_INICIADO |
+
 ### BL-10 · Stretch · Visualizar resultado FDS e comparar
 | ID | Tarefa | Papel | Dep. | h | Aceite / teste |
 |---|---|---|---|---|---|
